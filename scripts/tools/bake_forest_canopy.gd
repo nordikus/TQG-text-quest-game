@@ -26,10 +26,12 @@ const HAND_PLACED_POSITIONS: Array[Vector2] = [
 
 const NATURE_TRAIL_PTS: Array[Vector2] = [
 	Vector2(0.0, 0.0),
-	Vector2(-6.0, -25.0),
-	Vector2(-12.0, -55.0),
-	Vector2(-16.0, -85.0),
-	Vector2(-17.8, -105.5)
+	Vector2(0.0, -20.5),
+	Vector2(-3.5, -25.0),
+	Vector2(-8.0, -33.0),
+	Vector2(-12.5, -41.0),
+	Vector2(-13.25, -48.0),
+	Vector2(-17.5, -56.8)
 ]
 
 func _dist_to_nature_trail(p: Vector2) -> float:
@@ -82,12 +84,28 @@ func _init() -> void:
 			if tree_pos.length() < 22.5:
 				continue
 
-			# 2. Castle plateau exclusion
-			if pos_x > -55.0 and pos_x < 55.0 and pos_z > -195.0 and pos_z < -90.0:
+			# 2. Castle plateau and keep exclusion (Castle at Z = -90, front wall at Z = -81.5)
+			if pos_x > -50.0 and pos_x < 50.0 and pos_z > -165.0 and pos_z < -80.0:
 				continue
 
-			# 2b. Nature Trail exclusion (from altar to GreatTree at (-21, 0, -110))
-			if _dist_to_nature_trail(tree_pos) < 3.5:
+			# 2b. Castle gate approach clearing (front road directly into gate)
+			if pos_x > -10.0 and pos_x < 10.0 and pos_z >= -80.0 and pos_z < -70.0:
+				continue
+
+			# 2c. Great Tree zone exclusion (Trunk at (-21, -60), spiral stairs, buttress roots, canopy)
+			if (tree_pos - Vector2(-21.0, -60.0)).length() < 14.0:
+				continue
+
+			# 2d. Approach Plaza exclusion (center (-17.5, -56.8), radius 6.5)
+			if (tree_pos - Vector2(-17.5, -56.8)).length() < 8.0:
+				continue
+
+			# 2e. Bough Bridge corridor (from GreatTree terrace (-21, -60) to Castle balcony (-22.5, -107))
+			if pos_x >= -25.0 and pos_x <= -17.0 and pos_z <= -60.0 and pos_z >= -95.0:
+				continue
+
+			# 2f. Nature Trail exclusion
+			if _dist_to_nature_trail(tree_pos) < 4.0:
 				continue
 
 			# 3. Check distance against hand-placed perimeter trees and props
@@ -119,7 +137,7 @@ func _init() -> void:
 
 			var rot_y := rng.randf_range(0.0, TAU)
 			var is_pine := rng.randf() < 0.52
-			var is_in_corridor := (pos_x > -4.0 and pos_x < 36.0 and pos_z > -140.0 and pos_z < -5.0)
+			var is_in_corridor := (pos_x > -4.0 and pos_x < 36.0 and pos_z > -80.0 and pos_z < -5.0)
 
 			if is_pine:
 				var scale_p := rng.randf_range(1.2, 1.6)
