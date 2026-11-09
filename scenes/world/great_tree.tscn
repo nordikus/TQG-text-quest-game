@@ -1,22 +1,38 @@
 [gd_scene format=3]
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bark"]
 resource_name = "MagicBark"
 cull_mode = 2
-albedo_color = Color(0.28, 0.2, 0.14, 1)
-roughness = 0.9
+albedo_color = Color(0.25, 0.17, 0.12, 1)
+roughness = 0.88
 emission_enabled = true
-emission = Color(0.08, 0.32, 0.18, 1)
-emission_energy_multiplier = 0.5
+emission = Color(0.06, 0.18, 0.09, 1)
+emission_energy_multiplier = 0.35
+rim_enabled = true
+rim = 0.35
+rim_tint = 0.45
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bark_light"]
+resource_name = "MagicBarkLight"
+cull_mode = 2
+albedo_color = Color(0.30, 0.21, 0.15, 1)
+roughness = 0.84
+emission_enabled = true
+emission = Color(0.07, 0.22, 0.10, 1)
+emission_energy_multiplier = 0.30
+rim_enabled = true
+rim = 0.30
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moss"]
 resource_name = "GlowingMossPath"
 cull_mode = 2
-albedo_color = Color(0.24, 0.38, 0.2, 1)
-roughness = 0.85
+albedo_color = Color(0.28, 0.52, 0.22, 1)
+roughness = 0.80
 emission_enabled = true
-emission = Color(0.12, 0.48, 0.26, 1)
+emission = Color(0.14, 0.54, 0.26, 1)
 emission_energy_multiplier = 0.65
+rim_enabled = true
+rim = 0.50
+rim_tint = 0.80
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leaves"]
 resource_name = "MagicLeaves"
@@ -24,25 +40,42 @@ cull_mode = 2
 albedo_color = Color(0.18, 0.44, 0.22, 1)
 roughness = 0.85
 emission_enabled = true
-emission = Color(0.06, 0.28, 0.14, 1)
-emission_energy_multiplier = 0.4
+emission = Color(0.04, 0.20, 0.09, 1)
+emission_energy_multiplier = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leaves_light"]
+resource_name = "MagicLeavesHighlight"
+cull_mode = 2
+albedo_color = Color(0.26, 0.56, 0.28, 1)
+roughness = 0.82
+emission_enabled = true
+emission = Color(0.08, 0.32, 0.15, 1)
+emission_energy_multiplier = 0.40
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spore_shroom"]
+resource_name = "SporeShroom"
+cull_mode = 2
+albedo_color = Color(0.35, 0.95, 0.70, 1)
+roughness = 0.35
+emission_enabled = true
+emission = Color(0.30, 0.95, 0.75, 1)
+emission_energy_multiplier = 2.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bridge_deck"]
 cull_mode = 2
-albedo_color = Color(0.28, 0.48, 0.22, 1)
-roughness = 0.85
+albedo_color = Color(0.28, 0.50, 0.22, 1)
+roughness = 0.82
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bridge_bark"]
 cull_mode = 2
-albedo_color = Color(0.32, 0.22, 0.15, 1)
-roughness = 0.9
-
+albedo_color = Color(0.28, 0.19, 0.13, 1)
+roughness = 0.88
 [sub_resource type="CylinderMesh" id="CylinderMesh_lower_trunk"]
 material = SubResource("StandardMaterial3D_bark")
 top_radius = 2.8
 bottom_radius = 3.2
 height = 18.0
-radial_segments = 20
+radial_segments = 24
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_lower_trunk"]
 height = 18.0
@@ -53,7 +86,7 @@ material = SubResource("StandardMaterial3D_bark")
 top_radius = 2.2
 bottom_radius = 2.8
 height = 12.0
-radial_segments = 18
+radial_segments = 20
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_mid_trunk"]
 height = 12.0
@@ -61,57 +94,118 @@ radius = 2.5
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_upper_trunk"]
 material = SubResource("StandardMaterial3D_bark")
-top_radius = 1.5
+top_radius = 1.6
 bottom_radius = 2.25
 height = 15.0
-radial_segments = 16
+radial_segments = 18
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_upper_trunk"]
 height = 15.0
 radius = 1.8
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_buttress_root"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_buttress_major"]
 material = SubResource("StandardMaterial3D_bark")
-top_radius = 0.4
-bottom_radius = 1.2
-height = 2.4
+top_radius = 0.45
+bottom_radius = 1.60
+height = 5.6
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_buttress_flank"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.35
+bottom_radius = 1.25
+height = 4.4
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_trunk_flute"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.35
+bottom_radius = 0.55
+height = 18.0
 radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_root_runner"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.25
+bottom_radius = 0.65
+height = 4.8
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_terrace_cradle_bough"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.65
+bottom_radius = 1.25
+height = 6.8
+radial_segments = 10
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_crown_bough_main"]
 material = SubResource("StandardMaterial3D_bark")
-top_radius = 0.9
-bottom_radius = 1.6
-height = 11.0
-radial_segments = 10
+top_radius = 0.85
+bottom_radius = 1.55
+height = 11.5
+radial_segments = 12
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_crown_bough_side"]
-material = SubResource("StandardMaterial3D_bark")
-top_radius = 0.65
-bottom_radius = 1.2
-height = 8.5
-radial_segments = 8
+material = SubResource("StandardMaterial3D_bark_light")
+top_radius = 0.55
+bottom_radius = 1.05
+height = 8.8
+radial_segments = 10
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_hanging_vine"]
+material = SubResource("StandardMaterial3D_moss")
+top_radius = 0.04
+bottom_radius = 0.08
+height = 6.2
+radial_segments = 6
 [sub_resource type="SphereMesh" id="SphereMesh_canopy_center"]
 material = SubResource("StandardMaterial3D_leaves")
-radius = 13.0
-height = 14.0
-radial_segments = 14
-rings = 9
+radius = 15.0
+height = 10.5
+radial_segments = 18
+rings = 10
+
+[sub_resource type="SphereMesh" id="SphereMesh_canopy_crown_top"]
+material = SubResource("StandardMaterial3D_leaves_light")
+radius = 11.5
+height = 8.0
+radial_segments = 16
+rings = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_canopy_large"]
 material = SubResource("StandardMaterial3D_leaves")
-radius = 9.5
-height = 10.5
-radial_segments = 12
+radius = 10.5
+height = 7.0
+radial_segments = 14
+rings = 8
+
+[sub_resource type="SphereMesh" id="SphereMesh_canopy_large_light"]
+material = SubResource("StandardMaterial3D_leaves_light")
+radius = 9.8
+height = 6.5
+radial_segments = 14
 rings = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_canopy_med"]
 material = SubResource("StandardMaterial3D_leaves")
-radius = 8.0
-height = 9.0
+radius = 8.2
+height = 5.5
 radial_segments = 12
-rings = 8
+rings = 7
 
+[sub_resource type="SphereMesh" id="SphereMesh_canopy_skirt"]
+material = SubResource("StandardMaterial3D_leaves")
+radius = 7.5
+height = 5.0
+radial_segments = 12
+rings = 7
+
+[sub_resource type="SphereMesh" id="SphereMesh_canopy_sub"]
+material = SubResource("StandardMaterial3D_leaves")
+radius = 6.2
+height = 4.2
+radial_segments = 10
+rings = 6
 [sub_resource type="BoxMesh" id="BoxMesh_entry_ramp_moss"]
 material = SubResource("StandardMaterial3D_moss")
 size = Vector3(2.0, 0.35, 3.2)
@@ -127,23 +221,43 @@ points = PackedVector3Array(4.8, -0.20, 1.2, 4.8, -0.20, 5.0, 3.1, 0.75, 1.2, 3.
 material = SubResource("StandardMaterial3D_moss")
 size = Vector3(3.2, 0.35, 2.6)
 
-[sub_resource type="BoxMesh" id="BoxMesh_step_under"]
-material = SubResource("StandardMaterial3D_bark")
-size = Vector3(3.6, 0.35, 2.6)
+[sub_resource type="CylinderMesh" id="CylinderMesh_step_bracket"]
+material = SubResource("StandardMaterial3D_bark_light")
+top_radius = 1.25
+bottom_radius = 0.45
+height = 2.8
+radial_segments = 12
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_step"]
 size = Vector3(3.2, 0.45, 2.6)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_step_flank"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_step_post"]
 material = SubResource("StandardMaterial3D_bark")
-top_radius = 0.32
-bottom_radius = 0.38
+top_radius = 0.08
+bottom_radius = 0.12
+height = 1.1
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_step_rail_beam"]
+material = SubResource("StandardMaterial3D_moss")
+top_radius = 0.06
+bottom_radius = 0.08
 height = 2.6
-radial_segments = 8
+radial_segments = 6
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_step_flank"]
-size = Vector3(0.5, 1.2, 2.6)
+[sub_resource type="SphereMesh" id="SphereMesh_spore_shroom"]
+material = SubResource("StandardMaterial3D_spore_shroom")
+radius = 0.13
+height = 0.15
+radial_segments = 6
+rings = 4
 
+[sub_resource type="SphereMesh" id="SphereMesh_spore_shroom_small"]
+material = SubResource("StandardMaterial3D_spore_shroom")
+radius = 0.09
+height = 0.11
+radial_segments = 6
+rings = 4
 [sub_resource type="BoxMesh" id="BoxMesh_terrace_deck"]
 material = SubResource("StandardMaterial3D_bark")
 size = Vector3(6.2, 0.45, 2.6)
@@ -191,7 +305,7 @@ height = 3.4
 radial_segments = 8
 
 [sub_resource type="SphereMesh" id="SphereMesh_natural_arch_leaves"]
-material = SubResource("StandardMaterial3D_leaves")
+material = SubResource("StandardMaterial3D_leaves_light")
 radius = 1.5
 height = 1.6
 radial_segments = 8
@@ -222,12 +336,11 @@ radial_segments = 6
 size = Vector3(0.4, 1.2, 9.84)
 
 [sub_resource type="SphereMesh" id="SphereMesh_bridge_arch_foliage"]
-material = SubResource("StandardMaterial3D_leaves")
+material = SubResource("StandardMaterial3D_leaves_light")
 radius = 1.4
 height = 1.6
 radial_segments = 7
 rings = 4
-
 [node name="GreatTree" type="Node3D"]
 
 [node name="TrunkBody" type="StaticBody3D" parent="."]
@@ -255,113 +368,184 @@ mesh = SubResource("CylinderMesh_upper_trunk")
 [node name="UpperTrunkCol" type="CollisionShape3D" parent="TrunkBody"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 34.5, 0)
 shape = SubResource("CylinderShape3D_upper_trunk")
-
-[node name="ButtressRoot0" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(0.94, 0, 0.34, 0.13, 0.93, -0.35, -0.32, 0.37, 0.87, 3.4, 0.45, -1.2)
-mesh = SubResource("CylinderMesh_buttress_root")
-
-[node name="ButtressRoot1" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(0.94, 0, -0.34, -0.13, 0.93, -0.35, 0.32, 0.37, 0.87, -1.2, 0.45, -3.4)
-mesh = SubResource("CylinderMesh_buttress_root")
-
-[node name="ButtressRoot2" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(-0.94, 0, 0.34, 0.13, 0.93, 0.35, -0.32, 0.37, -0.87, -3.4, 0.45, 1.2)
-mesh = SubResource("CylinderMesh_buttress_root")
-
-[node name="ButtressRoot3" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(1.0, 0, 0, 0, 0.93, -0.37, 0, 0.37, 0.93, 0.0, 0.45, -3.6)
-mesh = SubResource("CylinderMesh_buttress_root")
-
+[node name="ButtressRootNorth" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.000, 0.880, 0.470, 0.12, 0.92, -0.36, 0.000, -0.470, 0.880, 0.00, 1.60, -4.40)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="ButtressRootNE" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.620, 0.760, 0.190, 0.12, 0.92, -0.36, -0.620, 0.760, -0.190, 3.20, 1.60, -3.20)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="ButtressRootEFlank" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.880, 0.470, 0.000, 0.12, 0.92, -0.36, -0.470, 0.880, 0.000, 4.20, 1.60, 0.60)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="ButtressRootSEFlank" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(-0.380, 0.820, -0.430, 0.12, 0.92, -0.36, 0.380, 0.820, 0.430, 1.80, 1.60, 4.60)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="ButtressRootSouth" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.000, 0.880, -0.470, 0.12, 0.92, -0.36, 0.000, 0.470, 0.880, -0.50, 1.60, 4.60)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="ButtressRootSW" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(-0.620, 0.760, -0.190, 0.12, 0.92, -0.36, 0.620, 0.760, 0.190, -3.50, 1.60, 3.00)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="ButtressRootWest" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(-0.880, 0.470, 0.000, 0.12, 0.92, -0.36, 0.470, 0.880, 0.000, -4.40, 1.60, -0.30)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="ButtressRootNW" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(-0.620, 0.760, 0.190, 0.12, 0.92, -0.36, 0.620, 0.760, -0.190, -3.20, 1.60, -3.20)
+mesh = SubResource("CylinderMesh_buttress_major")
+[node name="TrunkFlute0" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.68, 9.0, 0.97)
+mesh = SubResource("CylinderMesh_trunk_flute")
+[node name="TrunkFlute1" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.49, 9.0, 2.81)
+mesh = SubResource("CylinderMesh_trunk_flute")
+[node name="TrunkFlute2" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.18, 9.0, 1.83)
+mesh = SubResource("CylinderMesh_trunk_flute")
+[node name="TrunkFlute3" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.68, 9.0, -0.97)
+mesh = SubResource("CylinderMesh_trunk_flute")
+[node name="TrunkFlute4" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.49, 9.0, -2.81)
+mesh = SubResource("CylinderMesh_trunk_flute")
+[node name="TrunkFlute5" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.18, 9.0, -1.83)
+mesh = SubResource("CylinderMesh_trunk_flute")
+[node name="GroundRunnerW" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.000, 0.000, 1.000, 0.000, 1.000, 0.000, -1.000, 0.000, 0.000, -5.40, 0.25, -0.50)
+mesh = SubResource("CylinderMesh_root_runner")
+[node name="GroundRunnerNW" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.707, 0.000, 0.707, 0.000, 1.000, 0.000, -0.707, 0.000, 0.707, -4.50, 0.25, -4.50)
+mesh = SubResource("CylinderMesh_root_runner")
+[node name="GroundRunnerN" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000, 0.000, 1.000, 0.00, 0.25, -5.80)
+mesh = SubResource("CylinderMesh_root_runner")
+[node name="GroundRunnerSW" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(-0.707, 0.000, 0.707, 0.000, 1.000, 0.000, -0.707, 0.000, -0.707, -4.50, 0.25, 4.50)
+mesh = SubResource("CylinderMesh_root_runner")
+[node name="TerraceCradleWest" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.940, -0.220, 0.260, 0.200, 0.970, 0.100, -0.270, -0.040, 0.960, -1.80, 14.50, -3.20)
+mesh = SubResource("CylinderMesh_terrace_cradle_bough")
+[node name="TerraceCradleEast" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(0.950, 0.200, 0.220, -0.180, 0.980, 0.080, -0.240, -0.110, 0.960, 1.20, 14.50, -3.00)
+mesh = SubResource("CylinderMesh_terrace_cradle_bough")
+[node name="TerraceCradleCenter" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1.000, 0.000, 0.000, 0.000, 0.910, 0.410, 0.000, -0.410, 0.910, -0.30, 14.00, -4.40)
+mesh = SubResource("CylinderMesh_terrace_cradle_bough")
 [node name="CrownBoughNorth" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(1.00000, -0.00000, 0.00000, 0.00000, 0.88699, -0.46178, -0.00000, 0.46178, 0.88699, 0.00, 28.50, -3.80)
+transform = Transform3D(1.000, 0.000, 0.000, 0.000, 0.880, -0.470, 0.000, 0.470, 0.880, 0.00, 27.50, -4.20)
 mesh = SubResource("CylinderMesh_crown_bough_main")
-
 [node name="CrownBoughSouth" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(-1.00000, -0.00000, -0.00000, 0.00000, 0.88699, 0.46178, -0.00000, -0.46178, 0.88699, 0.00, 28.50, 3.80)
+transform = Transform3D(-1.000, 0.000, 0.000, 0.000, 0.880, 0.470, 0.000, -0.470, 0.880, 0.00, 27.50, 4.20)
 mesh = SubResource("CylinderMesh_crown_bough_main")
-
 [node name="CrownBoughEast" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(-0.00000, -1.00000, 0.00000, 0.88699, 0.88699, -0.00000, -0.46178, 0.00000, 1.00000, 3.80, 28.50, 0.00)
+transform = Transform3D(0.000, 0.880, -0.470, -1.000, 0.000, 0.000, 0.000, 0.470, 0.880, 4.20, 27.50, 0.00)
 mesh = SubResource("CylinderMesh_crown_bough_main")
-
 [node name="CrownBoughWest" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(-0.00000, 1.00000, -0.00000, -0.88699, 0.88699, -0.00000, -0.46178, 0.00000, 1.00000, -3.80, 28.50, 0.00)
+transform = Transform3D(0.000, -0.880, 0.470, 1.000, 0.000, 0.000, 0.000, 0.470, 0.880, -4.20, 27.50, 0.00)
 mesh = SubResource("CylinderMesh_crown_bough_main")
-
 [node name="CrownBoughNE" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(0.70711, -0.66424, 0.24247, 0.66424, 0.88242, -0.34290, -0.24247, 0.34290, 0.93937, 2.80, 30.00, -2.80)
+transform = Transform3D(0.707, -0.660, 0.240, 0.660, 0.880, -0.340, -0.240, 0.340, 0.940, 3.20, 29.50, -3.20)
 mesh = SubResource("CylinderMesh_crown_bough_side")
-
 [node name="CrownBoughNW" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(0.70711, 0.66424, -0.24247, -0.66424, 0.88242, -0.34290, -0.24247, 0.34290, 0.93937, -2.80, 30.00, -2.80)
+transform = Transform3D(0.707, 0.660, -0.240, -0.660, 0.880, -0.340, -0.240, 0.340, 0.940, -3.20, 29.50, -3.20)
 mesh = SubResource("CylinderMesh_crown_bough_side")
-
 [node name="CrownBoughSE" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(-0.70711, -0.66423, -0.24246, 0.66423, 0.88242, 0.34290, -0.24246, -0.34290, 0.93937, 2.80, 30.00, 2.80)
+transform = Transform3D(-0.707, -0.660, -0.240, 0.660, 0.880, 0.340, -0.240, -0.340, 0.940, 3.20, 29.50, 3.20)
 mesh = SubResource("CylinderMesh_crown_bough_side")
-
 [node name="CrownBoughSW" type="MeshInstance3D" parent="TrunkBody"]
-transform = Transform3D(-0.70711, 0.66423, 0.24246, -0.66423, 0.88242, 0.34290, -0.24246, -0.34290, 0.93937, -2.80, 30.00, 2.80)
+transform = Transform3D(-0.707, 0.660, 0.240, -0.660, 0.880, 0.340, -0.240, -0.340, 0.940, -3.20, 29.50, 3.20)
 mesh = SubResource("CylinderMesh_crown_bough_side")
-
+[node name="HangingVine0" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.50, 23.00, -1.80)
+mesh = SubResource("CylinderMesh_hanging_vine")
+[node name="HangingVine1" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.20, 23.00, -2.20)
+mesh = SubResource("CylinderMesh_hanging_vine")
+[node name="HangingVine2" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.80, 24.00, 4.00)
+mesh = SubResource("CylinderMesh_hanging_vine")
+[node name="HangingVine3" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.20, 24.00, 3.80)
+mesh = SubResource("CylinderMesh_hanging_vine")
+[node name="HangingVine4" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 24.50, -5.50)
+mesh = SubResource("CylinderMesh_hanging_vine")
+[node name="HangingVine5" type="MeshInstance3D" parent="TrunkBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00, 24.50, 5.20)
+mesh = SubResource("CylinderMesh_hanging_vine")
 [node name="CanopyGroup" type="Node3D" parent="."]
 
 [node name="CanopyDomeCenter" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 36.0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 36.5, 0)
 mesh = SubResource("SphereMesh_canopy_center")
 
+[node name="CanopyCrownTop" type="MeshInstance3D" parent="CanopyGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.0, 0)
+mesh = SubResource("SphereMesh_canopy_crown_top")
+
 [node name="CanopyLobeNorth" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 34.50, -6.50)
+transform = Transform3D(0.98, 0, 0.17, 0, 1, 0, -0.17, 0, 0.98, 0.0, 35.0, -7.5)
 mesh = SubResource("SphereMesh_canopy_large")
 
 [node name="CanopyLobeSouth" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 34.50, 6.50)
-mesh = SubResource("SphereMesh_canopy_large")
+transform = Transform3D(0.98, 0, -0.17, 0, 1, 0, 0.17, 0, 0.98, 0.0, 35.0, 7.5)
+mesh = SubResource("SphereMesh_canopy_large_light")
 
 [node name="CanopyLobeEast" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.50, 34.50, 0.00)
+transform = Transform3D(0.17, 0, -0.98, 0, 1, 0, 0.98, 0, 0.17, 7.5, 35.0, 0.0)
 mesh = SubResource("SphereMesh_canopy_large")
 
 [node name="CanopyLobeWest" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.50, 34.50, 0.00)
-mesh = SubResource("SphereMesh_canopy_large")
+transform = Transform3D(0.17, 0, 0.98, 0, 1, 0, -0.98, 0, 0.17, -7.5, 35.0, 0.0)
+mesh = SubResource("SphereMesh_canopy_large_light")
 
 [node name="CanopyLobeNE" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.20, 35.50, -5.20)
+transform = Transform3D(0.707, 0, 0.707, 0, 1, 0, -0.707, 0, 0.707, 5.8, 36.0, -5.8)
 mesh = SubResource("SphereMesh_canopy_med")
 
 [node name="CanopyLobeNW" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.20, 35.50, -5.20)
+transform = Transform3D(0.707, 0, -0.707, 0, 1, 0, 0.707, 0, 0.707, -5.8, 36.0, -5.8)
 mesh = SubResource("SphereMesh_canopy_med")
 
 [node name="CanopyLobeSE" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.20, 35.50, 5.20)
+transform = Transform3D(-0.707, 0, 0.707, 0, 1, 0, -0.707, 0, -0.707, 5.8, 36.0, 5.8)
 mesh = SubResource("SphereMesh_canopy_med")
 
 [node name="CanopyLobeSW" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.20, 35.50, 5.20)
+transform = Transform3D(-0.707, 0, -0.707, 0, 1, 0, 0.707, 0, -0.707, -5.8, 36.0, 5.8)
 mesh = SubResource("SphereMesh_canopy_med")
-
-[node name="CanopyLobeTop" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 41.00, 0.00)
-mesh = SubResource("SphereMesh_canopy_large")
 
 [node name="CanopySkirtN" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 29.50, -9.00)
-mesh = SubResource("SphereMesh_canopy_med")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 29.5, -9.8)
+mesh = SubResource("SphereMesh_canopy_skirt")
 
 [node name="CanopySkirtS" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 29.50, 9.00)
-mesh = SubResource("SphereMesh_canopy_med")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 29.5, 9.8)
+mesh = SubResource("SphereMesh_canopy_skirt")
 
 [node name="CanopySkirtE" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.00, 29.50, 0.00)
-mesh = SubResource("SphereMesh_canopy_med")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.8, 29.5, 0.0)
+mesh = SubResource("SphereMesh_canopy_skirt")
 
 [node name="CanopySkirtW" type="MeshInstance3D" parent="CanopyGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.00, 29.50, 0.00)
-mesh = SubResource("SphereMesh_canopy_med")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.8, 29.5, 0.0)
+mesh = SubResource("SphereMesh_canopy_skirt")
 
+[node name="CanopySub0" type="MeshInstance3D" parent="CanopyGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 27.0, -4.0)
+mesh = SubResource("SphereMesh_canopy_sub")
+
+[node name="CanopySub1" type="MeshInstance3D" parent="CanopyGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 27.0, -4.0)
+mesh = SubResource("SphereMesh_canopy_sub")
+
+[node name="CanopySub2" type="MeshInstance3D" parent="CanopyGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 27.0, 4.0)
+mesh = SubResource("SphereMesh_canopy_sub")
+
+[node name="CanopySub3" type="MeshInstance3D" parent="CanopyGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 27.0, 4.0)
+mesh = SubResource("SphereMesh_canopy_sub")
 [node name="BranchStairs" type="Node3D" parent="."]
 
 [node name="RootEntryRamp" type="StaticBody3D" parent="BranchStairs"]
@@ -376,473 +560,502 @@ mesh = SubResource("BoxMesh_entry_ramp_moss")
 [node name="RampBark" type="MeshInstance3D" parent="BranchStairs/RootEntryRamp"]
 transform = Transform3D(0.8944, 0.4472, 0, -0.4472, 0.8944, 0, 0, 0, 1, 3.95, 0.16, 3.10)
 mesh = SubResource("BoxMesh_entry_ramp_bark")
-
 [node name="RootStep0" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.30995113, 0.3903035, 0.8669449, -0.09167363, 0.8953337, -0.43585953, -0.9463225, -0.21457115, -0.24172916, 1.7102256, 0.7318182, 3.1108887)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep0"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep0"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep0"]
 shape = SubResource("BoxShape3D_step")
 
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
+
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep0"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
+
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="RootStep1" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.1438293, 0.44501823, 0.8838959, -0.09167363, 0.89533377, -0.43585953, -0.9853473, -0.018340573, 0.16957164, 0.14618234, 1.4954545, 3.546989)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep1"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep1"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep1"]
 shape = SubResource("BoxShape3D_step")
 
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
+
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep1"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep2" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.56752104, 0.40663612, 0.71593785, -0.09167362, 0.89533377, -0.43585953, -0.81823945, 0.18172681, 0.54539853, -1.4484419, 2.259091, 3.2410672)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep2"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep2"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep2"]
 shape = SubResource("BoxShape3D_step")
 
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
+
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep2"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep3" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.8724886, 0.2831867, 0.3982072, -0.09167363, 0.8953337, -0.43585956, -0.47995794, 0.3437774, 0.8071292, -2.7400553, 3.0227275, 2.2571213)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep3"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep3"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep3"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep3/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep3"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
 
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep3/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="RootStep4" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.9949335, 0.10049525, -0.0028274518, -0.091673605, 0.8953337, -0.43585956, -0.041270297, 0.4339105, 0.9000103, -3.4584553, 3.7863638, 0.8009909)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep4"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep4"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep4"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep4/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep4/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep4"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep5" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.9092406, -0.103219576, -0.40327066, -0.09167364, 0.8953337, -0.43585953, 0.40605104, 0.43327048, 0.80461127, -3.4533544, 4.55, -0.82270503)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep5"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep5"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep5"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep5/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep5/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep5"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep6" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.6333367, -0.2853411, -0.71935046, -0.09167358, 0.8953337, -0.43585953, 0.7684274, 0.34199128, 0.54088944, -2.7258193, 5.313637, -2.274293)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep6"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep6"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep6"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep6/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep6"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
 
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep6/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="RootStep7" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.22494, -0.40776995, -0.8849439, -0.091673635, 0.8953337, -0.43585956, 0.97005045, 0.17916828, 0.16401464, -1.4280492, 6.077273, -3.250104)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep7"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep7"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep7"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep7/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep7/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep7"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep8" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.2305135, -0.44489425, -0.86540896, -0.09167365, 0.8953337, -0.43585956, 0.96874124, -0.021136325, -0.24717157, 0.1684657, 6.8409095, -3.5460005)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep8"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep8"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep8"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep8/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep8/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep8"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep9" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.6377441, -0.38894758, -0.6648325, -0.091673605, 0.8953337, -0.43585953, 0.7647735, -0.21701925, -0.60665, 1.729738, 7.6045456, -3.1000817)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep9"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep9"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep9"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep9"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep9"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep9/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep9"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
 
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep9/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="RootStep10" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.9115601, -0.25163403, -0.32517448, -0.09167363, 0.8953337, -0.43585953, 0.40081674, -0.36750224, -0.8392187, 2.929153, 8.368182, -2.0056329)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep10"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep10"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep10"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep10/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep10/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep10"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep11" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.9946798, -0.061679207, 0.08250924, -0.091673635, 0.8953337, -0.43585953, -0.046989836, -0.4411046, -0.8962247, 3.5157957, 9.131819, -0.49161014)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep11"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep11"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep11"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep11"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep11"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep11/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep11/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep11"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep12" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.86971474, 0.14117876, 0.47293225, -0.09167363, 0.8953337, -0.43585953, -0.48496628, -0.42242882, -0.76574254, 3.366942, 9.895455, 1.1252563)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep12"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep12"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep12"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep12/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep12"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
 
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep12/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="RootStep13" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.5628072, 0.3145025, 0.7644189, -0.091673635, 0.8953337, -0.43585956, -0.82148886, -0.31538197, -0.4750687, 2.5137315, 10.659091, 2.5067217)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep13"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep13"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep13"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep13"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep13"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep13/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep13/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep13"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep14" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.1381619, 0.42203295, 0.8959908, -0.0916736, 0.8953337, -0.43585953, -0.98615783, -0.14235789, -0.08501172, 1.1346542, 11.422728, 3.3637865)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep14"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep14"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep14"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep14"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep14"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep14/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep14/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep14"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep15" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.3153869, 0.44127512, 0.8401235, -0.091673695, 0.8953337, -0.43585956, -0.94452477, 0.06044717, 0.32282984, -0.48179027, 12.186364, 3.517155)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep15"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep15"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep15"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep15"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep15"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep15/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep15"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
 
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep15/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="RootStep16" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.7029572, 0.36820346, 0.6085043, -0.09167355, 0.8953337, -0.43585953, -0.7052994, 0.2506068, 0.66313577, -1.9974453, 12.950001, 2.9347422)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep16"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep16"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep16"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep16"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep16"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep16/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep16/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep16"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep17" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.94347054, 0.21810457, 0.24958725, -0.091673635, 0.8953337, -0.43585953, -0.31852686, 0.3883401, 0.86471534, -3.0952394, 13.713637, 1.7383883)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep17"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep17"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep17"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep17"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep17"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep17"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep17/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep17/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep17"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep18" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.98661196, 0.022378618, -0.1615428, -0.09167363, 0.8953337, -0.43585953, 0.1348808, 0.44483343, 0.88539845, -3.5455163, 14.477273, 0.17836733)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep18"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep18"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep18"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep18"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep18"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep18/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep18"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
 
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep18/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="RootStep19" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.82335645, -0.17802887, -0.5388784, -0.0916736, 0.8953337, -0.43585956, 0.5600715, 0.4082687, 0.7208582, -3.254079, 15.24091, -1.4189676)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep19"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep19"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep19"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep19"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep19"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep19/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep19/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep19"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep20" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(0.48785645, -0.3411931, -0.80348206, -0.0916737, 0.8953337, -0.43585953, 0.8680968, 0.28629503, 0.40551588, -2.281896, 16.004547, -2.7194579)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep20"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep20"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep20"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep20"]
 shape = SubResource("BoxShape3D_step")
 
-[node name="OuterRootFlank" type="StaticBody3D" parent="BranchStairs/RootStep20"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.85, 0)
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
 
-[node name="FlankMesh" type="MeshInstance3D" parent="BranchStairs/RootStep20/OuterRootFlank"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CylinderMesh_step_flank")
-
-[node name="FlankCol" type="CollisionShape3D" parent="BranchStairs/RootStep20/OuterRootFlank"]
-shape = SubResource("BoxShape3D_step_flank")
-
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep20"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
 [node name="RootStep21" type="StaticBody3D" parent="BranchStairs"]
 transform = Transform3D(-0.65678066, -0.43964213, -0.61266136, 0, 0.8124603, -0.5830166, -0.75408167, 0.38291404, 0.5336082, -1.375, 16.4875, -3.175)
 
 [node name="StepDeck" type="MeshInstance3D" parent="BranchStairs/RootStep21"]
 mesh = SubResource("BoxMesh_step_deck")
 
-[node name="StepUnder" type="MeshInstance3D" parent="BranchStairs/RootStep21"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
-mesh = SubResource("BoxMesh_step_under")
+[node name="StepUnderBracket" type="MeshInstance3D" parent="BranchStairs/RootStep21"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.45, -0.42, 0)
+mesh = SubResource("CylinderMesh_step_bracket")
 
 [node name="StepCol" type="CollisionShape3D" parent="BranchStairs/RootStep21"]
 shape = SubResource("BoxShape3D_step")
 
+[node name="StepPost" type="MeshInstance3D" parent="BranchStairs/RootStep21"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 0.55, 0)
+mesh = SubResource("CylinderMesh_step_post")
+
+[node name="StepRailBeam" type="MeshInstance3D" parent="BranchStairs/RootStep21"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.50, 0.95, 0)
+mesh = SubResource("CylinderMesh_step_rail_beam")
+[node name="SporeShroom1" type="MeshInstance3D" parent="BranchStairs/RootStep21"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50, 1.15, 0.08)
+mesh = SubResource("SphereMesh_spore_shroom")
+
+[node name="SporeShroom2" type="MeshInstance3D" parent="BranchStairs/RootStep21"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 1.10, -0.08)
+mesh = SubResource("SphereMesh_spore_shroom_small")
 [node name="CanopyTerrace" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 17.0, -5.2)
 
@@ -867,9 +1080,9 @@ mesh = SubResource("BoxMesh_terrace_ramp")
 
 [node name="TerraceLight" type="OmniLight3D" parent="CanopyTerrace"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 0)
-light_color = Color(0.4, 1.0, 0.7, 1)
-light_energy = 2.2
-omni_range = 18.0
+light_color = Color(0.4, 0.9, 0.6, 1)
+light_energy = 1.8
+omni_range = 9.0
 
 [node name="TerraceRailWest" type="StaticBody3D" parent="CanopyTerrace"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 0.9, 0)
@@ -918,15 +1131,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0, 0)
 mesh = SubResource("SphereMesh_natural_arch_leaves")
 
 [node name="MagicAura" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14, 0)
-light_color = Color(0.3, 0.9, 0.55, 1)
-light_energy = 4.0
-omni_range = 28.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.0, 0)
+light_color = Color(0.35, 0.85, 0.55, 1)
+light_energy = 1.4
+omni_range = 14.0
+
+[node name="CrownGlow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.0, 0)
+light_color = Color(0.40, 0.92, 0.65, 1)
+light_energy = 2.2
+omni_range = 22.0
 
 [node name="AncientBoughBridge" type="Node3D" parent="."]
 
 [node name="BoughSegment0" type="StaticBody3D" parent="AncientBoughBridge"]
-transform = Transform3D(0.999908, 0.001198, 0.013503, 0, 0.996084, -0.088417, -0.013557, 0.088409, 0.995992, 0.08492, 17.42611, -11.50)
+transform = Transform3D(1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0.08, 17.43, -11.5)
 
 [node name="DeckMesh" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment0"]
 mesh = SubResource("BoxMesh_bridge_deck_0")
@@ -935,27 +1154,27 @@ mesh = SubResource("BoxMesh_bridge_deck_0")
 shape = SubResource("BoxShape3D_bridge_col_0")
 
 [node name="BarkBoughUnder" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment0"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.7, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.9, 0)
 mesh = SubResource("CylinderMesh_bridge_under")
 
 [node name="RailCol_W" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_W" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment0"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
 
 [node name="RailCol_E" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_E" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment0"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
 
 [node name="BoughSegment1" type="StaticBody3D" parent="AncientBoughBridge"]
-transform = Transform3D(0.999522, 0.002733, 0.030802, 0, 0.996087, -0.088383, -0.030923, 0.088341, 0.995610, -0.12866, 18.27833, -21.10)
+transform = Transform3D(0.999391, 0.00304138, -0.0347631, 0, 0.996195, 0.0871557, 0.0348995, -0.0871026, 0.995588, -0.13, 18.28, -21.1)
 
 [node name="DeckMesh" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment1"]
 mesh = SubResource("BoxMesh_bridge_deck_0")
@@ -964,40 +1183,40 @@ mesh = SubResource("BoxMesh_bridge_deck_0")
 shape = SubResource("BoxShape3D_bridge_col_0")
 
 [node name="BarkBoughUnder" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment1"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.7, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.9, 0)
 mesh = SubResource("CylinderMesh_bridge_under")
 
 [node name="RailCol_W" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_W" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment1"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
 
 [node name="RailCol_E" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_E" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment1"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
 
 [node name="BoughArch" type="Node3D" parent="AncientBoughBridge/BoughSegment1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 
 [node name="ArchLeaves" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment1/BoughArch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 mesh = SubResource("SphereMesh_bridge_arch_foliage")
 
 [node name="FireflyLight" type="OmniLight3D" parent="AncientBoughBridge/BoughSegment1/BoughArch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-light_color = Color(0.4, 0.95, 0.6, 1)
-light_energy = 1.8
-omni_range = 8.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+light_color = Color(0.4, 0.9, 0.5, 1)
+light_energy = 1.2
+omni_range = 6.0
 
 [node name="BoughSegment2" type="StaticBody3D" parent="AncientBoughBridge"]
-transform = Transform3D(0.998465, 0.004890, 0.055165, 0, 0.996095, -0.088290, -0.055381, 0.088155, 0.994566, -0.54340, 19.13055, -30.70)
+transform = Transform3D(0.998782, 0.0042976, -0.0491444, 0, 0.996195, 0.0871557, 0.049332, -0.0870496, 0.994981, -0.54, 19.13, -30.7)
 
 [node name="DeckMesh" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment2"]
 mesh = SubResource("BoxMesh_bridge_deck_0")
@@ -1006,40 +1225,40 @@ mesh = SubResource("BoxMesh_bridge_deck_0")
 shape = SubResource("BoxShape3D_bridge_col_0")
 
 [node name="BarkBoughUnder" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment2"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.7, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.9, 0)
 mesh = SubResource("CylinderMesh_bridge_under")
 
 [node name="RailCol_W" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_W" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment2"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
 
 [node name="RailCol_E" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_E" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment2"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
 
 [node name="BoughArch" type="Node3D" parent="AncientBoughBridge/BoughSegment2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 
 [node name="ArchLeaves" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment2/BoughArch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 mesh = SubResource("SphereMesh_bridge_arch_foliage")
 
 [node name="FireflyLight" type="OmniLight3D" parent="AncientBoughBridge/BoughSegment2/BoughArch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-light_color = Color(0.4, 0.95, 0.6, 1)
-light_energy = 1.8
-omni_range = 8.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+light_color = Color(0.4, 0.9, 0.5, 1)
+light_energy = 1.2
+omni_range = 6.0
 
 [node name="BoughSegment3" type="StaticBody3D" parent="AncientBoughBridge"]
-transform = Transform3D(0.997370, 0.006392, 0.072197, 0, 0.996103, -0.088194, -0.072479, 0.087962, 0.993484, -1.15482, 19.97833, -40.25)
+transform = Transform3D(0.997817, 0.00574886, -0.0657388, 0, 0.996195, 0.0871557, 0.0659897, -0.0869656, 0.99402, -1.15, 19.98, -40.25)
 
 [node name="DeckMesh" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment3"]
 mesh = SubResource("BoxMesh_bridge_deck_0")
@@ -1048,21 +1267,21 @@ mesh = SubResource("BoxMesh_bridge_deck_0")
 shape = SubResource("BoxShape3D_bridge_col_0")
 
 [node name="BarkBoughUnder" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment3"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.7, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.9, 0)
 mesh = SubResource("CylinderMesh_bridge_under")
 
 [node name="RailCol_W" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_W" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment3"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
 
 [node name="RailCol_E" type="CollisionShape3D" parent="AncientBoughBridge/BoughSegment3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0.6, 0)
 shape = SubResource("BoxShape3D_bridge_rail")
 
 [node name="RailMesh_E" type="MeshInstance3D" parent="AncientBoughBridge/BoughSegment3"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.45, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 1.4, 0.6, 0)
 mesh = SubResource("CylinderMesh_bridge_rail")
