@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_trunk"]
+height = 4.5
+radius = 0.45
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bark"]
+albedo_color = Color(0.35, 0.26, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_trunk"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.3
+bottom_radius = 0.5
+height = 3.5
+radial_segments = 7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_crown"]
+albedo_color = Color(0.32, 0.55, 0.25, 1)
+roughness = 0.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_crown1"]
+material = SubResource("StandardMaterial3D_crown")
+radius = 1.6
+height = 2.4
+radial_segments = 7
+rings = 5
+
+[sub_resource type="SphereMesh" id="SphereMesh_crown2"]
+material = SubResource("StandardMaterial3D_crown")
+radius = 1.2
+height = 1.8
+radial_segments = 6
+rings = 4
+
+[node name="TreeDeciduousLowPoly" type="StaticBody3D"]
+collision_layer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+shape = SubResource("CylinderShape3D_trunk")
+
+[node name="Trunk" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+mesh = SubResource("CylinderMesh_trunk")
+
+[node name="CrownMain" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 0)
+mesh = SubResource("SphereMesh_crown1")
+
+[node name="CrownSide" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 4.4, 0.4)
+mesh = SubResource("SphereMesh_crown2")

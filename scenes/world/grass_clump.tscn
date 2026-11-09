@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass_blade"]
+albedo_color = Color(0.28, 0.52, 0.22, 1)
+roughness = 0.85
+cull_mode = 2
+
+[sub_resource type="PrismMesh" id="PrismMesh_blade"]
+material = SubResource("StandardMaterial3D_grass_blade")
+left_to_right = 0.5
+size = Vector3(0.18, 0.55, 0.02)
+
+[node name="GrassClump" type="Node3D"]
+
+[node name="Blade1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, 0.25, 0)
+mesh = SubResource("PrismMesh_blade")
+
+[node name="Blade2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0.05, 0.22, 0)
+mesh = SubResource("PrismMesh_blade")
+
+[node name="Blade3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -0.04, 0.28, 0.04)
+mesh = SubResource("PrismMesh_blade")
+
+[node name="Blade4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 0.9, 0, -0.965926, 0, 0.258819, 0.02, 0.2, -0.05)
+mesh = SubResource("PrismMesh_blade")

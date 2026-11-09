@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_petal"]
+albedo_color = Color(0.95, 0.9, 0.5, 1)
+roughness = 0.8
+emission_enabled = true
+emission = Color(0.9, 0.85, 0.4, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_petal"]
+material = SubResource("StandardMaterial3D_petal")
+radius = 0.08
+height = 0.14
+radial_segments = 5
+rings = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stem"]
+albedo_color = Color(0.2, 0.45, 0.18, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_stem"]
+material = SubResource("StandardMaterial3D_stem")
+top_radius = 0.02
+bottom_radius = 0.03
+height = 0.25
+radial_segments = 4
+
+[node name="FlowersLowPoly" type="Node3D"]
+
+[node name="Stem1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("CylinderMesh_stem")
+
+[node name="Head1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+mesh = SubResource("SphereMesh_petal")
+
+[node name="Stem2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, 0.12, 0.1, 0.05)
+mesh = SubResource("CylinderMesh_stem")
+
+[node name="Head2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0.16, 0.23, 0.05)
+mesh = SubResource("SphereMesh_petal")

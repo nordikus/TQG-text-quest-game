@@ -1,0 +1,13 @@
+# Godot 4+ specific ignores
+.godot/
+*.translation
+*.import
+.tmp/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Agent & Superpowers local state
+.superpowers/

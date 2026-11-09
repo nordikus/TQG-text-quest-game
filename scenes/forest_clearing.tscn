@@ -1,0 +1,852 @@
+[gd_scene load_steps=41 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/world/stone_altar.tscn" id="2_altar"]
+[ext_resource type="PackedScene" path="res://scenes/world/great_tree.tscn" id="3_great_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle_facade.tscn" id="4_castle"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree_lowpoly.tscn" id="5_tree_pine"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree_deciduous_lowpoly.tscn" id="6_tree_deciduous"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree_dead_charred.tscn" id="7_tree_charred"]
+[ext_resource type="PackedScene" path="res://scenes/world/rock_lowpoly.tscn" id="8_rock"]
+[ext_resource type="PackedScene" path="res://scenes/world/bush_lowpoly.tscn" id="9_bush"]
+[ext_resource type="PackedScene" path="res://scenes/world/fern_lowpoly.tscn" id="10_fern"]
+[ext_resource type="PackedScene" path="res://scenes/world/mushroom_lowpoly.tscn" id="11_shroom"]
+[ext_resource type="PackedScene" path="res://scenes/world/log_lowpoly.tscn" id="12_log"]
+[ext_resource type="PackedScene" path="res://scenes/world/grass_clump.tscn" id="13_grass"]
+[ext_resource type="PackedScene" path="res://scenes/world/flowers_lowpoly.tscn" id="14_flowers"]
+[ext_resource type="PackedScene" path="res://scenes/world/forest_fireflies.tscn" id="15_fireflies"]
+[ext_resource type="Script" path="res://scripts/world/world_changer.gd" id="16_wc"]
+[ext_resource type="MultiMesh" path="res://scenes/world/forest_canopy_pines.res" id="17_pines"]
+[ext_resource type="MultiMesh" path="res://scenes/world/forest_canopy_oaks.res" id="18_oaks"]
+[ext_resource type="MultiMesh" path="res://scenes/world/corridor_forest_pines.res" id="19_corr_pines"]
+[ext_resource type="MultiMesh" path="res://scenes/world/corridor_forest_oaks.res" id="20_corr_oaks"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.24, 0.44, 0.74, 1)
+sky_horizon_color = Color(0.74, 0.78, 0.82, 1)
+ground_bottom_color = Color(0.12, 0.18, 0.12, 1)
+ground_horizon_color = Color(0.55, 0.64, 0.55, 1)
+sun_angle_max = 35.0
+
+[sub_resource type="Sky" id="Sky_forest"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_clearing"]
+background_mode = 2
+sky = SubResource("Sky_forest")
+ambient_light_source = 3
+ambient_light_color = Color(0.68, 0.74, 0.7, 1)
+ambient_light_energy = 0.95
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.2
+fog_enabled = true
+fog_light_color = Color(0.65, 0.73, 0.72, 1)
+fog_density = 0.0028
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0065
+volumetric_fog_albedo = Color(0.85, 0.92, 0.9, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass"]
+albedo_color = Color(0.24, 0.44, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_base_ground"]
+material = SubResource("StandardMaterial3D_grass")
+size = Vector3(500, 1, 500)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_base_ground"]
+size = Vector3(500, 1, 500)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dirt"]
+albedo_color = Color(0.38, 0.3, 0.2, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_approach_path"]
+material = SubResource("StandardMaterial3D_dirt")
+size = Vector3(2.2, 0.04, 7.0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mountain"]
+albedo_color = Color(0.24, 0.3, 0.36, 1)
+roughness = 0.95
+
+[sub_resource type="PrismMesh" id="PrismMesh_mountain_large"]
+material = SubResource("StandardMaterial3D_mountain")
+size = Vector3(180, 85, 80)
+
+[sub_resource type="PrismMesh" id="PrismMesh_mountain_med"]
+material = SubResource("StandardMaterial3D_mountain")
+size = Vector3(150, 70, 70)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ash_field"]
+albedo_color = Color(0.11, 0.09, 0.08, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_ash_field"]
+material = SubResource("StandardMaterial3D_ash_field")
+size = Vector3(65, 0.04, 120)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_charred_path"]
+albedo_color = Color(0.07, 0.05, 0.04, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="BoxMesh_road_seg1"]
+material = SubResource("StandardMaterial3D_charred_path")
+size = Vector3(5.5, 0.06, 42.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_road_seg2"]
+material = SubResource("StandardMaterial3D_charred_path")
+size = Vector3(6.0, 0.06, 56.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_road_seg3"]
+material = SubResource("StandardMaterial3D_charred_path")
+size = Vector3(7.5, 0.06, 36.0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fire_glow"]
+shading_mode = 0
+albedo_color = Color(1, 0.45, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_fire_ember"]
+material = SubResource("StandardMaterial3D_fire_glow")
+radius = 0.22
+height = 0.44
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_boundary_segment"]
+size = Vector3(7.5, 12.0, 4.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_road_border"]
+size = Vector3(4.0, 12.0, 125.0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trail"]
+albedo_color = Color(0.25, 0.38, 0.2, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_approach_plaza"]
+material = SubResource("StandardMaterial3D_trail")
+top_radius = 2.4
+bottom_radius = 2.7
+height = 0.1
+radial_segments = 12
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_approach_plaza"]
+top_radius = 2.4
+bottom_radius = 2.7
+height = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_trail_segment_0"]
+material = SubResource("StandardMaterial3D_trail")
+size = Vector3(3.8, 0.08, 26.210)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_segment_0"]
+size = Vector3(3.8, 0.08, 26.210)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_rail_0"]
+size = Vector3(0.5, 1.8, 26.210)
+
+[sub_resource type="BoxMesh" id="BoxMesh_trail_segment_1"]
+material = SubResource("StandardMaterial3D_trail")
+size = Vector3(3.8, 0.08, 31.094)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_segment_1"]
+size = Vector3(3.8, 0.08, 31.094)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_rail_1"]
+size = Vector3(0.5, 1.8, 31.094)
+
+[sub_resource type="BoxMesh" id="BoxMesh_trail_segment_2"]
+material = SubResource("StandardMaterial3D_trail")
+size = Vector3(3.8, 0.08, 30.765)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_segment_2"]
+size = Vector3(3.8, 0.08, 30.765)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_rail_2"]
+size = Vector3(0.5, 1.8, 30.765)
+
+[sub_resource type="BoxMesh" id="BoxMesh_trail_segment_3"]
+material = SubResource("StandardMaterial3D_trail")
+size = Vector3(3.8, 0.08, 21.079)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_segment_3"]
+size = Vector3(3.8, 0.08, 21.079)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trail_rail_3"]
+size = Vector3(0.5, 1.8, 21.079)
+
+[node name="ForestClearing" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_clearing")
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.766044, -0.422618, 0.48481, 0, 0.75471, 0.656059, -0.642788, -0.50257, 0.578142, 0, 36, 0)
+light_color = Color(1, 0.96, 0.88, 1)
+light_energy = 1.4
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_layer = 1
+
+[node name="BaseMesh" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_base_ground")
+
+[node name="BaseCollision" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_base_ground")
+
+[node name="ForestPines" type="MultiMeshInstance3D" parent="."]
+multimesh = ExtResource("17_pines")
+
+[node name="ForestOaks" type="MultiMeshInstance3D" parent="."]
+multimesh = ExtResource("18_oaks")
+
+[node name="DistantMountains" type="Node3D" parent="."]
+
+[node name="MountainNorth" type="MeshInstance3D" parent="DistantMountains"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42, -260)
+mesh = SubResource("PrismMesh_mountain_large")
+
+[node name="MountainNW" type="MeshInstance3D" parent="DistantMountains"]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -160, 36, -240)
+mesh = SubResource("PrismMesh_mountain_large")
+
+[node name="MountainNE" type="MeshInstance3D" parent="DistantMountains"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 160, 36, -240)
+mesh = SubResource("PrismMesh_mountain_med")
+
+[node name="MountainWest" type="MeshInstance3D" parent="DistantMountains"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -250, 34, -40)
+mesh = SubResource("PrismMesh_mountain_med")
+
+[node name="MountainEast" type="MeshInstance3D" parent="DistantMountains"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 250, 34, -40)
+mesh = SubResource("PrismMesh_mountain_med")
+
+[node name="MountainSouthEast" type="MeshInstance3D" parent="DistantMountains"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 180, 30, 210)
+mesh = SubResource("PrismMesh_mountain_med")
+
+[node name="MountainSouthWest" type="MeshInstance3D" parent="DistantMountains"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -180, 30, 210)
+mesh = SubResource("PrismMesh_mountain_med")
+
+[node name="ApproachPath" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 7.5)
+mesh = SubResource("BoxMesh_approach_path")
+
+[node name="StoneAltar" parent="." instance=ExtResource("2_altar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 10.5)
+
+[node name="ForestFireflies" parent="." instance=ExtResource("15_fireflies")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CastleFacade" parent="." instance=ExtResource("4_castle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -140)
+
+[node name="GreatTree" parent="." instance=ExtResource("3_great_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, -110)
+
+[node name="CorridorForest" type="Node3D" parent="."]
+
+[node name="CorridorPines" type="MultiMeshInstance3D" parent="CorridorForest"]
+multimesh = ExtResource("19_corr_pines")
+
+[node name="CorridorOaks" type="MultiMeshInstance3D" parent="CorridorForest"]
+multimesh = ExtResource("20_corr_oaks")
+
+[node name="CharredForestZone" type="Node3D" parent="."]
+visible = false
+
+[node name="AshField" type="MeshInstance3D" parent="CharredForestZone"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 16, 0.02, -72)
+mesh = SubResource("BoxMesh_ash_field")
+
+[node name="CharredTree1" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 15, 0, -14)
+
+[node name="CharredTree2" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 22, 0, -24)
+
+[node name="CharredTree3" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 26, 0, -42)
+
+[node name="CharredTree4" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 18, 0, -60)
+
+[node name="CharredTree5" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 8, 0, -78)
+
+[node name="CharredTree6" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 16, 0, -96)
+
+[node name="CharredTree7" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 5, 0, -112)
+
+[node name="CharredTree8" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 28, 0, -75)
+
+[node name="CharredLog1" parent="CharredForestZone" instance=ExtResource("12_log")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 18, 0, -18)
+
+[node name="CharredLog2" parent="CharredForestZone" instance=ExtResource("12_log")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 14, 0, -82)
+
+[node name="ForestBarrier" type="Node3D" parent="."]
+
+[node name="BarrierOak1" parent="ForestBarrier" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 13, 0, -10)
+
+[node name="BarrierPine1" parent="ForestBarrier" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 16, 0, -13)
+
+[node name="BarrierOak2" parent="ForestBarrier" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 19, 0, -9)
+
+[node name="BarrierPine2" parent="ForestBarrier" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 21, 0, -14)
+
+[node name="BarrierBush1" parent="ForestBarrier" instance=ExtResource("9_bush")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 14, 0, -6)
+
+[node name="BarrierBush2" parent="ForestBarrier" instance=ExtResource("9_bush")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 18, 0, -5)
+
+[node name="BarrierLog" parent="ForestBarrier" instance=ExtResource("12_log")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 15, 0, -8)
+
+[node name="BarrierBlocker" type="StaticBody3D" parent="ForestBarrier"]
+collision_layer = 1
+
+[node name="BarrierSeg1" type="CollisionShape3D" parent="ForestBarrier/BarrierBlocker"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 12.37, 6.0, -12.37)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BarrierSeg2" type="CollisionShape3D" parent="ForestBarrier/BarrierBlocker"]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 15.16, 6.0, -8.75)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BarrierSeg3" type="CollisionShape3D" parent="ForestBarrier/BarrierBlocker"]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, 16.9, 6.0, -4.53)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BurningPath" type="Node3D" parent="."]
+visible = false
+
+[node name="RoadBorderWest" type="StaticBody3D" parent="BurningPath"]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 9.0, 4.0, -75.0)
+collision_layer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BurningPath/RoadBorderWest"]
+shape = SubResource("BoxShape3D_road_border")
+
+[node name="RoadBorderEast" type="StaticBody3D" parent="BurningPath"]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 22.0, 4.0, -75.0)
+collision_layer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BurningPath/RoadBorderEast"]
+shape = SubResource("BoxShape3D_road_border")
+
+[node name="RoadSeg1" type="MeshInstance3D" parent="BurningPath"]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 18, 0.05, -28)
+mesh = SubResource("BoxMesh_road_seg1")
+
+[node name="RoadSeg2" type="MeshInstance3D" parent="BurningPath"]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 14, 0.05, -74)
+mesh = SubResource("BoxMesh_road_seg2")
+
+[node name="RoadSeg3" type="MeshInstance3D" parent="BurningPath"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 4, 0.05, -116)
+mesh = SubResource("BoxMesh_road_seg3")
+
+[node name="FireParticlesGroup" type="Node3D" parent="."]
+visible = false
+
+[node name="FireLight1" type="OmniLight3D" parent="FireParticlesGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1.5, -10)
+light_color = Color(1, 0.45, 0.1, 1)
+light_energy = 4.0
+omni_range = 14.0
+
+[node name="Ember1" type="MeshInstance3D" parent="FireParticlesGroup/FireLight1"]
+mesh = SubResource("SphereMesh_fire_ember")
+
+[node name="FireLight2" type="OmniLight3D" parent="FireParticlesGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.5, -50)
+light_color = Color(1, 0.45, 0.1, 1)
+light_energy = 4.0
+omni_range = 16.0
+
+[node name="Ember2" type="MeshInstance3D" parent="FireParticlesGroup/FireLight2"]
+mesh = SubResource("SphereMesh_fire_ember")
+
+[node name="FireLight3" type="OmniLight3D" parent="FireParticlesGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.5, -95)
+light_color = Color(1, 0.45, 0.1, 1)
+light_energy = 4.0
+omni_range = 16.0
+
+[node name="Ember3" type="MeshInstance3D" parent="FireParticlesGroup/FireLight3"]
+mesh = SubResource("SphereMesh_fire_ember")
+
+[node name="ClearingDetails" type="Node3D" parent="."]
+
+[node name="Log_NW" parent="ClearingDetails" instance=ExtResource("12_log")]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -12, 0, -3.5)
+
+[node name="Log_SW" parent="ClearingDetails" instance=ExtResource("12_log")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -9.0, 0, 7.5)
+
+[node name="Log_SE" parent="ClearingDetails" instance=ExtResource("12_log")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 8.5, 0, 8.0)
+
+[node name="Rock_AltarNW" parent="ClearingDetails" instance=ExtResource("8_rock")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -5.5, 0, -4.5)
+
+[node name="Rock_AltarSE" parent="ClearingDetails" instance=ExtResource("8_rock")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 5.0, 0, 5.0)
+
+[node name="Rock_AltarSW" parent="ClearingDetails" instance=ExtResource("8_rock")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -4.8, 0, 4.5)
+
+[node name="Rock_MidEast" parent="ClearingDetails" instance=ExtResource("8_rock")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 9.5, 0, 0.5)
+
+[node name="Rock_MidWest" parent="ClearingDetails" instance=ExtResource("8_rock")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -10.5, 0, 1.5)
+
+[node name="Rock_North" parent="ClearingDetails" instance=ExtResource("8_rock")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -3.5, 0, -9.0)
+
+[node name="Rock_South" parent="ClearingDetails" instance=ExtResource("8_rock")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 3.2, 0, 11.5)
+
+[node name="Bush1" parent="ClearingDetails" instance=ExtResource("9_bush")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -15, 0, -4.5)
+
+[node name="Bush2" parent="ClearingDetails" instance=ExtResource("9_bush")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 10.0, 0, 6.0)
+
+[node name="Bush3" parent="ClearingDetails" instance=ExtResource("9_bush")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -8.0, 0, 6.0)
+
+[node name="Bush4" parent="ClearingDetails" instance=ExtResource("9_bush")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 1.5, 0, -11.0)
+
+[node name="Grass1" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, 4.0)
+
+[node name="Grass2" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(0.8, 0, 0.6, 0, 1, 0, -0.6, 0, 0.8, 3.5, 0, 4.2)
+
+[node name="Grass3" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -6.5, 0, 3.0)
+
+[node name="Grass4" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 6.0, 0, 3.5)
+
+[node name="Grass5" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 0.5)
+
+[node name="Grass6" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -5.5, 0, -4.5)
+
+[node name="Grass7" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, -1.0)
+
+[node name="Grass8" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 4.5, 0, -5.5)
+
+[node name="Grass9" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -6.5)
+
+[node name="Grass10" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -1.5, 0, 10.0)
+
+[node name="Grass11" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 5.0)
+
+[node name="Grass12" parent="ClearingDetails" instance=ExtResource("13_grass")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -10.0, 0, 4.5)
+
+[node name="Flowers1" parent="ClearingDetails" instance=ExtResource("14_flowers")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 4.8)
+
+[node name="Flowers2" parent="ClearingDetails" instance=ExtResource("14_flowers")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 2.8, 0, 5.0)
+
+[node name="Flowers3" parent="ClearingDetails" instance=ExtResource("14_flowers")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -5.5, 0, -2.0)
+
+[node name="Flowers4" parent="ClearingDetails" instance=ExtResource("14_flowers")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 6.0, 0, 1.5)
+
+[node name="Flowers5" parent="ClearingDetails" instance=ExtResource("14_flowers")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="Flowers6" parent="ClearingDetails" instance=ExtResource("14_flowers")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -7.5, 0, 3.5)
+
+[node name="Fern1" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -4.5, 0, 5.0)
+
+[node name="Fern2" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8, 0, 4.5)
+
+[node name="Fern3" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -7.5, 0, 2.0)
+
+[node name="Fern4" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 2.5)
+
+[node name="Fern5" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -7.0, 0, -4.0)
+
+[node name="Fern6" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 6.5, 0, -4.5)
+
+[node name="Fern7" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -8.0)
+
+[node name="Fern8" parent="ClearingDetails" instance=ExtResource("10_fern")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 9.0, 0, 7.0)
+
+[node name="ShroomsAltarLeft" parent="ClearingDetails" instance=ExtResource("11_shroom")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -3.2, 0, 3.5)
+
+[node name="ShroomsAltarRight" parent="ClearingDetails" instance=ExtResource("11_shroom")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, 3.6)
+
+[node name="ShroomsBack" parent="ClearingDetails" instance=ExtResource("11_shroom")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, -4.5)
+
+[node name="ShroomsLogNW" parent="ClearingDetails" instance=ExtResource("11_shroom")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -11.5, 0, -3.5)
+
+[node name="ShroomsLogSW" parent="ClearingDetails" instance=ExtResource("11_shroom")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -8.5, 0, 8.2)
+
+[node name="ShroomsLogSE" parent="ClearingDetails" instance=ExtResource("11_shroom")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 7.5, 0, 7.5)
+
+[node name="DenseForestWall" type="Node3D" parent="."]
+
+[node name="Oak_W1" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -21, 0, 2)
+
+[node name="Pine_W2" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, -21, 0, -4)
+
+[node name="Oak_W3" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -21, 0, -8)
+
+[node name="Pine_W4" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -20, 0, -12)
+
+[node name="Oak_W5" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -21, 0, -16)
+
+[node name="Oak_W6" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, -19, 0, 6)
+
+[node name="Pine_NW1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, -14, 0, -22)
+
+[node name="Oak_NW2" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -16, 0, -20)
+
+[node name="Pine_NW3" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -9.8, 0, -23.5)
+
+[node name="Pine_N1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3, 0, -20)
+
+[node name="Oak_N2" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 1, 0, -18)
+
+[node name="Pine_N3" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 6, 0, -17)
+
+[node name="Oak_N4" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, -2.5, 0, -24.5)
+
+[node name="Pine_SW1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -15, 0, 10)
+
+[node name="Oak_SW2" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -18, 0, 14)
+
+[node name="Pine_SW3" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, -11, 0, 18)
+
+[node name="Pine_S1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -6, 0, 18)
+
+[node name="Oak_S2" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -2, 0, 20)
+
+[node name="Pine_S3" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 4, 0, 19)
+
+[node name="Oak_S4" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 9, 0, 17)
+
+[node name="Pine_SE1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 14, 0, 14)
+
+[node name="Oak_SE2" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 17, 0, 9)
+
+[node name="Pine_E1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 18, 0, 3)
+
+[node name="Oak_E2" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 17, 0, -3)
+
+[node name="Pine_NE1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 18.5, 0, -2.5)
+
+[node name="BorderRock1" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, -14, 0, 7)
+
+[node name="BorderRock2" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, -19, 0, -5)
+
+[node name="BorderRock3" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 14, 0, 9)
+
+[node name="BorderRock4" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 13, 0, -4)
+
+[node name="BorderRock5" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -11, 0, -21)
+
+[node name="BorderRock6" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.3, 0, 0, 0, 2.3, 0, 0, 0, 2.3, 8, 0, -15)
+
+[node name="BorderRock7" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, -8, 0, 16)
+
+[node name="BorderRock8" parent="DenseForestWall" instance=ExtResource("8_rock")]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 7, 0, 16)
+
+[node name="OuterOak1" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -26, 0, 0)
+
+[node name="OuterPine2" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -24, 0, -11)
+
+[node name="OuterPine3" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -23, 0, 12)
+
+[node name="OuterOak4" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 0, 0, 25)
+
+[node name="OuterPine5" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, 20, 0, 20)
+
+[node name="OuterOak6" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -12, 0, -26)
+
+[node name="OuterPine7" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 5, 0, -26)
+
+[node name="OuterOak8" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 24, 0, -6)
+
+[node name="OuterPine9" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -26, 0, -20)
+
+[node name="OuterOak10" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -9, 0, 24)
+
+[node name="ClearingImpassableBoundary" type="StaticBody3D" parent="."]
+collision_layer = 1
+
+[node name="BoundarySeg0" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 17.5, 6.0, 0)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg1" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, -0.258819, 16.9, 6.0, 4.53)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg2" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 15.16, 6.0, 8.75)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg3" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 12.37, 6.0, 12.37)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg4" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 8.75, 6.0, 15.16)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg5" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 4.53, 6.0, 16.9)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg6" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 6.0, 17.5)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg7" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, -4.53, 6.0, 16.9)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg8" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -8.75, 6.0, 15.16)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg9" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -12.37, 6.0, 12.37)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg10" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -15.16, 6.0, 8.75)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg11" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(-0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, -0.258819, -16.9, 6.0, 4.53)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg12" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -17.5, 6.0, 0)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg13" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -23.18, 6.0, -6.21)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg14" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -20.79, 6.0, -12.00)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg15" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -16.96, 6.0, -16.96)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg16" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -12.00, 6.0, -20.79)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+
+[node name="BoundarySeg18" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.0, -17.5)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg19" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 4.53, 6.0, -16.9)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="BoundarySeg20" type="CollisionShape3D" parent="ClearingImpassableBoundary"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 8.75, 6.0, -15.16)
+shape = SubResource("BoxShape3D_boundary_segment")
+
+[node name="WorldChanger" type="Node3D" parent="." node_paths=PackedStringArray("great_tree", "forest_barrier", "charred_forest_zone", "fire_particles_group", "burning_path", "ambient_light", "corridor_forest")]
+script = ExtResource("16_wc")
+great_tree = NodePath("../GreatTree")
+forest_barrier = NodePath("../ForestBarrier")
+charred_forest_zone = NodePath("../CharredForestZone")
+fire_particles_group = NodePath("../FireParticlesGroup")
+burning_path = NodePath("../BurningPath")
+ambient_light = NodePath("../SunLight")
+corridor_forest = NodePath("../CorridorForest")
+[node name="NatureTrail" type="Node3D" parent="."]
+[node name="TrailSegment0" type="StaticBody3D" parent="NatureTrail"]
+transform = Transform3D(-0.972387, 0, -0.233373, 0, 1, 0, 0.233373, 0, -0.972387, -3.000, 0.020, -12.500)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NatureTrail/TrailSegment0"]
+mesh = SubResource("BoxMesh_trail_segment_0")
+
+
+[node name="RailColW" type="CollisionShape3D" parent="NatureTrail/TrailSegment0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_0")
+
+[node name="RailColE" type="CollisionShape3D" parent="NatureTrail/TrailSegment0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_0")
+
+[node name="TrailSegment1" type="StaticBody3D" parent="NatureTrail"]
+transform = Transform3D(-0.980581, 0, -0.196116, 0, 1, 0, 0.196116, 0, -0.980581, -9.000, 0.020, -40.000)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NatureTrail/TrailSegment1"]
+mesh = SubResource("BoxMesh_trail_segment_1")
+
+
+[node name="RailColW" type="CollisionShape3D" parent="NatureTrail/TrailSegment1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_1")
+
+[node name="RailColE" type="CollisionShape3D" parent="NatureTrail/TrailSegment1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_1")
+
+[node name="TrailSegment2" type="StaticBody3D" parent="NatureTrail"]
+transform = Transform3D(-0.991228, 0, -0.132164, 0, 1, 0, 0.132164, 0, -0.991228, -14.000, 0.020, -70.000)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NatureTrail/TrailSegment2"]
+mesh = SubResource("BoxMesh_trail_segment_2")
+
+
+[node name="RailColW" type="CollisionShape3D" parent="NatureTrail/TrailSegment2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_2")
+
+[node name="RailColE" type="CollisionShape3D" parent="NatureTrail/TrailSegment2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_2")
+
+[node name="TrailSegment3" type="StaticBody3D" parent="NatureTrail"]
+transform = Transform3D(-0.996167, 0, -0.087468, 0, 1, 0, 0.087468, 0, -0.996167, -16.900, 0.020, -95.250)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NatureTrail/TrailSegment3"]
+mesh = SubResource("BoxMesh_trail_segment_3")
+
+
+[node name="RailColW" type="CollisionShape3D" parent="NatureTrail/TrailSegment3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_3")
+
+[node name="RailColE" type="CollisionShape3D" parent="NatureTrail/TrailSegment3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.8, 0)
+shape = SubResource("BoxShape3D_trail_rail_3")
+
+[node name="ApproachPlaza" type="StaticBody3D" parent="NatureTrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.8, 0.04, -105.5)
+
+[node name="PlazaMesh" type="MeshInstance3D" parent="NatureTrail/ApproachPlaza"]
+mesh = SubResource("CylinderMesh_approach_plaza")
+
+
+[node name="TrailFireflies1" parent="NatureTrail" instance=ExtResource("15_fireflies")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0, 0.5, -25.0)
+
+[node name="TrailFireflies2" parent="NatureTrail" instance=ExtResource("15_fireflies")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.0, 0.5, -55.0)
+
+[node name="TrailFireflies3" parent="NatureTrail" instance=ExtResource("15_fireflies")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.0, 0.5, -85.0)
+
+[node name="TrailFireflies4" parent="NatureTrail" instance=ExtResource("15_fireflies")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.8, 0.5, -105.5)
+

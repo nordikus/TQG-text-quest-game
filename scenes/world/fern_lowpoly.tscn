@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fern"]
+albedo_color = Color(0.2, 0.48, 0.18, 1)
+roughness = 0.8
+cull_mode = 2
+
+[sub_resource type="PrismMesh" id="PrismMesh_frond"]
+material = SubResource("StandardMaterial3D_fern")
+left_to_right = 0.5
+size = Vector3(0.35, 0.9, 0.04)
+
+[node name="FernLowPoly" type="Node3D"]
+
+[node name="Frond1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0.35, 0.3)
+mesh = SubResource("PrismMesh_frond")
+
+[node name="Frond2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.707107, -0.707107, 0, -0.707107, -0.707107, 0, 0.35, -0.3)
+mesh = SubResource("PrismMesh_frond")
+
+[node name="Frond3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 1, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0.3, 0.35, 0)
+mesh = SubResource("PrismMesh_frond")
+
+[node name="Frond4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, -1, -0.707107, -0.707107, 0, -0.707107, 0.707107, 0, -0.3, 0.35, 0)
+mesh = SubResource("PrismMesh_frond")
