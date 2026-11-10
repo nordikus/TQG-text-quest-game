@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/interaction/interaction_ray.gd" id="2_ir"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/quest_panel.tscn" id="4_qp"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_panel.tscn" id="5_inv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.4
@@ -31,3 +32,5 @@ script = ExtResource("2_ir")
 [node name="HUD" parent="." instance=ExtResource("3_hud")]
 
 [node name="QuestPanel" parent="." instance=ExtResource("4_qp")]
+
+[node name="InventoryPanel" parent="." instance=ExtResource("5_inv")]

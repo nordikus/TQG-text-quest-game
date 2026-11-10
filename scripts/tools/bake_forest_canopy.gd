@@ -97,8 +97,8 @@ func _init() -> void:
 			if tree_pos.length() < 22.5:
 				continue
 
-			# 2. Castle keep and courtyard exclusion ONLY (walls at X = -22..22, Z = -120..-79)
-			if pos_x > -23.5 and pos_x < 23.5 and pos_z > -120.0 and pos_z < -79.0:
+			# 2. Castle keep and courtyard exclusion (walls at X = -36..36, Z = -168..-81.5)
+			if pos_x > -39.0 and pos_x < 39.0 and pos_z > -175.0 and pos_z < -79.0:
 				continue
 
 			# 3. Nature Corridor exclusion:
