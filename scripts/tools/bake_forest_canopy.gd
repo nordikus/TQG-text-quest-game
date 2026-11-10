@@ -25,13 +25,11 @@ const HAND_PLACED_POSITIONS: Array[Vector2] = [
 ]
 
 const NATURE_TRAIL_PTS: Array[Vector2] = [
-	Vector2(0.0, 0.0),
-	Vector2(0.0, -20.5),
-	Vector2(-3.5, -25.0),
-	Vector2(-8.0, -33.0),
-	Vector2(-12.5, -41.0),
-	Vector2(-13.25, -48.0),
-	Vector2(-17.5, -56.8)
+	Vector2(-4.5, -17.5),
+	Vector2(-6.2, -25.0),
+	Vector2(-9.0, -35.5),
+	Vector2(-13.8, -47.5),
+	Vector2(-17.3, -56.8)
 ]
 
 func _dist_to_nature_trail(p: Vector2) -> float:
@@ -105,7 +103,7 @@ func _init() -> void:
 				continue
 
 			# 2f. Nature Trail exclusion
-			if _dist_to_nature_trail(tree_pos) < 4.0:
+			if _dist_to_nature_trail(tree_pos) < 5.0:
 				continue
 
 			# 3. Check distance against hand-placed perimeter trees and props
@@ -137,7 +135,7 @@ func _init() -> void:
 
 			var rot_y := rng.randf_range(0.0, TAU)
 			var is_pine := rng.randf() < 0.52
-			var is_in_corridor := (pos_x > -4.0 and pos_x < 36.0 and pos_z > -80.0 and pos_z < -5.0)
+			var is_in_corridor := (pos_x > -6.0 and pos_x < 36.0 and pos_z > -82.0 and pos_z < -5.0)
 
 			if is_pine:
 				var scale_p := rng.randf_range(1.2, 1.6)

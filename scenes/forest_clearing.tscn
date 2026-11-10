@@ -20,6 +20,10 @@
 [ext_resource type="MultiMesh" path="res://scenes/world/forest_canopy_oaks.res" id="18_oaks"]
 [ext_resource type="MultiMesh" path="res://scenes/world/corridor_forest_pines.res" id="19_corr_pines"]
 [ext_resource type="MultiMesh" path="res://scenes/world/corridor_forest_oaks.res" id="20_corr_oaks"]
+[ext_resource type="ArrayMesh" path="res://scenes/world/nature_trail_mesh.res" id="21_nature_trail_mesh"]
+[ext_resource type="Shape3D" path="res://scenes/world/nature_trail_col.res" id="22_nature_trail_col"]
+[ext_resource type="ArrayMesh" path="res://scenes/world/burning_path_mesh.res" id="23_burning_path_mesh"]
+[ext_resource type="Shape3D" path="res://scenes/world/burning_path_col.res" id="24_burning_path_col"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.24, 0.44, 0.74, 1)
@@ -79,30 +83,6 @@ size = Vector3(180, 85, 80)
 material = SubResource("StandardMaterial3D_mountain")
 size = Vector3(150, 70, 70)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ash_field"]
-albedo_color = Color(0.11, 0.09, 0.08, 1)
-roughness = 0.95
-
-[sub_resource type="BoxMesh" id="BoxMesh_ash_field"]
-material = SubResource("StandardMaterial3D_ash_field")
-size = Vector3(35, 0.04, 65)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_charred_path"]
-albedo_color = Color(0.07, 0.05, 0.04, 1)
-roughness = 0.98
-
-[sub_resource type="BoxMesh" id="BoxMesh_road_seg1"]
-material = SubResource("StandardMaterial3D_charred_path")
-size = Vector3(5.5, 0.06, 22.0)
-
-[sub_resource type="BoxMesh" id="BoxMesh_road_seg2"]
-material = SubResource("StandardMaterial3D_charred_path")
-size = Vector3(6.0, 0.06, 28.0)
-
-[sub_resource type="BoxMesh" id="BoxMesh_road_seg3"]
-material = SubResource("StandardMaterial3D_charred_path")
-size = Vector3(7.5, 0.06, 30.0)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fire_glow"]
 shading_mode = 0
 albedo_color = Color(1, 0.45, 0.1, 1)
@@ -160,52 +140,6 @@ rings = 3
 
 
 
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trail"]
-albedo_color = Color(0.25, 0.38, 0.2, 1)
-roughness = 0.95
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_approach_plaza"]
-material = SubResource("StandardMaterial3D_trail")
-top_radius = 3.2
-bottom_radius = 3.5
-height = 0.1
-radial_segments = 12
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_approach_plaza"]
-top_radius = 3.2
-bottom_radius = 3.5
-height = 0.1
-
-[sub_resource type="BoxMesh" id="BoxMesh_trail_segment_0"]
-material = SubResource("StandardMaterial3D_trail")
-size = Vector3(4.0, 0.08, 4.65)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_trail_segment_0"]
-size = Vector3(4.0, 0.08, 4.65)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_trail_rail_0"]
-size = Vector3(0.5, 1.8, 4.65)
-
-[sub_resource type="BoxMesh" id="BoxMesh_trail_segment_1"]
-material = SubResource("StandardMaterial3D_trail")
-size = Vector3(3.8, 0.08, 16.8)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_trail_segment_1"]
-size = Vector3(3.8, 0.08, 16.8)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_trail_rail_1"]
-size = Vector3(0.5, 1.8, 16.8)
-
-[sub_resource type="BoxMesh" id="BoxMesh_trail_segment_2"]
-material = SubResource("StandardMaterial3D_trail")
-size = Vector3(3.8, 0.08, 15.2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_trail_segment_2"]
-size = Vector3(3.8, 0.08, 15.2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_trail_rail_2"]
-size = Vector3(0.5, 1.8, 15.2)
 
 [node name="ForestClearing" type="Node3D"]
 
@@ -295,10 +229,6 @@ multimesh = ExtResource("20_corr_oaks")
 [node name="CharredForestZone" type="Node3D" parent="."]
 visible = false
 
-[node name="AshField" type="MeshInstance3D" parent="CharredForestZone"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 12, 0.02, -45)
-mesh = SubResource("BoxMesh_ash_field")
-
 [node name="CharredTree1" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 19, 0, -14)
 
@@ -312,7 +242,7 @@ transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 24, 0, -32)
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 20, 0, -44)
 
 [node name="CharredTree5" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 8, 0, -56)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 16.5, 0, -56)
 
 [node name="CharredTree6" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 14, 0, -64)
@@ -327,7 +257,7 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 22, 0, -52)
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 22, 0, -18)
 
 [node name="CharredLog2" parent="CharredForestZone" instance=ExtResource("12_log")]
-transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 5, 0, -62)
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 1.5, 0.4, -62)
 
 [node name="ForestBarrier" type="Node3D" parent="."]
 
@@ -370,17 +300,14 @@ shape = SubResource("BoxShape3D_boundary_segment")
 [node name="BurningPath" type="Node3D" parent="."]
 visible = false
 
-[node name="RoadSeg1" type="MeshInstance3D" parent="BurningPath"]
-transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 15.5, 0.05, -20.0)
-mesh = SubResource("BoxMesh_road_seg1")
+[node name="BurningPathBody" type="StaticBody3D" parent="BurningPath"]
+collision_layer = 1
 
-[node name="RoadSeg2" type="MeshInstance3D" parent="BurningPath"]
-transform = Transform3D(0.974, 0, -0.225, 0, 1, 0, 0.225, 0, 0.974, 15.0, 0.05, -41.0)
-mesh = SubResource("BoxMesh_road_seg2")
+[node name="BurningPathMesh" type="MeshInstance3D" parent="BurningPath/BurningPathBody"]
+mesh = ExtResource("23_burning_path_mesh")
 
-[node name="RoadSeg3" type="MeshInstance3D" parent="BurningPath"]
-transform = Transform3D(0.9165, 0, -0.400, 0, 1, 0, 0.400, 0, 0.9165, 6.0, 0.05, -67.75)
-mesh = SubResource("BoxMesh_road_seg3")
+[node name="BurningPathCol" type="CollisionShape3D" parent="BurningPath/BurningPathBody"]
+shape = ExtResource("24_burning_path_col")
 
 [node name="FireParticlesGroup" type="Node3D" parent="."]
 visible = false
@@ -412,12 +339,25 @@ scale_amount_min = 0.6
 scale_amount_max = 1.8
 
 [node name="FireEmbersSeg3" type="CPUParticles3D" parent="FireParticlesGroup"]
-transform = Transform3D(0.9165, 0, -0.400, 0, 1, 0, 0.400, 0, 0.9165, 6.0, 0.6, -67.75)
+transform = Transform3D(0.9165, 0, -0.400, 0, 1, 0, 0.400, 0, 0.9165, 8.5, 0.8, -60.0)
 amount = 75
 lifetime = 3.2
 mesh = SubResource("SphereMesh_ember_mote")
 emission_shape = 3
 emission_box_extents = Vector3(5.0, 0.5, 17)
+gravity = Vector3(0.2, 1.8, -0.2)
+initial_velocity_min = 0.4
+initial_velocity_max = 1.2
+scale_amount_min = 0.6
+scale_amount_max = 1.8
+
+[node name="FireEmbersSeg4" type="CPUParticles3D" parent="FireParticlesGroup"]
+transform = Transform3D(0.96, 0, -0.28, 0, 1, 0, 0.28, 0, 0.96, 1.5, 3.2, -76.0)
+amount = 80
+lifetime = 3.2
+mesh = SubResource("SphereMesh_ember_mote")
+emission_shape = 3
+emission_box_extents = Vector3(4.5, 0.8, 14)
 gravity = Vector3(0.2, 1.8, -0.2)
 initial_velocity_min = 0.4
 initial_velocity_max = 1.2
@@ -450,38 +390,51 @@ initial_velocity_max = 0.8
 scale_amount_min = 0.8
 scale_amount_max = 2.2
 
+[node name="FireSmokeSeg3" type="CPUParticles3D" parent="FireParticlesGroup"]
+transform = Transform3D(0.95, 0, -0.31, 0, 1, 0, 0.31, 0, 0.95, 3.0, 3.0, -72.0)
+amount = 45
+lifetime = 4.0
+mesh = SubResource("SphereMesh_smoke_puff")
+emission_shape = 3
+emission_box_extents = Vector3(4.0, 0.8, 16)
+gravity = Vector3(0.1, 1.1, -0.1)
+initial_velocity_min = 0.2
+initial_velocity_max = 0.8
+scale_amount_min = 0.8
+scale_amount_max = 2.2
+
 [node name="FireLight1" type="OmniLight3D" parent="FireParticlesGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 2.0, -18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2.0, -18)
 light_color = Color(1, 0.48, 0.12, 1)
 light_energy = 4.5
 omni_range = 16.0
 
 [node name="FireLight2" type="OmniLight3D" parent="FireParticlesGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 2.0, -32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2.0, -32)
 light_color = Color(1, 0.36, 0.08, 1)
 light_energy = 4.5
 omni_range = 16.0
 
 [node name="FireLight3" type="OmniLight3D" parent="FireParticlesGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 2.0, -44)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 2.0, -45)
 light_color = Color(1, 0.52, 0.14, 1)
 light_energy = 4.5
 omni_range = 16.0
 
 [node name="FireLight4" type="OmniLight3D" parent="FireParticlesGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 2.0, -56)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 2.2, -58)
 light_color = Color(1, 0.38, 0.09, 1)
 light_energy = 4.5
 omni_range = 16.0
 
 [node name="FireLight5" type="OmniLight3D" parent="FireParticlesGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 2.0, -68)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3.5, -70)
 light_color = Color(1, 0.5, 0.12, 1)
 light_energy = 4.5
 omni_range = 16.0
 
 [node name="FireLight6" type="OmniLight3D" parent="FireParticlesGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.0, -78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 5.0, -80)
 light_color = Color(1, 0.42, 0.1, 1)
 light_energy = 4.5
 omni_range = 16.0
@@ -656,7 +609,7 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -16, 0, -20)
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -9.8, 0, -23.5)
 
 [node name="Pine_N1" parent="DenseForestWall" instance=ExtResource("5_tree_pine")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -3, 0, -20)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -1.5, 0, -20)
 
 [node name="Oak_N2" parent="DenseForestWall" instance=ExtResource("6_tree_deciduous")]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 1, 0, -18)
@@ -853,58 +806,39 @@ ambient_light = NodePath("../SunLight")
 corridor_forest = NodePath("../CorridorForest")
 [node name="NatureTrail" type="Node3D" parent="."]
 visible = false
-[node name="TrailSegment0" type="StaticBody3D" parent="NatureTrail"]
-transform = Transform3D(-0.97618, 0, -0.21693, 0, 1, 0, 0.21693, 0, -0.97618, -5.500, 0.020, -22.750)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NatureTrail/TrailSegment0"]
-mesh = SubResource("BoxMesh_trail_segment_0")
+[node name="TrailBody" type="StaticBody3D" parent="NatureTrail"]
+collision_layer = 1
 
+[node name="TrailMesh" type="MeshInstance3D" parent="NatureTrail/TrailBody"]
+mesh = ExtResource("21_nature_trail_mesh")
 
-[node name="RailColW" type="CollisionShape3D" parent="NatureTrail/TrailSegment0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.8, 0)
-shape = SubResource("BoxShape3D_trail_rail_0")
+[node name="TrailCol" type="CollisionShape3D" parent="NatureTrail/TrailBody"]
+shape = ExtResource("22_nature_trail_col")
 
-[node name="RailColE" type="CollisionShape3D" parent="NatureTrail/TrailSegment0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.8, 0)
-shape = SubResource("BoxShape3D_trail_rail_0")
+[node name="TrailLight1" type="OmniLight3D" parent="NatureTrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 3.5, -23.0)
+light_color = Color(0.38, 0.92, 0.6, 1)
+light_energy = 1.4
+omni_range = 9.0
 
-[node name="TrailSegment1" type="StaticBody3D" parent="NatureTrail"]
-transform = Transform3D(-0.9545, 0, -0.2982, 0, 1, 0, 0.2982, 0, -0.9545, -8.0, 0.02, -33.0)
+[node name="TrailLight2" type="OmniLight3D" parent="NatureTrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 3.5, -34.0)
+light_color = Color(0.38, 0.92, 0.6, 1)
+light_energy = 1.4
+omni_range = 9.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NatureTrail/TrailSegment1"]
-mesh = SubResource("BoxMesh_trail_segment_1")
+[node name="TrailLight3" type="OmniLight3D" parent="NatureTrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0, 3.5, -46.0)
+light_color = Color(0.38, 0.92, 0.6, 1)
+light_energy = 1.4
+omni_range = 9.0
 
-
-[node name="RailColW" type="CollisionShape3D" parent="NatureTrail/TrailSegment1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.8, 0)
-shape = SubResource("BoxShape3D_trail_rail_1")
-
-[node name="RailColE" type="CollisionShape3D" parent="NatureTrail/TrailSegment1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.8, 0)
-shape = SubResource("BoxShape3D_trail_rail_1")
-
-[node name="TrailSegment2" type="StaticBody3D" parent="NatureTrail"]
-transform = Transform3D(-0.931, 0, -0.365, 0, 1, 0, 0.365, 0, -0.931, -13.25, 0.02, -48.0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NatureTrail/TrailSegment2"]
-mesh = SubResource("BoxMesh_trail_segment_2")
-
-
-[node name="RailColW" type="CollisionShape3D" parent="NatureTrail/TrailSegment2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.8, 0)
-shape = SubResource("BoxShape3D_trail_rail_2")
-
-[node name="RailColE" type="CollisionShape3D" parent="NatureTrail/TrailSegment2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.8, 0)
-shape = SubResource("BoxShape3D_trail_rail_2")
-
-
-[node name="ApproachPlaza" type="StaticBody3D" parent="NatureTrail"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0.04, -56.8)
-
-[node name="PlazaMesh" type="MeshInstance3D" parent="NatureTrail/ApproachPlaza"]
-mesh = SubResource("CylinderMesh_approach_plaza")
-
+[node name="TrailLight4" type="OmniLight3D" parent="NatureTrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3, 2.5, -56.8)
+light_color = Color(0.38, 0.92, 0.6, 1)
+light_energy = 1.6
+omni_range = 10.0
 
 [node name="TrailFireflies1" parent="NatureTrail" instance=ExtResource("15_fireflies")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0, 0.5, -25.0)
