@@ -35,11 +35,12 @@ const NATURE_TRAIL_PTS: Array[Vector2] = [
 ]
 
 const BURNING_PATH_PTS: Array[Vector2] = [
-	Vector2(13.5, -8.5),
-	Vector2(16.2, -21.0),
-	Vector2(15.2, -41.0),
-	Vector2(8.5, -60.0),
-	Vector2(3.0, -72.0),
+	Vector2(11.0, -6.5),
+	Vector2(15.2, -9.0),
+	Vector2(18.5, -17.0),
+	Vector2(17.5, -35.0),
+	Vector2(12.0, -53.0),
+	Vector2(5.5, -68.0),
 	Vector2(0.0, -82.0)
 ]
 
@@ -140,7 +141,7 @@ func _init() -> void:
 
 			var rot_y := rng.randf_range(0.0, TAU)
 			var is_pine := rng.randf() < 0.54
-			var is_in_burn_corridor := (_dist_to_line_strip(tree_pos, BURNING_PATH_PTS) < 6.2 and pos_z > -80.0 and pos_z < -6.0)
+			var is_in_burn_corridor := (_dist_to_line_strip(tree_pos, BURNING_PATH_PTS) < 9.5 and pos_z > -82.0 and pos_z < -5.0)
 
 			if is_pine:
 				var scale_p := rng.randf_range(1.25, 1.7)
@@ -167,6 +168,10 @@ func _init() -> void:
 			if (tree_pos.length() < 36.0 or (pos_z < -50.0 and pos_z > -75.0)) and rng.randf() < 0.38:
 				var ub_pos := tree_pos + Vector2(rng.randf_range(-1.8, 1.8), rng.randf_range(-1.8, 1.8))
 				if ub_pos.length() > 22.0:
+					if _dist_to_line_strip(ub_pos, BURNING_PATH_PTS) < 10.5 and ub_pos.y > -82.0 and ub_pos.y < -5.0:
+						continue
+					if _dist_to_line_strip(ub_pos, NATURE_TRAIL_PTS) < 4.5 and ub_pos.y > -56.0:
+						continue
 					var sc := rng.randf_range(0.9, 1.5)
 					var ub_xform := Transform3D(Basis(Vector3.UP, rng.randf_range(0, TAU)).scaled(Vector3(sc, sc, sc)), Vector3(ub_pos.x, 0.0, ub_pos.y))
 					undergrowth_transforms.append(ub_xform)

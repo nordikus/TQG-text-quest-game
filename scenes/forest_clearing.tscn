@@ -29,7 +29,7 @@
 [ext_resource type="MultiMesh" path="res://scenes/world/forest_canopy_undergrowth.res" id="27_undergrowth"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_great_tree_forest_wall"]
-size = Vector3(40, 10, 6)
+size = Vector3(50, 6, 4)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.24, 0.44, 0.74, 1)
@@ -804,7 +804,7 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -8.5, 6, -
 shape = SubResource("BoxShape3D_boundary_segment")
 
 [node name="GreatTreeForestWall" type="StaticBody3D" parent="." unique_id=141873304]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 5, -66)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 3, -73)
 
 [node name="Col" type="CollisionShape3D" parent="GreatTreeForestWall" unique_id=141873305]
 shape = SubResource("BoxShape3D_great_tree_forest_wall")

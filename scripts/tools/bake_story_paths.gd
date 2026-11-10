@@ -188,11 +188,12 @@ func _init() -> void:
 	])
 
 	var burning_spline := Spline3D.new([
-		Vector3(13.5, 0.0, -8.5),
-		Vector3(16.2, 0.0, -21.0),
-		Vector3(15.2, 0.0, -41.0),
-		Vector3(8.5, 0.0, -60.0),
-		Vector3(3.0, 0.0, -72.0),
+		Vector3(11.0, 0.0, -6.5),
+		Vector3(15.2, 0.0, -9.0),
+		Vector3(18.5, 0.0, -17.0),
+		Vector3(17.5, 0.0, -35.0),
+		Vector3(12.0, 0.0, -53.0),
+		Vector3(5.5, 0.0, -68.0),
 		Vector3(0.0, 0.0, -82.0)
 	])
 
@@ -462,35 +463,27 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 		var l1: Vector3 = f1.pos - f1.right * w1
 		var r1: Vector3 = f1.pos + f1.right * w1
 
-		# Left guide wall (height 5.0m)
-		var l0_top: Vector3 = l0 + Vector3.UP * 5.0
-		var l1_top: Vector3 = l1 + Vector3.UP * 5.0
-		col_faces.append(l0); col_faces.append(l0_top); col_faces.append(l1)
-		col_faces.append(l1); col_faces.append(l0_top); col_faces.append(l1_top)
+		# Left guide wall (height 5.0m) - stops at t = 0.72 so root ramp entry is 100% open
+		if t1 <= 0.74:
+			var l0_top: Vector3 = l0 + Vector3.UP * 5.0
+			var l1_top: Vector3 = l1 + Vector3.UP * 5.0
+			col_faces.append(l0); col_faces.append(l0_top); col_faces.append(l1)
+			col_faces.append(l1); col_faces.append(l0_top); col_faces.append(l1_top)
 
-		# Right guide wall (height 5.0m)
+		# Right guide wall (height 5.0m) - continues along east forest border
 		var r0_top: Vector3 = r0 + Vector3.UP * 5.0
 		var r1_top: Vector3 = r1 + Vector3.UP * 5.0
 		col_faces.append(r0); col_faces.append(r1); col_faces.append(r0_top)
 		col_faces.append(r1); col_faces.append(r1_top); col_faces.append(r0_top)
 
-	# Circular 5.0m barrier around ApproachPlaza with exact opening facing Great Tree root ramp
-	var plaza_col_segs: int = 32
-	var p_rad: float = 5.4
-	# Ramp entrance is at (-16.9, 0, -56.9); plaza center is (-17.3, 0.06, -56.8).
-	# Direction from plaza to ramp is (+0.97, 0, -0.24)
-	var ramp_dir := Vector3(0.97, 0.0, -0.24).normalized()
-
+	# East and North-East forest boundary for ApproachPlaza (facing deep woods only, no wall near tree roots)
+	var plaza_col_segs: int = 16
+	var p_rad: float = 5.2
 	for psi in range(plaza_col_segs):
-		var a0: float = float(psi) * TAU / float(plaza_col_segs)
-		var a1: float = float(psi + 1) * TAU / float(plaza_col_segs)
-
-		var mid_a: float = (a0 + a1) * 0.5
-		var seg_dir := Vector3(cos(mid_a), 0, sin(mid_a))
-
-		# Leave 2.8m opening pointing towards the Great Tree ramp
-		if seg_dir.dot(ramp_dir) > 0.75:
-			continue
+		var frac0: float = float(psi) / float(plaza_col_segs)
+		var frac1: float = float(psi + 1) / float(plaza_col_segs)
+		var a0: float = lerpf(-0.25 * PI, 0.35 * PI, frac0)
+		var a1: float = lerpf(-0.25 * PI, 0.35 * PI, frac1)
 
 		var pb0: Vector3 = plaza_center + Vector3(cos(a0), 0, sin(a0)) * p_rad
 		var pb1: Vector3 = plaza_center + Vector3(cos(a1), 0, sin(a1)) * p_rad
@@ -568,6 +561,9 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 		var total_half_w: float = 6.5
 		var core_half_w: float = 2.6
+		if t < 0.08:
+			total_half_w = lerpf(3.8, 6.5, t / 0.08)
+			core_half_w = lerpf(2.0, 2.6, t / 0.08)
 
 		for j in range(trans_pts):
 			var u_norm: float = -1.0 + 2.0 * float(j) / float(trans_pts - 1)
@@ -587,8 +583,9 @@ func _bake_burning_path(spline: Spline3D) -> void:
 				h = lerpf(mound, 0.015, flank_factor * flank_factor)
 				col = Color(0.05, 0.04, 0.035).lerp(Color(0.02, 0.02, 0.02), flank_factor)
 
-			if t < 0.04:
-				h = lerpf(0.02, h, t / 0.04)
+			if t < 0.08:
+				h = lerpf(0.005, h, t / 0.08)
+				col = Color(0.24, 0.28, 0.18).lerp(col, t / 0.08)
 
 			var vpos: Vector3 = pos + right * dist + up * h
 			b_charred.set_color(col)
@@ -670,14 +667,18 @@ func _bake_burning_path(spline: Spline3D) -> void:
 		var f0: PathFrame = spline.sample(t0)
 		var f1: PathFrame = spline.sample(t1)
 
+		# DO NOT place guide walls inside the clearing (t < 0.06)
+		if t1 < 0.06:
+			continue
+
 		var w0: float = 2.8
 		var w1: float = 2.8
 
-		# Flare out at entrance to connect with barrier
-		if t0 < 0.08:
-			w0 = lerpf(4.8, 2.8, t0 / 0.08)
-		if t1 < 0.08:
-			w1 = lerpf(4.8, 2.8, t1 / 0.08)
+		# Flare out at perimeter (t = 0.06..0.14) to meet ClearingImpassableBoundary
+		if t0 < 0.14:
+			w0 = lerpf(4.6, 2.8, clampf((t0 - 0.06) / 0.08, 0.0, 1.0))
+		if t1 < 0.14:
+			w1 = lerpf(4.6, 2.8, clampf((t1 - 0.06) / 0.08, 0.0, 1.0))
 
 		# Funnel straight into gate towers (GateTowerLeft is at X = -3.25, GateTowerRight at X = +3.25)
 		if t0 > 0.85:
