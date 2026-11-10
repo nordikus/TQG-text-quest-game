@@ -8,6 +8,8 @@ extends Node3D
 @export var burning_path: Node3D
 @export var ambient_light: DirectionalLight3D
 @export var corridor_forest: Node3D
+@export var nature_corridor_forest: Node3D
+@export var nature_barrier: Node3D
 
 func _ready():
 	QuestManager.quest_completed.connect(_on_quest_completed)
@@ -61,6 +63,21 @@ func _apply_extinguish_outcome():
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		tween.tween_property(great_tree, "position:y", 0.0, 3.5)
 
+	if nature_corridor_forest:
+		var tween_ncorr := create_tween()
+		tween_ncorr.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+		tween_ncorr.tween_property(nature_corridor_forest, "position:y", -14.0, 2.5)
+		tween_ncorr.finished.connect(func(): nature_corridor_forest.visible = false)
+
+	if nature_barrier:
+		var tween_nbar := create_tween()
+		tween_nbar.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+		tween_nbar.tween_property(nature_barrier, "position:y", -6.0, 3.0)
+		tween_nbar.finished.connect(func():
+			if is_instance_valid(nature_barrier):
+				nature_barrier.queue_free()
+		)
+
 func _apply_burn_outcome():
 	if great_tree:
 		great_tree.visible = false
@@ -89,7 +106,10 @@ func _apply_burn_outcome():
 		var tween := create_tween()
 		tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(forest_barrier, "position:y", -6.0, 3.0)
-		tween.finished.connect(func(): forest_barrier.queue_free())
+		tween.finished.connect(func():
+			if is_instance_valid(forest_barrier):
+				forest_barrier.queue_free()
+		)
 
 	if ambient_light:
 		var tween := create_tween()

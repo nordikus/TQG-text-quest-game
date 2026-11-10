@@ -187,13 +187,14 @@ func _init() -> void:
 		Vector3(-17.3, 0.0, -56.8)
 	])
 
+	# Ground-level path straight to castle courtyard gate at (0, 0, -82)
 	var burning_spline := Spline3D.new([
 		Vector3(13.5, 0.0, -8.5),
 		Vector3(16.2, 0.0, -21.0),
 		Vector3(15.2, 0.0, -41.0),
-		Vector3(8.5, 0.15, -60.0),
-		Vector3(2.5, 2.1, -72.0),
-		Vector3(0.0, 4.02, -82.5)
+		Vector3(8.5, 0.0, -60.0),
+		Vector3(3.0, 0.0, -72.0),
+		Vector3(0.0, 0.0, -82.0)
 	])
 
 	_bake_nature_trail(nature_spline)
@@ -203,9 +204,6 @@ func _init() -> void:
 	quit(0)
 
 
-# -----------------------------------------------------------------------------
-# Helper: Connect grid of vertices into triangles
-# -----------------------------------------------------------------------------
 func _connect_tube_grid(b: ToolMeshBuilder, base_idx: int, rings: int, ring_pts: int, is_closed_ring: bool = false) -> void:
 	for r in range(rings - 1):
 		var r0: int = base_idx + r * ring_pts
@@ -237,19 +235,19 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 
 	var col_faces: Array[Vector3] = []
 
-	var steps: int = 80
-	var trans_pts: int = 9
+	var steps: int = 90
+	var trans_pts: int = 11
 	var base_idx: int = 0
 
-	# 1. Road Surface & Stepping Stones
+	# 1. Main Road Surface
 	for i in range(steps + 1):
 		var t: float = float(i) / float(steps)
 		var f: PathFrame = spline.sample(t)
 
-		var half_w: float = 2.1
-		if t > 0.7:
-			var pt: float = (t - 0.7) / 0.3
-			half_w = lerpf(2.1, 5.2, pt * pt)
+		var half_w: float = 2.2
+		if t > 0.68:
+			var pt: float = (t - 0.68) / 0.32
+			half_w = lerpf(2.2, 5.4, pt * pt)
 
 		var pos: Vector3 = f.pos
 		var right: Vector3 = f.right
@@ -258,29 +256,23 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 		for j in range(trans_pts):
 			var u: float = -1.0 + 2.0 * float(j) / float(trans_pts - 1)
 			var abs_u: float = absf(u)
-			var crown: float = (1.0 - abs_u * abs_u) * 0.06
-			var edge_dip: float = -0.06 * pow(abs_u, 3.0)
-			var h: float = crown + edge_dip
-
-			# Feather start and end into terrain
+			
+			# Raised crown: center Y = 0.08m above base ground, edges feather to 0.01m
+			var h: float = lerpf(0.08, 0.01, pow(abs_u, 1.8))
 			if t < 0.06:
-				h *= (t / 0.06)
-			elif t > 0.88:
-				h *= (1.0 - (t - 0.88) / 0.12 * 0.6)
+				h = lerpf(0.02, h, t / 0.06)
 
 			var vpos: Vector3 = pos + right * (u * half_w) + up * h
 
-			var col: Color = Color(0.22, 0.16, 0.11)
-			if abs_u < 0.55:
-				var moss_mix: float = (1.0 - abs_u * 1.8)
-				col = col.lerp(Color(0.24, 0.52, 0.20), moss_mix * 0.9)
+			var col: Color = Color(0.25, 0.17, 0.12)
+			if abs_u < 0.60:
+				var m_mix: float = 1.0 - (abs_u / 0.60)
+				col = col.lerp(Color(0.24, 0.54, 0.22), m_mix).lerp(Color(0.32, 0.68, 0.28), m_mix * 0.4)
 			elif abs_u > 0.85:
-				col = Color(0.16, 0.12, 0.08)
+				col = Color(0.18, 0.13, 0.09)
 
-			# Feather start color into clearing grass
 			if t < 0.05:
-				var f_blend: float = (t / 0.05)
-				col = Color(0.22, 0.42, 0.20).lerp(col, f_blend)
+				col = Color(0.24, 0.44, 0.18).lerp(col, t / 0.05)
 
 			b_ground.set_color(col)
 			b_ground.set_uv(Vector2(u * 0.5 + 0.5, t * 24.0))
@@ -289,55 +281,55 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 
 	_connect_tube_grid(b_ground, base_idx, steps + 1, trans_pts, false)
 
-	# Stepping stones along the Nature Trail
-	var stone_count: int = 22
+	# Stepping Stones: 3D solid raised flagstones
+	var stone_count: int = 24
 	for s in range(stone_count):
-		var st_t: float = 0.04 + 0.88 * (float(s) / float(stone_count - 1))
+		var st_t: float = 0.05 + 0.86 * (float(s) / float(stone_count - 1))
 		var f: PathFrame = spline.sample(st_t)
 		var jitter_u: float = sin(float(s) * 4.31) * 0.75
-		var center: Vector3 = f.pos + f.right * jitter_u + f.up * 0.05
-		var stone_rad: float = 0.55 + 0.15 * cos(float(s) * 2.1)
-		var stone_segs: int = 8
+		var center: Vector3 = f.pos + f.right * jitter_u
+		var top_y: float = 0.13 + 0.02 * cos(float(s) * 1.7)
+		var stone_rad: float = 0.58 + 0.12 * cos(float(s) * 2.3)
+		var stone_segs: int = 9
 
 		var top_pts: Array[Vector3] = []
 		var bot_pts: Array[Vector3] = []
+
 		for si in range(stone_segs):
 			var ang: float = float(si) * TAU / float(stone_segs)
-			var rad_j: float = stone_rad * (0.88 + 0.12 * sin(ang * 3.0))
-			var l_x: float = cos(ang) * rad_j
-			var l_z: float = sin(ang) * rad_j
-			var p_top: Vector3 = center + f.right * l_x + f.tangent * l_z + f.up * 0.04
-			var p_bot: Vector3 = center + f.right * l_x + f.tangent * l_z - f.up * 0.04
-			top_pts.append(p_top)
-			bot_pts.append(p_bot)
+			var r_j: float = stone_rad * (0.88 + 0.12 * sin(ang * 3.0 + float(s)))
+			var off_v := f.right * (cos(ang) * r_j) + f.tangent * (sin(ang) * r_j)
+			top_pts.append(center + off_v + f.up * top_y)
+			bot_pts.append(center + off_v + f.up * 0.02)
 
-		var stone_col: Color = Color(0.38, 0.40, 0.38)
+		var top_center_v := center + f.up * (top_y + 0.01)
+		var stone_col: Color = Color(0.40, 0.42, 0.39).lerp(Color(0.28, 0.45, 0.25), 0.25)
+		var side_col: Color = Color(0.26, 0.27, 0.25)
+
 		for si in range(stone_segs):
 			var s_next: int = (si + 1) % stone_segs
-			# Top fan
+
+			# Top face
 			b_ground.set_color(stone_col)
 			b_ground.set_normal(f.up)
-			var c_idx: int = b_ground.add_vertex(center + f.up * 0.05)
+			var c_idx: int = b_ground.add_vertex(top_center_v)
 			var t0_idx: int = b_ground.add_vertex(top_pts[si])
 			var t1_idx: int = b_ground.add_vertex(top_pts[s_next])
 			b_ground.add_index(c_idx); b_ground.add_index(t0_idx); b_ground.add_index(t1_idx)
 
-			# Sides
-			var side_col: Color = Color(0.28, 0.30, 0.28)
+			# Side faces
 			b_ground.set_color(side_col)
-			var side_n: Vector3 = (top_pts[si] - center).normalized()
-			b_ground.set_normal(side_n)
-
-			var s_t0: int = b_ground.add_vertex(top_pts[si])
-			var s_b0: int = b_ground.add_vertex(bot_pts[si])
-			var s_t1: int = b_ground.add_vertex(top_pts[s_next])
-			var s_b1: int = b_ground.add_vertex(bot_pts[s_next])
-
-			b_ground.add_index(s_t0); b_ground.add_index(s_b0); b_ground.add_index(s_t1)
-			b_ground.add_index(s_t1); b_ground.add_index(s_b0); b_ground.add_index(s_b1)
+			var side_norm: Vector3 = ((top_pts[si] + top_pts[s_next]) * 0.5 - center).normalized()
+			b_ground.set_normal(side_norm)
+			var st0: int = b_ground.add_vertex(top_pts[si])
+			var sb0: int = b_ground.add_vertex(bot_pts[si])
+			var st1: int = b_ground.add_vertex(top_pts[s_next])
+			var sb1: int = b_ground.add_vertex(bot_pts[s_next])
+			b_ground.add_index(st0); b_ground.add_index(sb0); b_ground.add_index(st1)
+			b_ground.add_index(st1); b_ground.add_index(sb0); b_ground.add_index(sb1)
 
 	# Approach Plaza round stone pavement cap at end (center (-17.3, 0.0, -56.8))
-	var plaza_center: Vector3 = Vector3(-17.3, 0.03, -56.8)
+	var plaza_center: Vector3 = Vector3(-17.3, 0.06, -56.8)
 	var plaza_segs: int = 24
 	var plaza_rad: float = 5.2
 	for ring in range(3):
@@ -352,7 +344,7 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 			var p2: Vector3 = plaza_center + Vector3(cos(a0), 0, sin(a0)) * r_out
 			var p3: Vector3 = plaza_center + Vector3(cos(a1), 0, sin(a1)) * r_out
 
-			var c: Color = Color(0.26, 0.45, 0.22) if ring < 2 else Color(0.22, 0.28, 0.18)
+			var c: Color = Color(0.30, 0.48, 0.26) if ring < 2 else Color(0.24, 0.32, 0.20)
 			b_ground.set_color(c)
 			b_ground.set_normal(Vector3.UP)
 			var i0: int = b_ground.add_vertex(p0)
@@ -363,23 +355,23 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 			b_ground.add_index(i0); b_ground.add_index(i2); b_ground.add_index(i1)
 			b_ground.add_index(i1); b_ground.add_index(i2); b_ground.add_index(i3)
 
-	# Living Root Borders (left & right undulations)
+	# Living Root Borders: continuous gnarled root tubes on left and right
 	for side in [-1.0, 1.0]:
-		var r_steps: int = 60
-		var r_circ: int = 6
+		var r_steps: int = 70
+		var r_circ: int = 7
 		var r_grid_base: int = b_ground.vert_count
 
 		for rs in range(r_steps + 1):
 			var t: float = float(rs) / float(r_steps)
 			var f: PathFrame = spline.sample(t)
-			var half_w: float = 2.1
-			if t > 0.7:
-				half_w = lerpf(2.1, 5.2, pow((t - 0.7) / 0.3, 2.0))
+			var half_w: float = 2.2
+			if t > 0.68:
+				half_w = lerpf(2.2, 5.4, pow((t - 0.68) / 0.32, 2.0))
 
-			var undulate: float = sin(t * TAU * 4.5 + (0.5 if side > 0 else 0.0))
-			var root_h: float = maxf(-0.15, 0.12 + 0.28 * undulate)
-			var root_r: float = 0.18 + 0.08 * undulate
-			var c_pos: Vector3 = f.pos + f.right * (side * (half_w + 0.25)) + f.up * root_h
+			var undulate: float = sin(t * TAU * 5.0 + (0.8 if side > 0 else 0.0))
+			var root_h: float = 0.12 + 0.22 * maxf(0.0, undulate)
+			var root_r: float = 0.22 + 0.08 * undulate
+			var c_pos: Vector3 = f.pos + f.right * (side * (half_w + 0.20)) + f.up * root_h
 
 			for ci in range(r_circ):
 				var ca: float = float(ci) * TAU / float(r_circ)
@@ -387,124 +379,125 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 				var cn: Vector3 = (f.right * cos(ca) + f.up * sin(ca)).normalized()
 
 				var r_col: Color = Color(0.28, 0.18, 0.11)
-				if cn.y > 0.3:
-					r_col = r_col.lerp(Color(0.25, 0.42, 0.18), 0.6)
+				if cn.y > 0.2:
+					r_col = r_col.lerp(Color(0.26, 0.48, 0.20), 0.65)
 				b_ground.set_color(r_col)
 				b_ground.set_normal(cn)
 				b_ground.add_vertex(cp)
 
 		_connect_tube_grid(b_ground, r_grid_base, r_steps + 1, r_circ, true)
 
-	# 2. Foliage Surface: Ferns along borders & 3 Living Arches
-	var fern_count: int = 36
+	# Foliage Surface: Fern clusters along borders
+	var fern_count: int = 40
 	for fc in range(fern_count):
 		var t: float = 0.05 + 0.88 * (float(fc) / float(fern_count - 1))
 		var f: PathFrame = spline.sample(t)
 		var side: float = -1.0 if (fc % 2 == 0) else 1.0
-		var half_w: float = 2.1
-		if t > 0.7:
-			half_w = lerpf(2.1, 5.2, pow((t - 0.7) / 0.3, 2.0))
-		var base_p: Vector3 = f.pos + f.right * (side * (half_w + 0.35)) + f.up * 0.02
+		var half_w: float = 2.2 if t <= 0.68 else lerpf(2.2, 5.4, pow((t - 0.68) / 0.32, 2.0))
+		var base_p: Vector3 = f.pos + f.right * (side * (half_w + 0.40)) + f.up * 0.06
 
-		for frond in range(4):
-			var a: float = float(frond) * 0.7 + (0.3 if side < 0 else -0.3)
+		for frond in range(5):
+			var a: float = float(frond) * 0.6 + (0.3 if side < 0 else -0.3)
 			var frond_dir: Vector3 = (f.right * side * cos(a) + f.tangent * sin(a)).normalized()
-			var tip: Vector3 = base_p + frond_dir * 0.85 + f.up * 0.45
-			var mid_left: Vector3 = base_p + frond_dir * 0.45 + f.right * 0.2 + f.up * 0.25
-			var mid_right: Vector3 = base_p + frond_dir * 0.45 - f.right * 0.2 + f.up * 0.25
+			var tip: Vector3 = base_p + frond_dir * 0.95 + f.up * 0.45
+			var mid_l: Vector3 = base_p + frond_dir * 0.50 + f.right * 0.22 + f.up * 0.26
+			var mid_r: Vector3 = base_p + frond_dir * 0.50 - f.right * 0.22 + f.up * 0.26
 
-			b_foliage.set_color(Color(0.20, 0.55, 0.18))
+			b_foliage.set_color(Color(0.22, 0.58, 0.18))
 			b_foliage.set_normal(f.up)
 			var v0: int = b_foliage.add_vertex(base_p)
-			var v1: int = b_foliage.add_vertex(mid_left)
-			var v2: int = b_foliage.add_vertex(mid_right)
+			var v1: int = b_foliage.add_vertex(mid_l)
+			var v2: int = b_foliage.add_vertex(mid_r)
 			var v3: int = b_foliage.add_vertex(tip)
 
 			b_foliage.add_index(v0); b_foliage.add_index(v1); b_foliage.add_index(v2)
 			b_foliage.add_index(v1); b_foliage.add_index(v3); b_foliage.add_index(v2)
 
-	# 3 Living Arches at t = 0.25, 0.55, 0.82
-	var arch_ts: Array[float] = [0.25, 0.55, 0.82]
+	# 3 Living Tree Arches with full boughs and foliage canopies
+	var arch_ts: Array[float] = [0.25, 0.55, 0.80]
 	for at in arch_ts:
 		var f: PathFrame = spline.sample(at)
-		var arch_segs: int = 16
-		var arch_circ: int = 6
-		var arch_w: float = 2.2
-		var arch_h: float = 4.3
+		var arch_w: float = 2.3
+		var arch_h: float = 4.4
 
-		var arch_vbase: int = b_foliage.vert_count
-		for asg in range(arch_segs + 1):
-			var sa: float = float(asg) / float(arch_segs)
-			var ang: float = sa * PI
-			var u_pos: float = cos(ang) * arch_w
-			var v_h: float = sin(ang) * arch_h
-			var center_p: Vector3 = f.pos + f.right * u_pos + f.up * v_h
-			var rad: float = 0.16 * (1.0 - 0.4 * sin(ang))
+		# Main arch bough
+		_build_arch_bough(b_foliage, f, arch_w, arch_h, 0.28, 0.18)
 
-			for ac in range(arch_circ):
-				var ca: float = float(ac) * TAU / float(arch_circ)
-				var norm: Vector3 = (f.right * cos(ca) + f.tangent * sin(ca)).normalized()
-				var v: Vector3 = center_p + (f.right * cos(ca) + f.tangent * sin(ca)) * rad
-				b_foliage.set_color(Color(0.26, 0.18, 0.12))
-				b_foliage.set_normal(norm)
-				b_foliage.add_vertex(v)
+		# Foliage puffs along arch curvature and apex
+		var puff_count: int = 9
+		for pfi in range(puff_count):
+			var pa: float = float(pfi) / float(puff_count - 1)
+			var ang: float = lerpf(0.15 * PI, 0.85 * PI, pa)
+			var puff_p: Vector3 = f.pos + f.right * (cos(ang) * (arch_w + 0.2)) + f.up * (sin(ang) * arch_h + 0.2)
+			var puff_r: float = 0.85 + 0.25 * sin(float(pfi) * 2.1)
+			_add_foliage_puff(b_foliage, puff_p, puff_r, Color(0.20, 0.56, 0.18))
 
-		_connect_tube_grid(b_foliage, arch_vbase, arch_segs + 1, arch_circ, true)
-
-		# Foliage canopy cluster at apex of arch
-		var apex_center: Vector3 = f.pos + f.up * arch_h
-		for cl in range(6):
-			var cl_off: Vector3 = Vector3(sin(float(cl) * 1.5) * 0.7, cos(float(cl) * 2.1) * 0.35, sin(float(cl) * 3.2) * 0.7)
-			var cl_pos: Vector3 = apex_center + cl_off
-			var cl_rad: float = 0.75 + 0.2 * sin(float(cl))
-			_add_foliage_puff(b_foliage, cl_pos, cl_rad, Color(0.22, 0.58, 0.20))
-
-	# 3. Bioluminescent Mushrooms & Spores
-	var shroom_count: int = 45
+	# Bioluminescent 3D Spore Mushrooms
+	var shroom_count: int = 50
 	for sc in range(shroom_count):
-		var t: float = 0.08 + 0.82 * (float(sc) / float(shroom_count - 1))
+		var t: float = 0.07 + 0.84 * (float(sc) / float(shroom_count - 1))
 		var f: PathFrame = spline.sample(t)
 		var side: float = -1.0 if (sc % 2 == 0) else 1.0
-		var half_w: float = 2.1
-		if t > 0.7:
-			half_w = lerpf(2.1, 5.2, pow((t - 0.7) / 0.3, 2.0))
+		var half_w: float = 2.2 if t <= 0.68 else lerpf(2.2, 5.4, pow((t - 0.68) / 0.32, 2.0))
+		var sh_base: Vector3 = f.pos + f.right * (side * (half_w + 0.25)) + f.up * 0.10
+		var sh_h: float = 0.16 + 0.08 * sin(float(sc) * 2.8)
+		var sh_rad: float = 0.13 + 0.05 * cos(float(sc) * 3.4)
 
-		var sh_pos: Vector3 = f.pos + f.right * (side * (half_w + 0.15)) + f.up * 0.15
-		var sh_rad: float = 0.12 + 0.06 * sin(float(sc) * 3.5)
-		_add_mushroom_cap(b_biolum, sh_pos, sh_rad, Color(0.30, 0.95, 0.75))
+		_build_3d_mushroom(b_ground, b_biolum, sh_base, sh_h, sh_rad, Color(0.30, 0.95, 0.75))
 
-	# 4. Generate Collision Geometry for Nature Trail
+	# Collision Geometry for Nature Trail
 	for i in range(steps):
 		var t0: float = float(i) / float(steps)
 		var t1: float = float(i + 1) / float(steps)
 		var f0: PathFrame = spline.sample(t0)
 		var f1: PathFrame = spline.sample(t1)
 
-		var w0: float = 2.2 if t0 < 0.7 else lerpf(2.2, 5.2, pow((t0 - 0.7) / 0.3, 2.0))
-		var w1: float = 2.2 if t1 < 0.7 else lerpf(2.2, 5.2, pow((t1 - 0.7) / 0.3, 2.0))
+		var w0: float = 2.4 if t0 < 0.68 else lerpf(2.4, 5.4, pow((t0 - 0.68) / 0.32, 2.0))
+		var w1: float = 2.4 if t1 < 0.68 else lerpf(2.4, 5.4, pow((t1 - 0.68) / 0.32, 2.0))
 
-		var l0: Vector3 = f0.pos - f0.right * w0
-		var r0: Vector3 = f0.pos + f0.right * w0
-		var l1: Vector3 = f1.pos - f1.right * w1
-		var r1: Vector3 = f1.pos + f1.right * w1
+		var l0: Vector3 = f0.pos - f0.right * w0 + f0.up * 0.06
+		var r0: Vector3 = f0.pos + f0.right * w0 + f0.up * 0.06
+		var l1: Vector3 = f1.pos - f1.right * w1 + f1.up * 0.06
+		var r1: Vector3 = f1.pos + f1.right * w1 + f1.up * 0.06
 
-		# Walkable floor
+		# Walkable floor (normals UP)
 		col_faces.append(l0); col_faces.append(l1); col_faces.append(r0)
 		col_faces.append(r0); col_faces.append(l1); col_faces.append(r1)
 
-		# Left guide wall (height 1.6m)
-		var l0_top: Vector3 = l0 + Vector3.UP * 1.6
-		var l1_top: Vector3 = l1 + Vector3.UP * 1.6
+		# Left guide wall (height 1.8m)
+		var l0_top: Vector3 = l0 + Vector3.UP * 1.8
+		var l1_top: Vector3 = l1 + Vector3.UP * 1.8
 		col_faces.append(l0); col_faces.append(l0_top); col_faces.append(l1)
 		col_faces.append(l1); col_faces.append(l0_top); col_faces.append(l1_top)
 
-		# Right guide wall (height 1.6m)
-		var r0_top: Vector3 = r0 + Vector3.UP * 1.6
-		var r1_top: Vector3 = r1 + Vector3.UP * 1.6
+		# Right guide wall (height 1.8m)
+		var r0_top: Vector3 = r0 + Vector3.UP * 1.8
+		var r1_top: Vector3 = r1 + Vector3.UP * 1.8
 		col_faces.append(r0); col_faces.append(r1); col_faces.append(r0_top)
 		col_faces.append(r1); col_faces.append(r1_top); col_faces.append(r0_top)
 
-	# Commit Nature Trail Mesh
+	# Circular barrier around ApproachPlaza except opening toward Great Tree root entry
+	var plaza_col_segs: int = 24
+	var p_rad: float = 5.4
+	for psi in range(plaza_col_segs):
+		var a0: float = float(psi) * TAU / float(plaza_col_segs)
+		var a1: float = float(psi + 1) * TAU / float(plaza_col_segs)
+
+		# Opening facing Great Tree root ramp at approx direction (+0.4, -0.9)
+		var mid_a: float = (a0 + a1) * 0.5
+		var dir := Vector3(cos(mid_a), 0, sin(mid_a))
+		if dir.dot(Vector3(0.35, 0, 0.93)) > 0.85:
+			continue # Opening toward Great Tree ramp
+
+		var pb0: Vector3 = plaza_center + Vector3(cos(a0), 0, sin(a0)) * p_rad + Vector3.UP * 0.06
+		var pb1: Vector3 = plaza_center + Vector3(cos(a1), 0, sin(a1)) * p_rad + Vector3.UP * 0.06
+		var pt0: Vector3 = pb0 + Vector3.UP * 1.8
+		var pt1: Vector3 = pb1 + Vector3.UP * 1.8
+
+		col_faces.append(pb0); col_faces.append(pb1); col_faces.append(pt0)
+		col_faces.append(pb1); col_faces.append(pt1); col_faces.append(pt0)
+
+	# Commit Nature Trail Mesh & Collisions
 	b_ground.generate_normals()
 	b_foliage.generate_normals()
 	b_biolum.generate_normals()
@@ -526,7 +519,7 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 	m_biolum.vertex_color_is_srgb = true
 	m_biolum.emission_enabled = true
 	m_biolum.emission = Color(0.30, 0.95, 0.75)
-	m_biolum.emission_energy_multiplier = 2.2
+	m_biolum.emission_energy_multiplier = 2.4
 
 	var mesh := ArrayMesh.new()
 	b_ground.commit(mesh)
@@ -538,8 +531,8 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 	mesh.surface_set_material(2, m_biolum)
 
 	var col_shape := ConcavePolygonShape3D.new()
-	var packed_col_faces := PackedVector3Array(col_faces)
-	col_shape.set_faces(packed_col_faces)
+	col_shape.backface_collision = true
+	col_shape.set_faces(PackedVector3Array(col_faces))
 
 	ResourceSaver.save(mesh, "res://scenes/world/nature_trail_mesh.res")
 	ResourceSaver.save(col_shape, "res://scenes/world/nature_trail_col.res")
@@ -547,21 +540,21 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 
 
 # -----------------------------------------------------------------------------
-# BAKE BURNING PATH & CHARRED FOREST ZONE
+# BAKE BURNING PATH & CHARRED FOREST ZONE (100% GROUND LEVEL, NO RAMP)
 # -----------------------------------------------------------------------------
 func _bake_burning_path(spline: Spline3D) -> void:
 	print("Baking Burning Path and Charred Zone...")
 	var b_charred := ToolMeshBuilder.new()
 	var b_lava := ToolMeshBuilder.new()
-	var b_debris := ToolMeshBuilder.new()
+	var b_timber := ToolMeshBuilder.new()
 
 	var col_faces: Array[Vector3] = []
 
-	var steps: int = 100
+	var steps: int = 110
 	var trans_pts: int = 13
 	var base_idx: int = 0
 
-	# 1. Charred Road & Ash Field Surface
+	# 1. Charred Road & Ash Field Surface (firmly elevated Y = 0.06..0.25 above grass)
 	for i in range(steps + 1):
 		var t: float = float(i) / float(steps)
 		var f: PathFrame = spline.sample(t)
@@ -571,31 +564,30 @@ func _bake_burning_path(spline: Spline3D) -> void:
 		var up: Vector3 = f.up
 
 		var total_half_w: float = 7.0
-		var core_half_w: float = 2.5
+		var core_half_w: float = 2.6
 
 		for j in range(trans_pts):
 			var u_norm: float = -1.0 + 2.0 * float(j) / float(trans_pts - 1)
 			var dist: float = u_norm * total_half_w
 			var abs_d: float = absf(dist)
 
-			var h: float = 0.0
-			var col: Color = Color(0.04, 0.04, 0.04)
+			var h: float = 0.08
+			var col: Color = Color(0.06, 0.05, 0.045)
 
 			if abs_d <= core_half_w:
-				var rut: float = 0.06 + 0.03 * cos(abs_d * 2.5)
-				h = rut
-				col = Color(0.04, 0.035, 0.03)
-				if abs_d < 1.2:
-					col = Color(0.055, 0.048, 0.042)
+				# Rut profile: center crown 0.09m, wheel ruts 0.06m
+				var rut_factor: float = abs_d / core_half_w
+				h = lerpf(0.09, 0.06, sin(rut_factor * PI))
+				col = Color(0.07, 0.06, 0.05) if rut_factor < 0.4 else Color(0.045, 0.04, 0.035)
 			else:
+				# Outer ash mounds
 				var flank_factor: float = (abs_d - core_half_w) / (total_half_w - core_half_w)
-				var mound: float = 0.05 + sin(flank_factor * PI) * (0.22 + 0.12 * sin(t * 30.0 + dist))
-				h = mound
+				var mound: float = 0.06 + sin(flank_factor * PI) * (0.24 + 0.12 * sin(t * 28.0 + dist))
+				h = lerpf(mound, 0.015, flank_factor * flank_factor)
 				col = Color(0.05, 0.04, 0.035).lerp(Color(0.02, 0.02, 0.02), flank_factor)
 
-			# Feather start into clearing ground
-			if t < 0.05:
-				h *= (t / 0.05)
+			if t < 0.04:
+				h = lerpf(0.02, h, t / 0.04)
 
 			var vpos: Vector3 = pos + right * dist + up * h
 			b_charred.set_color(col)
@@ -605,21 +597,21 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 	_connect_tube_grid(b_charred, base_idx, steps + 1, trans_pts, false)
 
-	# Broken flagstone ramp steps on the castle approach (Z = -60 to -82.5, t approx 0.65 to 1.0)
-	var ramp_steps: int = 18
-	for rs in range(ramp_steps):
-		var t: float = 0.65 + 0.34 * (float(rs) / float(ramp_steps - 1))
+	# Ancient Cracked Stone Pavers approaching castle gate (Z = -65 to -82, ground level Y = 0.08..0.12)
+	var paver_rows: int = 16
+	for pr in range(paver_rows):
+		var t: float = 0.72 + 0.27 * (float(pr) / float(paver_rows - 1))
 		var f: PathFrame = spline.sample(t)
-		var slab_w: float = 4.4
-		var slab_l: float = 1.1
-		var slab_h: float = 0.06
+		var paver_w: float = 4.2
+		var paver_l: float = 1.05
+		var paver_h: float = 0.08
 
-		var p0: Vector3 = f.pos - f.right * (slab_w * 0.5) - f.tangent * (slab_l * 0.5) + f.up * slab_h
-		var p1: Vector3 = f.pos + f.right * (slab_w * 0.5) - f.tangent * (slab_l * 0.5) + f.up * slab_h
-		var p2: Vector3 = f.pos - f.right * (slab_w * 0.5) + f.tangent * (slab_l * 0.5) + f.up * slab_h
-		var p3: Vector3 = f.pos + f.right * (slab_w * 0.5) + f.tangent * (slab_l * 0.5) + f.up * slab_h
+		var p0: Vector3 = f.pos - f.right * (paver_w * 0.5) - f.tangent * (paver_l * 0.5) + f.up * paver_h
+		var p1: Vector3 = f.pos + f.right * (paver_w * 0.5) - f.tangent * (paver_l * 0.5) + f.up * paver_h
+		var p2: Vector3 = f.pos - f.right * (paver_w * 0.5) + f.tangent * (paver_l * 0.5) + f.up * paver_h
+		var p3: Vector3 = f.pos + f.right * (paver_w * 0.5) + f.tangent * (paver_l * 0.5) + f.up * paver_h
 
-		var slab_col: Color = Color(0.22, 0.22, 0.24)
+		var slab_col: Color = Color(0.24, 0.24, 0.26)
 		b_charred.set_color(slab_col)
 		b_charred.set_normal(f.up)
 		var v0: int = b_charred.add_vertex(p0)
@@ -630,95 +622,83 @@ func _bake_burning_path(spline: Spline3D) -> void:
 		b_charred.add_index(v0); b_charred.add_index(v2); b_charred.add_index(v1)
 		b_charred.add_index(v1); b_charred.add_index(v2); b_charred.add_index(v3)
 
-	# 2. Glowing Lava Cracks & Coals
-	var crack_count: int = 28
+	# Volumetric Glowing Lava Fissures & 3D Coal Embers
+	var crack_count: int = 30
 	for cc in range(crack_count):
-		var t: float = 0.05 + 0.90 * (float(cc) / float(crack_count - 1))
+		var t: float = 0.06 + 0.88 * (float(cc) / float(crack_count - 1))
 		var f: PathFrame = spline.sample(t)
 		var side: float = -1.0 if (cc % 2 == 0) else 1.0
-		var crack_pos: Vector3 = f.pos + f.right * (side * 2.4) - f.up * 0.03
-		var crack_len: float = 2.2 + 0.6 * sin(float(cc) * 1.8)
+		var crack_pos: Vector3 = f.pos + f.right * (side * 2.3) + f.up * 0.06
+		var crack_len: float = 2.4 + 0.6 * sin(float(cc) * 1.8)
 
 		var c_p0: Vector3 = crack_pos - f.tangent * (crack_len * 0.5)
 		var c_p1: Vector3 = crack_pos + f.tangent * (crack_len * 0.5)
-		var c_mid: Vector3 = crack_pos + f.right * (0.35 * sin(float(cc) * 3.1)) - f.up * 0.05
+		var c_mid: Vector3 = crack_pos + f.right * (0.35 * sin(float(cc) * 3.1))
 
-		# Ember glow triangles
-		b_lava.set_color(Color(1.0, 0.72, 0.15))
+		# Glowing fissure floor
+		b_lava.set_color(Color(1.0, 0.65, 0.12))
 		b_lava.set_normal(f.up)
-		var vm: int = b_lava.add_vertex(c_mid)
+		var vm: int = b_lava.add_vertex(c_mid + f.up * 0.03)
 		b_lava.set_color(Color(0.85, 0.25, 0.02))
-		var vp0: int = b_lava.add_vertex(c_p0)
-		var vp1: int = b_lava.add_vertex(c_p1)
+		var vp0: int = b_lava.add_vertex(c_p0 + f.up * 0.02)
+		var vp1: int = b_lava.add_vertex(c_p1 + f.up * 0.02)
 		b_lava.add_index(vm); b_lava.add_index(vp0); b_lava.add_index(vp1)
 
-		# Coal mounds
-		var coal_p: Vector3 = crack_pos + f.right * (side * 0.5)
-		for cm in range(5):
-			var ca: float = float(cm) * TAU / 5.0
-			var cp: Vector3 = coal_p + Vector3(cos(ca), 0.1, sin(ca)) * 0.25
-			var cp_next: Vector3 = coal_p + Vector3(cos(ca + 1.25), 0.1, sin(ca + 1.25)) * 0.25
+		# 3D ember rocks around fissure
+		for ember_i in range(3):
+			var a: float = float(ember_i) * 2.1 + float(cc)
+			var ep: Vector3 = crack_pos + Vector3(cos(a) * 0.35, 0.06, sin(a) * 0.35)
+			_add_ember_rock(b_lava, ep, 0.15)
 
-			b_lava.set_color(Color(1.0, 0.35, 0.05))
-			b_lava.set_normal(f.up)
-			var v_apex: int = b_lava.add_vertex(coal_p + Vector3.UP * 0.15)
-			var v_c0: int = b_lava.add_vertex(cp)
-			var v_c1: int = b_lava.add_vertex(cp_next)
-			b_lava.add_index(v_apex); b_lava.add_index(v_c0); b_lava.add_index(v_c1)
+	# Realistic Fallen Charred Timber Overhead & Log Obstacles
+	var timber_ts: Array[float] = [0.22, 0.48, 0.76]
+	for tt in timber_ts:
+		var f: PathFrame = spline.sample(tt)
+		_build_fallen_timber_crossing(b_timber, f)
 
-	# 3. Charred Debris & Fallen Burned Tree Arches Overhead
-	var arch_ts: Array[float] = [0.22, 0.50, 0.78]
-	for at in arch_ts:
-		var f: PathFrame = spline.sample(at)
-		var trunk_r: float = 0.32
+	# Scattered charred logs on road shoulders
+	for li in range(12):
+		var t_log: float = 0.08 + 0.84 * (float(li) / 11.0)
+		var f_log: PathFrame = spline.sample(t_log)
+		var side: float = 1.0 if (li % 2 == 0) else -1.0
+		var log_pos: Vector3 = f_log.pos + f_log.right * (side * 3.4) + f_log.up * 0.12
+		var log_dir: Vector3 = (f_log.tangent + f_log.right * (0.4 * sin(float(li)))).normalized()
+		_add_cylinder_beam(b_timber, log_pos - log_dir * 1.1, log_pos + log_dir * 1.1, 0.26, 0.20, Color(0.06, 0.05, 0.05))
 
-		var p_start: Vector3 = f.pos - f.right * 4.5 + f.up * 0.5
-		var p_end: Vector3 = f.pos + f.right * 4.5 + f.up * 5.2 + f.tangent * 2.0
-		var p_mid: Vector3 = (p_start + p_end) * 0.5 + f.up * 1.2
-
-		_add_cylinder_beam(b_debris, p_start, p_mid, trunk_r, Color(0.06, 0.05, 0.05))
-		_add_cylinder_beam(b_debris, p_mid, p_end, trunk_r * 0.7, Color(0.05, 0.05, 0.05))
-
-		var p2_start: Vector3 = f.pos + f.right * 4.2 + f.up * 0.4
-		var p2_end: Vector3 = f.pos - f.right * 3.5 + f.up * 5.6 - f.tangent * 1.5
-		var p2_mid: Vector3 = (p2_start + p2_end) * 0.5 + f.up * 1.0
-		_add_cylinder_beam(b_debris, p2_start, p2_mid, trunk_r * 0.8, Color(0.06, 0.05, 0.05))
-		_add_cylinder_beam(b_debris, p2_mid, p2_end, trunk_r * 0.55, Color(0.05, 0.05, 0.05))
-
-	# 4. Generate Collision Geometry for Burning Path
+	# Collision Geometry for Burning Path (Smooth floor + guide walls to castle gate)
 	for i in range(steps):
 		var t0: float = float(i) / float(steps)
 		var t1: float = float(i + 1) / float(steps)
 		var f0: PathFrame = spline.sample(t0)
 		var f1: PathFrame = spline.sample(t1)
 
-		var w: float = 2.4
+		var w: float = 2.6
 
-		var l0: Vector3 = f0.pos - f0.right * w
-		var r0: Vector3 = f0.pos + f0.right * w
-		var l1: Vector3 = f1.pos - f1.right * w
-		var r1: Vector3 = f1.pos + f1.right * w
+		var l0: Vector3 = f0.pos - f0.right * w + f0.up * 0.06
+		var r0: Vector3 = f0.pos + f0.right * w + f0.up * 0.06
+		var l1: Vector3 = f1.pos - f1.right * w + f1.up * 0.06
+		var r1: Vector3 = f1.pos + f1.right * w + f1.up * 0.06
 
-		# Floor
+		# Walkable floor
 		col_faces.append(l0); col_faces.append(l1); col_faces.append(r0)
 		col_faces.append(r0); col_faces.append(l1); col_faces.append(r1)
 
-		# Left guide wall
-		var l0_top: Vector3 = l0 + Vector3.UP * 1.8
-		var l1_top: Vector3 = l1 + Vector3.UP * 1.8
+		# Left guide wall (height 2.0m)
+		var l0_top: Vector3 = l0 + Vector3.UP * 2.0
+		var l1_top: Vector3 = l1 + Vector3.UP * 2.0
 		col_faces.append(l0); col_faces.append(l0_top); col_faces.append(l1)
 		col_faces.append(l1); col_faces.append(l0_top); col_faces.append(l1_top)
 
-		# Right guide wall
-		var r0_top: Vector3 = r0 + Vector3.UP * 1.8
-		var r1_top: Vector3 = r1 + Vector3.UP * 1.8
+		# Right guide wall (height 2.0m)
+		var r0_top: Vector3 = r0 + Vector3.UP * 2.0
+		var r1_top: Vector3 = r1 + Vector3.UP * 2.0
 		col_faces.append(r0); col_faces.append(r1); col_faces.append(r0_top)
 		col_faces.append(r1); col_faces.append(r1_top); col_faces.append(r0_top)
 
-	# Commit Burning Path Mesh
+	# Commit Burning Path Mesh & Collisions
 	b_charred.generate_normals()
 	b_lava.generate_normals()
-	b_debris.generate_normals()
+	b_timber.generate_normals()
 
 	var m_charred := StandardMaterial3D.new()
 	m_charred.cull_mode = BaseMaterial3D.CULL_DISABLED
@@ -730,27 +710,27 @@ func _bake_burning_path(spline: Spline3D) -> void:
 	m_lava.vertex_color_use_as_albedo = true
 	m_lava.vertex_color_is_srgb = true
 	m_lava.emission_enabled = true
-	m_lava.emission = Color(1.0, 0.32, 0.05)
+	m_lava.emission = Color(1.0, 0.38, 0.06)
 	m_lava.emission_energy_multiplier = 3.2
 
-	var m_debris := StandardMaterial3D.new()
-	m_debris.cull_mode = BaseMaterial3D.CULL_DISABLED
-	m_debris.vertex_color_use_as_albedo = true
-	m_debris.vertex_color_is_srgb = true
-	m_debris.roughness = 0.96
+	var m_timber := StandardMaterial3D.new()
+	m_timber.cull_mode = BaseMaterial3D.CULL_DISABLED
+	m_timber.vertex_color_use_as_albedo = true
+	m_timber.vertex_color_is_srgb = true
+	m_timber.roughness = 0.96
 
 	var mesh := ArrayMesh.new()
 	b_charred.commit(mesh)
 	b_lava.commit(mesh)
-	b_debris.commit(mesh)
+	b_timber.commit(mesh)
 
 	mesh.surface_set_material(0, m_charred)
 	mesh.surface_set_material(1, m_lava)
-	mesh.surface_set_material(2, m_debris)
+	mesh.surface_set_material(2, m_timber)
 
 	var col_shape := ConcavePolygonShape3D.new()
-	var packed_col_faces := PackedVector3Array(col_faces)
-	col_shape.set_faces(packed_col_faces)
+	col_shape.backface_collision = true
+	col_shape.set_faces(PackedVector3Array(col_faces))
 
 	ResourceSaver.save(mesh, "res://scenes/world/burning_path_mesh.res")
 	ResourceSaver.save(col_shape, "res://scenes/world/burning_path_col.res")
@@ -758,8 +738,119 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 
 # -----------------------------------------------------------------------------
-# Common Mesh Helpers
+# Detailed 3D Procedural Helpers
 # -----------------------------------------------------------------------------
+func _build_arch_bough(b: ToolMeshBuilder, f: PathFrame, arch_w: float, arch_h: float, r_base: float, r_top: float) -> void:
+	var segs: int = 16
+	var circ: int = 7
+	var vbase: int = b.vert_count
+
+	for s in range(segs + 1):
+		var sa: float = float(s) / float(segs)
+		var ang: float = sa * PI
+		var u_pos: float = cos(ang) * arch_w
+		var v_h: float = sin(ang) * arch_h
+		var center_p: Vector3 = f.pos + f.right * u_pos + f.up * v_h
+		var rad: float = lerpf(r_base, r_top, sin(ang))
+
+		for c in range(circ):
+			var ca: float = float(c) * TAU / float(circ)
+			var n: Vector3 = (f.right * cos(ca) + f.tangent * sin(ca)).normalized()
+			var v: Vector3 = center_p + (f.right * cos(ca) + f.tangent * sin(ca)) * rad
+			b.set_color(Color(0.28, 0.18, 0.12))
+			b.set_normal(n)
+			b.add_vertex(v)
+
+	_connect_tube_grid(b, vbase, segs + 1, circ, true)
+
+
+func _build_3d_mushroom(b_ground: ToolMeshBuilder, b_bio: ToolMeshBuilder, base: Vector3, h: float, rad: float, glow_col: Color) -> void:
+	# 5-sided stalk
+	var stalk_segs: int = 5
+	var stalk_r: float = 0.035
+	var s_base: int = b_ground.vert_count
+	for i in range(2):
+		var y_off: float = float(i) * h
+		for s in range(stalk_segs):
+			var a: float = float(s) * TAU / float(stalk_segs)
+			var v: Vector3 = base + Vector3(cos(a) * stalk_r, y_off, sin(a) * stalk_r)
+			b_ground.set_color(Color(0.48, 0.62, 0.44))
+			b_ground.set_normal(Vector3(cos(a), 0, sin(a)))
+			b_ground.add_vertex(v)
+	_connect_tube_grid(b_ground, s_base, 2, stalk_segs, true)
+
+	# Domed glowing cap
+	var cap_apex: Vector3 = base + Vector3.UP * (h + rad * 0.65)
+	var cap_segs: int = 8
+	var cap_pts: Array[Vector3] = []
+	for s in range(cap_segs):
+		var a: float = float(s) * TAU / float(cap_segs)
+		var p: Vector3 = base + Vector3(cos(a) * rad, h, sin(a) * rad)
+		cap_pts.append(p)
+
+	for s in range(cap_segs):
+		var s_next: int = (s + 1) % cap_segs
+		b_bio.set_color(glow_col)
+		b_bio.set_normal(Vector3.UP)
+		var va: int = b_bio.add_vertex(cap_apex)
+		var v0: int = b_bio.add_vertex(cap_pts[s])
+		var v1: int = b_bio.add_vertex(cap_pts[s_next])
+		b_bio.add_index(va); b_bio.add_index(v0); b_bio.add_index(v1)
+
+
+func _build_fallen_timber_crossing(b: ToolMeshBuilder, f: PathFrame) -> void:
+	# Main leaning charred giant trunk
+	var p0: Vector3 = f.pos - f.right * 4.2 + f.up * 0.1
+	var p1: Vector3 = f.pos - f.right * 1.5 + f.up * 3.8 + f.tangent * 0.5
+	var p2: Vector3 = f.pos + f.right * 3.8 + f.up * 0.1 + f.tangent * 1.2
+	_add_cylinder_beam(b, p0, p1, 0.42, 0.30, Color(0.06, 0.05, 0.05))
+	_add_cylinder_beam(b, p1, p2, 0.30, 0.22, Color(0.05, 0.045, 0.045))
+
+	# Broken jagged branch stub pointing upward
+	var p_stub: Vector3 = p1 + f.up * 1.4 - f.tangent * 0.8
+	_add_cylinder_beam(b, p1, p_stub, 0.22, 0.12, Color(0.05, 0.045, 0.045))
+
+
+func _add_cylinder_beam(b: ToolMeshBuilder, start: Vector3, end: Vector3, r0: float, r1: float, color: Color) -> void:
+	var segs: int = 6
+	var dir: Vector3 = (end - start).normalized()
+	var right: Vector3 = dir.cross(Vector3.UP).normalized()
+	if right.length_squared() < 0.01:
+		right = Vector3.RIGHT
+	var up: Vector3 = right.cross(dir).normalized()
+
+	var vbase: int = b.vert_count
+	for i in range(2):
+		var p: Vector3 = start if i == 0 else end
+		var r: float = r0 if i == 0 else r1
+		for s in range(segs):
+			var a: float = float(s) * TAU / float(segs)
+			var n: Vector3 = (right * cos(a) + up * sin(a)).normalized()
+			var v: Vector3 = p + n * r
+			b.set_color(color)
+			b.set_normal(n)
+			b.add_vertex(v)
+	_connect_tube_grid(b, vbase, 2, segs, true)
+
+
+func _add_ember_rock(b: ToolMeshBuilder, pos: Vector3, rad: float) -> void:
+	var segs: int = 5
+	var top: Vector3 = pos + Vector3.UP * rad
+	var ring: Array[Vector3] = []
+	for s in range(segs):
+		var a: float = float(s) * TAU / float(segs)
+		ring.append(pos + Vector3(cos(a) * rad, 0.02, sin(a) * rad))
+
+	for s in range(segs):
+		var s_next: int = (s + 1) % segs
+		b.set_color(Color(1.0, 0.45, 0.08))
+		b.set_normal(Vector3.UP)
+		var vt: int = b.add_vertex(top)
+		var v0: int = b.add_vertex(ring[s])
+		var v1: int = b.add_vertex(ring[s_next])
+		b.add_index(vt); b.add_index(v0); b.add_index(v1)
+
+
 func _add_foliage_puff(b: ToolMeshBuilder, center: Vector3, radius: float, color: Color) -> void:
 	var rings: int = 4
 	var ring_pts: int = 6
@@ -778,45 +869,3 @@ func _add_foliage_puff(b: ToolMeshBuilder, center: Vector3, radius: float, color
 			b.add_vertex(v)
 
 	_connect_tube_grid(b, vbase, rings, ring_pts, true)
-
-
-func _add_mushroom_cap(b: ToolMeshBuilder, center: Vector3, radius: float, color: Color) -> void:
-	var segs: int = 6
-	var top_v: Vector3 = center + Vector3.UP * (radius * 0.6)
-	var ring_pts: Array[Vector3] = []
-
-	for i in range(segs):
-		var a: float = float(i) * TAU / float(segs)
-		var p: Vector3 = center + Vector3(cos(a), 0, sin(a)) * radius
-		ring_pts.append(p)
-
-	for i in range(segs):
-		var i_next: int = (i + 1) % segs
-		b.set_color(color)
-		b.set_normal(Vector3.UP)
-		var v_top: int = b.add_vertex(top_v)
-		var v0: int = b.add_vertex(ring_pts[i])
-		var v1: int = b.add_vertex(ring_pts[i_next])
-		b.add_index(v_top); b.add_index(v0); b.add_index(v1)
-
-
-func _add_cylinder_beam(b: ToolMeshBuilder, p0: Vector3, p1: Vector3, radius: float, color: Color) -> void:
-	var segs: int = 5
-	var dir: Vector3 = (p1 - p0).normalized()
-	var right: Vector3 = dir.cross(Vector3.UP).normalized()
-	if right.length_squared() < 0.01:
-		right = dir.cross(Vector3.RIGHT).normalized()
-	var up: Vector3 = right.cross(dir).normalized()
-
-	var vbase: int = b.vert_count
-	for p_idx in [0, 1]:
-		var cp: Vector3 = p0 if p_idx == 0 else p1
-		for s in range(segs):
-			var a: float = float(s) * TAU / float(segs)
-			var norm: Vector3 = (right * cos(a) + up * sin(a)).normalized()
-			var v: Vector3 = cp + norm * radius
-			b.set_color(color)
-			b.set_normal(norm)
-			b.add_vertex(v)
-
-	_connect_tube_grid(b, vbase, 2, segs, true)

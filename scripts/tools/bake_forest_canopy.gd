@@ -15,13 +15,15 @@ const HAND_PLACED_POSITIONS: Array[Vector2] = [
 	Vector2(-11.0, 18.0), Vector2(-6.0, 18.0), Vector2(-2.0, 20.0),
 	Vector2(4.0, 19.0), Vector2(9.0, 17.0), Vector2(14.0, 14.0),
 	Vector2(17.0, 9.0), Vector2(18.0, 3.0), Vector2(17.0, -3.0),
-	Vector2(18.5, -2.5), Vector2(-9.0, -10.0), # GreatTree base location in clearing
+	Vector2(18.5, -2.5), Vector2(-9.0, -10.0),
 	Vector2(-26.0, 0.0), Vector2(-24.0, -11.0), Vector2(-23.0, 12.0),
 	Vector2(0.0, 25.0), Vector2(20.0, 20.0), Vector2(-12.0, -26.0),
 	Vector2(5.0, -26.0), Vector2(24.0, -6.0), Vector2(-26.0, -20.0),
 	Vector2(-9.0, 24.0),
-	# Barrier props:
-	Vector2(13.0, -10.0), Vector2(16.0, -13.0), Vector2(19.0, -9.0), Vector2(21.0, -14.0)
+	# East barrier props:
+	Vector2(13.0, -10.0), Vector2(16.0, -13.0), Vector2(19.0, -9.0), Vector2(21.0, -14.0),
+	# Northwest barrier props:
+	Vector2(-4.5, -18.0), Vector2(-6.5, -18.5), Vector2(-3.0, -18.5)
 ]
 
 const NATURE_TRAIL_PTS: Array[Vector2] = [
@@ -55,6 +57,8 @@ func _init() -> void:
 	var persistent_oaks: Array[Transform3D] = []
 	var corridor_pines: Array[Transform3D] = []
 	var corridor_oaks: Array[Transform3D] = []
+	var nature_corridor_pines: Array[Transform3D] = []
+	var nature_corridor_oaks: Array[Transform3D] = []
 
 	var half_size := FOREST_SIZE * 0.5
 	var grid_cols := int(FOREST_SIZE / CELL_SIZE)
@@ -82,29 +86,20 @@ func _init() -> void:
 			if tree_pos.length() < 22.5:
 				continue
 
-			# 2. Castle plateau and keep exclusion (Castle at Z = -90, front wall at Z = -81.5)
-			if pos_x > -50.0 and pos_x < 50.0 and pos_z > -165.0 and pos_z < -80.0:
+			# 2. Castle courtyard and keep exclusion
+			if pos_x > -35.0 and pos_x < 35.0 and pos_z > -165.0 and pos_z < -78.0:
 				continue
 
-			# 2b. Castle gate approach clearing (front road directly into gate)
-			if pos_x > -10.0 and pos_x < 10.0 and pos_z >= -80.0 and pos_z < -70.0:
-				continue
-
-			# 2c. Great Tree zone exclusion (Trunk at (-21, -60), spiral stairs, buttress roots, canopy)
+			# 2b. Check if inside nature path corridor / Great Tree zone
+			var is_nature_corridor := false
 			if (tree_pos - Vector2(-21.0, -60.0)).length() < 14.0:
-				continue
-
-			# 2d. Approach Plaza exclusion (center (-17.5, -56.8), radius 6.5)
-			if (tree_pos - Vector2(-17.5, -56.8)).length() < 8.0:
-				continue
-
-			# 2e. Bough Bridge corridor (from GreatTree terrace (-21, -60) to Castle balcony (-22.5, -107))
-			if pos_x >= -25.0 and pos_x <= -17.0 and pos_z <= -60.0 and pos_z >= -95.0:
-				continue
-
-			# 2f. Nature Trail exclusion
-			if _dist_to_nature_trail(tree_pos) < 5.0:
-				continue
+				is_nature_corridor = true
+			elif (tree_pos - Vector2(-17.5, -56.8)).length() < 8.0:
+				is_nature_corridor = true
+			elif pos_x >= -25.0 and pos_x <= -17.0 and pos_z <= -60.0 and pos_z >= -95.0:
+				is_nature_corridor = true
+			elif _dist_to_nature_trail(tree_pos) < 5.0:
+				is_nature_corridor = true
 
 			# 3. Check distance against hand-placed perimeter trees and props
 			var too_close := false
@@ -115,7 +110,7 @@ func _init() -> void:
 			if too_close:
 				continue
 
-			# 4. Check neighbor cells in spatial hash grid to ensure NO tree-on-tree overlap
+			# 4. Check neighbor cells in spatial hash grid
 			var cell_coord := Vector2i(col, row)
 			for dx in range(-1, 2):
 				for dz in range(-1, 2):
@@ -135,13 +130,15 @@ func _init() -> void:
 
 			var rot_y := rng.randf_range(0.0, TAU)
 			var is_pine := rng.randf() < 0.52
-			var is_in_corridor := (pos_x > -6.0 and pos_x < 36.0 and pos_z > -82.0 and pos_z < -5.0)
+			var is_in_burn_corridor := (pos_x > -6.0 and pos_x < 36.0 and pos_z > -82.0 and pos_z < -5.0)
 
 			if is_pine:
 				var scale_p := rng.randf_range(1.2, 1.6)
 				var b := Basis(Vector3.UP, rot_y).scaled(Vector3(scale_p, scale_p * rng.randf_range(0.95, 1.1), scale_p))
 				var xform := Transform3D(b, Vector3(pos_x, 0.0, pos_z))
-				if is_in_corridor:
+				if is_nature_corridor:
+					nature_corridor_pines.append(xform)
+				elif is_in_burn_corridor:
 					corridor_pines.append(xform)
 				else:
 					persistent_pines.append(xform)
@@ -149,25 +146,32 @@ func _init() -> void:
 				var scale_o := rng.randf_range(1.1, 1.45)
 				var b := Basis(Vector3.UP, rot_y).scaled(Vector3(scale_o, scale_o * rng.randf_range(0.95, 1.08), scale_o))
 				var xform := Transform3D(b, Vector3(pos_x, 0.0, pos_z))
-				if is_in_corridor:
+				if is_nature_corridor:
+					nature_corridor_oaks.append(xform)
+				elif is_in_burn_corridor:
 					corridor_oaks.append(xform)
 				else:
 					persistent_oaks.append(xform)
 
-	print("Baking: %d persistent pines, %d persistent oaks." % [persistent_pines.size(), persistent_oaks.size()])
-	print("Corridor (burnable): %d pines, %d oaks." % [corridor_pines.size(), corridor_oaks.size()])
+	print("Persistent: %d pines, %d oaks." % [persistent_pines.size(), persistent_oaks.size()])
+	print("Burn corridor: %d pines, %d oaks." % [corridor_pines.size(), corridor_oaks.size()])
+	print("Nature corridor: %d pines, %d oaks." % [nature_corridor_pines.size(), nature_corridor_oaks.size()])
 
 	var mm_pers_pines := _create_pine_multimesh(persistent_pines)
 	var mm_pers_oaks := _create_oak_multimesh(persistent_oaks)
 	var mm_corr_pines := _create_pine_multimesh(corridor_pines)
 	var mm_corr_oaks := _create_oak_multimesh(corridor_oaks)
+	var mm_nat_pines := _create_pine_multimesh(nature_corridor_pines)
+	var mm_nat_oaks := _create_oak_multimesh(nature_corridor_oaks)
 
 	ResourceSaver.save(mm_pers_pines, "res://scenes/world/forest_canopy_pines.res")
 	ResourceSaver.save(mm_pers_oaks, "res://scenes/world/forest_canopy_oaks.res")
 	ResourceSaver.save(mm_corr_pines, "res://scenes/world/corridor_forest_pines.res")
 	ResourceSaver.save(mm_corr_oaks, "res://scenes/world/corridor_forest_oaks.res")
+	ResourceSaver.save(mm_nat_pines, "res://scenes/world/nature_corridor_pines.res")
+	ResourceSaver.save(mm_nat_oaks, "res://scenes/world/nature_corridor_oaks.res")
 
-	print("Bake completed successfully! All 4 MultiMesh resources saved.")
+	print("Bake completed successfully! All 6 MultiMesh resources saved.")
 	quit(0)
 
 func _create_pine_multimesh(transforms: Array[Transform3D]) -> MultiMesh:

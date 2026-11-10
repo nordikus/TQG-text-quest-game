@@ -1,15 +1,15 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=22 format=3]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rock_base"]
-albedo_color = Color(0.28, 0.29, 0.3, 1)
-roughness = 0.95
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_courtyard"]
+albedo_color = Color(0.32, 0.33, 0.35, 1)
+roughness = 0.92
 
-[sub_resource type="BoxMesh" id="BoxMesh_plateau"]
-material = SubResource("StandardMaterial3D_rock_base")
-size = Vector3(90.0, 4.0, 70.0)
+[sub_resource type="BoxMesh" id="BoxMesh_courtyard"]
+material = SubResource("StandardMaterial3D_courtyard")
+size = Vector3(44.0, 0.1, 26.0)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_plateau"]
-size = Vector3(90.0, 4.0, 70.0)
+[sub_resource type="BoxShape3D" id="BoxShape3D_courtyard"]
+size = Vector3(44.0, 0.1, 26.0)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.38, 0.4, 0.42, 1)
@@ -58,6 +58,13 @@ size = Vector3(26.0, 10.0, 3.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_wall_front"]
 size = Vector3(26.0, 10.0, 3.5)
 
+[sub_resource type="BoxMesh" id="BoxMesh_wall_side"]
+material = SubResource("StandardMaterial3D_stone")
+size = Vector3(3.5, 10.0, 26.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_side"]
+size = Vector3(3.5, 10.0, 26.0)
+
 [sub_resource type="BoxMesh" id="BoxMesh_gate_tower"]
 material = SubResource("StandardMaterial3D_stone")
 size = Vector3(6.5, 14.0, 6.5)
@@ -76,18 +83,38 @@ size = Vector3(7.0, 7.5, 0.5)
 
 [node name="CastleFacade" type="Node3D"]
 
-[node name="PlateauBase" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, -27.0)
+[node name="Courtyard" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -4.5)
 collision_layer = 1
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlateauBase"]
-mesh = SubResource("BoxMesh_plateau")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Courtyard"]
+mesh = SubResource("BoxMesh_courtyard")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlateauBase"]
-shape = SubResource("BoxShape3D_plateau")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Courtyard"]
+shape = SubResource("BoxShape3D_courtyard")
+
+[node name="CourtyardWallWest" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.0, 5.0, -4.5)
+collision_layer = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CourtyardWallWest"]
+mesh = SubResource("BoxMesh_wall_side")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CourtyardWallWest"]
+shape = SubResource("BoxShape3D_wall_side")
+
+[node name="CourtyardWallEast" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.0, 5.0, -4.5)
+collision_layer = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CourtyardWallEast"]
+mesh = SubResource("BoxMesh_wall_side")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CourtyardWallEast"]
+shape = SubResource("BoxShape3D_wall_side")
 
 [node name="MainKeep" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.0, -28.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, -28.0)
 collision_layer = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MainKeep"]
@@ -121,7 +148,7 @@ mesh = SubResource("BoxMesh_balcony")
 shape = SubResource("BoxShape3D_balcony")
 
 [node name="WallFrontLeft" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.0, 7.0, 8.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.0, 5.0, 8.0)
 collision_layer = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="WallFrontLeft"]
@@ -131,7 +158,7 @@ mesh = SubResource("BoxMesh_wall_front")
 shape = SubResource("BoxShape3D_wall_front")
 
 [node name="WallFrontRight" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.0, 7.0, 8.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.0, 5.0, 8.0)
 collision_layer = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="WallFrontRight"]
@@ -141,7 +168,7 @@ mesh = SubResource("BoxMesh_wall_front")
 shape = SubResource("BoxShape3D_wall_front")
 
 [node name="GateTowerLeft" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 9.0, 8.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 7.0, 8.5)
 collision_layer = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="GateTowerLeft"]
@@ -151,7 +178,7 @@ mesh = SubResource("BoxMesh_gate_tower")
 shape = SubResource("BoxShape3D_gate_tower")
 
 [node name="GateTowerRight" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 9.0, 8.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 7.0, 8.5)
 collision_layer = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="GateTowerRight"]
@@ -161,5 +188,5 @@ mesh = SubResource("BoxMesh_gate_tower")
 shape = SubResource("BoxShape3D_gate_tower")
 
 [node name="GatePortcullis" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 8.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, 8.5)
 mesh = SubResource("BoxMesh_gate_arch")
