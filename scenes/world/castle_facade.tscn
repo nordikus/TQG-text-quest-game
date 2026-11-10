@@ -72,6 +72,13 @@ size = Vector3(6.5, 14.0, 6.5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_gate_tower"]
 size = Vector3(6.5, 14.0, 6.5)
 
+[sub_resource type="BoxMesh" id="BoxMesh_gate_arch_wall"]
+material = SubResource("StandardMaterial3D_stone")
+size = Vector3(6.6, 5.0, 4.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gate_arch_wall"]
+size = Vector3(6.6, 5.0, 4.0)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gate_iron"]
 albedo_color = Color(0.12, 0.12, 0.14, 1)
 metallic = 0.8
@@ -79,7 +86,7 @@ roughness = 0.4
 
 [sub_resource type="BoxMesh" id="BoxMesh_gate_arch"]
 material = SubResource("StandardMaterial3D_gate_iron")
-size = Vector3(7.0, 7.5, 0.5)
+size = Vector3(6.5, 4.5, 0.4)
 
 [node name="CastleFacade" type="Node3D"]
 
@@ -187,6 +194,16 @@ mesh = SubResource("BoxMesh_gate_tower")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GateTowerRight"]
 shape = SubResource("BoxShape3D_gate_tower")
 
+[node name="GateArchWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.5, 8.5)
+collision_layer = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GateArchWall"]
+mesh = SubResource("BoxMesh_gate_arch_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GateArchWall"]
+shape = SubResource("BoxShape3D_gate_arch_wall")
+
 [node name="GatePortcullis" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, 8.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 8.5)
 mesh = SubResource("BoxMesh_gate_arch")
