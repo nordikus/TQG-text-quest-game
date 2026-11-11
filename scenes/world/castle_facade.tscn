@@ -1,1358 +1,153 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/interaction/interactable_door.gd" id="1_door"]
-[ext_resource type="Script" path="res://scripts/interaction/pickup_item.gd" id="2_item"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/courtyard_walls.tscn" id="1_walls"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/barracks_building.tscn" id="2_barracks"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/chapel_building.tscn" id="3_chapel"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/mage_tower.tscn" id="4_tower"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/main_keep.tscn" id="5_keep"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_Stone"]
 albedo_color = Color(0.40, 0.42, 0.44, 1.0)
 roughness = 0.90
+
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
 roughness = 0.92
-[sub_resource type="StandardMaterial3D" id="Mat_Courtyard"]
-albedo_color = Color(0.33, 0.35, 0.36, 1.0)
-roughness = 0.92
-[sub_resource type="StandardMaterial3D" id="Mat_Pathway"]
-albedo_color = Color(0.48, 0.49, 0.51, 1.0)
-roughness = 0.88
+
 [sub_resource type="StandardMaterial3D" id="Mat_Roof"]
-albedo_color = Color(0.20, 0.25, 0.36, 1.0)
+albedo_color = Color(0.18, 0.22, 0.32, 1.0)
 roughness = 0.65
+
 [sub_resource type="StandardMaterial3D" id="Mat_Wood"]
 albedo_color = Color(0.38, 0.26, 0.18, 1.0)
 roughness = 0.85
+
 [sub_resource type="StandardMaterial3D" id="Mat_Carpet"]
 albedo_color = Color(0.65, 0.12, 0.16, 1.0)
 roughness = 0.95
+
 [sub_resource type="StandardMaterial3D" id="Mat_Gold"]
 albedo_color = Color(0.95, 0.80, 0.28, 1.0)
 metallic = 0.85
 roughness = 0.32
+
 [sub_resource type="StandardMaterial3D" id="Mat_Iron"]
 albedo_color = Color(0.15, 0.15, 0.18, 1.0)
 metallic = 0.80
 roughness = 0.40
+
 [sub_resource type="StandardMaterial3D" id="Mat_Crystal"]
 albedo_color = Color(0.35, 0.85, 0.95, 1.0)
 emission_enabled = true
 emission = Color(0.35, 0.85, 0.95, 1.0)
 emission_energy_multiplier = 2.5
+
 [sub_resource type="StandardMaterial3D" id="Mat_Paper"]
 albedo_color = Color(0.90, 0.85, 0.72, 1.0)
 roughness = 0.90
 
-[sub_resource type="BoxMesh" id="Mesh_CourtyardFloor"]
-material = SubResource("Mat_Courtyard")
-size = Vector3(74.0, 0.2, 56.0)
+[sub_resource type="StandardMaterial3D" id="Mat_DirtPath"]
+albedo_color = Color(0.36, 0.28, 0.18, 1.0)
+roughness = 0.95
 
-[sub_resource type="BoxShape3D" id="Shape_CourtyardFloor"]
-size = Vector3(74.0, 0.2, 56.0)
+[sub_resource type="StandardMaterial3D" id="Mat_StainedGlass"]
+albedo_color = Color(0.25, 0.65, 0.85, 1.0)
+emission_enabled = true
+emission = Color(0.20, 0.60, 0.80, 1.0)
+emission_energy_multiplier = 1.6
 
-[sub_resource type="BoxMesh" id="Mesh_PathMain"]
-material = SubResource("Mat_Pathway")
-size = Vector3(5.0, 0.05, 54.5)
+[sub_resource type="BoxMesh" id="Mesh_MainAvenueDirt"]
+material = SubResource("Mat_DirtPath")
+size = Vector3(4.5, 0.04, 54.5)
 
-[sub_resource type="BoxShape3D" id="Shape_PathMain"]
-size = Vector3(5.0, 0.05, 54.5)
+[sub_resource type="BoxShape3D" id="Shape_MainAvenueDirt"]
+size = Vector3(4.5, 0.04, 54.5)
 
-[sub_resource type="BoxMesh" id="Mesh_WallSide"]
-material = SubResource("Mat_Stone")
-size = Vector3(3.5, 10.0, 86.5)
+[sub_resource type="BoxMesh" id="Mesh_BarracksPathDirt"]
+material = SubResource("Mat_DirtPath")
+size = Vector3(14.0, 0.04, 3.2)
 
-[sub_resource type="BoxShape3D" id="Shape_WallSide"]
-size = Vector3(3.5, 10.0, 86.5)
+[sub_resource type="BoxShape3D" id="Shape_BarracksPathDirt"]
+size = Vector3(14.0, 0.04, 3.2)
 
-[sub_resource type="BoxMesh" id="Mesh_WallFrontSide"]
-material = SubResource("Mat_Stone")
-size = Vector3(31.0, 10.0, 3.5)
+[sub_resource type="BoxMesh" id="Mesh_ChapelPathDirt"]
+material = SubResource("Mat_DirtPath")
+size = Vector3(13.0, 0.04, 3.2)
 
-[sub_resource type="BoxShape3D" id="Shape_WallFrontSide"]
-size = Vector3(31.0, 10.0, 3.5)
+[sub_resource type="BoxShape3D" id="Shape_ChapelPathDirt"]
+size = Vector3(13.0, 0.04, 3.2)
 
-[sub_resource type="CylinderMesh" id="Mesh_GateTower"]
+[sub_resource type="BoxMesh" id="Mesh_TowerPathDirt"]
+material = SubResource("Mat_DirtPath")
+size = Vector3(15.0, 0.04, 2.8)
+
+[sub_resource type="BoxShape3D" id="Shape_TowerPathDirt"]
+size = Vector3(15.0, 0.04, 2.8)
+
+[sub_resource type="CylinderMesh" id="Mesh_CourtyardWell"]
 material = SubResource("Mat_StoneDark")
-top_radius = 3.2
-bottom_radius = 3.8
-height = 14.0
-radial_segments = 16
-
-[sub_resource type="CylinderShape3D" id="Shape_GateTower"]
-radius = 3.8
-height = 14.0
-
-[sub_resource type="BoxMesh" id="Mesh_GateArch"]
-material = SubResource("Mat_Stone")
-size = Vector3(7.0, 5.0, 3.5)
-
-[sub_resource type="BoxShape3D" id="Shape_GateArch"]
-size = Vector3(7.0, 5.0, 3.5)
-
-[sub_resource type="BoxMesh" id="Mesh_Portcullis"]
-material = SubResource("Mat_Iron")
-size = Vector3(6.0, 6.0, 0.4)
-
-[sub_resource type="BoxShape3D" id="Shape_Portcullis"]
-size = Vector3(6.0, 6.0, 0.4)
-
-[sub_resource type="CylinderMesh" id="Mesh_CornerTower"]
-material = SubResource("Mat_StoneDark")
-top_radius = 4.2
-bottom_radius = 4.8
-height = 18.0
-radial_segments = 16
-
-[sub_resource type="CylinderShape3D" id="Shape_CornerTower"]
-radius = 4.8
-height = 18.0
-
-[sub_resource type="CylinderMesh" id="Mesh_TowerRoof"]
-material = SubResource("Mat_Roof")
-top_radius = 0.1
-bottom_radius = 5.2
-height = 5.0
-radial_segments = 16
-
-[sub_resource type="CylinderShape3D" id="Shape_TowerRoof"]
-radius = 5.2
-height = 5.0
-
-[sub_resource type="CylinderMesh" id="Mesh_MageTowerBody"]
-material = SubResource("Mat_StoneDark")
-top_radius = 4.2
-bottom_radius = 5.0
-height = 36.0
-radial_segments = 20
-
-[sub_resource type="CylinderShape3D" id="Shape_MageTowerBody"]
-radius = 5.0
-height = 36.0
-
-[sub_resource type="CylinderMesh" id="Mesh_MageTowerRoof"]
-material = SubResource("Mat_Roof")
-top_radius = 0.1
-bottom_radius = 5.6
-height = 7.0
-radial_segments = 20
-
-[sub_resource type="CylinderShape3D" id="Shape_MageTowerRoof"]
-radius = 5.6
-height = 7.0
-
-[sub_resource type="BoxMesh" id="Mesh_MageTowerBalcony"]
-material = SubResource("Mat_Stone")
-size = Vector3(3.2, 0.4, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_MageTowerBalcony"]
-size = Vector3(3.2, 0.4, 3.2)
-
-[sub_resource type="BoxMesh" id="Mesh_MageWalkwayBridge"]
-material = SubResource("Mat_Stone")
-size = Vector3(3.0, 3.0, 16.0)
-
-[sub_resource type="BoxShape3D" id="Shape_MageWalkwayBridge"]
-size = Vector3(3.0, 3.0, 16.0)
-
-[sub_resource type="PrismMesh" id="PrismMesh_crystal"]
-material = SubResource("Mat_Crystal")
-size = Vector3(1.2, 2.4, 1.2)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksFloor"]
-material = SubResource("Mat_Wood")
-size = Vector3(15.8, 0.1, 21.8)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksFloor"]
-size = Vector3(15.8, 0.1, 21.8)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksWallEW"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.6, 5.5, 22.0)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksWallEW"]
-size = Vector3(0.6, 5.5, 22.0)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksWallNS"]
-material = SubResource("Mat_Stone")
-size = Vector3(16.0, 5.5, 0.6)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksWallNS"]
-size = Vector3(16.0, 5.5, 0.6)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksDoorWing"]
-material = SubResource("Mat_Wood")
-size = Vector3(0.15, 3.2, 1.8)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksDoorWing"]
-size = Vector3(0.15, 3.2, 1.8)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksWallWS"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.6, 5.5, 10.0)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksWallWS"]
-size = Vector3(0.6, 5.5, 10.0)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksLintel"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.6, 2.2, 2.4)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksLintel"]
-size = Vector3(0.6, 2.2, 2.4)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksRoof"]
-material = SubResource("Mat_Roof")
-size = Vector3(16.4, 0.4, 22.4)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksRoof"]
-size = Vector3(16.4, 0.4, 22.4)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksPartition"]
-material = SubResource("Mat_Wood")
-size = Vector3(0.4, 5.0, 10.0)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksPartition"]
-size = Vector3(0.4, 5.0, 10.0)
-
-[sub_resource type="BoxMesh" id="Mesh_Desk"]
-material = SubResource("Mat_Wood")
-size = Vector3(3.2, 0.9, 1.6)
-
-[sub_resource type="BoxShape3D" id="Shape_Desk"]
-size = Vector3(3.2, 0.9, 1.6)
-
-[sub_resource type="BoxShape3D" id="Shape_KeyCol"]
-size = Vector3(0.5, 0.4, 0.5)
-
-[sub_resource type="BoxMesh" id="Mesh_KeyGold"]
-material = SubResource("Mat_Gold")
-size = Vector3(0.24, 0.12, 0.45)
-
-[sub_resource type="BoxMesh" id="Mesh_NotePaper"]
-material = SubResource("Mat_Paper")
-size = Vector3(0.35, 0.03, 0.25)
-
-[sub_resource type="BoxMesh" id="Mesh_BunkBed"]
-material = SubResource("Mat_Wood")
-size = Vector3(2.4, 1.8, 1.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BunkBed"]
-size = Vector3(2.4, 1.8, 1.2)
-
-[sub_resource type="BoxMesh" id="Mesh_ChapelFloor"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(13.8, 0.1, 13.8)
-
-[sub_resource type="BoxShape3D" id="Shape_ChapelFloor"]
-size = Vector3(13.8, 0.1, 13.8)
-
-[sub_resource type="BoxMesh" id="Mesh_ChapelWall"]
-material = SubResource("Mat_Stone")
-size = Vector3(14.0, 7.0, 0.6)
-
-[sub_resource type="BoxShape3D" id="Shape_ChapelWall"]
-size = Vector3(14.0, 7.0, 0.6)
-
-[sub_resource type="BoxMesh" id="Mesh_ChapelWallES"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.6, 7.0, 5.0)
-
-[sub_resource type="BoxShape3D" id="Shape_ChapelWallES"]
-size = Vector3(0.6, 7.0, 5.0)
-
-[sub_resource type="BoxMesh" id="Mesh_ChapelLintel"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.6, 3.0, 3.8)
-
-[sub_resource type="BoxShape3D" id="Shape_ChapelLintel"]
-size = Vector3(0.6, 3.0, 3.8)
-
-[sub_resource type="BoxMesh" id="Mesh_ChapelRoof"]
-material = SubResource("Mat_Roof")
-size = Vector3(14.4, 0.5, 14.4)
-
-[sub_resource type="BoxShape3D" id="Shape_ChapelRoof"]
-size = Vector3(14.4, 0.5, 14.4)
-
-[sub_resource type="CylinderMesh" id="Mesh_StatuePedestal"]
-material = SubResource("Mat_StoneDark")
-top_radius = 1.0
-bottom_radius = 1.2
+top_radius = 1.2
+bottom_radius = 1.4
 height = 1.2
 radial_segments = 12
 
-[sub_resource type="CylinderShape3D" id="Shape_StatuePedestal"]
-radius = 1.2
+[sub_resource type="CylinderShape3D" id="Shape_CourtyardWell"]
+radius = 1.4
 height = 1.2
 
-[sub_resource type="PrismMesh" id="Mesh_StatueFigure"]
-material = SubResource("Mat_Stone")
-size = Vector3(1.2, 2.0, 0.8)
-
-[sub_resource type="BoxMesh" id="Mesh_Altar"]
-material = SubResource("Mat_Stone")
-size = Vector3(1.6, 1.0, 2.8)
-
-[sub_resource type="BoxShape3D" id="Shape_Altar"]
-size = Vector3(1.6, 1.0, 2.8)
-
-[sub_resource type="BoxMesh" id="Mesh_Pew"]
+[sub_resource type="CylinderMesh" id="Mesh_WellRoof"]
 material = SubResource("Mat_Wood")
-size = Vector3(1.0, 0.8, 3.8)
+top_radius = 0.1
+bottom_radius = 1.6
+height = 1.2
+radial_segments = 8
 
-[sub_resource type="BoxShape3D" id="Shape_Pew"]
-size = Vector3(1.0, 0.8, 3.8)
-
-[sub_resource type="BoxMesh" id="Mesh_KeepFloor"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(64.0, 0.2, 30.0)
-
-[sub_resource type="BoxShape3D" id="Shape_KeepFloor"]
-size = Vector3(64.0, 0.2, 30.0)
-
-[sub_resource type="BoxMesh" id="Mesh_WingFloor2"]
-material = SubResource("Mat_Stone")
-size = Vector3(19.0, 0.3, 30.0)
-
-[sub_resource type="BoxShape3D" id="Shape_WingFloor2"]
-size = Vector3(19.0, 0.3, 30.0)
-
-[sub_resource type="BoxMesh" id="Mesh_GalleryBridge"]
-material = SubResource("Mat_Stone")
-size = Vector3(26.0, 0.3, 4.0)
-
-[sub_resource type="BoxShape3D" id="Shape_GalleryBridge"]
-size = Vector3(26.0, 0.3, 4.0)
-
-[sub_resource type="BoxMesh" id="Mesh_KeepFloor3"]
-material = SubResource("Mat_Stone")
-size = Vector3(64.0, 0.4, 30.0)
-
-[sub_resource type="BoxShape3D" id="Shape_KeepFloor3"]
-size = Vector3(64.0, 0.4, 30.0)
-
-[sub_resource type="BoxMesh" id="Mesh_KeepWallEW"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.8, 18.0, 30.0)
-
-[sub_resource type="BoxShape3D" id="Shape_KeepWallEW"]
-size = Vector3(0.8, 18.0, 30.0)
-
-[sub_resource type="BoxMesh" id="Mesh_KeepFrontWing"]
-material = SubResource("Mat_Stone")
-size = Vector3(28.0, 18.0, 1.0)
-
-[sub_resource type="BoxShape3D" id="Shape_KeepFrontWing"]
-size = Vector3(28.0, 18.0, 1.0)
-
-[sub_resource type="BoxMesh" id="Mesh_KeepFrontArch"]
-material = SubResource("Mat_Stone")
-size = Vector3(8.0, 11.5, 1.0)
-
-[sub_resource type="BoxShape3D" id="Shape_KeepFrontArch"]
-size = Vector3(8.0, 11.5, 1.0)
-
-[sub_resource type="BoxMesh" id="Mesh_GrandDoorWing"]
-material = SubResource("Mat_Wood")
-size = Vector3(0.2, 6.4, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_GrandDoorWing"]
-size = Vector3(0.2, 6.4, 3.2)
-
-[sub_resource type="CylinderMesh" id="Mesh_PorticoPillar"]
-material = SubResource("Mat_Stone")
-top_radius = 0.55
-bottom_radius = 0.65
-height = 6.0
-radial_segments = 12
-
-[sub_resource type="CylinderShape3D" id="Shape_PorticoPillar"]
-radius = 0.65
-height = 6.0
-
-[sub_resource type="BoxMesh" id="Mesh_ThroneCarpet"]
-material = SubResource("Mat_Carpet")
-size = Vector3(4.0, 0.04, 24.0)
-
-[sub_resource type="BoxShape3D" id="Shape_ThroneCarpet"]
-size = Vector3(4.0, 0.04, 24.0)
-
-[sub_resource type="CylinderMesh" id="Mesh_NaveCol"]
-material = SubResource("Mat_Stone")
-top_radius = 0.8
-bottom_radius = 0.9
-height = 11.5
-radial_segments = 14
-
-[sub_resource type="CylinderShape3D" id="Shape_NaveCol"]
-radius = 0.9
-height = 11.5
-
-[sub_resource type="BoxMesh" id="Mesh_Dais"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(7.0, 0.6, 5.0)
-
-[sub_resource type="BoxShape3D" id="Shape_Dais"]
-size = Vector3(7.0, 0.6, 5.0)
-
-[sub_resource type="BoxMesh" id="Mesh_ThroneSeat"]
-material = SubResource("Mat_Gold")
-size = Vector3(1.6, 1.0, 1.2)
-
-[sub_resource type="BoxShape3D" id="Shape_ThroneSeat"]
-size = Vector3(1.6, 1.0, 1.2)
-
-[sub_resource type="BoxMesh" id="Mesh_ThroneBack"]
-material = SubResource("Mat_Carpet")
-size = Vector3(1.4, 2.4, 0.3)
-
-[sub_resource type="BoxShape3D" id="Shape_ThroneBack"]
-size = Vector3(1.4, 2.4, 0.3)
-
-[sub_resource type="BoxMesh" id="Mesh_StairStep"]
-material = SubResource("Mat_Stone")
-size = Vector3(3.2, 0.3, 0.6)
-
-[sub_resource type="BoxShape3D" id="Shape_StairStep"]
-size = Vector3(3.2, 0.3, 0.6)
-
-[sub_resource type="BoxMesh" id="Mesh_DiningTable"]
-material = SubResource("Mat_Wood")
-size = Vector3(7.0, 1.0, 2.2)
-
-[sub_resource type="BoxShape3D" id="Shape_DiningTable"]
-size = Vector3(7.0, 1.0, 2.2)
-
-[sub_resource type="BoxMesh" id="Mesh_AlchBench"]
-material = SubResource("Mat_Wood")
-size = Vector3(4.5, 1.0, 1.6)
-
-[sub_resource type="BoxShape3D" id="Shape_AlchBench"]
-size = Vector3(4.5, 1.0, 1.6)
+[sub_resource type="CylinderShape3D" id="Shape_WellRoof"]
+radius = 1.6
+height = 1.2
 
 [node name="CastleFacade" type="Node3D"]
 
-[node name="CourtyardFloor" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, -0.1, -18.75)
-
-[node name="Mesh" type="MeshInstance3D" parent="CourtyardFloor"]
-mesh = SubResource("Mesh_CourtyardFloor")
-
-[node name="Col" type="CollisionShape3D" parent="CourtyardFloor"]
-shape = SubResource("Shape_CourtyardFloor")
-
-[node name="MainPathway" type="StaticBody3D" parent="."]
+[node name="MainAvenueDirt" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.02, -18.75)
+mesh = SubResource("Mesh_MainAvenueDirt")
 
-[node name="Mesh" type="MeshInstance3D" parent="MainPathway"]
-mesh = SubResource("Mesh_PathMain")
+[node name="BarracksPathDirt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0, 0.02, -19.0)
+mesh = SubResource("Mesh_BarracksPathDirt")
 
-[node name="Col" type="CollisionShape3D" parent="MainPathway"]
-shape = SubResource("Shape_PathMain")
+[node name="ChapelPathDirt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.0, 0.02, -2.0)
+mesh = SubResource("Mesh_ChapelPathDirt")
 
-[node name="WallWest" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0, 5.0, -34.75)
+[node name="TowerPathDirt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0, 0.02, -20.0)
+mesh = SubResource("Mesh_TowerPathDirt")
 
-[node name="Mesh" type="MeshInstance3D" parent="WallWest"]
-mesh = SubResource("Mesh_WallSide")
+[node name="CourtyardWell" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 0.6, -10.0)
 
-[node name="Col" type="CollisionShape3D" parent="WallWest"]
-shape = SubResource("Shape_WallSide")
+[node name="Mesh" type="MeshInstance3D" parent="CourtyardWell"]
+mesh = SubResource("Mesh_CourtyardWell")
 
-[node name="WallEast" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 5.0, -34.75)
+[node name="Col" type="CollisionShape3D" parent="CourtyardWell"]
+shape = SubResource("Shape_CourtyardWell")
 
-[node name="Mesh" type="MeshInstance3D" parent="WallEast"]
-mesh = SubResource("Mesh_WallSide")
+[node name="WellRoofMesh" type="MeshInstance3D" parent="CourtyardWell"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+mesh = SubResource("Mesh_WellRoof")
 
-[node name="Col" type="CollisionShape3D" parent="WallEast"]
-shape = SubResource("Shape_WallSide")
+[node name="CourtyardWalls" parent="." instance=ExtResource("1_walls")]
 
-[node name="WallFrontLeft" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.5, 5.0, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="WallFrontLeft"]
-mesh = SubResource("Mesh_WallFrontSide")
-
-[node name="Col" type="CollisionShape3D" parent="WallFrontLeft"]
-shape = SubResource("Shape_WallFrontSide")
-
-[node name="WallFrontRight" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.5, 5.0, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="WallFrontRight"]
-mesh = SubResource("Mesh_WallFrontSide")
-
-[node name="Col" type="CollisionShape3D" parent="WallFrontRight"]
-shape = SubResource("Shape_WallFrontSide")
-
-[node name="GateTowerLeft" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 7.0, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="GateTowerLeft"]
-mesh = SubResource("Mesh_GateTower")
-
-[node name="Col" type="CollisionShape3D" parent="GateTowerLeft"]
-shape = SubResource("Shape_GateTower")
-
-[node name="GateTowerRight" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 7.0, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="GateTowerRight"]
-mesh = SubResource("Mesh_GateTower")
-
-[node name="Col" type="CollisionShape3D" parent="GateTowerRight"]
-shape = SubResource("Shape_GateTower")
-
-[node name="GateArchWall" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 11.5, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="GateArchWall"]
-mesh = SubResource("Mesh_GateArch")
-
-[node name="Col" type="CollisionShape3D" parent="GateArchWall"]
-shape = SubResource("Shape_GateArch")
-
-[node name="GatePortcullis" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 8.5)
-mesh = SubResource("Mesh_Portcullis")
-
-[node name="CornerTowerSW" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0, 7.0, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="CornerTowerSW"]
-mesh = SubResource("Mesh_CornerTower")
-
-[node name="Col" type="CollisionShape3D" parent="CornerTowerSW"]
-shape = SubResource("Shape_CornerTower")
-
-[node name="Roof" type="MeshInstance3D" parent="CornerTowerSW"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
-mesh = SubResource("Mesh_TowerRoof")
-
-[node name="CornerTowerSE" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 7.0, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="CornerTowerSE"]
-mesh = SubResource("Mesh_CornerTower")
-
-[node name="Col" type="CollisionShape3D" parent="CornerTowerSE"]
-shape = SubResource("Shape_CornerTower")
-
-[node name="Roof" type="MeshInstance3D" parent="CornerTowerSE"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
-mesh = SubResource("Mesh_TowerRoof")
-
-[node name="CornerTowerNW" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0, 9.0, -78.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="CornerTowerNW"]
-mesh = SubResource("Mesh_CornerTower")
-
-[node name="Col" type="CollisionShape3D" parent="CornerTowerNW"]
-shape = SubResource("Shape_CornerTower")
-
-[node name="Roof" type="MeshInstance3D" parent="CornerTowerNW"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
-mesh = SubResource("Mesh_TowerRoof")
-
-[node name="CornerTowerNE" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 9.0, -78.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="CornerTowerNE"]
-mesh = SubResource("Mesh_CornerTower")
-
-[node name="Col" type="CollisionShape3D" parent="CornerTowerNE"]
-shape = SubResource("Shape_CornerTower")
-
-[node name="Roof" type="MeshInstance3D" parent="CornerTowerNE"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
-mesh = SubResource("Mesh_TowerRoof")
-
-[node name="MageTower" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0, 18.0, -20.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MageTower"]
-mesh = SubResource("Mesh_MageTowerBody")
-
-[node name="Col" type="CollisionShape3D" parent="MageTower"]
-shape = SubResource("Shape_MageTowerBody")
-
-[node name="RoofMesh" type="MeshInstance3D" parent="MageTower"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.0, 0)
-mesh = SubResource("Mesh_MageTowerRoof")
-
-[node name="TowerBalcony" type="StaticBody3D" parent="MageTower"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.0, 3.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MageTower/TowerBalcony"]
-mesh = SubResource("Mesh_MageTowerBalcony")
-
-[node name="Col" type="CollisionShape3D" parent="MageTower/TowerBalcony"]
-shape = SubResource("Shape_MageTowerBalcony")
-
-[node name="MagicCrystal" type="MeshInstance3D" parent="MageTower"]
-transform = Transform3D(0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0, 0, 1, 0, 4.0, 0)
-mesh = SubResource("PrismMesh_crystal")
-
-[node name="CrystalLight" type="OmniLight3D" parent="MageTower/MagicCrystal"]
-light_color = Color(0.35, 0.88, 0.98, 1.0)
-light_energy = 2.2
-omni_range = 12.0
-
-[node name="MageBridgeToKeep" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.0, 6.0, -36.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MageBridgeToKeep"]
-mesh = SubResource("Mesh_MageWalkwayBridge")
-
-[node name="Col" type="CollisionShape3D" parent="MageBridgeToKeep"]
-shape = SubResource("Shape_MageWalkwayBridge")
-
-[node name="BarracksBuilding" type="Node3D" parent="."]
+[node name="BarracksBuilding" parent="." instance=ExtResource("2_barracks")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.0, 0.0, -19.0)
 
-[node name="Floor" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.05, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/Floor"]
-mesh = SubResource("Mesh_BarracksFloor")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/Floor"]
-shape = SubResource("Shape_BarracksFloor")
-
-[node name="WallEast" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7, 2.75, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/WallEast"]
-mesh = SubResource("Mesh_BarracksWallEW")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/WallEast"]
-shape = SubResource("Shape_BarracksWallEW")
-
-[node name="WallWestSouth" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 2.75, 5.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/WallWestSouth"]
-mesh = SubResource("Mesh_BarracksWallWS")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/WallWestSouth"]
-shape = SubResource("Shape_BarracksWallWS")
-
-[node name="WallWestNorth" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 2.75, -5.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/WallWestNorth"]
-mesh = SubResource("Mesh_BarracksWallWS")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/WallWestNorth"]
-shape = SubResource("Shape_BarracksWallWS")
-
-[node name="WallWestLintel" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 4.4, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/WallWestLintel"]
-mesh = SubResource("Mesh_BarracksLintel")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/WallWestLintel"]
-shape = SubResource("Shape_BarracksLintel")
-
-[node name="WallSouth" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.75, 10.7)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/WallSouth"]
-mesh = SubResource("Mesh_BarracksWallNS")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/WallSouth"]
-shape = SubResource("Shape_BarracksWallNS")
-
-[node name="WallNorth" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.75, -10.7)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/WallNorth"]
-mesh = SubResource("Mesh_BarracksWallNS")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/WallNorth"]
-shape = SubResource("Shape_BarracksWallNS")
-
-[node name="Roof" type="MeshInstance3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.6, 0)
-mesh = SubResource("Mesh_BarracksRoof")
-
-[node name="InteriorPartition" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.5, -5.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/InteriorPartition"]
-mesh = SubResource("Mesh_BarracksPartition")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/InteriorPartition"]
-shape = SubResource("Shape_BarracksPartition")
-
-[node name="BarracksDoor" type="StaticBody3D" parent="BarracksBuilding" node_paths=PackedStringArray("left_wing")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 1.6, 0.0)
-script = ExtResource("1_door")
-left_wing = NodePath("DoorWing")
-open_angle_deg = 85.0
-
-[node name="DoorWing" type="Node3D" parent="BarracksBuilding/BarracksDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/BarracksDoor/DoorWing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.9)
-mesh = SubResource("Mesh_BarracksDoorWing")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/BarracksDoor"]
-shape = SubResource("Shape_BarracksDoorWing")
-
-[node name="CaptainsDesk" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.45, -7.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/CaptainsDesk"]
-mesh = SubResource("Mesh_Desk")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/CaptainsDesk"]
-shape = SubResource("Shape_Desk")
-
-[node name="ThroneHallKey" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0.96, -7.0)
-script = ExtResource("2_item")
-item_id = "throne_hall_key"
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/ThroneHallKey"]
-shape = SubResource("Shape_KeyCol")
-
-[node name="KeyMesh" type="MeshInstance3D" parent="BarracksBuilding/ThroneHallKey"]
-mesh = SubResource("Mesh_KeyGold")
-
-[node name="KeyLight" type="OmniLight3D" parent="BarracksBuilding/ThroneHallKey"]
-light_color = Color(1.0, 0.85, 0.4, 1.0)
-light_energy = 1.4
-omni_range = 3.5
-
-[node name="CaptainNote" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0.96, -6.9)
-script = ExtResource("2_item")
-item_id = "guard_captain_note"
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/CaptainNote"]
-shape = SubResource("Shape_KeyCol")
-
-[node name="NoteMesh" type="MeshInstance3D" parent="BarracksBuilding/CaptainNote"]
-mesh = SubResource("Mesh_NotePaper")
-
-[node name="BunkBed_0" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.9, 3.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/BunkBed_0"]
-mesh = SubResource("Mesh_BunkBed")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/BunkBed_0"]
-shape = SubResource("Shape_BunkBed")
-
-[node name="BunkBed_1" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.9, 6.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/BunkBed_1"]
-mesh = SubResource("Mesh_BunkBed")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/BunkBed_1"]
-shape = SubResource("Shape_BunkBed")
-
-[node name="BunkBed_2" type="StaticBody3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.9, -4.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksBuilding/BunkBed_2"]
-mesh = SubResource("Mesh_BunkBed")
-
-[node name="Col" type="CollisionShape3D" parent="BarracksBuilding/BunkBed_2"]
-shape = SubResource("Shape_BunkBed")
-
-[node name="BarracksLight" type="OmniLight3D" parent="BarracksBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 0)
-light_color = Color(1.0, 0.82, 0.55, 1.0)
-light_energy = 1.8
-omni_range = 14.0
-
-[node name="ChapelBuilding" type="Node3D" parent="."]
+[node name="ChapelBuilding" parent="." instance=ExtResource("3_chapel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.0, 0.0, -2.0)
 
-[node name="Floor" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.05, 0.0)
+[node name="MageTower" parent="." instance=ExtResource("4_tower")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0, 0.0, -20.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/Floor"]
-mesh = SubResource("Mesh_ChapelFloor")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/Floor"]
-shape = SubResource("Shape_ChapelFloor")
-
-[node name="WallWest" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -6.7, 3.5, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/WallWest"]
-mesh = SubResource("Mesh_ChapelWall")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/WallWest"]
-shape = SubResource("Shape_ChapelWall")
-
-[node name="WallNorth" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 3.5, -6.7)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/WallNorth"]
-mesh = SubResource("Mesh_ChapelWall")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/WallNorth"]
-shape = SubResource("Shape_ChapelWall")
-
-[node name="WallSouth" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 3.5, 6.7)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/WallSouth"]
-mesh = SubResource("Mesh_ChapelWall")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/WallSouth"]
-shape = SubResource("Shape_ChapelWall")
-
-[node name="WallEastSouth" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 3.5, 4.4)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/WallEastSouth"]
-mesh = SubResource("Mesh_ChapelWallES")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/WallEastSouth"]
-shape = SubResource("Shape_ChapelWallES")
-
-[node name="WallEastNorth" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 3.5, -4.4)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/WallEastNorth"]
-mesh = SubResource("Mesh_ChapelWallES")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/WallEastNorth"]
-shape = SubResource("Shape_ChapelWallES")
-
-[node name="WallEastLintel" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 5.2, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/WallEastLintel"]
-mesh = SubResource("Mesh_ChapelLintel")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/WallEastLintel"]
-shape = SubResource("Shape_ChapelLintel")
-
-[node name="Roof" type="MeshInstance3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.1, 0)
-mesh = SubResource("Mesh_ChapelRoof")
-
-[node name="ChapelDoor" type="StaticBody3D" parent="ChapelBuilding" node_paths=PackedStringArray("left_wing")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 6.7, 1.7, 0.0)
-script = ExtResource("1_door")
-left_wing = NodePath("DoorWing")
-open_angle_deg = 85.0
-
-[node name="DoorWing" type="Node3D" parent="ChapelBuilding/ChapelDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/ChapelDoor/DoorWing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.9)
-mesh = SubResource("Mesh_BarracksDoorWing")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/ChapelDoor"]
-shape = SubResource("Shape_BarracksDoorWing")
-
-[node name="WatcherStatue" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.6, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/WatcherStatue"]
-mesh = SubResource("Mesh_StatuePedestal")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/WatcherStatue"]
-shape = SubResource("Shape_StatuePedestal")
-
-[node name="FigureMesh" type="MeshInstance3D" parent="ChapelBuilding/WatcherStatue"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-mesh = SubResource("Mesh_StatueFigure")
-
-[node name="ChapelAltar" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.5, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/ChapelAltar"]
-mesh = SubResource("Mesh_Altar")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/ChapelAltar"]
-shape = SubResource("Shape_Altar")
-
-[node name="ChapelNote" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.05, 0.0)
-script = ExtResource("2_item")
-item_id = "chapel_lore_note"
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/ChapelNote"]
-shape = SubResource("Shape_KeyCol")
-
-[node name="NoteMesh" type="MeshInstance3D" parent="ChapelBuilding/ChapelNote"]
-mesh = SubResource("Mesh_NotePaper")
-
-[node name="Pew_-2.5" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.4, -2.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/Pew_-2.5"]
-mesh = SubResource("Mesh_Pew")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/Pew_-2.5"]
-shape = SubResource("Shape_Pew")
-
-[node name="Pew_2.5" type="StaticBody3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.4, 2.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelBuilding/Pew_2.5"]
-mesh = SubResource("Mesh_Pew")
-
-[node name="Col" type="CollisionShape3D" parent="ChapelBuilding/Pew_2.5"]
-shape = SubResource("Shape_Pew")
-
-[node name="ChapelLight" type="OmniLight3D" parent="ChapelBuilding"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 3.8, 0)
-light_color = Color(0.70, 0.85, 1.0, 1.0)
-light_energy = 2.0
-omni_range = 14.0
-
-[node name="MainKeep" type="Node3D" parent="."]
+[node name="MainKeep" parent="." instance=ExtResource("5_keep")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.0, -61.0)
-
-[node name="Floor1" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.05, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/Floor1"]
-mesh = SubResource("Mesh_KeepFloor")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/Floor1"]
-shape = SubResource("Shape_KeepFloor")
-
-[node name="Floor2West" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.0, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/Floor2West"]
-mesh = SubResource("Mesh_WingFloor2")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/Floor2West"]
-shape = SubResource("Shape_WingFloor2")
-
-[node name="Floor2East" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 6.0, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/Floor2East"]
-mesh = SubResource("Mesh_WingFloor2")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/Floor2East"]
-shape = SubResource("Shape_WingFloor2")
-
-[node name="Floor2Gallery" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 6.0, 12.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/Floor2Gallery"]
-mesh = SubResource("Mesh_GalleryBridge")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/Floor2Gallery"]
-shape = SubResource("Shape_GalleryBridge")
-
-[node name="Floor3" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 12.0, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/Floor3"]
-mesh = SubResource("Mesh_KeepFloor3")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/Floor3"]
-shape = SubResource("Shape_KeepFloor3")
-
-[node name="KeepWallWest" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.0, 9.0, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/KeepWallWest"]
-mesh = SubResource("Mesh_KeepWallEW")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/KeepWallWest"]
-shape = SubResource("Shape_KeepWallEW")
-
-[node name="KeepWallEast" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.0, 9.0, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/KeepWallEast"]
-mesh = SubResource("Mesh_KeepWallEW")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/KeepWallEast"]
-shape = SubResource("Shape_KeepWallEW")
-
-[node name="KeepWallNorth" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.0, 9.0, -15.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/KeepWallNorth"]
-mesh = SubResource("Mesh_KeepWallEW")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/KeepWallNorth"]
-shape = SubResource("Shape_KeepWallEW")
-
-[node name="KeepFrontLeft" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.0, 9.0, 15.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/KeepFrontLeft"]
-mesh = SubResource("Mesh_KeepFrontWing")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/KeepFrontLeft"]
-shape = SubResource("Shape_KeepFrontWing")
-
-[node name="KeepFrontRight" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.0, 9.0, 15.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/KeepFrontRight"]
-mesh = SubResource("Mesh_KeepFrontWing")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/KeepFrontRight"]
-shape = SubResource("Shape_KeepFrontWing")
-
-[node name="KeepFrontArch" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 12.25, 15.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/KeepFrontArch"]
-mesh = SubResource("Mesh_KeepFrontArch")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/KeepFrontArch"]
-shape = SubResource("Shape_KeepFrontArch")
-
-[node name="ThroneRoomEntranceDoors" type="StaticBody3D" parent="MainKeep" node_paths=PackedStringArray("left_wing", "right_wing")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.5, 15.0)
-script = ExtResource("1_door")
-required_item_id = "throne_hall_key"
-is_locked = true
-is_double_door = true
-left_wing = NodePath("DoorWingLeft")
-right_wing = NodePath("DoorWingRight")
-open_angle_deg = 90.0
-
-[node name="DoorWingLeft" type="Node3D" parent="MainKeep/ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneRoomEntranceDoors/DoorWingLeft"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.7, 0)
-mesh = SubResource("Mesh_GrandDoorWing")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.7, 0)
-shape = SubResource("Shape_GrandDoorWing")
-
-[node name="DoorWingRight" type="Node3D" parent="MainKeep/ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneRoomEntranceDoors/DoorWingRight"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.7, 0)
-mesh = SubResource("Mesh_GrandDoorWing")
-
-[node name="ColRight" type="CollisionShape3D" parent="MainKeep/ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.7, 0)
-shape = SubResource("Shape_GrandDoorWing")
-
-[node name="PorticoPillarLeft" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 3.0, 17.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/PorticoPillarLeft"]
-mesh = SubResource("Mesh_PorticoPillar")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/PorticoPillarLeft"]
-shape = SubResource("Shape_PorticoPillar")
-
-[node name="PorticoPillarRight" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 3.0, 17.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/PorticoPillarRight"]
-mesh = SubResource("Mesh_PorticoPillar")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/PorticoPillarRight"]
-shape = SubResource("Shape_PorticoPillar")
-
-[node name="ThroneCarpet" type="MeshInstance3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 1.0)
-mesh = SubResource("Mesh_ThroneCarpet")
-
-[node name="ThroneCol_0" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, 5.8, 8.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneCol_0"]
-mesh = SubResource("Mesh_NaveCol")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneCol_0"]
-shape = SubResource("Shape_NaveCol")
-
-[node name="ThroneCol_1" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 5.8, 8.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneCol_1"]
-mesh = SubResource("Mesh_NaveCol")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneCol_1"]
-shape = SubResource("Shape_NaveCol")
-
-[node name="ThroneCol_2" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, 5.8, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneCol_2"]
-mesh = SubResource("Mesh_NaveCol")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneCol_2"]
-shape = SubResource("Shape_NaveCol")
-
-[node name="ThroneCol_3" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 5.8, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneCol_3"]
-mesh = SubResource("Mesh_NaveCol")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneCol_3"]
-shape = SubResource("Shape_NaveCol")
-
-[node name="ThroneCol_4" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, 5.8, -8.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneCol_4"]
-mesh = SubResource("Mesh_NaveCol")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneCol_4"]
-shape = SubResource("Shape_NaveCol")
-
-[node name="ThroneCol_5" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 5.8, -8.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneCol_5"]
-mesh = SubResource("Mesh_NaveCol")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneCol_5"]
-shape = SubResource("Shape_NaveCol")
-
-[node name="ThroneDais" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.3, -11.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/ThroneDais"]
-mesh = SubResource("Mesh_Dais")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/ThroneDais"]
-shape = SubResource("Shape_Dais")
-
-[node name="TheThrone" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.1, -11.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/TheThrone"]
-mesh = SubResource("Mesh_ThroneSeat")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/TheThrone"]
-shape = SubResource("Shape_ThroneSeat")
-
-[node name="BackRest" type="MeshInstance3D" parent="MainKeep/TheThrone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.45)
-mesh = SubResource("Mesh_ThroneBack")
-
-[node name="StairsFloor1to2_0" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.15, -10.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_0"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_0"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_1" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.44999999999999996, -9.4)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_1"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_1"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_2" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.75, -8.8)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_2"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_2"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_3" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 1.0499999999999998, -8.2)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_3"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_3"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_4" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 1.3499999999999999, -7.6)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_4"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_4"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_5" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 1.65, -7.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_5"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_5"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_6" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 1.9499999999999997, -6.4)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_6"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_6"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_7" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 2.25, -5.8)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_7"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_7"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_8" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 2.55, -5.2)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_8"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_8"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_9" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 2.8499999999999996, -4.6000000000000005)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_9"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_9"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_10" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 3.15, -4.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_10"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_10"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_11" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 3.4499999999999997, -3.4000000000000004)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_11"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_11"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_12" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 3.7499999999999996, -2.8000000000000007)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_12"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_12"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_13" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.05, -2.2)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_13"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_13"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_14" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.3500000000000005, -1.5999999999999996)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_14"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_14"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_15" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.65, -1.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_15"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_15"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_16" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.95, -0.40000000000000036)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_16"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_16"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_17" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.25, 0.1999999999999993)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_17"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_17"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_18" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.55, 0.7999999999999989)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_18"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_18"]
-shape = SubResource("Shape_StairStep")
-
-[node name="StairsFloor1to2_19" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.8500000000000005, 1.4000000000000004)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/StairsFloor1to2_19"]
-mesh = SubResource("Mesh_StairStep")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/StairsFloor1to2_19"]
-shape = SubResource("Shape_StairStep")
-
-[node name="DiningTable" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 6.5, 0.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/DiningTable"]
-mesh = SubResource("Mesh_DiningTable")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/DiningTable"]
-shape = SubResource("Shape_DiningTable")
-
-[node name="AlchemistBench" type="StaticBody3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.5, 5.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="MainKeep/AlchemistBench"]
-mesh = SubResource("Mesh_AlchBench")
-
-[node name="Col" type="CollisionShape3D" parent="MainKeep/AlchemistBench"]
-shape = SubResource("Shape_AlchBench")
-
-[node name="ThroneChandelier" type="OmniLight3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -4.0)
-light_color = Color(1.0, 0.9, 0.7, 1.0)
-light_energy = 2.4
-omni_range = 24.0
-
-[node name="ThroneDaisLight" type="OmniLight3D" parent="MainKeep"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0, -12.0)
-light_color = Color(1.0, 0.8, 0.45, 1.0)
-light_energy = 1.8
-omni_range = 10.0
 

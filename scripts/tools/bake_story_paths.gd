@@ -595,31 +595,6 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 	_connect_tube_grid(b_charred, base_idx, steps + 1, trans_pts, false)
 
-	# Ancient Cracked Stone Pavers approaching castle gate (ground level Y = 0.08..0.12)
-	var paver_rows: int = 16
-	for pr in range(paver_rows):
-		var t: float = 0.72 + 0.27 * (float(pr) / float(paver_rows - 1))
-		var f: PathFrame = spline.sample(t)
-		var paver_w: float = 4.2
-		var paver_l: float = 1.05
-		var paver_h: float = 0.08
-
-		var p0: Vector3 = f.pos - f.right * (paver_w * 0.5) - f.tangent * (paver_l * 0.5) + f.up * paver_h
-		var p1: Vector3 = f.pos + f.right * (paver_w * 0.5) - f.tangent * (paver_l * 0.5) + f.up * paver_h
-		var p2: Vector3 = f.pos - f.right * (paver_w * 0.5) + f.tangent * (paver_l * 0.5) + f.up * paver_h
-		var p3: Vector3 = f.pos + f.right * (paver_w * 0.5) + f.tangent * (paver_l * 0.5) + f.up * paver_h
-
-		var slab_col: Color = Color(0.24, 0.24, 0.26)
-		b_charred.set_color(slab_col)
-		b_charred.set_normal(f.up)
-		var v0: int = b_charred.add_vertex(p0)
-		var v1: int = b_charred.add_vertex(p1)
-		var v2: int = b_charred.add_vertex(p2)
-		var v3: int = b_charred.add_vertex(p3)
-
-		b_charred.add_index(v0); b_charred.add_index(v2); b_charred.add_index(v1)
-		b_charred.add_index(v1); b_charred.add_index(v2); b_charred.add_index(v3)
-
 	# Lava Fissures & Solid Ground Embers
 	var crack_count: int = 30
 	for cc in range(crack_count):

@@ -9,6 +9,7 @@ const ItemDb = preload("res://scripts/inventory/item_database.gd")
 @export var left_wing: Node3D
 @export var right_wing: Node3D
 @export var open_angle_deg: float = 90.0
+@export var doorway_blockers: Array[CollisionShape3D] = []
 
 var is_open: bool = false
 var _initial_left_rot: float = 0.0
@@ -23,7 +24,20 @@ func _ready():
 		_initial_left_rot = left_wing.rotation.y
 	if right_wing:
 		_initial_right_rot = right_wing.rotation.y
+
+	if doorway_blockers.is_empty():
+		for child in get_children():
+			if child is CollisionShape3D:
+				if child.name.begins_with("DoorBlocker") or child.name == "Col" or child.name == "ColRight":
+					doorway_blockers.append(child)
+
+	_update_blockers()
 	_update_prompt()
+
+func _update_blockers():
+	for blocker in doorway_blockers:
+		if is_instance_valid(blocker):
+			blocker.disabled = is_open
 
 func _update_prompt():
 	if is_locked:
@@ -55,6 +69,7 @@ func interact():
 func _toggle_door():
 	_animating = true
 	is_open = not is_open
+	_update_blockers()
 	_update_prompt()
 	GameManager.interaction_prompt_changed.emit(interaction_prompt)
 
