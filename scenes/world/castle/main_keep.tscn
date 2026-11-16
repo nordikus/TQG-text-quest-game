@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/interaction/interactable_door.gd" id="1_door"]
+[ext_resource type="Script" path="res://scripts/interaction/pickup_item.gd" id="2_pickup"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_Stone"]
 albedo_color = Color(0.40, 0.42, 0.44, 1.0)
@@ -17,6 +18,10 @@ roughness = 0.65
 [sub_resource type="StandardMaterial3D" id="Mat_Wood"]
 albedo_color = Color(0.38, 0.26, 0.18, 1.0)
 roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_WoodDark"]
+albedo_color = Color(0.26, 0.17, 0.12, 1.0)
+roughness = 0.88
 
 [sub_resource type="StandardMaterial3D" id="Mat_Carpet"]
 albedo_color = Color(0.65, 0.12, 0.16, 1.0)
@@ -38,13 +43,21 @@ emission_enabled = true
 emission = Color(0.35, 0.85, 0.95, 1.0)
 emission_energy_multiplier = 2.5
 
+[sub_resource type="StandardMaterial3D" id="Mat_ArcaneBarrier"]
+transparency = 1
+albedo_color = Color(0.20, 0.75, 0.98, 0.65)
+emission_enabled = true
+emission = Color(0.25, 0.80, 0.98, 1.0)
+emission_energy_multiplier = 3.0
+roughness = 0.1
+
 [sub_resource type="StandardMaterial3D" id="Mat_Paper"]
 albedo_color = Color(0.90, 0.85, 0.72, 1.0)
 roughness = 0.90
 
-[sub_resource type="StandardMaterial3D" id="Mat_DirtPath"]
-albedo_color = Color(0.36, 0.28, 0.18, 1.0)
-roughness = 0.95
+[sub_resource type="StandardMaterial3D" id="Mat_Books"]
+albedo_color = Color(0.48, 0.22, 0.18, 1.0)
+roughness = 0.85
 
 [sub_resource type="StandardMaterial3D" id="Mat_StainedGlass"]
 albedo_color = Color(0.25, 0.65, 0.85, 1.0)
@@ -122,12 +135,33 @@ size = Vector3(64.8, 18.0, 1.0)
 [sub_resource type="BoxShape3D" id="Shape_KeepWallNorth"]
 size = Vector3(64.8, 18.0, 1.0)
 
-[sub_resource type="BoxMesh" id="Mesh_KeepFrontLeft"]
+[sub_resource type="BoxMesh" id="Mesh_KeepFrontWest_Outer"]
 material = SubResource("Mat_Stone")
-size = Vector3(28.8, 18.0, 1.0)
+size = Vector3(4.4, 18.0, 1.0)
 
-[sub_resource type="BoxShape3D" id="Shape_KeepFrontLeft"]
-size = Vector3(28.8, 18.0, 1.0)
+[sub_resource type="BoxShape3D" id="Shape_KeepFrontWest_Outer"]
+size = Vector3(4.4, 18.0, 1.0)
+
+[sub_resource type="BoxMesh" id="Mesh_BridgeLintel"]
+material = SubResource("Mat_Stone")
+size = Vector3(3.2, 8.42, 1.0)
+
+[sub_resource type="BoxShape3D" id="Shape_BridgeLintel"]
+size = Vector3(3.2, 8.42, 1.0)
+
+[sub_resource type="BoxMesh" id="Mesh_BridgeSill"]
+material = SubResource("Mat_Stone")
+size = Vector3(3.2, 6.0, 1.0)
+
+[sub_resource type="BoxShape3D" id="Shape_BridgeSill"]
+size = Vector3(3.2, 6.0, 1.0)
+
+[sub_resource type="BoxMesh" id="Mesh_KeepFrontWest_Inner"]
+material = SubResource("Mat_Stone")
+size = Vector3(21.2, 18.0, 1.0)
+
+[sub_resource type="BoxShape3D" id="Shape_KeepFrontWest_Inner"]
+size = Vector3(21.2, 18.0, 1.0)
 
 [sub_resource type="BoxMesh" id="Mesh_KeepFrontRight"]
 material = SubResource("Mat_Stone")
@@ -136,41 +170,12 @@ size = Vector3(28.8, 18.0, 1.0)
 [sub_resource type="BoxShape3D" id="Shape_KeepFrontRight"]
 size = Vector3(28.8, 18.0, 1.0)
 
-[sub_resource type="BoxMesh" id="Mesh_KeepFrontArch"]
+[sub_resource type="BoxMesh" id="Mesh_KeepLintel"]
 material = SubResource("Mat_Stone")
-size = Vector3(8.0, 12.2, 1.0)
+size = Vector3(6.4, 12.42, 1.0)
 
-[sub_resource type="BoxShape3D" id="Shape_KeepFrontArch"]
-size = Vector3(8.0, 12.2, 1.0)
-
-[sub_resource type="CylinderMesh" id="Mesh_PorticoPillarLeft"]
-material = SubResource("Mat_Stone")
-top_radius = 0.55
-bottom_radius = 0.65
-height = 6.2
-radial_segments = 14
-
-[sub_resource type="CylinderShape3D" id="Shape_PorticoPillarLeft"]
-radius = 0.65
-height = 6.2
-
-[sub_resource type="CylinderMesh" id="Mesh_PorticoPillarRight"]
-material = SubResource("Mat_Stone")
-top_radius = 0.55
-bottom_radius = 0.65
-height = 6.2
-radial_segments = 14
-
-[sub_resource type="CylinderShape3D" id="Shape_PorticoPillarRight"]
-radius = 0.65
-height = 6.2
-
-[sub_resource type="BoxMesh" id="Mesh_PorticoEntablature"]
-material = SubResource("Mat_Stone")
-size = Vector3(9.0, 0.8, 2.5)
-
-[sub_resource type="BoxShape3D" id="Shape_PorticoEntablature"]
-size = Vector3(9.0, 0.8, 2.5)
+[sub_resource type="BoxShape3D" id="Shape_KeepLintel"]
+size = Vector3(6.4, 12.42, 1.0)
 
 [sub_resource type="BoxMesh" id="Mesh_GrandDoorWing"]
 material = SubResource("Mat_Wood")
@@ -179,113 +184,156 @@ size = Vector3(3.2, 5.8, 0.22)
 [sub_resource type="BoxShape3D" id="Shape_GrandDoorWing"]
 size = Vector3(3.2, 5.8, 0.22)
 
-[sub_resource type="BoxMesh" id="Mesh_ThroneCarpetMesh"]
-material = SubResource("Mat_Carpet")
-size = Vector3(4.2, 0.04, 23.5)
-
-[sub_resource type="BoxShape3D" id="Shape_ThroneCarpetMesh"]
-size = Vector3(4.2, 0.04, 23.5)
-
-[sub_resource type="CylinderMesh" id="Mesh_ThroneCol_0"]
+[sub_resource type="CylinderMesh" id="Mesh_EntranceColLeft"]
 material = SubResource("Mat_Stone")
-top_radius = 0.85
-bottom_radius = 0.95
-height = 11.5
+top_radius = 0.5
+bottom_radius = 0.55
+height = 5.8
 radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_ThroneCol_0"]
-radius = 0.95
-height = 11.5
+[sub_resource type="CylinderShape3D" id="Shape_EntranceColLeft"]
+radius = 0.55
+height = 5.8
 
-[sub_resource type="CylinderMesh" id="Mesh_ThroneCol_1"]
+[sub_resource type="CylinderMesh" id="Mesh_EntranceColRight"]
 material = SubResource("Mat_Stone")
-top_radius = 0.85
-bottom_radius = 0.95
-height = 11.5
+top_radius = 0.5
+bottom_radius = 0.55
+height = 5.8
 radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_ThroneCol_1"]
-radius = 0.95
-height = 11.5
+[sub_resource type="CylinderShape3D" id="Shape_EntranceColRight"]
+radius = 0.55
+height = 5.8
 
-[sub_resource type="CylinderMesh" id="Mesh_ThroneCol_2"]
+[sub_resource type="BoxMesh" id="Mesh_EntranceArchitrave"]
 material = SubResource("Mat_Stone")
-top_radius = 0.85
-bottom_radius = 0.95
-height = 11.5
+size = Vector3(8.4, 0.6, 1.0)
+
+[sub_resource type="BoxShape3D" id="Shape_EntranceArchitrave"]
+size = Vector3(8.4, 0.6, 1.0)
+
+[sub_resource type="CylinderMesh" id="Mesh_NaveColLeft_0"]
+material = SubResource("Mat_Stone")
+top_radius = 0.8
+bottom_radius = 0.9
+height = 12.0
 radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_ThroneCol_2"]
-radius = 0.95
-height = 11.5
+[sub_resource type="CylinderShape3D" id="Shape_NaveColLeft_0"]
+radius = 0.9
+height = 12.0
 
-[sub_resource type="CylinderMesh" id="Mesh_ThroneCol_3"]
+[sub_resource type="CylinderMesh" id="Mesh_NaveColRight_0"]
 material = SubResource("Mat_Stone")
-top_radius = 0.85
-bottom_radius = 0.95
-height = 11.5
+top_radius = 0.8
+bottom_radius = 0.9
+height = 12.0
 radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_ThroneCol_3"]
-radius = 0.95
-height = 11.5
+[sub_resource type="CylinderShape3D" id="Shape_NaveColRight_0"]
+radius = 0.9
+height = 12.0
 
-[sub_resource type="CylinderMesh" id="Mesh_ThroneCol_4"]
+[sub_resource type="CylinderMesh" id="Mesh_NaveColLeft_1"]
 material = SubResource("Mat_Stone")
-top_radius = 0.85
-bottom_radius = 0.95
-height = 11.5
+top_radius = 0.8
+bottom_radius = 0.9
+height = 12.0
 radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_ThroneCol_4"]
-radius = 0.95
-height = 11.5
+[sub_resource type="CylinderShape3D" id="Shape_NaveColLeft_1"]
+radius = 0.9
+height = 12.0
 
-[sub_resource type="CylinderMesh" id="Mesh_ThroneCol_5"]
+[sub_resource type="CylinderMesh" id="Mesh_NaveColRight_1"]
 material = SubResource("Mat_Stone")
-top_radius = 0.85
-bottom_radius = 0.95
-height = 11.5
+top_radius = 0.8
+bottom_radius = 0.9
+height = 12.0
 radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_ThroneCol_5"]
-radius = 0.95
-height = 11.5
+[sub_resource type="CylinderShape3D" id="Shape_NaveColRight_1"]
+radius = 0.9
+height = 12.0
+
+[sub_resource type="CylinderMesh" id="Mesh_NaveColLeft_2"]
+material = SubResource("Mat_Stone")
+top_radius = 0.8
+bottom_radius = 0.9
+height = 12.0
+radial_segments = 16
+
+[sub_resource type="CylinderShape3D" id="Shape_NaveColLeft_2"]
+radius = 0.9
+height = 12.0
+
+[sub_resource type="CylinderMesh" id="Mesh_NaveColRight_2"]
+material = SubResource("Mat_Stone")
+top_radius = 0.8
+bottom_radius = 0.9
+height = 12.0
+radial_segments = 16
+
+[sub_resource type="CylinderShape3D" id="Shape_NaveColRight_2"]
+radius = 0.9
+height = 12.0
 
 [sub_resource type="BoxMesh" id="Mesh_DaisTier1"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(8.0, 0.22, 5.5)
+material = SubResource("Mat_Stone")
+size = Vector3(12.0, 0.26, 8.0)
 
 [sub_resource type="BoxShape3D" id="Shape_DaisTier1"]
-size = Vector3(8.0, 0.22, 5.5)
+size = Vector3(12.0, 0.26, 8.0)
 
 [sub_resource type="BoxMesh" id="Mesh_DaisTier2"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(6.0, 0.22, 4.2)
+material = SubResource("Mat_Stone")
+size = Vector3(9.0, 0.26, 6.0)
 
 [sub_resource type="BoxShape3D" id="Shape_DaisTier2"]
-size = Vector3(6.0, 0.22, 4.2)
+size = Vector3(9.0, 0.26, 6.0)
 
-[sub_resource type="BoxMesh" id="Mesh_ThroneDais"]
+[sub_resource type="BoxMesh" id="Mesh_DaisTier3"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(4.0, 0.22, 3.0)
+size = Vector3(6.0, 0.26, 4.0)
 
-[sub_resource type="BoxShape3D" id="Shape_ThroneDais"]
-size = Vector3(4.0, 0.22, 3.0)
+[sub_resource type="BoxShape3D" id="Shape_DaisTier3"]
+size = Vector3(6.0, 0.26, 4.0)
 
-[sub_resource type="BoxMesh" id="Mesh_TheThrone"]
+[sub_resource type="BoxMesh" id="Mesh_ThroneBase"]
 material = SubResource("Mat_Gold")
-size = Vector3(1.6, 0.9, 1.2)
+size = Vector3(2.0, 0.8, 1.6)
 
-[sub_resource type="BoxShape3D" id="Shape_TheThrone"]
-size = Vector3(1.6, 0.9, 1.2)
+[sub_resource type="BoxShape3D" id="Shape_ThroneBase"]
+size = Vector3(2.0, 0.8, 1.6)
 
 [sub_resource type="BoxMesh" id="Mesh_ThroneBack"]
 material = SubResource("Mat_Carpet")
-size = Vector3(1.4, 2.4, 0.3)
+size = Vector3(1.8, 1.8, 0.3)
 
 [sub_resource type="BoxShape3D" id="Shape_ThroneBack"]
-size = Vector3(1.4, 2.4, 0.3)
+size = Vector3(1.8, 1.8, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_ThroneArmL"]
+material = SubResource("Mat_Gold")
+size = Vector3(0.25, 0.6, 1.4)
+
+[sub_resource type="BoxShape3D" id="Shape_ThroneArmL"]
+size = Vector3(0.25, 0.6, 1.4)
+
+[sub_resource type="BoxMesh" id="Mesh_ThroneArmR"]
+material = SubResource("Mat_Gold")
+size = Vector3(0.25, 0.6, 1.4)
+
+[sub_resource type="BoxShape3D" id="Shape_ThroneArmR"]
+size = Vector3(0.25, 0.6, 1.4)
+
+[sub_resource type="BoxMesh" id="Mesh_ThroneCarpet"]
+material = SubResource("Mat_Carpet")
+size = Vector3(4.8, 0.02, 22.0)
+
+[sub_resource type="BoxShape3D" id="Shape_ThroneCarpet"]
+size = Vector3(4.8, 0.02, 22.0)
 
 [sub_resource type="BoxMesh" id="Mesh_Stairs_0"]
 material = SubResource("Mat_Stone")
@@ -427,19 +475,208 @@ size = Vector3(3.6, 0.3, 0.6)
 [sub_resource type="BoxShape3D" id="Shape_Stairs_19"]
 size = Vector3(3.6, 0.3, 0.6)
 
+[sub_resource type="BoxMesh" id="Mesh_ScholarsDesk"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(3.6, 0.7, 1.6)
+
+[sub_resource type="BoxShape3D" id="Shape_ScholarsDesk"]
+size = Vector3(3.6, 0.7, 1.6)
+
+[sub_resource type="BoxMesh" id="Mesh_ScholarsChair"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="Shape_ScholarsChair"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_ChronicleScrollMesh"]
+material = SubResource("Mat_Paper")
+size = Vector3(0.5, 0.08, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_ChronicleScrollMesh"]
+size = Vector3(0.5, 0.08, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_0"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxShape3D" id="Shape_BookcaseWest_0"]
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxMesh" id="Mesh_BooksWest_0"]
+material = SubResource("Mat_Books")
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxShape3D" id="Shape_BooksWest_0"]
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_1"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxShape3D" id="Shape_BookcaseWest_1"]
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxMesh" id="Mesh_BooksWest_1"]
+material = SubResource("Mat_Books")
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxShape3D" id="Shape_BooksWest_1"]
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_2"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxShape3D" id="Shape_BookcaseWest_2"]
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxMesh" id="Mesh_BooksWest_2"]
+material = SubResource("Mat_Books")
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxShape3D" id="Shape_BooksWest_2"]
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_3"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxShape3D" id="Shape_BookcaseWest_3"]
+size = Vector3(0.8, 3.8, 3.6)
+
+[sub_resource type="BoxMesh" id="Mesh_BooksWest_3"]
+material = SubResource("Mat_Books")
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxShape3D" id="Shape_BooksWest_3"]
+size = Vector3(0.5, 3.4, 3.2)
+
+[sub_resource type="BoxMesh" id="Mesh_AlcoveShelf_1"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(4.2, 3.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="Shape_AlcoveShelf_1"]
+size = Vector3(4.2, 3.8, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_AlcoveShelf_2"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(4.2, 3.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="Shape_AlcoveShelf_2"]
+size = Vector3(4.2, 3.8, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_ReadingLecternNorth"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.8, 1.2, 0.8)
+
+[sub_resource type="BoxShape3D" id="Shape_ReadingLecternNorth"]
+size = Vector3(0.8, 1.2, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_ReadingLecternSouth"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.8, 1.2, 0.8)
+
+[sub_resource type="BoxShape3D" id="Shape_ReadingLecternSouth"]
+size = Vector3(0.8, 1.2, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_LibraryCarpet"]
+material = SubResource("Mat_Carpet")
+size = Vector3(5.4, 0.02, 14.0)
+
+[sub_resource type="BoxShape3D" id="Shape_LibraryCarpet"]
+size = Vector3(5.4, 0.02, 14.0)
+
+[sub_resource type="BoxMesh" id="Mesh_LibraryBalustradeNorth"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(0.25, 0.9, 12.0)
+
+[sub_resource type="BoxShape3D" id="Shape_LibraryBalustradeNorth"]
+size = Vector3(0.25, 0.9, 12.0)
+
+[sub_resource type="BoxMesh" id="Mesh_LibraryBalustradeSouth"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(0.25, 0.9, 8.0)
+
+[sub_resource type="BoxShape3D" id="Shape_LibraryBalustradeSouth"]
+size = Vector3(0.25, 0.9, 8.0)
+
 [sub_resource type="BoxMesh" id="Mesh_DiningTable"]
 material = SubResource("Mat_Wood")
-size = Vector3(7.0, 1.0, 2.2)
+size = Vector3(3.6, 0.7, 10.0)
 
 [sub_resource type="BoxShape3D" id="Shape_DiningTable"]
-size = Vector3(7.0, 1.0, 2.2)
+size = Vector3(3.6, 0.7, 10.0)
 
-[sub_resource type="BoxMesh" id="Mesh_AlchemistBench"]
+[sub_resource type="BoxMesh" id="Mesh_DiningChairL_0"]
 material = SubResource("Mat_Wood")
-size = Vector3(4.5, 1.0, 1.6)
+size = Vector3(0.7, 0.8, 0.7)
 
-[sub_resource type="BoxShape3D" id="Shape_AlchemistBench"]
-size = Vector3(4.5, 1.0, 1.6)
+[sub_resource type="BoxShape3D" id="Shape_DiningChairL_0"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairR_0"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairR_0"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairL_1"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairL_1"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairR_1"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairR_1"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairL_2"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairL_2"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairR_2"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairR_2"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairL_3"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairL_3"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairR_3"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairR_3"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairL_4"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairL_4"]
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_DiningChairR_4"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.7, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_DiningChairR_4"]
+size = Vector3(0.7, 0.8, 0.7)
 
 [node name="MainKeep" type="Node3D"]
 
@@ -533,14 +770,41 @@ mesh = SubResource("Mesh_KeepWallNorth")
 [node name="Col" type="CollisionShape3D" parent="KeepWallNorth"]
 shape = SubResource("Shape_KeepWallNorth")
 
-[node name="KeepFrontLeft" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.6, 9.22, 15.0)
+[node name="KeepFrontWest_Outer" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.8, 9.22, 15.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="KeepFrontLeft"]
-mesh = SubResource("Mesh_KeepFrontLeft")
+[node name="Mesh" type="MeshInstance3D" parent="KeepFrontWest_Outer"]
+mesh = SubResource("Mesh_KeepFrontWest_Outer")
 
-[node name="Col" type="CollisionShape3D" parent="KeepFrontLeft"]
-shape = SubResource("Shape_KeepFrontLeft")
+[node name="Col" type="CollisionShape3D" parent="KeepFrontWest_Outer"]
+shape = SubResource("Shape_KeepFrontWest_Outer")
+
+[node name="BridgeLintel" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0, 14.01, 15.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BridgeLintel"]
+mesh = SubResource("Mesh_BridgeLintel")
+
+[node name="Col" type="CollisionShape3D" parent="BridgeLintel"]
+shape = SubResource("Shape_BridgeLintel")
+
+[node name="BridgeSill" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0, 3.22, 15.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BridgeSill"]
+mesh = SubResource("Mesh_BridgeSill")
+
+[node name="Col" type="CollisionShape3D" parent="BridgeSill"]
+shape = SubResource("Shape_BridgeSill")
+
+[node name="KeepFrontWest_Inner" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8, 9.22, 15.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="KeepFrontWest_Inner"]
+mesh = SubResource("Mesh_KeepFrontWest_Inner")
+
+[node name="Col" type="CollisionShape3D" parent="KeepFrontWest_Inner"]
+shape = SubResource("Shape_KeepFrontWest_Inner")
 
 [node name="KeepFrontRight" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.6, 9.22, 15.0)
@@ -551,134 +815,131 @@ mesh = SubResource("Mesh_KeepFrontRight")
 [node name="Col" type="CollisionShape3D" parent="KeepFrontRight"]
 shape = SubResource("Shape_KeepFrontRight")
 
-[node name="KeepFrontArch" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 12.12, 15.0)
+[node name="KeepLintel" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 12.01, 15.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="KeepFrontArch"]
-mesh = SubResource("Mesh_KeepFrontArch")
+[node name="Mesh" type="MeshInstance3D" parent="KeepLintel"]
+mesh = SubResource("Mesh_KeepLintel")
 
-[node name="Col" type="CollisionShape3D" parent="KeepFrontArch"]
-shape = SubResource("Shape_KeepFrontArch")
+[node name="Col" type="CollisionShape3D" parent="KeepLintel"]
+shape = SubResource("Shape_KeepLintel")
 
-[node name="PorticoPillarLeft" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 3.32, 17.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="PorticoPillarLeft"]
-mesh = SubResource("Mesh_PorticoPillarLeft")
-
-[node name="Col" type="CollisionShape3D" parent="PorticoPillarLeft"]
-shape = SubResource("Shape_PorticoPillarLeft")
-
-[node name="PorticoPillarRight" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 3.32, 17.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="PorticoPillarRight"]
-mesh = SubResource("Mesh_PorticoPillarRight")
-
-[node name="Col" type="CollisionShape3D" parent="PorticoPillarRight"]
-shape = SubResource("Shape_PorticoPillarRight")
-
-[node name="PorticoEntablature" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 6.52, 17.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="PorticoEntablature"]
-mesh = SubResource("Mesh_PorticoEntablature")
-
-[node name="Col" type="CollisionShape3D" parent="PorticoEntablature"]
-shape = SubResource("Shape_PorticoEntablature")
-
-[node name="ThroneRoomEntranceDoors" type="StaticBody3D" parent="." node_paths=PackedStringArray("left_wing", "right_wing")]
+[node name="ThroneRoomEntranceDoors" type="StaticBody3D" parent="." node_paths=PackedStringArray("left_wing", "right_wing", "doorway_blockers")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 3.12, 15.0)
 script = ExtResource("1_door")
 required_item_id = "throne_hall_key"
 is_locked = true
 is_double_door = true
-left_wing = NodePath("DoorWingLeft")
-right_wing = NodePath("DoorWingRight")
 open_angle_deg = 95.0
+left_wing = NodePath("DoorWingLeftPivot/DoorWingLeft")
+right_wing = NodePath("DoorWingRightPivot/DoorWingRight")
+doorway_blockers = [NodePath("DoorBlockerLeft"), NodePath("DoorBlockerRight")]
 
-[node name="DoorWingLeft" type="Node3D" parent="ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, 0)
+[node name="DoorWingLeftPivot" type="Node3D" parent="ThroneRoomEntranceDoors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0.0, 0.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneRoomEntranceDoors/DoorWingLeft"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, 0)
+[node name="DoorWingLeft" type="MeshInstance3D" parent="ThroneRoomEntranceDoors/DoorWingLeftPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.0, 0.0)
 mesh = SubResource("Mesh_GrandDoorWing")
 
 [node name="DoorBlockerLeft" type="CollisionShape3D" parent="ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.0, 0.0)
 shape = SubResource("Shape_GrandDoorWing")
 
-[node name="DoorWingRight" type="Node3D" parent="ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, 0)
+[node name="DoorWingRightPivot" type="Node3D" parent="ThroneRoomEntranceDoors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0.0, 0.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneRoomEntranceDoors/DoorWingRight"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
+[node name="DoorWingRight" type="MeshInstance3D" parent="ThroneRoomEntranceDoors/DoorWingRightPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.0, 0.0)
 mesh = SubResource("Mesh_GrandDoorWing")
 
 [node name="DoorBlockerRight" type="CollisionShape3D" parent="ThroneRoomEntranceDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.0, 0.0)
 shape = SubResource("Shape_GrandDoorWing")
 
-[node name="ThroneCarpet" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.26, 2.75)
-mesh = SubResource("Mesh_ThroneCarpetMesh")
+[node name="EntranceColLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 3.12, 15.6)
 
-[node name="ThroneCol_0" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, 6.0, 8.0)
+[node name="Mesh" type="MeshInstance3D" parent="EntranceColLeft"]
+mesh = SubResource("Mesh_EntranceColLeft")
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneCol_0"]
-mesh = SubResource("Mesh_ThroneCol_0")
+[node name="Col" type="CollisionShape3D" parent="EntranceColLeft"]
+shape = SubResource("Shape_EntranceColLeft")
 
-[node name="Col" type="CollisionShape3D" parent="ThroneCol_0"]
-shape = SubResource("Shape_ThroneCol_0")
+[node name="EntranceColRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.12, 15.6)
 
-[node name="ThroneCol_1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 6.0, 8.0)
+[node name="Mesh" type="MeshInstance3D" parent="EntranceColRight"]
+mesh = SubResource("Mesh_EntranceColRight")
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneCol_1"]
-mesh = SubResource("Mesh_ThroneCol_1")
+[node name="Col" type="CollisionShape3D" parent="EntranceColRight"]
+shape = SubResource("Shape_EntranceColRight")
 
-[node name="Col" type="CollisionShape3D" parent="ThroneCol_1"]
-shape = SubResource("Shape_ThroneCol_1")
+[node name="EntranceArchitrave" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 6.2, 15.6)
 
-[node name="ThroneCol_2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, 6.0, 0.0)
+[node name="Mesh" type="MeshInstance3D" parent="EntranceArchitrave"]
+mesh = SubResource("Mesh_EntranceArchitrave")
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneCol_2"]
-mesh = SubResource("Mesh_ThroneCol_2")
+[node name="Col" type="CollisionShape3D" parent="EntranceArchitrave"]
+shape = SubResource("Shape_EntranceArchitrave")
 
-[node name="Col" type="CollisionShape3D" parent="ThroneCol_2"]
-shape = SubResource("Shape_ThroneCol_2")
+[node name="NaveColLeft_0" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0, 6.22, -9.0)
 
-[node name="ThroneCol_3" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 6.0, 0.0)
+[node name="Mesh" type="MeshInstance3D" parent="NaveColLeft_0"]
+mesh = SubResource("Mesh_NaveColLeft_0")
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneCol_3"]
-mesh = SubResource("Mesh_ThroneCol_3")
+[node name="Col" type="CollisionShape3D" parent="NaveColLeft_0"]
+shape = SubResource("Shape_NaveColLeft_0")
 
-[node name="Col" type="CollisionShape3D" parent="ThroneCol_3"]
-shape = SubResource("Shape_ThroneCol_3")
+[node name="NaveColRight_0" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 6.22, -9.0)
 
-[node name="ThroneCol_4" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, 6.0, -8.0)
+[node name="Mesh" type="MeshInstance3D" parent="NaveColRight_0"]
+mesh = SubResource("Mesh_NaveColRight_0")
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneCol_4"]
-mesh = SubResource("Mesh_ThroneCol_4")
+[node name="Col" type="CollisionShape3D" parent="NaveColRight_0"]
+shape = SubResource("Shape_NaveColRight_0")
 
-[node name="Col" type="CollisionShape3D" parent="ThroneCol_4"]
-shape = SubResource("Shape_ThroneCol_4")
+[node name="NaveColLeft_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0, 6.22, 0.0)
 
-[node name="ThroneCol_5" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 6.0, -8.0)
+[node name="Mesh" type="MeshInstance3D" parent="NaveColLeft_1"]
+mesh = SubResource("Mesh_NaveColLeft_1")
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneCol_5"]
-mesh = SubResource("Mesh_ThroneCol_5")
+[node name="Col" type="CollisionShape3D" parent="NaveColLeft_1"]
+shape = SubResource("Shape_NaveColLeft_1")
 
-[node name="Col" type="CollisionShape3D" parent="ThroneCol_5"]
-shape = SubResource("Shape_ThroneCol_5")
+[node name="NaveColRight_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 6.22, 0.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NaveColRight_1"]
+mesh = SubResource("Mesh_NaveColRight_1")
+
+[node name="Col" type="CollisionShape3D" parent="NaveColRight_1"]
+shape = SubResource("Shape_NaveColRight_1")
+
+[node name="NaveColLeft_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0, 6.22, 9.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NaveColLeft_2"]
+mesh = SubResource("Mesh_NaveColLeft_2")
+
+[node name="Col" type="CollisionShape3D" parent="NaveColLeft_2"]
+shape = SubResource("Shape_NaveColLeft_2")
+
+[node name="NaveColRight_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 6.22, 9.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="NaveColRight_2"]
+mesh = SubResource("Mesh_NaveColRight_2")
+
+[node name="Col" type="CollisionShape3D" parent="NaveColRight_2"]
+shape = SubResource("Shape_NaveColRight_2")
 
 [node name="DaisTier1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.34, -11.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.38, -9.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="DaisTier1"]
 mesh = SubResource("Mesh_DaisTier1")
@@ -687,7 +948,7 @@ mesh = SubResource("Mesh_DaisTier1")
 shape = SubResource("Shape_DaisTier1")
 
 [node name="DaisTier2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.56, -11.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.64, -9.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="DaisTier2"]
 mesh = SubResource("Mesh_DaisTier2")
@@ -695,27 +956,60 @@ mesh = SubResource("Mesh_DaisTier2")
 [node name="Col" type="CollisionShape3D" parent="DaisTier2"]
 shape = SubResource("Shape_DaisTier2")
 
-[node name="ThroneDais" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.78, -11.0)
+[node name="DaisTier3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.9, -10.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneDais"]
-mesh = SubResource("Mesh_ThroneDais")
+[node name="Mesh" type="MeshInstance3D" parent="DaisTier3"]
+mesh = SubResource("Mesh_DaisTier3")
 
-[node name="Col" type="CollisionShape3D" parent="ThroneDais"]
-shape = SubResource("Shape_ThroneDais")
+[node name="Col" type="CollisionShape3D" parent="DaisTier3"]
+shape = SubResource("Shape_DaisTier3")
 
-[node name="TheThrone" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.35, -11.5)
+[node name="ThroneBase" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.45, -10.2)
 
-[node name="Mesh" type="MeshInstance3D" parent="TheThrone"]
-mesh = SubResource("Mesh_TheThrone")
+[node name="Mesh" type="MeshInstance3D" parent="ThroneBase"]
+mesh = SubResource("Mesh_ThroneBase")
 
-[node name="Col" type="CollisionShape3D" parent="TheThrone"]
-shape = SubResource("Shape_TheThrone")
+[node name="Col" type="CollisionShape3D" parent="ThroneBase"]
+shape = SubResource("Shape_ThroneBase")
 
-[node name="BackRest" type="MeshInstance3D" parent="TheThrone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.45)
+[node name="ThroneBack" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.75, -10.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="ThroneBack"]
 mesh = SubResource("Mesh_ThroneBack")
+
+[node name="Col" type="CollisionShape3D" parent="ThroneBack"]
+shape = SubResource("Shape_ThroneBack")
+
+[node name="ThroneArmL" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 1.75, -10.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="ThroneArmL"]
+mesh = SubResource("Mesh_ThroneArmL")
+
+[node name="Col" type="CollisionShape3D" parent="ThroneArmL"]
+shape = SubResource("Shape_ThroneArmL")
+
+[node name="ThroneArmR" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 1.75, -10.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="ThroneArmR"]
+mesh = SubResource("Mesh_ThroneArmR")
+
+[node name="Col" type="CollisionShape3D" parent="ThroneArmR"]
+shape = SubResource("Shape_ThroneArmR")
+
+[node name="ThroneCarpet" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.26, 1.0)
+mesh = SubResource("Mesh_ThroneCarpet")
+
+[node name="ThroneLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 3.5, -9.0)
+light_color = Color(1.0, 0.85, 0.55, 1.0)
+light_energy = 3.0
+omni_range = 14.0
 
 [node name="Stairs_0" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.38, -10.0)
@@ -727,7 +1021,7 @@ mesh = SubResource("Mesh_Stairs_0")
 shape = SubResource("Shape_Stairs_0")
 
 [node name="Stairs_1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.68, -9.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0.6799999999999999, -9.4)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_1"]
 mesh = SubResource("Mesh_Stairs_1")
@@ -754,7 +1048,7 @@ mesh = SubResource("Mesh_Stairs_3")
 shape = SubResource("Shape_Stairs_3")
 
 [node name="Stairs_4" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 1.5799999999999998, -7.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 1.58, -7.6)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_4"]
 mesh = SubResource("Mesh_Stairs_4")
@@ -844,7 +1138,7 @@ mesh = SubResource("Mesh_Stairs_13")
 shape = SubResource("Shape_Stairs_13")
 
 [node name="Stairs_14" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.580000000000001, -1.5999999999999996)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.58, -1.5999999999999996)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_14"]
 mesh = SubResource("Mesh_Stairs_14")
@@ -853,7 +1147,7 @@ mesh = SubResource("Mesh_Stairs_14")
 shape = SubResource("Shape_Stairs_14")
 
 [node name="Stairs_15" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.880000000000001, -1.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 4.88, -1.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_15"]
 mesh = SubResource("Mesh_Stairs_15")
@@ -862,7 +1156,7 @@ mesh = SubResource("Mesh_Stairs_15")
 shape = SubResource("Shape_Stairs_15")
 
 [node name="Stairs_16" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.180000000000001, -0.40000000000000036)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.18, -0.40000000000000036)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_16"]
 mesh = SubResource("Mesh_Stairs_16")
@@ -871,7 +1165,7 @@ mesh = SubResource("Mesh_Stairs_16")
 shape = SubResource("Shape_Stairs_16")
 
 [node name="Stairs_17" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.48, 0.1999999999999993)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.4799999999999995, 0.1999999999999993)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_17"]
 mesh = SubResource("Mesh_Stairs_17")
@@ -880,7 +1174,7 @@ mesh = SubResource("Mesh_Stairs_17")
 shape = SubResource("Shape_Stairs_17")
 
 [node name="Stairs_18" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.78, 0.7999999999999989)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 5.779999999999999, 0.7999999999999989)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_18"]
 mesh = SubResource("Mesh_Stairs_18")
@@ -889,13 +1183,170 @@ mesh = SubResource("Mesh_Stairs_18")
 shape = SubResource("Shape_Stairs_18")
 
 [node name="Stairs_19" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.080000000000001, 1.4000000000000004)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.08, 1.4000000000000004)
 
 [node name="Mesh" type="MeshInstance3D" parent="Stairs_19"]
 mesh = SubResource("Mesh_Stairs_19")
 
 [node name="Col" type="CollisionShape3D" parent="Stairs_19"]
 shape = SubResource("Shape_Stairs_19")
+
+[node name="ScholarsDesk" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.72, 0.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ScholarsDesk"]
+mesh = SubResource("Mesh_ScholarsDesk")
+
+[node name="Col" type="CollisionShape3D" parent="ScholarsDesk"]
+shape = SubResource("Shape_ScholarsDesk")
+
+[node name="ScholarsChair" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.72, -1.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="ScholarsChair"]
+mesh = SubResource("Mesh_ScholarsChair")
+
+[node name="Col" type="CollisionShape3D" parent="ScholarsChair"]
+shape = SubResource("Shape_ScholarsChair")
+
+[node name="ChronicleOfTheFire" type="StaticBody3D" parent="."]
+transform = Transform3D(0.966, 0, -0.259, 0, 1, 0, 0.259, 0, 0.966, -22.1, 7.12, 0.0)
+script = ExtResource("2_pickup")
+item_id = "chronicle_of_the_fire"
+
+[node name="Mesh" type="MeshInstance3D" parent="ChronicleOfTheFire"]
+mesh = SubResource("Mesh_ChronicleScrollMesh")
+
+[node name="Col" type="CollisionShape3D" parent="ChronicleOfTheFire"]
+shape = SubResource("Shape_ChronicleScrollMesh")
+
+[node name="BookcaseWest_0" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, -10.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_0"]
+mesh = SubResource("Mesh_BookcaseWest_0")
+
+[node name="Col" type="CollisionShape3D" parent="BookcaseWest_0"]
+shape = SubResource("Shape_BookcaseWest_0")
+
+[node name="BooksMesh_0" type="MeshInstance3D" parent="BookcaseWest_0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
+mesh = SubResource("Mesh_BooksWest_0")
+
+[node name="BookcaseWest_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, -4.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_1"]
+mesh = SubResource("Mesh_BookcaseWest_1")
+
+[node name="Col" type="CollisionShape3D" parent="BookcaseWest_1"]
+shape = SubResource("Shape_BookcaseWest_1")
+
+[node name="BooksMesh_1" type="MeshInstance3D" parent="BookcaseWest_1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
+mesh = SubResource("Mesh_BooksWest_1")
+
+[node name="BookcaseWest_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, 4.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_2"]
+mesh = SubResource("Mesh_BookcaseWest_2")
+
+[node name="Col" type="CollisionShape3D" parent="BookcaseWest_2"]
+shape = SubResource("Shape_BookcaseWest_2")
+
+[node name="BooksMesh_2" type="MeshInstance3D" parent="BookcaseWest_2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
+mesh = SubResource("Mesh_BooksWest_2")
+
+[node name="BookcaseWest_3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, 10.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_3"]
+mesh = SubResource("Mesh_BookcaseWest_3")
+
+[node name="Col" type="CollisionShape3D" parent="BookcaseWest_3"]
+shape = SubResource("Shape_BookcaseWest_3")
+
+[node name="BooksMesh_3" type="MeshInstance3D" parent="BookcaseWest_3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
+mesh = SubResource("Mesh_BooksWest_3")
+
+[node name="AlcoveShelf_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.5, 8.22, -6.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="AlcoveShelf_1"]
+mesh = SubResource("Mesh_AlcoveShelf_1")
+
+[node name="Col" type="CollisionShape3D" parent="AlcoveShelf_1"]
+shape = SubResource("Shape_AlcoveShelf_1")
+
+[node name="AlcoveShelf_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.5, 8.22, 6.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="AlcoveShelf_2"]
+mesh = SubResource("Mesh_AlcoveShelf_2")
+
+[node name="Col" type="CollisionShape3D" parent="AlcoveShelf_2"]
+shape = SubResource("Shape_AlcoveShelf_2")
+
+[node name="ReadingLecternNorth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 6.9, -11.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ReadingLecternNorth"]
+mesh = SubResource("Mesh_ReadingLecternNorth")
+
+[node name="Col" type="CollisionShape3D" parent="ReadingLecternNorth"]
+shape = SubResource("Shape_ReadingLecternNorth")
+
+[node name="ReadingLecternSouth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 6.9, 11.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ReadingLecternSouth"]
+mesh = SubResource("Mesh_ReadingLecternSouth")
+
+[node name="Col" type="CollisionShape3D" parent="ReadingLecternSouth"]
+shape = SubResource("Shape_ReadingLecternSouth")
+
+[node name="LibraryCarpet" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.36, 0.0)
+mesh = SubResource("Mesh_LibraryCarpet")
+
+[node name="LibraryBalustradeNorth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0, 6.82, -8.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="LibraryBalustradeNorth"]
+mesh = SubResource("Mesh_LibraryBalustradeNorth")
+
+[node name="Col" type="CollisionShape3D" parent="LibraryBalustradeNorth"]
+shape = SubResource("Shape_LibraryBalustradeNorth")
+
+[node name="LibraryBalustradeSouth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.0, 6.82, 6.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="LibraryBalustradeSouth"]
+mesh = SubResource("Mesh_LibraryBalustradeSouth")
+
+[node name="Col" type="CollisionShape3D" parent="LibraryBalustradeSouth"]
+shape = SubResource("Shape_LibraryBalustradeSouth")
+
+[node name="LibraryChandelierNorth" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 9.8, -6.0)
+light_color = Color(0.98, 0.72, 0.38, 1.0)
+light_energy = 2.4
+omni_range = 11.0
+
+[node name="LibraryChandelierSouth" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 9.8, 6.0)
+light_color = Color(0.98, 0.72, 0.38, 1.0)
+light_energy = 2.4
+omni_range = 11.0
+
+[node name="ScholarsDeskLamp" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 7.5, 0.0)
+light_color = Color(1.0, 0.82, 0.45, 1.0)
+light_energy = 1.8
+omni_range = 5.0
 
 [node name="DiningTable" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 6.7, 0.0)
@@ -906,24 +1357,99 @@ mesh = SubResource("Mesh_DiningTable")
 [node name="Col" type="CollisionShape3D" parent="DiningTable"]
 shape = SubResource("Shape_DiningTable")
 
-[node name="AlchemistBench" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 6.7, 5.0)
+[node name="DiningChairL_0" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8, 6.7, -3.6)
 
-[node name="Mesh" type="MeshInstance3D" parent="AlchemistBench"]
-mesh = SubResource("Mesh_AlchemistBench")
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairL_0"]
+mesh = SubResource("Mesh_DiningChairL_0")
 
-[node name="Col" type="CollisionShape3D" parent="AlchemistBench"]
-shape = SubResource("Shape_AlchemistBench")
+[node name="Col" type="CollisionShape3D" parent="DiningChairL_0"]
+shape = SubResource("Shape_DiningChairL_0")
 
-[node name="ThroneChandelier" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -4.0)
-light_color = Color(1.0, 0.9, 0.7, 1.0)
+[node name="DiningChairR_0" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.2, 6.7, -3.6)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairR_0"]
+mesh = SubResource("Mesh_DiningChairR_0")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairR_0"]
+shape = SubResource("Shape_DiningChairR_0")
+
+[node name="DiningChairL_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8, 6.7, -1.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairL_1"]
+mesh = SubResource("Mesh_DiningChairL_1")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairL_1"]
+shape = SubResource("Shape_DiningChairL_1")
+
+[node name="DiningChairR_1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.2, 6.7, -1.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairR_1"]
+mesh = SubResource("Mesh_DiningChairR_1")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairR_1"]
+shape = SubResource("Shape_DiningChairR_1")
+
+[node name="DiningChairL_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8, 6.7, 0.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairL_2"]
+mesh = SubResource("Mesh_DiningChairL_2")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairL_2"]
+shape = SubResource("Shape_DiningChairL_2")
+
+[node name="DiningChairR_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.2, 6.7, 0.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairR_2"]
+mesh = SubResource("Mesh_DiningChairR_2")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairR_2"]
+shape = SubResource("Shape_DiningChairR_2")
+
+[node name="DiningChairL_3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8, 6.7, 1.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairL_3"]
+mesh = SubResource("Mesh_DiningChairL_3")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairL_3"]
+shape = SubResource("Shape_DiningChairL_3")
+
+[node name="DiningChairR_3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.2, 6.7, 1.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairR_3"]
+mesh = SubResource("Mesh_DiningChairR_3")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairR_3"]
+shape = SubResource("Shape_DiningChairR_3")
+
+[node name="DiningChairL_4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8, 6.7, 3.6)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairL_4"]
+mesh = SubResource("Mesh_DiningChairL_4")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairL_4"]
+shape = SubResource("Shape_DiningChairL_4")
+
+[node name="DiningChairR_4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.2, 6.7, 3.6)
+
+[node name="Mesh" type="MeshInstance3D" parent="DiningChairR_4"]
+mesh = SubResource("Mesh_DiningChairR_4")
+
+[node name="Col" type="CollisionShape3D" parent="DiningChairR_4"]
+shape = SubResource("Shape_DiningChairR_4")
+
+[node name="DiningChandelier" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 9.8, 0.0)
+light_color = Color(0.98, 0.72, 0.38, 1.0)
 light_energy = 2.4
-omni_range = 24.0
-
-[node name="ThroneDaisLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0, -12.0)
-light_color = Color(1.0, 0.8, 0.45, 1.0)
-light_energy = 2.0
-omni_range = 10.0
+omni_range = 12.0
 
