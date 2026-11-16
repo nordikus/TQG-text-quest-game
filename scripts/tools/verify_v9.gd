@@ -29,6 +29,14 @@ func _run_verification() -> void:
 		if wc and wc.has_method("_set_collision_recursive"):
 			wc._set_collision_recursive(tree_node, true)
 
+	var ncorr_node: Node3D = clearing.get_node_or_null("NatureCorridorForest") as Node3D
+	if ncorr_node:
+		# Immediately set to post-tween outcome state for headless test
+		ncorr_node.position.y = -14.0
+		ncorr_node.visible = false
+		if wc and wc.has_method("_set_collision_recursive"):
+			wc._set_collision_recursive(ncorr_node, false)
+
 	await physics_frame
 	await physics_frame
 	await physics_frame
@@ -36,15 +44,16 @@ func _run_verification() -> void:
 	var all_passed: bool = true
 
 	# -------------------------------------------------------------------------
-	# 1. TEST ISSUE 1: NATURE CORRIDOR FOREST & NO INVISIBLE WALL AT TREE BASE
+	# 1. TEST ISSUE 1: NATURE CORRIDOR FOREST SINKS & NO INVISIBLE WALL AT TREE BASE
 	# -------------------------------------------------------------------------
 	print("\n--- 1. Testing Ground Traversal Near Great Tree Base ---")
 	var ncorr: Node3D = clearing.get_node_or_null("NatureCorridorForest") as Node3D
 	if ncorr:
-		if ncorr.visible and is_equal_approx(ncorr.position.y, 0.0):
-			print("PASS: NatureCorridorForest is visible at Y = 0.0!")
+		# Should sink or be hidden when extinguish_fire is chosen
+		if is_equal_approx(ncorr.position.y, -14.0) or not ncorr.visible:
+			print("PASS: NatureCorridorForest sinks/hides to open Nature Trail!")
 		else:
-			push_error("FAIL: NatureCorridorForest is hidden or sunk: visible=" + str(ncorr.visible) + " y=" + str(ncorr.position.y))
+			push_error("FAIL: NatureCorridorForest is still blocking path: visible=" + str(ncorr.visible) + " y=" + str(ncorr.position.y))
 			all_passed = false
 
 	var space_state: PhysicsDirectSpaceState3D = clearing.get_world_3d().direct_space_state

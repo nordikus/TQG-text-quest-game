@@ -468,8 +468,8 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		Vector2(-0.36, 0.21),   # 19: inner-west moss path
 	]
 	var m_b := prof_b.size()
-	var n_stations := 108
-	var z_start := -1.20
+	var n_stations := 100
+	var z_start := -4.26
 	var z_end := -45.60
 	var start := g.v.size()
 	var centers: Array = []
