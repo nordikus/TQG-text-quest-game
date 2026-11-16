@@ -800,7 +800,7 @@ shape = SubResource("BoxShape3D_boundary_segment")
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -8.5, 6, -19)
 shape = SubResource("BoxShape3D_boundary_segment")
 
-[node name="WorldChanger" type="Node3D" parent="." unique_id=773051624 node_paths=PackedStringArray("great_tree", "nature_trail", "forest_barrier", "charred_forest_zone", "fire_particles_group", "burning_path", "ambient_light", "corridor_forest", "nature_corridor_forest", "nature_barrier")]
+[node name="WorldChanger" type="Node3D" parent="." unique_id=773051624 groups=["world_changer"] node_paths=PackedStringArray("great_tree", "nature_trail", "forest_barrier", "charred_forest_zone", "fire_particles_group", "burning_path", "ambient_light", "corridor_forest", "nature_corridor_forest", "nature_barrier")]
 script = ExtResource("16_wc")
 great_tree = NodePath("../GreatTree")
 nature_trail = NodePath("../NatureTrail")

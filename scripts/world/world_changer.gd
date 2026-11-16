@@ -80,7 +80,7 @@ func _apply_extinguish_outcome():
 		tween_nbar.tween_property(nature_barrier, "position:y", -14.0, 3.0)
 		tween_nbar.finished.connect(func():
 			if is_instance_valid(nature_barrier):
-				nature_barrier.queue_free()
+				nature_barrier.visible = false
 		)
 
 func _apply_burn_outcome():
@@ -108,17 +108,66 @@ func _apply_burn_outcome():
 		tween_corr.finished.connect(func(): corridor_forest.visible = false)
 
 	if forest_barrier:
+		_set_collision_recursive(forest_barrier, false)
 		var tween := create_tween()
 		tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(forest_barrier, "position:y", -6.0, 3.0)
 		tween.finished.connect(func():
 			if is_instance_valid(forest_barrier):
-				forest_barrier.queue_free()
+				forest_barrier.visible = false
 		)
 
 	if ambient_light:
 		var tween := create_tween()
 		tween.tween_property(ambient_light, "light_color", Color(1.0, 0.65, 0.4), 2.0)
+
+func reset_world() -> void:
+	if great_tree:
+		var tween_gt := create_tween()
+		tween_gt.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+		tween_gt.tween_property(great_tree, "position:y", -35.0, 2.0)
+		tween_gt.finished.connect(func():
+			if is_instance_valid(great_tree):
+				great_tree.visible = false
+				_set_collision_recursive(great_tree, false)
+		)
+
+	if nature_trail:
+		nature_trail.visible = false
+		_set_collision_recursive(nature_trail, false)
+
+	if burning_path:
+		burning_path.visible = false
+		_set_collision_recursive(burning_path, false)
+
+	if charred_forest_zone:
+		charred_forest_zone.visible = false
+
+	if fire_particles_group:
+		fire_particles_group.visible = false
+
+	if corridor_forest:
+		corridor_forest.visible = true
+		corridor_forest.position.y = 0.0
+
+	if nature_corridor_forest:
+		nature_corridor_forest.visible = true
+		nature_corridor_forest.position.y = 0.0
+		_set_collision_recursive(nature_corridor_forest, true)
+
+	if is_instance_valid(nature_barrier):
+		nature_barrier.visible = true
+		nature_barrier.position.y = 0.0
+		_set_collision_recursive(nature_barrier, true)
+
+	if is_instance_valid(forest_barrier):
+		forest_barrier.visible = true
+		forest_barrier.position.y = 0.0
+		_set_collision_recursive(forest_barrier, true)
+
+	if ambient_light:
+		var tween_light := create_tween()
+		tween_light.tween_property(ambient_light, "light_color", Color(1.0, 0.98, 0.95), 2.0)
 
 func _set_collision_recursive(node: Node, enabled: bool) -> void:
 	if not node:
