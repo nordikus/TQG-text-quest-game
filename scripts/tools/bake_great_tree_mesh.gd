@@ -88,9 +88,10 @@ func _init() -> void:
 	_commit_smooth(mesh, spores, _spore_material())
 	_commit_smooth(mesh, leaves, _leaf_material())
 
-	var trunk_only := ArrayMesh.new()
-	_commit_smooth(trunk_only, trunk, bark_mat)
-	var shape := trunk_only.create_trimesh_shape()
+	var col_mesh := ArrayMesh.new()
+	_commit_smooth(col_mesh, trunk, bark_mat)
+	_commit_smooth(col_mesh, bark, bark_mat)
+	var shape := col_mesh.create_trimesh_shape()
 
 	_report_normal(mesh)
 	print("trunk verts=", trunk.v.size(), " bark verts=", bark.v.size(), " spores verts=", spores.v.size(), " leaves verts=", leaves.v.size())

@@ -28,9 +28,6 @@
 [ext_resource type="MultiMesh" path="res://scenes/world/nature_corridor_oaks.res" id="26_nat_oaks"]
 [ext_resource type="MultiMesh" path="res://scenes/world/forest_canopy_undergrowth.res" id="27_undergrowth"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_great_tree_forest_wall"]
-size = Vector3(50, 6, 4)
-
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.24, 0.44, 0.74, 1)
 sky_horizon_color = Color(0.74, 0.78, 0.82, 1)
@@ -754,7 +751,7 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -12, 6, -2
 shape = SubResource("BoxShape3D_boundary_segment")
 
 [node name="BoundarySeg18" type="CollisionShape3D" parent="ClearingImpassableBoundary" unique_id=1308131450]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -17.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 6, -17.5)
 shape = SubResource("BoxShape3D_boundary_segment")
 
 [node name="BoundarySeg19" type="CollisionShape3D" parent="ClearingImpassableBoundary" unique_id=914342005]
@@ -802,12 +799,6 @@ shape = SubResource("BoxShape3D_boundary_segment")
 [node name="BarrierSeg2" type="CollisionShape3D" parent="NatureBarrier/NatureBarrierBlocker" unique_id=141873303]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -8.5, 6, -19)
 shape = SubResource("BoxShape3D_boundary_segment")
-
-[node name="GreatTreeForestWall" type="StaticBody3D" parent="." unique_id=141873304]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 3, -73)
-
-[node name="Col" type="CollisionShape3D" parent="GreatTreeForestWall" unique_id=141873305]
-shape = SubResource("BoxShape3D_great_tree_forest_wall")
 
 [node name="WorldChanger" type="Node3D" parent="." unique_id=773051624 node_paths=PackedStringArray("great_tree", "nature_trail", "forest_barrier", "charred_forest_zone", "fire_particles_group", "burning_path", "ambient_light", "corridor_forest", "nature_corridor_forest", "nature_barrier")]
 script = ExtResource("16_wc")

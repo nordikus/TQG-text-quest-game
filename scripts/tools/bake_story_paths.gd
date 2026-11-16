@@ -519,6 +519,9 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 
 	var mesh := ArrayMesh.new()
 	b_ground.commit(mesh)
+	var ground_shape := mesh.create_trimesh_shape()
+	if ground_shape:
+		col_faces.append_array(ground_shape.get_faces())
 	b_foliage.commit(mesh)
 	b_biolum.commit(mesh)
 
@@ -704,6 +707,9 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 	var mesh := ArrayMesh.new()
 	b_charred.commit(mesh)
+	var charred_shape := mesh.create_trimesh_shape()
+	if charred_shape:
+		col_faces.append_array(charred_shape.get_faces())
 	b_lava.commit(mesh)
 	b_timber.commit(mesh)
 

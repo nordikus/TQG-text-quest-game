@@ -70,9 +70,10 @@ func _apply_extinguish_outcome():
 		tween_ncorr.finished.connect(func(): nature_corridor_forest.visible = false)
 
 	if nature_barrier:
+		_set_collision_recursive(nature_barrier, false)
 		var tween_nbar := create_tween()
 		tween_nbar.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-		tween_nbar.tween_property(nature_barrier, "position:y", -6.0, 3.0)
+		tween_nbar.tween_property(nature_barrier, "position:y", -14.0, 3.0)
 		tween_nbar.finished.connect(func():
 			if is_instance_valid(nature_barrier):
 				nature_barrier.queue_free()

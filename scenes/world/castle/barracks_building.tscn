@@ -116,12 +116,12 @@ size = Vector3(0.6, 1.9, 2.8)
 [sub_resource type="BoxShape3D" id="Shape_WallWestLintel"]
 size = Vector3(0.6, 1.9, 2.8)
 
-[sub_resource type="PrismMesh" id="Mesh_BarracksRoofGable"]
+[sub_resource type="PrismMesh" id="Mesh_Roof"]
 material = SubResource("Mat_Roof")
 size = Vector3(16.8, 3.6, 22.8)
 
-[sub_resource type="BoxShape3D" id="Shape_BarracksRoofGable"]
-size = Vector3(16.8, 3.6, 22.8)
+[sub_resource type="ConvexPolygonShape3D" id="Shape_Roof"]
+points = PackedVector3Array(-8.4, -1.8, -11.4, 8.4, -1.8, -11.4, 0, 1.8, -11.4, -8.4, -1.8, 11.4, 8.4, -1.8, 11.4, 0, 1.8, 11.4)
 
 [sub_resource type="BoxMesh" id="Mesh_Chimney"]
 material = SubResource("Mat_StoneDark")
@@ -266,9 +266,14 @@ mesh = SubResource("Mesh_WallWestLintel")
 [node name="Col" type="CollisionShape3D" parent="WallWestLintel"]
 shape = SubResource("Shape_WallWestLintel")
 
-[node name="Roof" type="MeshInstance3D" parent="."]
+[node name="Roof" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 7.5, 0.0)
-mesh = SubResource("Mesh_BarracksRoofGable")
+
+[node name="Mesh" type="MeshInstance3D" parent="Roof"]
+mesh = SubResource("Mesh_Roof")
+
+[node name="Col" type="CollisionShape3D" parent="Roof"]
+shape = SubResource("Shape_Roof")
 
 [node name="Chimney" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 6.5, -9.0)

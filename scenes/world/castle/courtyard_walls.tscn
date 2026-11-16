@@ -411,6 +411,10 @@ shape = SubResource("Shape_CornerTowerSW")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
 mesh = SubResource("Mesh_TowerRoof")
 
+[node name="RoofCol" type="CollisionShape3D" parent="CornerTowerSW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
+shape = SubResource("Shape_TowerRoof")
+
 [node name="CornerTowerSE" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 7.0, 8.5)
 
@@ -423,6 +427,10 @@ shape = SubResource("Shape_CornerTowerSE")
 [node name="Roof" type="MeshInstance3D" parent="CornerTowerSE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
 mesh = SubResource("Mesh_TowerRoof")
+
+[node name="RoofCol" type="CollisionShape3D" parent="CornerTowerSE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
+shape = SubResource("Shape_TowerRoof")
 
 [node name="CornerTowerNW" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0, 9.0, -78.0)
@@ -437,6 +445,10 @@ shape = SubResource("Shape_CornerTowerNW")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
 mesh = SubResource("Mesh_TowerRoof")
 
+[node name="RoofCol" type="CollisionShape3D" parent="CornerTowerNW"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
+shape = SubResource("Shape_TowerRoof")
+
 [node name="CornerTowerNE" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 9.0, -78.0)
 
@@ -449,6 +461,10 @@ shape = SubResource("Shape_CornerTowerNE")
 [node name="Roof" type="MeshInstance3D" parent="CornerTowerNE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
 mesh = SubResource("Mesh_TowerRoof")
+
+[node name="RoofCol" type="CollisionShape3D" parent="CornerTowerNE"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
+shape = SubResource("Shape_TowerRoof")
 
 [node name="GateLantern_-4" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 4.2, 6.5)

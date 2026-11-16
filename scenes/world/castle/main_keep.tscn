@@ -135,6 +135,13 @@ size = Vector3(64.8, 18.0, 1.0)
 [sub_resource type="BoxShape3D" id="Shape_KeepWallNorth"]
 size = Vector3(64.8, 18.0, 1.0)
 
+[sub_resource type="BoxMesh" id="Mesh_Roof"]
+material = SubResource("Mat_Roof")
+size = Vector3(64.8, 0.5, 30.8)
+
+[sub_resource type="BoxShape3D" id="Shape_Roof"]
+size = Vector3(64.8, 0.5, 30.8)
+
 [sub_resource type="BoxMesh" id="Mesh_KeepFrontWest_Outer"]
 material = SubResource("Mat_Stone")
 size = Vector3(4.4, 18.0, 1.0)
@@ -769,6 +776,15 @@ mesh = SubResource("Mesh_KeepWallNorth")
 
 [node name="Col" type="CollisionShape3D" parent="KeepWallNorth"]
 shape = SubResource("Shape_KeepWallNorth")
+
+[node name="Roof" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 18.22, 0.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Roof"]
+mesh = SubResource("Mesh_Roof")
+
+[node name="Col" type="CollisionShape3D" parent="Roof"]
+shape = SubResource("Shape_Roof")
 
 [node name="KeepFrontWest_Outer" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.8, 9.22, 15.0)
