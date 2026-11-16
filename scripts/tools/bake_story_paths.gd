@@ -463,36 +463,6 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 		var l1: Vector3 = f1.pos - f1.right * w1
 		var r1: Vector3 = f1.pos + f1.right * w1
 
-		# Left guide wall (height 5.0m) - stops at t = 0.72 so root ramp entry is 100% open
-		if t1 <= 0.74:
-			var l0_top: Vector3 = l0 + Vector3.UP * 5.0
-			var l1_top: Vector3 = l1 + Vector3.UP * 5.0
-			col_faces.append(l0); col_faces.append(l0_top); col_faces.append(l1)
-			col_faces.append(l1); col_faces.append(l0_top); col_faces.append(l1_top)
-
-		# Right guide wall (height 5.0m) - continues along east forest border
-		var r0_top: Vector3 = r0 + Vector3.UP * 5.0
-		var r1_top: Vector3 = r1 + Vector3.UP * 5.0
-		col_faces.append(r0); col_faces.append(r1); col_faces.append(r0_top)
-		col_faces.append(r1); col_faces.append(r1_top); col_faces.append(r0_top)
-
-	# East and North-East forest boundary for ApproachPlaza (facing deep woods only, no wall near tree roots)
-	var plaza_col_segs: int = 16
-	var p_rad: float = 5.2
-	for psi in range(plaza_col_segs):
-		var frac0: float = float(psi) / float(plaza_col_segs)
-		var frac1: float = float(psi + 1) / float(plaza_col_segs)
-		var a0: float = lerpf(-0.25 * PI, 0.35 * PI, frac0)
-		var a1: float = lerpf(-0.25 * PI, 0.35 * PI, frac1)
-
-		var pb0: Vector3 = plaza_center + Vector3(cos(a0), 0, sin(a0)) * p_rad
-		var pb1: Vector3 = plaza_center + Vector3(cos(a1), 0, sin(a1)) * p_rad
-		var pt0: Vector3 = pb0 + Vector3.UP * 5.0
-		var pt1: Vector3 = pb1 + Vector3.UP * 5.0
-
-		col_faces.append(pb0); col_faces.append(pb1); col_faces.append(pt0)
-		col_faces.append(pb1); col_faces.append(pt1); col_faces.append(pt0)
-
 	# Commit Nature Trail Mesh & Collisions
 	b_ground.generate_normals()
 	b_foliage.generate_normals()

@@ -64,10 +64,8 @@ func _apply_extinguish_outcome():
 		tween.tween_property(great_tree, "position:y", 0.0, 3.5)
 
 	if nature_corridor_forest:
-		var tween_ncorr := create_tween()
-		tween_ncorr.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-		tween_ncorr.tween_property(nature_corridor_forest, "position:y", -14.0, 2.5)
-		tween_ncorr.finished.connect(func(): nature_corridor_forest.visible = false)
+		nature_corridor_forest.visible = true
+		nature_corridor_forest.position.y = 0.0
 
 	if nature_barrier:
 		_set_collision_recursive(nature_barrier, false)

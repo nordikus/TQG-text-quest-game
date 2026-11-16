@@ -502,11 +502,19 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 			var is_west_parapet := (j >= 15 and j <= 17)
 			if is_moss:
 				uy += 0.016 * noise.get_noise_2d(z * 0.6, ux * 1.2)
-			elif is_east_parapet or is_west_parapet:
-				var p_scale := (west_stair_open if is_west_parapet else 1.0) * clampf((-z - 2.0) / 1.5, 0.0, 1.0)
+			elif is_east_parapet:
 				var wave := 0.14 * sin(z * 0.45 + signf(ux) * 1.4) + 0.12 * noise.get_noise_3d(c.x + ux * 0.6, c.y, z * 0.35)
 				var target_y := (uv.y + 0.22 * terrace_w + wave)
-				uy = lerpf(0.22, target_y, p_scale)
+				uy = lerpf(0.21, target_y, clampf((-z - 2.0) / 1.5, 0.0, 1.0))
+				ux += width_meander + 0.10 * noise.get_noise_2d(z * 0.35, ux)
+			elif is_west_parapet:
+				# Along the entire terrace section from z = -1.2 to z = -6.2, keep west parapet flat at floor level (0.21)
+				# so the spiral walkway merges seamlessly onto the terrace with zero vertical lip or blocking wall.
+				# North of z = -6.2, smoothly raise the west parapet to protect the narrow bough bridge.
+				var west_bridge_guard := clampf((-z - 6.2) / 1.8, 0.0, 1.0)
+				var wave := 0.14 * sin(z * 0.45 + signf(ux) * 1.4) + 0.12 * noise.get_noise_3d(c.x + ux * 0.6, c.y, z * 0.35)
+				var target_y := (uv.y + 0.22 * terrace_w + wave)
+				uy = lerpf(0.21, target_y, west_bridge_guard)
 				ux += width_meander + 0.10 * noise.get_noise_2d(z * 0.35, ux)
 			else:
 				uy *= belly_depth
@@ -518,7 +526,7 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 			g.v.append(pt)
 
 			var col := BARK
-			if is_moss:
+			if is_moss or (is_west_parapet and z >= -6.2):
 				var edge_f := clampf(1.0 - absf(uv.x) / 0.78, 0.0, 1.0)
 				col = MOSS.lerp(MOSS_PATH, edge_f).lerp(MOSS_GLOW, 0.28 * edge_f)
 			elif j == 3 or j == 17:

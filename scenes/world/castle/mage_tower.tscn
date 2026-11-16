@@ -273,297 +273,675 @@ height = 20.4
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_0"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_0"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_1"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_1"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_2"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_2"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_3"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_3"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_4"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_4"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_5"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_5"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_6"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_6"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_7"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_7"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_8"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_8"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_9"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_9"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_10"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_10"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_11"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_11"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_12"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_12"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_13"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_13"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_14"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_14"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_15"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_15"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_16"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_16"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_17"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_17"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_18"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_18"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_19"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_19"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_20"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_20"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_21"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_21"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_22"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_22"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_23"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_23"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_24"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_24"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_25"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_25"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_26"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_26"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_27"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_27"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_28"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_28"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_29"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_29"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_30"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_30"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_31"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_31"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_32"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_32"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_33"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_33"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_34"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_34"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_35"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_35"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_36"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_36"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_37"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_37"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_38"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_38"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_39"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_39"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_40"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_40"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_SpiralStep_41"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxShape3D" id="Shape_SpiralStep_41"]
-size = Vector3(0.7, 0.22, 1.6)
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_42"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_42"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_43"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_43"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_44"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_44"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_45"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_45"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_46"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_46"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_47"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_47"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_48"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_48"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_49"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_49"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_50"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_50"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_51"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_51"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_52"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_52"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_53"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_53"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_54"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_54"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_55"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_55"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_56"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_56"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_57"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_57"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_58"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_58"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_59"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_59"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_60"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_60"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_61"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_61"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_62"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_62"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_63"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_63"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_64"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_64"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_65"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_65"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_66"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_66"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_67"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_67"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_68"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_68"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_69"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_69"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_70"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_70"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_71"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_71"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_72"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_72"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_73"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_73"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_74"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_74"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_75"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_75"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_76"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_76"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_77"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_77"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_78"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_78"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_79"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_79"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_80"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_80"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_81"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_81"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_82"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_82"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_83"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_83"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_84"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_84"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_85"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_85"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_86"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_86"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_87"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_87"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_88"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_88"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_89"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_89"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_90"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_90"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_91"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_91"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_92"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_92"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_93"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_93"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_94"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_94"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxMesh" id="Mesh_SpiralStep_95"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4981372143385048, 0.2, 2.87)
+
+[sub_resource type="BoxShape3D" id="Shape_SpiralStep_95"]
+size = Vector3(0.4981372143385048, 0.2, 2.87)
 
 [sub_resource type="BoxMesh" id="Mesh_DoorFrameLeft"]
 material = SubResource("Mat_Stone")
@@ -926,7 +1304,7 @@ mesh = SubResource("Mesh_StairsCentralColumn")
 shape = SubResource("Shape_StairsCentralColumn")
 
 [node name="SpiralStep_0" type="StaticBody3D" parent="."]
-transform = Transform3D(6.123233995736766e-17, 0, 1.0, 0, 1, 0, -1.0, 0, 6.123233995736766e-17, 1.65, 0.35, 0.0)
+transform = Transform3D(-0.0, 0.43090827561580386, 0.9023957324842657, 0.0, 0.9023957324842657, -0.43090827561580386, 1.0, 0.0, 0.0, 1.915, 0.35, 0.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_0"]
 mesh = SubResource("Mesh_SpiralStep_0")
@@ -935,7 +1313,7 @@ mesh = SubResource("Mesh_SpiralStep_0")
 shape = SubResource("Shape_SpiralStep_0")
 
 [node name="SpiralStep_1" type="StaticBody3D" parent="."]
-transform = Transform3D(0.4999999999999999, 0, 0.8660254037844387, 0, 1, 0, -0.8660254037844387, 0, 0.4999999999999999, 1.4289419162443238, 0.8329268292682928, 0.8249999999999998)
+transform = Transform3D(-0.2023809776017205, 0.43090827561580386, 0.8794088911938441, 0.096640126871742, 0.9023957324842657, -0.4199316942937258, 0.9745268727865771, 0.0, 0.22427076094938117, 1.8662189613862952, 0.5568421052631578, 0.42947850721806496)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_1"]
 mesh = SubResource("Mesh_SpiralStep_1")
@@ -944,7 +1322,7 @@ mesh = SubResource("Mesh_SpiralStep_1")
 shape = SubResource("Shape_SpiralStep_1")
 
 [node name="SpiralStep_2" type="StaticBody3D" parent="."]
-transform = Transform3D(0.8660254037844386, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254037844386, 0.8250000000000002, 1.3158536585365854, 1.4289419162443235)
+transform = Transform3D(-0.39445140242738996, 0.43090827561580386, 0.8116194607874307, 0.18835680125203358, 0.9023957324842657, -0.38756116603226326, 0.8994052515663711, 0.0, 0.4371157666509329, 1.7223610567496006, 0.7636842105263157, 0.8370766931365364)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_2"]
 mesh = SubResource("Mesh_SpiralStep_2")
@@ -953,7 +1331,7 @@ mesh = SubResource("Mesh_SpiralStep_2")
 shape = SubResource("Shape_SpiralStep_2")
 
 [node name="SpiralStep_3" type="StaticBody3D" parent="."]
-transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 1.0103336092965664e-16, 1.798780487804878, 1.65)
+transform = Transform3D(-0.5664260057459676, 0.43090827561580386, 0.7024810588339615, 0.27047740211271226, 0.9023957324842657, -0.335445848000156, 0.7784623015670235, 0.0, 0.6276913612907005, 1.49075530750085, 0.9705263157894737, 1.2020289568716913)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_3"]
 mesh = SubResource("Mesh_SpiralStep_3")
@@ -962,7 +1340,7 @@ mesh = SubResource("Mesh_SpiralStep_3")
 shape = SubResource("Shape_SpiralStep_3")
 
 [node name="SpiralStep_4" type="StaticBody3D" parent="."]
-transform = Transform3D(0.8660254037844387, 0, -0.49999999999999983, 0, 1, 0, 0.49999999999999983, 0, 0.8660254037844387, -0.8249999999999996, 2.2817073170731708, 1.4289419162443238)
+transform = Transform3D(-0.7095433256618291, 0.43090827561580386, 0.5575538781270972, 0.33881819242864447, 0.9023957324842657, -0.2662408204494037, 0.6178596130903343, 0.0, 0.7862884321366189, 1.1832011590679903, 1.1773684210526314, 1.5057423475416252)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_4"]
 mesh = SubResource("Mesh_SpiralStep_4")
@@ -971,7 +1349,7 @@ mesh = SubResource("Mesh_SpiralStep_4")
 shape = SubResource("Shape_SpiralStep_4")
 
 [node name="SpiralStep_5" type="StaticBody3D" parent="."]
-transform = Transform3D(0.5000000000000003, 0, -0.8660254037844385, 0, 1, 0, 0.8660254037844385, 0, 0.5000000000000003, -1.4289419162443233, 2.7646341463414634, 0.8250000000000005)
+transform = Transform3D(-0.8165120707816529, 0.43090827561580386, 0.3842214156884955, 0.389897464908663, 0.9023957324842657, -0.18347182032122403, 0.42577929156507266, 0.0, 0.9048270524660196, 0.8153673433471141, 1.3842105263157891, 1.7327438054724276)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_5"]
 mesh = SubResource("Mesh_SpiralStep_5")
@@ -980,7 +1358,7 @@ mesh = SubResource("Mesh_SpiralStep_5")
 shape = SubResource("Shape_SpiralStep_5")
 
 [node name="SpiralStep_6" type="StaticBody3D" parent="."]
-transform = Transform3D(6.123233995736766e-17, 0, -1.0, 0, 1, 0, 1.0, 0, 6.123233995736766e-17, -1.65, 3.247560975609756, 2.0206672185931328e-16)
+transform = Transform3D(-0.8818825842008439, 0.43090827561580386, 0.19131431124998483, 0.4211129219410626, 0.9023957324842657, -0.09135561815480278, 0.21200710992205474, 0.0, 0.9772681235681935, 0.4059936155007348, 1.5910526315789473, 1.8714684566330906)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_6"]
 mesh = SubResource("Mesh_SpiralStep_6")
@@ -989,7 +1367,7 @@ mesh = SubResource("Mesh_SpiralStep_6")
 shape = SubResource("Shape_SpiralStep_6")
 
 [node name="SpiralStep_7" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.4999999999999998, 0, -0.8660254037844387, 0, 1, 0, 0.8660254037844387, 0, -0.4999999999999998, -1.428941916244324, 3.730487804878049, -0.8249999999999995)
+transform = Transform3D(-0.9023244831107345, 0.43090827561580386, -0.011339540764964514, 0.4308742529098204, 0.9023957324842657, 0.0054148105774549085, -0.012566039883352653, 0.0, 0.9999210442038161, -0.02406396637662033, 1.797894736842105, 1.9148487996503079)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_7"]
 mesh = SubResource("Mesh_SpiralStep_7")
@@ -998,7 +1376,7 @@ mesh = SubResource("Mesh_SpiralStep_7")
 shape = SubResource("Shape_SpiralStep_7")
 
 [node name="SpiralStep_8" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.8660254037844385, 0, -0.5000000000000003, 0, 1, 0, 0.5000000000000003, 0, -0.8660254037844385, -0.8250000000000007, 4.213414634146342, -1.4289419162443233)
+transform = Transform3D(-0.8767963293284937, 0.43090827561580386, -0.21341568565101818, 0.41868415456385744, 0.9023957324842657, 0.10190937499236032, -0.23649899702372465, 0.0, 0.971631732914674, -0.4528955793004327, 2.004736842105263, 1.8606747685316007)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_8"]
 mesh = SubResource("Mesh_SpiralStep_8")
@@ -1007,7 +1385,7 @@ mesh = SubResource("Mesh_SpiralStep_8")
 shape = SubResource("Shape_SpiralStep_8")
 
 [node name="SpiralStep_9" type="StaticBody3D" parent="."]
-transform = Transform3D(-1.0, 0, -1.2246467991473532e-16, 0, 1, 0, 1.2246467991473532e-16, 0, -1.0, -3.031000827889699e-16, 4.696341463414634, -1.65)
+transform = Transform3D(-0.806598686671759, 0.43090827561580386, -0.40461910071721535, 0.38516366675499547, 0.9023957324842657, 0.1932120384604241, -0.4483832160900321, 0.0, 0.8938414241512639, -0.8586538588124115, 2.211578947368421, 1.7117063272496704)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_9"]
 mesh = SubResource("Mesh_SpiralStep_9")
@@ -1016,7 +1394,7 @@ mesh = SubResource("Mesh_SpiralStep_9")
 shape = SubResource("Shape_SpiralStep_9")
 
 [node name="SpiralStep_10" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.866025403784439, 0, 0.49999999999999933, 0, 1, 0, -0.49999999999999933, 0, -0.866025403784439, 0.8249999999999988, 5.179268292682926, -1.4289419162443244)
+transform = Transform3D(-0.6953078621034853, 0.43090827561580386, -0.575208688132312, 0.33202053278365656, 0.9023957324842657, 0.27467127225875376, -0.6374239897486897, 0.0, 0.7705132427757893, -1.220666940368741, 2.4184210526315786, 1.4755328599156365)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_10"]
 mesh = SubResource("Mesh_SpiralStep_10")
@@ -1025,7 +1403,7 @@ mesh = SubResource("Mesh_SpiralStep_10")
 shape = SubResource("Shape_SpiralStep_10")
 
 [node name="SpiralStep_11" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.5000000000000004, 0, 0.8660254037844385, 0, 1, 0, -0.8660254037844385, 0, -0.5000000000000004, 1.4289419162443233, 5.662195121951219, -0.8250000000000007)
+transform = Transform3D(-0.548593706287501, 0.43090827561580386, -0.7164935473732875, 0.26196219627418466, 0.9023957324842657, 0.34213703353684344, -0.7939903986478354, 0.0, 0.6079302976946053, -1.5204916134106048, 2.6252631578947367, 1.164186520085169)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_11"]
 mesh = SubResource("Mesh_SpiralStep_11")
@@ -1034,7 +1412,7 @@ mesh = SubResource("Mesh_SpiralStep_11")
 shape = SubResource("Shape_SpiralStep_11")
 
 [node name="SpiralStep_12" type="StaticBody3D" parent="."]
-transform = Transform3D(-1.8369701987210297e-16, 0, 1.0, 0, 1, 0, -1.0, 0, -1.8369701987210297e-16, 1.65, 6.145121951219512, -4.0413344371862655e-16)
+transform = Transform3D(-0.37393075593402797, 0.43090827561580386, -0.8212757440545904, 0.17855786706311302, 0.9023957324842657, 0.3921721944555188, -0.9101059706849957, 0.0, 0.4143755809932843, -1.7428529338617667, 2.832105263157895, 0.7935292376021394)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_12"]
 mesh = SubResource("Mesh_SpiralStep_12")
@@ -1043,7 +1421,7 @@ mesh = SubResource("Mesh_SpiralStep_12")
 shape = SubResource("Shape_SpiralStep_12")
 
 [node name="SpiralStep_13" type="StaticBody3D" parent="."]
-transform = Transform3D(0.49999999999999933, 0, 0.866025403784439, 0, 1, 0, -0.866025403784439, 0, 0.49999999999999933, 1.4289419162443244, 6.628048780487805, 0.8249999999999987)
+transform = Transform3D(-0.18021743415071678, 0.43090827561580386, -0.8842170177246911, 0.08605668332672893, 0.9023957324842657, 0.42222765097632897, -0.9798550523842469, 0.0, 0.19970998051440705, -1.8764224253158328, 3.0389473684210526, 0.3824446126850895)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_13"]
 mesh = SubResource("Mesh_SpiralStep_13")
@@ -1052,7 +1430,7 @@ mesh = SubResource("Mesh_SpiralStep_13")
 shape = SubResource("Shape_SpiralStep_13")
 
 [node name="SpiralStep_14" type="StaticBody3D" parent="."]
-transform = Transform3D(0.8660254037844384, 0, 0.5000000000000004, 0, 1, 0, -0.5000000000000004, 0, 0.8660254037844384, 0.8250000000000007, 7.110975609756098, 1.4289419162443233)
+transform = Transform3D(0.022677290884990115, 0.43090827561580386, -0.9021107462412428, -0.010828766093549162, 0.9023957324842657, 0.4307721901644496, -0.9996841892832999, 0.0, -0.02513009544333757, -1.9143952224775194, 3.2457894736842103, -0.04812413277399145)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_14"]
 mesh = SubResource("Mesh_SpiralStep_14")
@@ -1061,7 +1439,7 @@ mesh = SubResource("Mesh_SpiralStep_14")
 shape = SubResource("Shape_SpiralStep_14")
 
 [node name="SpiralStep_15" type="StaticBody3D" parent="."]
-transform = Transform3D(1.0, 0, 1.133107779529596e-15, 0, 1, 0, -1.133107779529596e-15, 0, 1.0, 1.97066119715349e-15, 7.59390243902439, 1.65)
+transform = Transform3D(0.22441669288955834, 0.43090827561580386, -0.8740453111585967, -0.10716253044129631, 0.9023957324842657, 0.4173704997524428, -0.9685831611286312, 0.0, -0.24868988716485457, -1.8548367535613288, 3.452631578947368, -0.4762411339206965)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_15"]
 mesh = SubResource("Mesh_SpiralStep_15")
@@ -1070,7 +1448,7 @@ mesh = SubResource("Mesh_SpiralStep_15")
 shape = SubResource("Shape_SpiralStep_15")
 
 [node name="SpiralStep_16" type="StaticBody3D" parent="."]
-transform = Transform3D(0.866025403784439, 0, -0.4999999999999993, 0, 1, 0, 0.4999999999999993, 0, 0.866025403784439, -0.8249999999999986, 8.076829268292684, 1.4289419162443244)
+transform = Transform3D(0.4147229049605442, 0.43090827561580386, -0.8014505412730731, -0.19803676524815678, 0.9023957324842657, 0.38270534566978814, -0.8881364488135446, 0.0, -0.45957986062148776, -1.7007812994779379, 3.659473684210526, -0.880095433090149)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_16"]
 mesh = SubResource("Mesh_SpiralStep_16")
@@ -1079,7 +1457,7 @@ mesh = SubResource("Mesh_SpiralStep_16")
 shape = SubResource("Shape_SpiralStep_16")
 
 [node name="SpiralStep_17" type="StaticBody3D" parent="."]
-transform = Transform3D(0.5000000000000012, 0, -0.8660254037844379, 0, 1, 0, 0.8660254037844379, 0, 0.5000000000000012, -1.4289419162443224, 8.559756097560975, 0.8250000000000022)
+transform = Transform3D(0.5839005383987697, 0.43090827561580386, -0.6880248682013184, -0.2788217686268151, 0.9023957324842657, 0.32854278767612655, -0.7624425110114479, 0.0, -0.6470559615694443, -1.4600774085869228, 3.866315789473684, -1.2391121664054858)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_17"]
 mesh = SubResource("Mesh_SpiralStep_17")
@@ -1088,7 +1466,7 @@ mesh = SubResource("Mesh_SpiralStep_17")
 shape = SubResource("Shape_SpiralStep_17")
 
 [node name="SpiralStep_18" type="StaticBody3D" parent="."]
-transform = Transform3D(3.061616997868383e-16, 0, -1.0, 0, 1, 0, 1.0, 0, 3.061616997868383e-16, -1.65, 9.042682926829269, 6.062001655779398e-16)
+transform = Transform3D(0.7233306264477589, 0.43090827561580386, -0.5395469051421824, -0.3454018472412685, 0.9023957324842657, 0.25764220523141196, -0.597904983057519, 0.0, -0.8015669848708764, -1.144988042555149, 4.073157894736842, -1.5350007760277284)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_18"]
 mesh = SubResource("Mesh_SpiralStep_18")
@@ -1097,7 +1475,7 @@ mesh = SubResource("Mesh_SpiralStep_18")
 shape = SubResource("Shape_SpiralStep_18")
 
 [node name="SpiralStep_19" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.4999999999999992, 0, -0.8660254037844392, 0, 1, 0, 0.8660254037844392, 0, -0.4999999999999992, -1.4289419162443244, 9.52560975609756, -0.8249999999999986)
+transform = Transform3D(0.8259097283670112, 0.43090827561580386, -0.3635810481784555, -0.39438499546666583, 0.9023957324842657, 0.17361571744788418, -0.4029064357136628, 0.0, -0.9152411726209175, -0.7715658243916643, 4.279999999999999, -1.7526868455690572)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_19"]
 mesh = SubResource("Mesh_SpiralStep_19")
@@ -1106,7 +1484,7 @@ mesh = SubResource("Mesh_SpiralStep_19")
 shape = SubResource("Shape_SpiralStep_19")
 
 [node name="SpiralStep_20" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.8660254037844379, 0, -0.5000000000000013, 0, 1, 0, 0.5000000000000013, 0, -0.8660254037844379, -0.8250000000000022, 10.008536585365853, -1.4289419162443224)
+transform = Transform3D(0.8864118231312706, 0.43090827561580386, -0.1690920986294496, -0.42327570537088804, 0.9023957324842657, 0.08074415915075707, -0.18738131458572463, 0.0, -0.9822872507286887, -0.3588352174316627, 4.486842105263157, -1.881080085145439)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_20"]
 mesh = SubResource("Mesh_SpiralStep_20")
@@ -1115,7 +1493,7 @@ mesh = SubResource("Mesh_SpiralStep_20")
 shape = SubResource("Shape_SpiralStep_20")
 
 [node name="SpiralStep_21" type="StaticBody3D" parent="."]
-transform = Transform3D(-1.0, 0, -3.6739403974420594e-16, 0, 1, 0, 3.6739403974420594e-16, 0, -1.0, -7.072335265075964e-16, 10.491463414634147, -1.65)
+transform = Transform3D(0.9017545556273201, 0.43090827561580386, 0.03401145999790148, -0.4306021034965823, 0.9023957324842657, -0.016241011621946203, 0.03769018266993467, 0.0, -0.9992894726405892, 0.0721766998129249, 4.693684210526315, -1.9136393401067284)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_21"]
 mesh = SubResource("Mesh_SpiralStep_21")
@@ -1124,7 +1502,7 @@ mesh = SubResource("Mesh_SpiralStep_21")
 shape = SubResource("Shape_SpiralStep_21")
 
 [node name="SpiralStep_22" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.8660254037844392, 0, 0.49999999999999917, 0, 1, 0, -0.49999999999999917, 0, -0.8660254037844392, 0.8249999999999985, 10.97439024390244, -1.4289419162443244)
+transform = Transform3D(0.8711562711018129, 0.43090827561580386, 0.23538226213077096, -0.4159909373008048, 0.9023957324842657, -0.11239876368440845, 0.26084150628989716, 0.0, -0.9653816388332738, 0.4995114845451531, 4.900526315789473, -1.8487058383657193)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_22"]
 mesh = SubResource("Mesh_SpiralStep_22")
@@ -1133,7 +1511,7 @@ mesh = SubResource("Mesh_SpiralStep_22")
 shape = SubResource("Shape_SpiralStep_22")
 
 [node name="SpiralStep_23" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.5000000000000013, 0, 0.8660254037844378, 0, 1, 0, -0.8660254037844378, 0, -0.5000000000000013, 1.4289419162443224, 11.457317073170733, -0.8250000000000023)
+transform = Transform3D(0.7961758375432111, 0.43090827561580386, 0.42476121964955904, -0.38018659097403856, 0.9023957324842657, -0.20283021973494159, 0.47070393216533213, 0.0, -0.8822912264349535, 0.901398030096611, 5.107368421052631, -1.689587698622936)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_23"]
 mesh = SubResource("Mesh_SpiralStep_23")
@@ -1142,7 +1520,7 @@ mesh = SubResource("Mesh_SpiralStep_23")
 shape = SubResource("Shape_SpiralStep_23")
 
 [node name="SpiralStep_24" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.286263797015736e-16, 0, 1.0, 0, 1, 0, -1.0, 0, -4.286263797015736e-16, 1.65, 11.940243902439024, -8.082668874372531e-16)
+transform = Transform3D(0.6806332271966253, 0.43090827561580386, 0.5925001840014241, -0.3250131618538337, 0.9023957324842657, -0.2829282358054057, 0.6565857557529562, 0.0, -0.754251380736104, 1.2573617222669111, 5.314210526315789, -1.4443913941096391)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_24"]
 mesh = SubResource("Mesh_SpiralStep_24")
@@ -1151,7 +1529,7 @@ mesh = SubResource("Mesh_SpiralStep_24")
 shape = SubResource("Shape_SpiralStep_24")
 
 [node name="SpiralStep_25" type="StaticBody3D" parent="."]
-transform = Transform3D(0.4999999999999991, 0, 0.8660254037844392, 0, 1, 0, -0.8660254037844392, 0, 0.4999999999999991, 1.4289419162443244, 12.423170731707318, 0.8249999999999984)
+transform = Transform3D(0.5304149032859155, 0.43090827561580386, 0.7300534832311997, -0.2532815294977499, 0.9023957324842657, -0.34861211798998903, 0.8090169943749473, 0.0, -0.5877852522924734, 1.5492675442280242, 5.5210526315789465, -1.1256087581400864)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_25"]
 mesh = SubResource("Mesh_SpiralStep_25")
@@ -1160,7 +1538,7 @@ mesh = SubResource("Mesh_SpiralStep_25")
 shape = SubResource("Shape_SpiralStep_25")
 
 [node name="SpiralStep_26" type="StaticBody3D" parent="."]
-transform = Transform3D(0.8660254037844378, 0, 0.5000000000000014, 0, 1, 0, -0.5000000000000014, 0, 0.8660254037844378, 0.8250000000000023, 12.90609756097561, 1.4289419162443224)
+transform = Transform3D(0.3531739267606103, 0.43090827561580386, 0.8304132919590735, -0.16864615189825305, 0.9023957324842657, -0.39653551851517277, 0.9202318473658703, 0.0, -0.3913736668372025, 1.7622439877056415, 5.727894736842105, -0.7494805719932428)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_26"]
 mesh = SubResource("Mesh_SpiralStep_26")
@@ -1169,7 +1547,7 @@ mesh = SubResource("Mesh_SpiralStep_26")
 shape = SubResource("Shape_SpiralStep_26")
 
 [node name="SpiralStep_27" type="StaticBody3D" parent="."]
-transform = Transform3D(1.0, 0, 2.266215559059192e-15, 0, 1, 0, -2.266215559059192e-15, 0, 1.0, 3.840289033377323e-15, 13.389024390243904, 1.65)
+transform = Transform3D(0.15794006150563103, 0.43090827561580386, 0.888466653835366, -0.07541888453603933, 0.9023957324842657, -0.4242569196248014, 0.9845643345292054, 0.0, -0.175023058975276, 1.8854407006234284, 5.934736842105262, -0.33516915793765356)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_27"]
 mesh = SubResource("Mesh_SpiralStep_27")
@@ -1178,7 +1556,7 @@ mesh = SubResource("Mesh_SpiralStep_27")
 shape = SubResource("Shape_SpiralStep_27")
 
 [node name="SpiralStep_28" type="StaticBody3D" parent="."]
-transform = Transform3D(0.8660254037844392, 0, -0.49999999999999906, 0, 1, 0, 0.49999999999999906, 0, 0.8660254037844392, -0.8249999999999983, 13.871951219512196, 1.4289419162443247)
+transform = Transform3D(-0.045340258307005825, 0.43090827561580386, 0.9012559675155934, 0.02165069250633636, 0.9023957324842657, -0.4303640197648749, 0.9987369566060175, 0.0, 0.05024431817976974, 1.9125812719005235, 6.14157894736842, 0.09621786931425905)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_28"]
 mesh = SubResource("Mesh_SpiralStep_28")
@@ -1187,7 +1565,7 @@ mesh = SubResource("Mesh_SpiralStep_28")
 shape = SubResource("Shape_SpiralStep_28")
 
 [node name="SpiralStep_29" type="StaticBody3D" parent="."]
-transform = Transform3D(0.5000000000000014, 0, -0.8660254037844378, 0, 1, 0, 0.8660254037844378, 0, 0.5000000000000014, -1.4289419162443222, 14.354878048780487, 0.8250000000000025)
+transform = Transform3D(-0.24631066178415426, 0.43090827561580386, 0.8681296653710587, 0.11761724785976646, 0.9023957324842657, -0.4145456850578472, 0.962027671586086, 0.0, 0.27295193551732466, 1.8422829910873548, 6.348421052631578, 0.5227029565156768)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_29"]
 mesh = SubResource("Mesh_SpiralStep_29")
@@ -1196,7 +1574,7 @@ mesh = SubResource("Mesh_SpiralStep_29")
 shape = SubResource("Shape_SpiralStep_29")
 
 [node name="SpiralStep_30" type="StaticBody3D" parent="."]
-transform = Transform3D(2.3274478990165594e-15, 0, -1.0, 0, 1, 0, 1.0, 0, 2.3274478990165594e-15, -1.65, 14.83780487804878, 3.94132239430698e-15)
+transform = Transform3D(-0.4347324596180032, 0.43090827561580386, 0.7907754084190376, 0.2075916449787479, 0.9023957324842657, -0.3776078004083113, 0.8763066800438638, 0.0, 0.4817536741017149, 1.6781272922839992, 6.555263157894736, 0.9225582859047841)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_30"]
 mesh = SubResource("Mesh_SpiralStep_30")
@@ -1205,7 +1583,7 @@ mesh = SubResource("Mesh_SpiralStep_30")
 shape = SubResource("Shape_SpiralStep_30")
 
 [node name="SpiralStep_31" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.499999999999999, 0, -0.8660254037844393, 0, 1, 0, 0.8660254037844393, 0, -0.499999999999999, -1.4289419162443247, 15.320731707317073, -0.8249999999999982)
+transform = Transform3D(-0.601006266956545, 0.43090827561580386, 0.6731341063152072, 0.28699002533575463, 0.9023957324842657, -0.321432212685612, 0.7459411454241823, 0.0, 0.6660118674342514, 1.4284772934873091, 6.762105263157895, 1.2754127261365915)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_31"]
 mesh = SubResource("Mesh_SpiralStep_31")
@@ -1214,7 +1592,7 @@ mesh = SubResource("Mesh_SpiralStep_31")
 shape = SubResource("Shape_SpiralStep_31")
 
 [node name="SpiralStep_32" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.8660254037844377, 0, -0.5000000000000016, 0, 1, 0, 0.5000000000000016, 0, -0.8660254037844377, -0.8250000000000025, 15.803658536585367, -1.4289419162443222)
+transform = Transform3D(-0.7366610561065897, 0.43090827561580386, 0.5211991427676549, 0.35176733884403905, 0.9023957324842657, -0.24888085767444748, 0.5775727034222677, 0.0, 0.8163392507171838, 1.1060517270536427, 6.968947368421052, 1.5632896651234072)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_32"]
 mesh = SubResource("Mesh_SpiralStep_32")
@@ -1223,7 +1601,7 @@ mesh = SubResource("Mesh_SpiralStep_32")
 shape = SubResource("Shape_SpiralStep_32")
 
 [node name="SpiralStep_33" type="StaticBody3D" parent="."]
-transform = Transform3D(-1.0, 0, -2.388680238973927e-15, 0, 1, 0, 2.388680238973927e-15, 0, -1.0, -4.042355755236636e-15, 16.28658536585366, -1.65)
+transform = Transform3D(-0.8347857236658793, 0.43090827561580386, 0.3427110350856077, 0.39862342400852063, 0.9023957324842657, -0.163649955166229, 0.37977909552180117, 0.0, 0.925077206834458, 0.7272769679242492, 7.17578947368421, 1.7715228510879872)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_33"]
 mesh = SubResource("Mesh_SpiralStep_33")
@@ -1232,7 +1610,7 @@ mesh = SubResource("Mesh_SpiralStep_33")
 shape = SubResource("Shape_SpiralStep_33")
 
 [node name="SpiralStep_34" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.8660254037844393, 0, 0.49999999999999895, 0, 1, 0, -0.49999999999999895, 0, -0.8660254037844393, 0.8249999999999955, 16.76951219512195, -1.4289419162443262)
+transform = Transform3D(-0.8903811853553885, 0.43090827561580386, 0.14676308381520145, 0.42517113879296364, 0.9023957324842657, -0.0700817004051699, 0.16263716519488353, 0.0, 0.986685944207868, 0.31145017134820197, 7.382631578947367, 1.8895035831580673)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_34"]
 mesh = SubResource("Mesh_SpiralStep_34")
@@ -1241,7 +1619,7 @@ mesh = SubResource("Mesh_SpiralStep_34")
 shape = SubResource("Shape_SpiralStep_34")
 
 [node name="SpiralStep_35" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.5000000000000047, 0, 0.8660254037844359, 0, 1, 0, -0.8660254037844359, 0, -0.5000000000000047, 1.4289419162443207, 17.252439024390245, -0.8250000000000053)
+transform = Transform3D(-0.9006150606389055, 0.43090827561580386, -0.056661896863722534, 0.43005797656550865, 0.9023957324842657, 0.027056954495396978, -0.0627905195293136, 0.0, 0.9980267284282716, -0.12024384489863554, 7.589473684210525, 1.9112211849401401)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_35"]
 mesh = SubResource("Mesh_SpiralStep_35")
@@ -1250,7 +1628,7 @@ mesh = SubResource("Mesh_SpiralStep_35")
 shape = SubResource("Shape_SpiralStep_35")
 
 [node name="SpiralStep_36" type="StaticBody3D" parent="."]
-transform = Transform3D(-2.4499125789312946e-15, 0, 1.0, 0, 1, 0, -1.0, 0, -2.4499125789312946e-15, 1.65, 17.73536585365854, -1.2124003311558795e-15)
+transform = Transform3D(-0.8649659719024639, 0.43090827561580386, -0.2572001661287188, 0.41303497124565286, 0.9023957324842657, 0.1228171589082254, -0.2850192624699756, 0.0, 0.9585217890173761, -0.5458118876300033, 7.796315789473684, 1.8355692259682752)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_36"]
 mesh = SubResource("Mesh_SpiralStep_36")
@@ -1259,7 +1637,7 @@ mesh = SubResource("Mesh_SpiralStep_36")
 shape = SubResource("Shape_SpiralStep_36")
 
 [node name="SpiralStep_37" type="StaticBody3D" parent="."]
-transform = Transform3D(0.5000000000000004, 0, 0.8660254037844384, 0, 1, 0, -0.8660254037844384, 0, 0.5000000000000004, 1.4289419162443247, 18.218292682926833, 0.8249999999999981)
+transform = Transform3D(-0.7852501066909153, 0.43090827561580386, -0.44463505029149525, 0.37496938119353107, 0.9023957324842657, 0.2123202890953334, -0.49272734154829123, 0.0, 0.8701837546695258, -0.9435728590649777, 8.003157894736841, 1.666401890192142)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_37"]
 mesh = SubResource("Mesh_SpiralStep_37")
@@ -1268,7 +1646,7 @@ mesh = SubResource("Mesh_SpiralStep_37")
 shape = SubResource("Shape_SpiralStep_37")
 
 [node name="SpiralStep_38" type="StaticBody3D" parent="."]
-transform = Transform3D(0.8660254037844368, 0, 0.5000000000000032, 0, 1, 0, -0.5000000000000032, 0, 0.8660254037844368, 0.8250000000000027, 18.701219512195124, 1.4289419162443222)
+transform = Transform3D(-0.6655286897551838, 0.43090827561580386, -0.6094174440550277, 0.31780050564484674, 0.9023957324842657, 0.2910064958142091, -0.6753328081210243, 0.0, 0.737513117358174, -1.2932623275517614, 8.209999999999999, 1.4123376197409032)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_38"]
 mesh = SubResource("Mesh_SpiralStep_38")
@@ -1277,7 +1655,7 @@ mesh = SubResource("Mesh_SpiralStep_38")
 shape = SubResource("Shape_SpiralStep_38")
 
 [node name="SpiralStep_39" type="StaticBody3D" parent="."]
-transform = Transform3D(1.0, 0, 7.347880794884119e-16, 0, 1, 0, -7.347880794884119e-16, 0, 1.0, 4.24442247709595e-15, 19.184146341463414, 1.65)
+transform = Transform3D(-0.5119010788628192, 0.43090827561580386, -0.7431523016615748, 0.24444088467859987, 0.9023957324842657, 0.35486701155746925, -0.8235325976284273, 0.0, 0.5672689491267566, -1.5770649244584385, 8.416842105263157, 1.0863200375777389)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_39"]
 mesh = SubResource("Mesh_SpiralStep_39")
@@ -1286,7 +1664,7 @@ mesh = SubResource("Mesh_SpiralStep_39")
 shape = SubResource("Shape_SpiralStep_39")
 
 [node name="SpiralStep_40" type="StaticBody3D" parent="."]
-transform = Transform3D(0.866025403784441, 0, -0.4999999999999957, 0, 1, 0, 0.4999999999999957, 0, 0.866025403784441, -0.8249999999999954, 19.667073170731708, 1.4289419162443264)
+transform = Transform3D(-0.33219402536533266, 0.43090827561580386, -0.8390263330297753, 0.15862791620919373, 0.9023957324842657, 0.4006483822422282, -0.9297764858882515, 0.0, 0.368124552684678, -1.7805219704760016, 8.623684210526314, 0.7049585183911583)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_40"]
 mesh = SubResource("Mesh_SpiralStep_40")
@@ -1295,13 +1673,499 @@ mesh = SubResource("Mesh_SpiralStep_40")
 shape = SubResource("Shape_SpiralStep_40")
 
 [node name="SpiralStep_41" type="StaticBody3D" parent="."]
-transform = Transform3D(0.5000000000000017, 0, -0.8660254037844377, 0, 1, 0, 0.8660254037844377, 0, 0.5000000000000017, -1.4289419162443204, 20.150000000000002, 0.8250000000000054)
+transform = Transform3D(-0.1355629305325058, 0.43090827561580386, -0.8921551153646173, 0.06473344956139362, 0.9023957324842657, 0.42601821850957045, -0.9886517447379141, 0.0, 0.15022558912075692, -1.8932680911731055, 8.830526315789474, 0.28768200316624953)
 
 [node name="Mesh" type="MeshInstance3D" parent="SpiralStep_41"]
 mesh = SubResource("Mesh_SpiralStep_41")
 
 [node name="Col" type="CollisionShape3D" parent="SpiralStep_41"]
 shape = SubResource("Shape_SpiralStep_41")
+
+[node name="SpiralStep_42" type="StaticBody3D" parent="."]
+transform = Transform3D(0.06797458785007893, 0.43090827561580386, -0.8998319362038816, -0.032458943877688606, 0.9023957324842657, 0.4296840222262525, -0.9971589002606139, 0.0, -0.07532680552793299, -1.9095592939990758, 9.03736842105263, -0.14425083258599167)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_42"]
+mesh = SubResource("Mesh_SpiralStep_42")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_42"]
+shape = SubResource("Shape_SpiralStep_42")
+
+[node name="SpiralStep_43" type="StaticBody3D" parent="."]
+transform = Transform3D(0.2680490555854936, 0.43090827561580386, -0.8616656902799017, -0.12799767570355142, 0.9023957324842657, 0.41145903442344545, -0.9548645447466428, 0.0, -0.2970415815770353, -1.828565603189821, 9.244210526315788, -0.5688346287200227)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_43"]
+mesh = SubResource("Mesh_SpiralStep_43")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_43"]
+shape = SubResource("Shape_SpiralStep_43")
+
+[node name="SpiralStep_44" type="StaticBody3D" parent="."]
+transform = Transform3D(0.45446742793617384, 0.43090827561580386, -0.7796008048680383, -0.21701540537697617, 0.9023957324842657, 0.3722717499666773, -0.863923417192835, 0.0, -0.5036232016357612, -1.6544133439242792, 9.451052631578946, -0.9644384311324828)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_44"]
+mesh = SubResource("Mesh_SpiralStep_44")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_44"]
+shape = SubResource("Shape_SpiralStep_44")
+
+[node name="SpiralStep_45" type="StaticBody3D" parent="."]
+transform = Transform3D(0.6177323870745025, 0.43090827561580386, -0.6578181784999951, -0.2949770129935199, 0.9023957324842657, 0.31411861422018017, -0.7289686274214123, 0.0, -0.6845471059286878, -1.3959749215120045, 9.657894736842104, -1.3109077078534372)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_45"]
+mesh = SubResource("Mesh_SpiralStep_45")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_45"]
+shape = SubResource("Shape_SpiralStep_45")
+
+[node name="SpiralStep_46" type="StaticBody3D" parent="."]
+transform = Transform3D(0.7495261948532322, 0.43090827561580386, -0.5025221798434862, -0.35791064665602546, 0.9023957324842657, 0.23996231163341317, -0.5568756164881888, 0.0, -0.8305958991958121, -1.0664168055748817, 9.864736842105263, -1.5905911469599803)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_46"]
+mesh = SubResource("Mesh_SpiralStep_46")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_46"]
+shape = SubResource("Shape_SpiralStep_46")
+
+[node name="SpiralStep_47" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8431344504093835, 0.43090827561580386, -0.32162455835753784, -0.4026100734519162, 0.9023957324842657, 0.15358082806531623, -0.3564118787132515, 0.0, -0.9343289424566117, -0.6825287477358766, 10.071578947368419, -1.7892399248044115)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_47"]
+mesh = SubResource("Mesh_SpiralStep_47")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_47"]
+shape = SubResource("Shape_SpiralStep_47")
+
+[node name="SpiralStep_48" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8937881637389395, 0.43090827561580386, -0.1243413702915845, -0.4267980250109146, 0.9023957324842657, 0.05937497655551806, -0.13779029068463877, 0.0, -0.9904614256966511, -0.26386840666108324, 10.278421052631579, -1.896733630209087)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_48"]
+mesh = SubResource("Mesh_SpiralStep_48")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_48"]
+shape = SubResource("Shape_SpiralStep_48")
+
+[node name="SpiralStep_49" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8989067178749485, 0.43090827561580386, 0.07927654486102657, -0.4292422157988316, 0.9023957324842657, -0.03785580761646556, 0.08785119655074261, 0.0, -0.9961336091431725, 0.1682350413946721, 10.485263157894737, -1.9075958615091755)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_49"]
+mesh = SubResource("Mesh_SpiralStep_49")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_49"]
+shape = SubResource("Shape_SpiralStep_49")
+
+[node name="SpiralStep_50" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8582293416560993, 0.43090827561580386, 0.2788556169890665, -0.40981812344991836, 0.9023957324842657, -0.13315798018208697, 0.309016994374947, 0.0, -0.9510565162951538, 0.5917675442280236, 10.692105263157893, -1.8212732287052196)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_50"]
+mesh = SubResource("Mesh_SpiralStep_50")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_50"]
+shape = SubResource("Shape_SpiralStep_50")
+
+[node name="SpiralStep_51" type="StaticBody3D" parent="."]
+transform = Transform3D(0.7738283950406541, 0.43090827561580386, 0.46422803990562644, -0.36951533271499304, 0.9023957324842657, -0.2216762524103869, 0.5144395337815062, 0.0, -0.8575266561936524, 0.9851517071915844, 10.898947368421052, -1.6421635466108444)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_51"]
+mesh = SubResource("Mesh_SpiralStep_51")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_51"]
+shape = SubResource("Shape_SpiralStep_51")
+
+[node name="SpiralStep_52" type="StaticBody3D" parent="."]
+transform = Transform3D(0.6500037901287501, 0.43090827561580386, 0.6259497829890784, -0.31038711982494915, 0.9023957324842657, -0.2989009498829976, 0.6936533058128048, 0.0, -0.720309024887907, 1.3283460806315213, 11.10578947368421, -1.3793917826603421)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_52"]
+mesh = SubResource("Mesh_SpiralStep_52")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_52"]
+shape = SubResource("Shape_SpiralStep_52")
+
+[node name="SpiralStep_53" type="StaticBody3D" parent="."]
+transform = Transform3D(0.49306392674653265, 0.43090827561580386, 0.7557817291699399, -0.23544584575748753, 0.9023957324842657, -0.3608977635144432, 0.8375280400421417, 0.0, -0.5463943467342691, 1.6038661966807013, 11.312631578947366, -1.0463451739961254)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_53"]
+mesh = SubResource("Mesh_SpiralStep_53")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_53"]
+shape = SubResource("Shape_SpiralStep_53")
+
+[node name="SpiralStep_54" type="StaticBody3D" parent="."]
+transform = Transform3D(0.31100430310358673, 0.43090827561580386, 0.8471094270853482, -0.14850948772832107, 0.9023957324842657, -0.4045081878638024, 0.9387338576538741, 0.0, -0.34464292317451695, 1.7976753374071688, 11.519473684210524, -0.6599911978792)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_54"]
+mesh = SubResource("Mesh_SpiralStep_54")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_54"]
+shape = SubResource("Shape_SpiralStep_54")
+
+[node name="SpiralStep_55" type="StaticBody3D" parent="."]
+transform = Transform3D(0.11310017510688168, 0.43090827561580386, 0.8952800726010868, -0.05400712755254703, 0.9023957324842657, -0.42751043515650994, 0.9921147013144779, 0.0, -0.125333233564304, 1.8998996530172252, 11.726315789473684, -0.2400131422756422)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_55"]
+mesh = SubResource("Mesh_SpiralStep_55")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_55"]
+shape = SubResource("Shape_SpiralStep_55")
+
+[node name="SpiralStep_56" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.09056598318653938, 0.43090827561580386, 0.8978395517548055, 0.043246693484382176, 0.9023957324842657, -0.42873262704960247, 0.9949510169813002, 0.0, 0.10036171485121524, 1.9053311975191898, 11.93315789473684, 0.19219268394007719)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_56"]
+mesh = SubResource("Mesh_SpiralStep_56")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_56"]
+shape = SubResource("Shape_SpiralStep_56")
+
+[node name="SpiralStep_57" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.28961814385812157, 0.43090827561580386, 0.8546574686703386, 0.13829725747193622, 0.9023957324842657, -0.40811249744393585, 0.9470983049947441, 0.0, 0.32094360980720993, 1.813693254064935, 12.139999999999999, 0.614607012780807)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_57"]
+mesh = SubResource("Mesh_SpiralStep_57")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_57"]
+shape = SubResource("Shape_SpiralStep_57")
+
+[node name="SpiralStep_58" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.4739153448860758, 0.43090827561580386, 0.7679337887391897, 0.22630209419378938, 0.9023957324842657, -0.36670056470871554, 0.8509944817946925, 0.0, 0.5251746299612947, 1.629654432636836, 12.346842105263157, 1.0057094163758793)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_58"]
+mesh = SubResource("Mesh_SpiralStep_58")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_58"]
+shape = SubResource("Shape_SpiralStep_58")
+
+[node name="SpiralStep_59" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6340683341766791, 0.43090827561580386, 0.6420867586239617, 0.30277768684751843, 0.9023957324842657, -0.3066066117053767, 0.711535677209286, 0.0, 0.7026499697988484, 1.3625908218557827, 12.553684210526315, 1.3455746921647946)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_59"]
+mesh = SubResource("Mesh_SpiralStep_59")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_59"]
+shape = SubResource("Shape_SpiralStep_59")
+
+[node name="SpiralStep_60" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7619179167903111, 0.43090827561580386, 0.4835278131397688, 0.36382789043234204, 0.9023957324842657, -0.2308922002531426, 0.5358267949789973, 0.0, 0.8443279255020146, 1.0261083123847798, 12.760526315789471, 1.616887977336358)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_60"]
+mesh = SubResource("Mesh_SpiralStep_60")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_60"]
+shape = SubResource("Shape_SpiralStep_60")
+
+[node name="SpiralStep_61" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8509506353627715, 0.43090827561580386, 0.30033493666490085, 0.4063424257436169, 0.9023957324842657, -0.14341469602163773, 0.33281954452298734, 0.0, 0.9429905358928642, 0.6373494277615208, 12.96736842105263, 1.805826876234835)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_61"]
+mesh = SubResource("Mesh_SpiralStep_61")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_61"]
+shape = SubResource("Shape_SpiralStep_61")
+
+[node name="SpiralStep_62" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.896630606361354, 0.43090827561580386, 0.10184112009343227, 0.4281553364485358, 0.9023957324842657, -0.04863075019806575, 0.1128563848734823, 0.0, 0.9936113105200083, 0.21611997703271862, 13.17421052631579, 1.902765659645816)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_62"]
+mesh = SubResource("Mesh_SpiralStep_62")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_62"]
+shape = SubResource("Shape_SpiralStep_62")
+
+[node name="SpiralStep_63" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8966306063613543, 0.43090827561580386, -0.10184112009343128, 0.4281553364485359, 0.9023957324842657, 0.04863075019806528, -0.11285638487348121, 0.0, 0.9936113105200085, -0.21611997703271651, 13.381052631578946, 1.9027656596458162)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_63"]
+mesh = SubResource("Mesh_SpiralStep_63")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_63"]
+shape = SubResource("Shape_SpiralStep_63")
+
+[node name="SpiralStep_64" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8509506353627718, 0.43090827561580386, -0.3003349366648999, 0.4063424257436171, 0.9023957324842657, 0.14341469602163728, -0.3328195445229863, 0.0, 0.9429905358928646, -0.6373494277615187, 13.587894736842104, 1.8058268762348357)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_64"]
+mesh = SubResource("Mesh_SpiralStep_64")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_64"]
+shape = SubResource("Shape_SpiralStep_64")
+
+[node name="SpiralStep_65" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7619179167903115, 0.43090827561580386, -0.48352781313976795, 0.36382789043234226, 0.9023957324842657, 0.23089220025314222, -0.5358267949789964, 0.0, 0.8443279255020152, -1.0261083123847783, 13.794736842105262, 1.6168879773363591)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_65"]
+mesh = SubResource("Mesh_SpiralStep_65")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_65"]
+shape = SubResource("Shape_SpiralStep_65")
+
+[node name="SpiralStep_66" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6340683341766798, 0.43090827561580386, -0.6420867586239611, 0.3027776868475188, 0.9023957324842657, 0.3066066117053764, -0.7115356772092853, 0.0, 0.7026499697988493, -1.3625908218557814, 14.00157894736842, 1.3455746921647964)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_66"]
+mesh = SubResource("Mesh_SpiralStep_66")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_66"]
+shape = SubResource("Shape_SpiralStep_66")
+
+[node name="SpiralStep_67" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.47391534488607656, 0.43090827561580386, -0.767933788739189, 0.22630209419378977, 0.9023957324842657, 0.36670056470871526, -0.8509944817946918, 0.0, 0.5251746299612956, -1.629654432636835, 14.208421052631577, 1.005709416375881)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_67"]
+mesh = SubResource("Mesh_SpiralStep_67")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_67"]
+shape = SubResource("Shape_SpiralStep_67")
+
+[node name="SpiralStep_68" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.289618143858121, 0.43090827561580386, -0.8546574686703389, 0.13829725747193597, 0.9023957324842657, 0.40811249744393596, -0.9470983049947443, 0.0, 0.3209436098072093, -1.8136932540649355, 14.415263157894735, 0.6146070127808059)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_68"]
+mesh = SubResource("Mesh_SpiralStep_68")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_68"]
+shape = SubResource("Shape_SpiralStep_68")
+
+[node name="SpiralStep_69" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.09056598318653879, 0.43090827561580386, -0.8978395517548055, 0.043246693484381885, 0.9023957324842657, 0.42873262704960247, -0.9949510169813002, 0.0, 0.10036171485121458, -1.9053311975191898, 14.622105263157895, 0.1921926839400759)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_69"]
+mesh = SubResource("Mesh_SpiralStep_69")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_69"]
+shape = SubResource("Shape_SpiralStep_69")
+
+[node name="SpiralStep_70" type="StaticBody3D" parent="."]
+transform = Transform3D(0.1131001751068823, 0.43090827561580386, -0.8952800726010867, -0.05400712755254733, 0.9023957324842657, 0.4275104351565099, -0.9921147013144778, 0.0, -0.1253332335643047, -1.899899653017225, 14.82894736842105, -0.24001314227564352)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_70"]
+mesh = SubResource("Mesh_SpiralStep_70")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_70"]
+shape = SubResource("Shape_SpiralStep_70")
+
+[node name="SpiralStep_71" type="StaticBody3D" parent="."]
+transform = Transform3D(0.31100430310358584, 0.43090827561580386, -0.8471094270853485, -0.14850948772832062, 0.9023957324842657, 0.40450818786380255, -0.9387338576538745, 0.0, -0.34464292317451595, -1.7976753374071697, 15.03578947368421, -0.659991197879198)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_71"]
+mesh = SubResource("Mesh_SpiralStep_71")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_71"]
+shape = SubResource("Shape_SpiralStep_71")
+
+[node name="SpiralStep_72" type="StaticBody3D" parent="."]
+transform = Transform3D(0.4930639267465319, 0.43090827561580386, -0.7557817291699405, -0.23544584575748714, 0.9023957324842657, 0.36089776351444347, -0.8375280400421423, 0.0, -0.5463943467342682, -1.6038661966807026, 15.242631578947368, -1.0463451739961236)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_72"]
+mesh = SubResource("Mesh_SpiralStep_72")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_72"]
+shape = SubResource("Shape_SpiralStep_72")
+
+[node name="SpiralStep_73" type="StaticBody3D" parent="."]
+transform = Transform3D(0.6500037901287494, 0.43090827561580386, -0.6259497829890791, -0.3103871198249488, 0.9023957324842657, 0.2989009498829979, -0.6936533058128056, 0.0, -0.7203090248879063, -1.3283460806315228, 15.449473684210524, -1.3793917826603406)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_73"]
+mesh = SubResource("Mesh_SpiralStep_73")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_73"]
+shape = SubResource("Shape_SpiralStep_73")
+
+[node name="SpiralStep_74" type="StaticBody3D" parent="."]
+transform = Transform3D(0.7738283950406536, 0.43090827561580386, -0.4642280399056273, -0.3695153327149928, 0.9023957324842657, 0.2216762524103873, -0.5144395337815071, 0.0, -0.8575266561936519, -0.9851517071915861, 15.656315789473682, -1.6421635466108433)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_74"]
+mesh = SubResource("Mesh_SpiralStep_74")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_74"]
+shape = SubResource("Shape_SpiralStep_74")
+
+[node name="SpiralStep_75" type="StaticBody3D" parent="."]
+transform = Transform3D(0.858229341656099, 0.43090827561580386, -0.27885561698906747, -0.40981812344991825, 0.9023957324842657, 0.13315798018208744, -0.30901699437494806, 0.0, -0.9510565162951534, -0.5917675442280256, 15.86315789473684, -1.821273228705219)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_75"]
+mesh = SubResource("Mesh_SpiralStep_75")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_75"]
+shape = SubResource("Shape_SpiralStep_75")
+
+[node name="SpiralStep_76" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8989067178749484, 0.43090827561580386, -0.07927654486102757, -0.42924221579883154, 0.9023957324842657, 0.03785580761646603, -0.08785119655074371, 0.0, -0.9961336091431724, -0.1682350413946742, 16.07, -1.9075958615091753)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_76"]
+mesh = SubResource("Mesh_SpiralStep_76")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_76"]
+shape = SubResource("Shape_SpiralStep_76")
+
+[node name="SpiralStep_77" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8937881637389398, 0.43090827561580386, 0.1243413702915835, -0.42679802501091463, 0.9023957324842657, -0.05937497655551758, 0.13779029068463766, 0.0, -0.9904614256966513, 0.26386840666108113, 16.276842105263157, -1.8967336302090874)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_77"]
+mesh = SubResource("Mesh_SpiralStep_77")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_77"]
+shape = SubResource("Shape_SpiralStep_77")
+
+[node name="SpiralStep_78" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8431344504093838, 0.43090827561580386, 0.32162455835753695, -0.40261007345191635, 0.9023957324842657, -0.15358082806531578, 0.3564118787132505, 0.0, -0.9343289424566121, 0.6825287477358747, 16.483684210526317, -1.7892399248044122)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_78"]
+mesh = SubResource("Mesh_SpiralStep_78")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_78"]
+shape = SubResource("Shape_SpiralStep_78")
+
+[node name="SpiralStep_79" type="StaticBody3D" parent="."]
+transform = Transform3D(0.7495261948532327, 0.43090827561580386, 0.5025221798434854, -0.3579106466560257, 0.9023957324842657, -0.23996231163341272, 0.5568756164881878, 0.0, -0.8305958991958127, 1.0664168055748797, 16.690526315789473, -1.5905911469599814)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_79"]
+mesh = SubResource("Mesh_SpiralStep_79")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_79"]
+shape = SubResource("Shape_SpiralStep_79")
+
+[node name="SpiralStep_80" type="StaticBody3D" parent="."]
+transform = Transform3D(0.6177323870745032, 0.43090827561580386, 0.6578181784999945, -0.29497701299352025, 0.9023957324842657, -0.31411861422017984, 0.7289686274214116, 0.0, -0.6845471059286886, 1.3959749215120032, 16.89736842105263, -1.3109077078534388)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_80"]
+mesh = SubResource("Mesh_SpiralStep_80")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_80"]
+shape = SubResource("Shape_SpiralStep_80")
+
+[node name="SpiralStep_81" type="StaticBody3D" parent="."]
+transform = Transform3D(0.45446742793617334, 0.43090827561580386, 0.7796008048680386, -0.21701540537697592, 0.9023957324842657, -0.3722717499666774, 0.8639234171928354, 0.0, -0.5036232016357607, 1.6544133439242799, 17.10421052631579, -0.9644384311324817)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_81"]
+mesh = SubResource("Mesh_SpiralStep_81")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_81"]
+shape = SubResource("Shape_SpiralStep_81")
+
+[node name="SpiralStep_82" type="StaticBody3D" parent="."]
+transform = Transform3D(0.26804905558549297, 0.43090827561580386, 0.8616656902799019, -0.12799767570355114, 0.9023957324842657, -0.41145903442344556, 0.9548645447466431, 0.0, -0.29704158157703464, 1.8285656031898214, 17.31105263157895, -0.5688346287200213)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_82"]
+mesh = SubResource("Mesh_SpiralStep_82")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_82"]
+shape = SubResource("Shape_SpiralStep_82")
+
+[node name="SpiralStep_83" type="StaticBody3D" parent="."]
+transform = Transform3D(0.06797458785007833, 0.43090827561580386, 0.8998319362038816, -0.032458943877688315, 0.9023957324842657, -0.4296840222262525, 0.9971589002606139, 0.0, -0.07532680552793232, 1.9095592939990758, 17.517894736842106, -0.1442508325859904)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_83"]
+mesh = SubResource("Mesh_SpiralStep_83")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_83"]
+shape = SubResource("Shape_SpiralStep_83")
+
+[node name="SpiralStep_84" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.1355629305325064, 0.43090827561580386, 0.8921551153646172, 0.06473344956139392, 0.9023957324842657, -0.4260182185095704, 0.988651744737914, 0.0, 0.1502255891207576, 1.8932680911731052, 17.724736842105262, 0.2876820031662508)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_84"]
+mesh = SubResource("Mesh_SpiralStep_84")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_84"]
+shape = SubResource("Shape_SpiralStep_84")
+
+[node name="SpiralStep_85" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.3321940253653332, 0.43090827561580386, 0.8390263330297749, 0.15862791620919398, 0.9023957324842657, -0.4006483822422281, 0.9297764858882511, 0.0, 0.3681245526846786, 1.780521970476001, 17.931578947368422, 0.7049585183911595)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_85"]
+mesh = SubResource("Mesh_SpiralStep_85")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_85"]
+shape = SubResource("Shape_SpiralStep_85")
+
+[node name="SpiralStep_86" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.5119010788628198, 0.43090827561580386, 0.7431523016615745, 0.2444408846786001, 0.9023957324842657, -0.35486701155746914, 0.823532597628427, 0.0, 0.5672689491267572, 1.5770649244584378, 18.13842105263158, 1.08632003757774)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_86"]
+mesh = SubResource("Mesh_SpiralStep_86")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_86"]
+shape = SubResource("Shape_SpiralStep_86")
+
+[node name="SpiralStep_87" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6655286897551841, 0.43090827561580386, 0.6094174440550273, 0.31780050564484696, 0.9023957324842657, -0.29100649581420884, 0.6753328081210237, 0.0, 0.7375131173581745, 1.2932623275517605, 18.345263157894735, 1.412337619740904)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_87"]
+mesh = SubResource("Mesh_SpiralStep_87")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_87"]
+shape = SubResource("Shape_SpiralStep_87")
+
+[node name="SpiralStep_88" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7852501066909158, 0.43090827561580386, 0.4446350502914947, 0.37496938119353124, 0.9023957324842657, -0.21232028909533313, 0.4927273415482906, 0.0, 0.8701837546695262, 0.9435728590649766, 18.552105263157895, 1.6664018901921427)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_88"]
+mesh = SubResource("Mesh_SpiralStep_88")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_88"]
+shape = SubResource("Shape_SpiralStep_88")
+
+[node name="SpiralStep_89" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.864965971902464, 0.43090827561580386, 0.25720016612871827, 0.41303497124565297, 0.9023957324842657, -0.12281715890822513, 0.285019262469975, 0.0, 0.9585217890173763, 0.5458118876300021, 18.758947368421055, 1.8355692259682757)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_89"]
+mesh = SubResource("Mesh_SpiralStep_89")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_89"]
+shape = SubResource("Shape_SpiralStep_89")
+
+[node name="SpiralStep_90" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.9006150606389054, 0.43090827561580386, 0.056661896863724324, 0.43005797656550865, 0.9023957324842657, -0.02705695449539783, 0.06279051952931558, 0.0, 0.9980267284282714, 0.12024384489863933, 18.96578947368421, 1.91122118494014)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_90"]
+mesh = SubResource("Mesh_SpiralStep_90")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_90"]
+shape = SubResource("Shape_SpiralStep_90")
+
+[node name="SpiralStep_91" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8903811853553888, 0.43090827561580386, -0.14676308381519967, 0.4251711387929638, 0.9023957324842657, 0.07008170040516905, -0.16263716519488156, 0.0, 0.9866859442078684, -0.3114501713481982, 19.172631578947367, 1.889503583158068)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_91"]
+mesh = SubResource("Mesh_SpiralStep_91")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_91"]
+shape = SubResource("Shape_SpiralStep_91")
+
+[node name="SpiralStep_92" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.8347857236658801, 0.43090827561580386, -0.34271103508560596, 0.39862342400852097, 0.9023957324842657, 0.16364995516622818, -0.3797790955217993, 0.0, 0.9250772068344588, -0.7272769679242457, 19.379473684210527, 1.7715228510879886)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_92"]
+mesh = SubResource("Mesh_SpiralStep_92")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_92"]
+shape = SubResource("Shape_SpiralStep_92")
+
+[node name="SpiralStep_93" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.7366610561065908, 0.43090827561580386, -0.5211991427676533, 0.3517673388440396, 0.9023957324842657, 0.24888085767444676, -0.5775727034222661, 0.0, 0.816339250717185, -1.1060517270536396, 19.586315789473684, 1.5632896651234094)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_93"]
+mesh = SubResource("Mesh_SpiralStep_93")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_93"]
+shape = SubResource("Shape_SpiralStep_93")
+
+[node name="SpiralStep_94" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.6010062669565464, 0.43090827561580386, -0.673134106315206, 0.2869900253357553, 0.9023957324842657, 0.3214322126856114, -0.745941145424181, 0.0, 0.6660118674342529, -1.4284772934873067, 19.79315789473684, 1.2754127261365944)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_94"]
+mesh = SubResource("Mesh_SpiralStep_94")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_94"]
+shape = SubResource("Shape_SpiralStep_94")
+
+[node name="SpiralStep_95" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.43473245961800483, 0.43090827561580386, -0.7907754084190367, 0.20759164497874866, 0.9023957324842657, 0.3776078004083109, -0.8763066800438628, 0.0, 0.48175367410171666, -1.6781272922839974, 20.0, 0.9225582859047874)
+
+[node name="Mesh" type="MeshInstance3D" parent="SpiralStep_95"]
+mesh = SubResource("Mesh_SpiralStep_95")
+
+[node name="Col" type="CollisionShape3D" parent="SpiralStep_95"]
+shape = SubResource("Shape_SpiralStep_95")
 
 [node name="StairsTorch_0" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.40, 3.00, 0.00)
