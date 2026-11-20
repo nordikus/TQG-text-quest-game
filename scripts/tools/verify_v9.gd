@@ -245,6 +245,21 @@ func _run_verification() -> void:
 	if right_guard.is_empty() or right_guard.collider.name != "BalconySouthWindbreak" or right_guard.position.y < 22.2:
 		push_error("FAIL: The right side of the balcony must rise continuously above jump height.")
 		all_passed = false
+	var tower := clearing.find_child("MageTower", true, false) as Node3D
+	var sill := tower.get_node("ForestPortalSill/Mesh") as MeshInstance3D
+	var hall_floor := tower.get_node("TowerFloor3_North/Mesh") as MeshInstance3D
+	var bridge_floor := tower.get_node("CoveredBridge/TowerBridgeDeck/Mesh") as MeshInstance3D
+	var stair_floor := tower.get_node("TowerFloor2_West/Mesh") as MeshInstance3D
+	var balcony_join := is_equal_approx(_bounds(sill).end.x, _bounds(hall_floor).position.x)
+	var bridge_join := is_equal_approx(_bounds(bridge_floor).end.z, _bounds(stair_floor).position.z)
+	if not balcony_join or not bridge_join:
+		push_error("FAIL: The balcony and bridge thresholds must meet their landings edge to edge.")
+		all_passed = false
+	for shelf_name in ["AlcoveShelf_1", "AlcoveShelf_2"]:
+		var shelf := clearing.find_child(shelf_name, true, false).get_node("Mesh") as MeshInstance3D
+		if _bounds(shelf).end.x >= -25.2:
+			push_error("FAIL: A library bookcase reaches into the stairwell.")
+			all_passed = false
 	var open_sky := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
 		Vector3(-27.5, 31.0, -110), Vector3(-27.5, 23.0, -110)))
 	var covered_roof := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
@@ -262,3 +277,6 @@ func _run_verification() -> void:
 		push_error("SOME VERIFICATION CHECKS FAILED!")
 		print("==================================================")
 		quit(1)
+
+func _bounds(model: MeshInstance3D) -> AABB:
+	return model.global_transform * model.get_aabb()

@@ -355,15 +355,15 @@ rotation = Vector3(0, 0, 3.141593)
 mesh = SubResource("PortalVoussoir")
 
 [node name="FacadeButtress1" type="MeshInstance3D" parent="."]
-position = Vector3(-30.75, 7.7, 15.92)
+position = Vector3(-32.22, 7.7, 15.92)
 mesh = SubResource("Pilaster")
 
 [node name="FacadeButtressFoot1" type="MeshInstance3D" parent="."]
-position = Vector3(-30.75, 0.53, 16.08)
+position = Vector3(-32.22, 0.53, 16.08)
 mesh = SubResource("PilasterBase")
 
 [node name="FacadeButtressCap1" type="MeshInstance3D" parent="."]
-position = Vector3(-30.75, 15.12, 16.08)
+position = Vector3(-32.22, 15.12, 16.08)
 mesh = SubResource("PilasterBase")
 
 [node name="FacadeButtress2" type="MeshInstance3D" parent="."]

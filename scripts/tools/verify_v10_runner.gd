@@ -84,11 +84,15 @@ func _verify_life() -> void:
 	await _verify_life_blockers()
 	_check(_bridge_is_intact(), "The Life bridge carries a walkable deck across the span.")
 	var corridor: Node3D = _world.intact_bridge.get_parent()
+	var library_lintel := _level.find_child("BridgeLintel", true, false) as Node3D
+	_check(is_zero_approx(corridor.global_rotation.y)
+		and is_equal_approx(corridor.global_position.x, library_lintel.global_position.x),
+		"The straight bridge and library portal share an axis.")
 	var continuous := true
 	for step in range(1, 43):
 		var point := corridor.to_global(Vector3(0, 6.8, -step * 0.5))
 		continuous = continuous and not _ray(point, point - Vector3.UP).is_empty()
-	_check(continuous, "The angled span joins the tower and library end to end.")
+	_check(continuous, "The straight span joins the tower and library end to end.")
 	_check(_world.intact_bridge.get_node("Shoring").is_visible_in_tree() and not _remnant_smoke().emitting,
 		"The damaged span keeps its timber supports in Life.")
 	_check(_tower_has_solid_base(), "The tower has a solid wall in place of the lower door.")
