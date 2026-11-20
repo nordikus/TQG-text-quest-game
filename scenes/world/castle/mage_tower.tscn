@@ -150,13 +150,6 @@ size = Vector3(2.45, 14.0, 1.0)
 [sub_resource type="BoxShape3D" id="Shape_TowerWall_9_Top"]
 size = Vector3(2.45, 14.0, 1.0)
 
-[sub_resource type="BoxMesh" id="Mesh_TowerWall_10"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(2.45, 24.0, 1.0)
-
-[sub_resource type="BoxShape3D" id="Shape_TowerWall_10"]
-size = Vector3(2.45, 24.0, 1.0)
-
 [sub_resource type="BoxMesh" id="Mesh_TowerWall_11"]
 material = SubResource("Mat_StoneDark")
 size = Vector3(2.45, 24.0, 1.0)
@@ -315,10 +308,10 @@ size = Vector3(0.4, 3.6, 5.63)
 
 [sub_resource type="BoxMesh" id="Mesh_TowerBridgeEast"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(0.4, 3.6, 5.63)
+size = Vector3(0.4, 3.6, 6.75)
 
 [sub_resource type="BoxShape3D" id="Shape_TowerBridgeEast"]
-size = Vector3(0.4, 3.6, 5.63)
+size = Vector3(0.4, 3.6, 6.75)
 
 [sub_resource type="BoxMesh" id="Mesh_TowerBridgeRoof"]
 material = SubResource("Mat_Stone")
@@ -518,6 +511,30 @@ size = Vector3(0.21, 0.91, 1.84)
 [sub_resource type="BoxShape3D" id="Shape_BalconyIntactCenter"]
 size = Vector3(0.21, 0.91, 1.84)
 
+
+[sub_resource type="BoxMesh" id="Mesh_WallSouthInfill"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.45, 4, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_WallSouthInfill"]
+size = Vector3(2.45, 4, 1)
+
+
+[sub_resource type="BoxMesh" id="Mesh_WallSoutheastLower"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.45, 6, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_WallSoutheastLower"]
+size = Vector3(2.45, 6, 1)
+
+
+[sub_resource type="BoxMesh" id="Mesh_WallSoutheastUpper"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.45, 14.22, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_WallSoutheastUpper"]
+size = Vector3(2.45, 14.22, 1)
+
 [node name="MageTower" type="Node3D"]
 
 [node name="TowerPlinth" type="StaticBody3D" parent="."]
@@ -619,14 +636,35 @@ mesh = SubResource("Mesh_TowerWall_9_Top")
 [node name="Col" type="CollisionShape3D" parent="TowerWall_9_Top"]
 shape = SubResource("Shape_TowerWall_9_Top")
 
-[node name="TowerWall_10" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.8660254037844386, 0, 0.5000000000000001, 0, 1, 0, -0.5000000000000001, 0, -0.8660254037844386, 2.1500000000000004, 12.22, -3.723909236273086)
 
-[node name="Mesh" type="MeshInstance3D" parent="TowerWall_10"]
-mesh = SubResource("Mesh_TowerWall_10")
+[node name="WallSouthInfill" type="StaticBody3D" parent="."]
+position = Vector3(0, 8.22, -4.30)
 
-[node name="Col" type="CollisionShape3D" parent="TowerWall_10"]
-shape = SubResource("Shape_TowerWall_10")
+[node name="Mesh" type="MeshInstance3D" parent="WallSouthInfill"]
+mesh = SubResource("Mesh_WallSouthInfill")
+
+[node name="Col" type="CollisionShape3D" parent="WallSouthInfill"]
+shape = SubResource("Shape_WallSouthInfill")
+
+[node name="WallSoutheastLower" type="StaticBody3D" parent="."]
+position = Vector3(2.15, 3.22, -3.723909)
+rotation = Vector3(0, 2.617994, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WallSoutheastLower"]
+mesh = SubResource("Mesh_WallSoutheastLower")
+
+[node name="Col" type="CollisionShape3D" parent="WallSoutheastLower"]
+shape = SubResource("Shape_WallSoutheastLower")
+
+[node name="WallSoutheastUpper" type="StaticBody3D" parent="."]
+position = Vector3(2.15, 17.11, -3.723909)
+rotation = Vector3(0, 2.617994, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WallSoutheastUpper"]
+mesh = SubResource("Mesh_WallSoutheastUpper")
+
+[node name="Col" type="CollisionShape3D" parent="WallSoutheastUpper"]
+shape = SubResource("Shape_WallSoutheastUpper")
 
 [node name="TowerWall_11" type="StaticBody3D" parent="."]
 transform = Transform3D(-0.5000000000000004, 0, 0.8660254037844385, 0, 1, 0, -0.8660254037844385, 0, -0.5000000000000004, 3.723909236273085, 12.22, -2.1500000000000017)
@@ -791,7 +829,7 @@ mesh = SubResource("Mesh_ObservatoryBookcase")
 shape = SubResource("Shape_ObservatoryBookcase")
 
 [node name="CoveredBridge" type="Node3D" parent="."]
-position = Vector3(0.65, 0, -4.2)
+position = Vector3(2.65, 0, -4.2)
 
 [node name="BridgeLantern1" type="OmniLight3D" parent="CoveredBridge"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 8.6, -4.8)
@@ -867,7 +905,7 @@ mesh = SubResource("Mesh_TowerBridgeWest")
 shape = SubResource("Shape_TowerBridgeWest")
 
 [node name="TowerBridgeEast" type="StaticBody3D" parent="CoveredBridge"]
-position = Vector3(1.6, 7.8, -2.725)
+position = Vector3(1.6, 7.8, -2.165)
 
 
 [node name="Mesh" type="MeshInstance3D" parent="CoveredBridge/TowerBridgeEast"]

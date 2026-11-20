@@ -1,5 +1,7 @@
 extends Node
 
+const ForestLayout := preload("res://scripts/world/forest_layout.gd")
+
 var _passed := true
 var _level: Node3D
 var _world: Node
@@ -30,6 +32,7 @@ func _verify() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	_check_initial()
+	_check_rooms()
 
 	var ash_first := OS.get_cmdline_user_args().has("ash-first")
 	if ash_first:
@@ -67,6 +70,7 @@ func _check_initial() -> void:
 	_check(_world.intact_bridge.get_node("Shoring").is_visible_in_tree() and not _remnant_smoke().emitting,
 		"The wooden shoring and shed are restored while the castle embers go out.")
 	_check_courtyard_fire(false)
+	_check_burned_placements(false)
 
 func _verify_life() -> void:
 	QuestManager.complete_quest("burning_grove", "extinguish_fire")
@@ -88,6 +92,11 @@ func _verify_life() -> void:
 	_check(is_zero_approx(corridor.global_rotation.y)
 		and is_equal_approx(corridor.global_position.x, library_lintel.global_position.x),
 		"The straight bridge and library portal share an axis.")
+	var bridge_wall := corridor.get_node("IntactBridgeSpan/CentralBridgeWest/Mesh") as MeshInstance3D
+	var curtain := _level.get_node("CastleFacade/CourtyardWalls/WallWestRear/Mesh") as MeshInstance3D
+	var bridge_edge := (bridge_wall.global_transform * bridge_wall.get_aabb()).position.x
+	var curtain_edge := (curtain.global_transform * curtain.get_aabb()).end.x
+	_check(bridge_edge - curtain_edge > 2.1, "The roofed bridge clears the western curtain by over two metres.")
 	var continuous := true
 	for step in range(1, 43):
 		var point := corridor.to_global(Vector3(0, 6.8, -step * 0.5))
@@ -116,6 +125,7 @@ func _verify_ash(has_shard: bool) -> void:
 	var smoke := _world.fire_particles_group.get_node("Fire1/Smoke") as CPUParticles3D
 	_check(smoke.emitting and smoke.is_visible_in_tree() and not _world.corridor_forest.visible,
 		"Active fire and charred trees replace the living grove.")
+	_check_burned_placements(true)
 	_check(not _bridge_is_intact() and _world.collapsed_bridge.visible and not _seal.visible,
 		"The ruined bridge has a real gap rather than a magical lock.")
 	_check(_world.collapsed_bridge.get_node("BurnedShoring").is_visible_in_tree()
@@ -159,6 +169,44 @@ func _verify_life_blockers() -> void:
 
 func _remnant_smoke() -> CPUParticles3D:
 	return _world.castle_ash.get_node("RemnantFires/Embers5/Smoke")
+
+func _check_burned_placements(burned: bool) -> void:
+	var clear := true
+	var variants_match := true
+	for living: Node3D in _world.corridor_forest.get_node("HandPlanted").get_children():
+		var charred: Node3D = _world.charred_forest_zone.get_node_or_null(NodePath(living.name))
+		var ground := Vector2(living.global_position.x, living.global_position.z)
+		clear = clear and ForestLayout.distance_to_path(ground, ForestLayout.ASH_PATH) > ForestLayout.ASH_CORE
+		variants_match = (variants_match and charred != null
+			and living.is_visible_in_tree() != burned and charred.is_visible_in_tree() == burned
+			and living.global_transform.is_equal_approx(charred.global_transform))
+	_check(variants_match, "Hand-planted trees exchange living and charred variants at the same positions.")
+	for rock_name in ["Rock_MidEast", "BorderRock4", "BorderRock6"]:
+		var rock := _level.find_child(rock_name, true, false) as Node3D
+		var ground := Vector2(rock.global_position.x, rock.global_position.z)
+		clear = clear and ForestLayout.distance_to_path(ground, ForestLayout.ASH_PATH) - rock.scale.x > ForestLayout.ASH_CORE
+	_check(clear, "Rocks and tree trunks clear the central lane of the fire route.")
+
+func _check_rooms() -> void:
+	var castle := _level.get_node("CastleFacade")
+	var well: StaticBody3D = castle.get_node("CourtyardWell")
+	var post := _ray(well.global_position + Vector3(-0.94, 0.83, 0.5),
+		well.global_position + Vector3(-0.94, 0.83, -0.5))
+	var roof := _ray(well.global_position + Vector3.UP * 2.9, well.global_position + Vector3.UP * 0.78)
+	_check(post.get("collider") == well and roof.get("collider") == well and roof.position.y > 2.7,
+		"The courtyard well has physical posts and a roof.")
+	var quarters := castle.get_node("BarracksBuilding/GuardQuartersAndArmory")
+	var beds := 0
+	for child in quarters.get_children():
+		if child is StaticBody3D and child.name.begins_with("GuardBed"):
+			beds += 1
+	var entry := _ray(Vector3(20.08, 1.75, -112), Vector3(20.08, 1.75, -108.9))
+	var partition := _ray(Vector3(24.8, 1.75, -112), Vector3(24.8, 1.75, -108.9))
+	_check(beds == 6 and entry.is_empty() and partition.get("collider") == castle.get_node("BarracksBuilding/DormitoryWallEast"),
+		"The six-bed guard dormitory has a separate walkable doorway.")
+	var bedroom := castle.get_node("MageTower/AstromancerWorkshop/AstromancerBed") as StaticBody3D
+	_check(bedroom != null and not (bedroom.get_child(0) as CollisionShape3D).disabled,
+		"The astromancer has a bed with collision beside the workshop.")
 
 func _check_courtyard_fire(burned: bool) -> void:
 	var surfaces_match: bool = _world.courtyard_surfaces.size() == 3

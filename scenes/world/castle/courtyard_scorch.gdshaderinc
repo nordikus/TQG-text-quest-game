@@ -25,7 +25,7 @@ vec3 apply_courtyard_scorch(vec3 color, vec2 p, float relief) {
 	distance = min(distance, distance_to_scorch(p, vec2(-18.0, -85.6), vec2(-25.7, -87.4)));
 	distance = min(distance, distance_to_scorch(p, vec2(-25.7, -87.4), vec2(-26.2, -105.0)));
 	distance = min(distance, distance_to_scorch(p, vec2(-26.2, -105.0), vec2(-23.5, -117.6)));
-	distance = min(distance, distance_to_scorch(p, vec2(-23.5, -117.6), vec2(-29.75, -126.0)));
+	distance = min(distance, distance_to_scorch(p, vec2(-23.5, -117.6), vec2(-27.75, -126.0)));
 	float cloud = scorch_noise(p * 0.53);
 	float flecks = scorch_noise(p * 4.1);
 	float width = mix(2.7, 5.3, smoothstep(-87.0, -81.0, p.y));

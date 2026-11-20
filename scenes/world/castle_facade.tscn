@@ -78,6 +78,12 @@ bottom_radius = 1.6
 height = 1.2
 radial_segments = 8
 
+[sub_resource type="ConvexPolygonShape3D" id="WellRoofShape"]
+points = PackedVector3Array(0, -0.6, 1.6, 1.13137, -0.6, 1.13137, 1.6, -0.6, 0, 1.13137, -0.6, -1.13137, 0, -0.6, -1.6, -1.13137, -0.6, -1.13137, -1.6, -0.6, 0, -1.13137, -0.6, 1.13137, 0, 0.6, 0.1, 0.0707107, 0.6, 0.0707107, 0.1, 0.6, 0, 0.0707107, 0.6, -0.0707107, 0, 0.6, -0.1, -0.0707107, 0.6, -0.0707107, -0.1, 0.6, 0, -0.0707107, 0.6, 0.0707107)
+
+[sub_resource type="BoxShape3D" id="WellPostShape"]
+size = Vector3(0.16, 2, 0.16)
+
 [sub_resource type="BoxMesh" id="PlanterBase"]
 material = SubResource("Mat_StoneDark")
 size = Vector3(2.5, 0.52, 5.4)
@@ -156,6 +162,18 @@ mesh = SubResource("Mesh_WellPost")
 [node name="RightWellPost" type="MeshInstance3D" parent="CourtyardWell"]
 position = Vector3(0.94, 0.75, 0)
 mesh = SubResource("Mesh_WellPost")
+
+[node name="RoofCol" type="CollisionShape3D" parent="CourtyardWell"]
+position = Vector3(0, 1.6, 0)
+shape = SubResource("WellRoofShape")
+
+[node name="WestPostCol" type="CollisionShape3D" parent="CourtyardWell"]
+position = Vector3(-0.94, 0.75, 0)
+shape = SubResource("WellPostShape")
+
+[node name="EastPostCol" type="CollisionShape3D" parent="CourtyardWell"]
+position = Vector3(0.94, 0.75, 0)
+shape = SubResource("WellPostShape")
 
 [node name="CourtyardWalls" parent="." instance=ExtResource("1_walls")]
 
@@ -424,7 +442,7 @@ smoke_density = 0.54
 smoke_size = 0.68
 
 [node name="Embers5" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
-position = Vector3(-29.15, 0, -35.17)
+position = Vector3(-27.15, 0, -35.17)
 scale = Vector3(0.32, 0.32, 0.32)
 phase = 5.65
 smoke_density = 0.54

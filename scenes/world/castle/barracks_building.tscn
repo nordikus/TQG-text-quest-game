@@ -11,6 +11,8 @@
 
 [ext_resource type="Script" path="res://scripts/world/castle_outbuilding_details.gd" id="13_details"]
 
+[ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
+
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("10_masonry")
 
@@ -173,27 +175,6 @@ radial_segments = 8
 material = SubResource("Mat_Paper")
 size = Vector3(0.35, 0.03, 0.25)
 
-[sub_resource type="BoxMesh" id="Mesh_BunkBed_0"]
-material = SubResource("Mat_Wood")
-size = Vector3(2.4, 1.8, 1.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BunkBed_0"]
-size = Vector3(2.4, 1.8, 1.2)
-
-[sub_resource type="BoxMesh" id="Mesh_BunkBed_1"]
-material = SubResource("Mat_Wood")
-size = Vector3(2.4, 1.8, 1.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BunkBed_1"]
-size = Vector3(2.4, 1.8, 1.2)
-
-[sub_resource type="BoxMesh" id="Mesh_BunkBed_2"]
-material = SubResource("Mat_Wood")
-size = Vector3(2.4, 1.8, 1.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BunkBed_2"]
-size = Vector3(2.4, 1.8, 1.2)
-
 [sub_resource type="BoxMesh" id="Mesh_ArmoryPartitionSouth"]
 material = SubResource("Mat_Stone")
 size = Vector3(0.4, 5, 3.5)
@@ -208,6 +189,34 @@ size = Vector3(0.94, 3.9, 0.34)
 [sub_resource type="BoxMesh" id="PortalLintel"]
 material = SubResource("Mat_Stone")
 size = Vector3(0.98, 0.38, 3.62)
+
+[sub_resource type="BoxMesh" id="Mesh_TimberCeiling"]
+material = SubResource("Mat_Wood")
+size = Vector3(14.78, 0.16, 21.35)
+
+[sub_resource type="BoxShape3D" id="Shape_TimberCeiling"]
+size = Vector3(14.78, 0.16, 21.35)
+
+[sub_resource type="BoxMesh" id="Mesh_DormitoryLintel"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.49, 1.06, 0.32)
+
+[sub_resource type="BoxShape3D" id="Shape_DormitoryLintel"]
+size = Vector3(2.49, 1.06, 0.32)
+
+[sub_resource type="BoxMesh" id="Mesh_DormitoryWallEast"]
+material = SubResource("Mat_Stone")
+size = Vector3(10.06, 3.62, 0.32)
+
+[sub_resource type="BoxShape3D" id="Shape_DormitoryWallEast"]
+size = Vector3(10.06, 3.62, 0.32)
+
+[sub_resource type="BoxMesh" id="Mesh_DormitoryWallWest"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.25, 3.62, 0.32)
+
+[sub_resource type="BoxShape3D" id="Shape_DormitoryWallWest"]
+size = Vector3(2.25, 3.62, 0.32)
 
 [node name="BarracksBuilding" type="Node3D"]
 
@@ -382,40 +391,6 @@ shape = SubResource("Shape_KeyCol")
 [node name="NoteMesh" type="MeshInstance3D" parent="CaptainNote"]
 mesh = SubResource("Mesh_NotePaper")
 
-[node name="BunkBed_0" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.12, 2.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="BunkBed_0"]
-mesh = SubResource("Mesh_BunkBed_0")
-
-[node name="Col" type="CollisionShape3D" parent="BunkBed_0"]
-shape = SubResource("Shape_BunkBed_0")
-
-[node name="BunkBed_1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.12, 6.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BunkBed_1"]
-mesh = SubResource("Mesh_BunkBed_1")
-
-[node name="Col" type="CollisionShape3D" parent="BunkBed_1"]
-shape = SubResource("Shape_BunkBed_1")
-
-[node name="BunkBed_2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.12, 9.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="BunkBed_2"]
-mesh = SubResource("Mesh_BunkBed_2")
-
-[node name="Col" type="CollisionShape3D" parent="BunkBed_2"]
-shape = SubResource("Shape_BunkBed_2")
-
-[node name="BarracksLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 0)
-light_color = Color(1.0, 0.82, 0.55, 1.0)
-light_energy = 2.0
-omni_range = 15.0
-
-
 [node name="PortalJambNorth" type="MeshInstance3D" parent="."]
 position = Vector3(-8.07, 1.95, -1.59)
 mesh = SubResource("PortalJamb")
@@ -435,3 +410,43 @@ rotation = Vector3(0, -0.16, 0)
 [node name="ArchitecturalDetails" type="Node3D" parent="."]
 script = ExtResource("13_details")
 building = 1
+
+[node name="DormitoryWallWest" type="StaticBody3D" parent="."]
+position = Vector3(-6.275, 2.06, 1.68)
+
+[node name="Mesh" type="MeshInstance3D" parent="DormitoryWallWest"]
+mesh = SubResource("Mesh_DormitoryWallWest")
+
+[node name="Col" type="CollisionShape3D" parent="DormitoryWallWest"]
+shape = SubResource("Shape_DormitoryWallWest")
+
+[node name="DormitoryWallEast" type="StaticBody3D" parent="."]
+position = Vector3(2.37, 2.06, 1.68)
+
+[node name="Mesh" type="MeshInstance3D" parent="DormitoryWallEast"]
+mesh = SubResource("Mesh_DormitoryWallEast")
+
+[node name="Col" type="CollisionShape3D" parent="DormitoryWallEast"]
+shape = SubResource("Shape_DormitoryWallEast")
+
+[node name="DormitoryLintel" type="StaticBody3D" parent="."]
+position = Vector3(-3.905, 3.34, 1.68)
+
+[node name="Mesh" type="MeshInstance3D" parent="DormitoryLintel"]
+mesh = SubResource("Mesh_DormitoryLintel")
+
+[node name="Col" type="CollisionShape3D" parent="DormitoryLintel"]
+shape = SubResource("Shape_DormitoryLintel")
+
+[node name="TimberCeiling" type="StaticBody3D" parent="."]
+position = Vector3(0, 3.94, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="TimberCeiling"]
+mesh = SubResource("Mesh_TimberCeiling")
+
+[node name="Col" type="CollisionShape3D" parent="TimberCeiling"]
+shape = SubResource("Shape_TimberCeiling")
+
+[node name="GuardQuartersAndArmory" type="Node3D" parent="."]
+script = ExtResource("26_furnishing")
+place = 4
