@@ -1,256 +1,205 @@
 extends Node
 
+var _passed := true
+var _level: Node3D
+var _world: Node
+var _gate: CourtyardGate
+var _seal: ArcaneBarrier
+var _shard: PickupItem
+var _captain_seal: PickupItem
+var _chest: Interactable
+var _keep: InteractableDoor
+var _book: BookPedestal
+var _barracks: InteractableDoor
+
 func _ready() -> void:
-	call_deferred("_run_verification")
+	_verify.call_deferred()
 
-func _run_verification() -> void:
-	print("==================================================================")
-	print("--- VERIFY V10: 2-PATH COMPLETE LEVEL DESIGN & REWRITE LOOP ---")
-	print("==================================================================")
-
-	var clearing_scene: PackedScene = load("res://scenes/forest_clearing.tscn")
-	if not clearing_scene:
-		push_error("Failed to load forest_clearing.tscn")
-		get_tree().quit(1)
-		return
-
-	var clearing: Node3D = clearing_scene.instantiate() as Node3D
-	add_child(clearing)
-
-	var wc: Node = clearing.get_node_or_null("WorldChanger")
-	if not wc:
-		push_error("WorldChanger not found in forest_clearing.tscn")
-		get_tree().quit(1)
-		return
-
-	var clearing_pedestal: Node = clearing.find_child("PedestalWithBook", true, false)
-	if not clearing_pedestal:
-		clearing_pedestal = clearing.find_child("BookPedestal", true, false)
-
-	var main_keep: Node3D = clearing.get_node_or_null("CastleKeep")
-	if not main_keep:
-		main_keep = clearing.find_child("MainKeep", true, false)
-	if not main_keep:
-		push_error("MainKeep not found in forest clearing scene hierarchy")
-		get_tree().quit(1)
-		return
-
-	var throne_pedestal: Node = main_keep.find_child("ThroneBookPedestal", true, false)
-	if not throne_pedestal:
-		push_error("ThroneBookPedestal not found in MainKeep!")
-		get_tree().quit(1)
-		return
-
+func _verify() -> void:
+	_level = load("res://scenes/forest_clearing.tscn").instantiate()
+	add_child(_level)
+	_world = _level.get_node("WorldChanger")
+	_gate = _world.outer_gate
+	_seal = _world.bridge_seal
+	_shard = _world.shard
+	_captain_seal = _world.keep_key
+	_chest = _world.rune_chest
+	_keep = _world.keep_door
+	_book = _level.find_child("PedestalWithBook", true, false)
+	_barracks = _level.find_child("BarracksDoor", true, false)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	await get_tree().physics_frame
+	_check_initial()
 
-	var all_passed: bool = true
+	var ash_first := OS.get_cmdline_user_args().has("ash-first")
+	if ash_first:
+		await _verify_ash(false)
+	else:
+		await _verify_life()
+	await _take_quill_and_rewrite()
 
-	# -------------------------------------------------------------------------
-	# 1. TEST PATH A: THE PATH OF LIFE ("EXTINGUISH_FIRE")
-	# -------------------------------------------------------------------------
-	print("\n--- 1. Testing Path A: The Path of Life ---")
+	if ash_first:
+		await _verify_life()
+		_check(InventoryManager.has_item("throne_hall_key"), "Seal survives Ash → Life.")
+		await _rewrite()
+		await _verify_ash(true)
+	else:
+		await _verify_ash(true)
+		_check(InventoryManager.has_item(ArcaneBarrier.SHARD_ID), "Shard survives Life → Ash.")
+
+	await _rewrite()
+	_check_initial()
+	_check(not _shard.visible and not _captain_seal.visible,
+		"Carried quest items do not respawn as duplicates.")
+	_check(InventoryManager.notes.has("captains_sealed_report"), "The chest report survives rewriting.")
+	get_tree().quit(0 if _passed else 1)
+
+func _check_initial() -> void:
+	_check(not _world.nature_trail.visible and not _world.burning_path.visible,
+		"Neither trail exists before the decision.")
+	_check(_world.life_thicket.visible and _world.ash_thicket.visible and not _world.great_tree.visible,
+		"Both areas return to ordinary woodland and the Great Tree retracts.")
+	_check(_gate_blocks(), "Physical outer gate is closed.")
+	_check(_tower_wall_is_closed() and _balcony_rail_is_intact(),
+		"The western masonry and balcony are intact before the choice and after a rewrite.")
+	_check(_world.intact_bridge.visible and not _world.collapsed_bridge.visible and not _world.courtyard_roots.visible,
+		"The castle returns to its initial geometry.")
+	_check(_world.intact_bridge.get_node("Shoring").is_visible_in_tree() and not _remnant_smoke().emitting,
+		"The wooden shoring and shed are restored while the castle embers go out.")
+	_check_courtyard_fire(false)
+
+func _verify_life() -> void:
 	QuestManager.complete_quest("burning_grove", "extinguish_fire")
-	wc._apply_extinguish_outcome()
+	await get_tree().create_timer(3.75).timeout
+	_check(_gate_blocks() and _world.great_tree.visible and _world.nature_trail.visible and not _world.burning_path.visible,
+		"Life grows its approach while the courtyard gate stays closed.")
+	_check(_world.courtyard_roots.visible and _world.castle_life.visible and not _world.castle_ash.visible,
+		"Life exposes roots and lights the upper wing.")
+	_check_courtyard_fire(false)
+	_check(_world.living_arches.get_child(3).position.y >= -0.02, "The last living arch rose.")
+	_check(not _tower_wall_is_closed() and not _balcony_rail_is_intact() and _world.tower_breach.is_visible_in_tree(),
+		"The Great Tree breaks the balcony railing and creates a breach through the western masonry.")
+	if not InventoryManager.has_item("great_quill"):
+		_check(_book.get_interaction_prompt().is_empty(), "The completed grove book stays quiet without the Quill.")
+	await _verify_life_blockers()
+	_check(_bridge_is_intact(), "The Life bridge carries a walkable deck across the span.")
+	var corridor: Node3D = _world.intact_bridge.get_parent()
+	var continuous := true
+	for step in range(1, 43):
+		var point := corridor.to_global(Vector3(0, 6.8, -step * 0.5))
+		continuous = continuous and not _ray(point, point - Vector3.UP).is_empty()
+	_check(continuous, "The angled span joins the tower and library end to end.")
+	_check(_world.intact_bridge.get_node("Shoring").is_visible_in_tree() and not _remnant_smoke().emitting,
+		"The damaged span keeps its timber supports in Life.")
+	_check(_tower_has_solid_base(), "The tower has a solid wall in place of the lower door.")
+	_check(_seal.visible and not _seal.get_node("Col").disabled, "The bridge initially needs the shard.")
+	_seal.interact()
+	_check(_seal.visible and not _seal.get_node("Col").disabled, "The bridge seal refuses bare hands.")
+	_shard.interact()
+	_seal.interact()
+	await get_tree().create_timer(0.6).timeout
+	_check(InventoryManager.has_item(ArcaneBarrier.SHARD_ID) and not _seal.visible and _seal.get_node("Col").disabled,
+		"The shard removes the bridge seal and stays in inventory.")
 
-	var gt: Node3D = clearing.get_node_or_null("GreatTree") as Node3D
-	if gt:
-		gt.position.y = 0.0
-		gt.visible = true
-		wc._set_collision_recursive(gt, true)
-
-	var ncorr: Node3D = clearing.get_node_or_null("NatureCorridorForest") as Node3D
-	if ncorr:
-		ncorr.position.y = -14.0
-		ncorr.visible = false
-		wc._set_collision_recursive(ncorr, false)
-
-	await get_tree().physics_frame
-
-	var nat_trail: Node3D = clearing.get_node_or_null("NatureTrail") as Node3D
-	if nat_trail and nat_trail.visible:
-		print("PASS: NatureTrail is visible on Path A!")
-	else:
-		push_error("FAIL: NatureTrail is not visible on Path A")
-		all_passed = false
-
-	# Test Mage Tower Covered Bridge Arcane Barrier & Arcane Focus
-	var mage_tower: Node3D = clearing.find_child("MageTower", true, false)
-	if mage_tower:
-		var barrier: Node3D = mage_tower.find_child("ArcaneBarrier", true, false)
-		var focus: Node = mage_tower.find_child("ArcaneFocusAltar", true, false)
-		if barrier and focus:
-			print("Found ArcaneBarrier and ArcaneFocus in MageTower.")
-			focus.interact()
-			# Allow tween to complete
-			await get_tree().create_timer(0.7).timeout
-			if not barrier.visible:
-				print("PASS: ArcaneFocus in Observatory dissipated ArcaneBarrier on Covered Bridge!")
-			else:
-				push_error("FAIL: ArcaneBarrier still visible after focus interact")
-				all_passed = false
-	else:
-		push_error("FAIL: MageTower not found")
-		all_passed = false
-
-	# -------------------------------------------------------------------------
-	# 2. TEST THRONE ROOM FINALE & QUEST: DEAL AT THE THRONE
-	# -------------------------------------------------------------------------
-	print("\n--- 2. Testing Throne Room & Deal at the Throne Quest ---")
-	var q_def: Dictionary = QuestData.get_quest("deal_at_the_throne")
-	if q_def.is_empty():
-		push_error("FAIL: deal_at_the_throne quest not found in QuestData")
-		all_passed = false
-	else:
-		print("PASS: deal_at_the_throne quest registered with title: " + q_def.get("title", ""))
-
-	# Pedestal initial state
-	if throne_pedestal.interaction_prompt.contains("Сделка у Трона"):
-		print("PASS: ThroneBookPedestal prompt is ready: " + throne_pedestal.interaction_prompt)
-	else:
-		push_error("FAIL: ThroneBookPedestal unexpected initial prompt: " + throne_pedestal.interaction_prompt)
-		all_passed = false
-
-	# Simulate accepting the deal
-	QuestManager.complete_quest("deal_at_the_throne", "accept_deal")
-	await get_tree().physics_frame
-
-	var quill_pickup: Node = throne_pedestal.get_node_or_null("GreatQuillPickup")
-	if quill_pickup and quill_pickup.visible:
-		print("PASS: GreatQuillPickup appeared on ThroneBookPedestal upon accepting deal!")
-		# Simulate player taking the Great Quill
-		quill_pickup.interact()
-		if InventoryManager.has_item("great_quill"):
-			print("PASS: Great Quill successfully added to InventoryManager!")
-		else:
-			push_error("FAIL: Great Quill not found in inventory after pickup")
-			all_passed = false
-	else:
-		push_error("FAIL: GreatQuillPickup is not visible on pedestal after deal accepted")
-		all_passed = false
-
-	# -------------------------------------------------------------------------
-	# 3. TEST REALITY REWRITING VIA GREAT QUILL AT CLEARING ALTAR
-	# -------------------------------------------------------------------------
-	print("\n--- 3. Testing Reality Rewriting Loop via Great Quill ---")
-	if clearing_pedestal:
-		clearing_pedestal._update_prompt()
-		if clearing_pedestal.interaction_prompt.contains("Переписать историю"):
-			print("PASS: Clearing altar book prompt updated to rewrite option: " + clearing_pedestal.interaction_prompt)
-		else:
-			push_error("FAIL: Clearing altar book prompt did not offer rewrite: " + clearing_pedestal.interaction_prompt)
-			all_passed = false
-
-		# Interact with altar to rewrite reality
-		clearing_pedestal.interact()
-		await get_tree().physics_frame
-
-		if not QuestManager.is_quest_completed("burning_grove"):
-			print("PASS: QuestManager successfully reset 'burning_grove' quest!")
-		else:
-			push_error("FAIL: 'burning_grove' is still completed after rewrite")
-			all_passed = false
-
-		if InventoryManager.quill_uses_count >= 1:
-			print("PASS: Great Quill uses count tracked: %d" % InventoryManager.quill_uses_count)
-		else:
-			push_error("FAIL: Quill uses count not incremented")
-			all_passed = false
-
-		if nat_trail and not nat_trail.visible:
-			print("PASS: WorldChanger reset_world() successfully hid NatureTrail!")
-		else:
-			push_error("FAIL: NatureTrail still visible after world reset")
-			all_passed = false
-
-	# -------------------------------------------------------------------------
-	# 4. TEST PATH B: THE PATH OF ASH ("PASS_BY")
-	# -------------------------------------------------------------------------
-	print("\n--- 4. Testing Path B: The Path of Ash ---")
+func _verify_ash(has_shard: bool) -> void:
 	QuestManager.complete_quest("burning_grove", "pass_by")
-	wc._apply_burn_outcome()
-	await get_tree().physics_frame
+	await get_tree().create_timer(3.45).timeout
+	_check(_gate.is_raised and not _gate_blocks() and _world.burning_path.visible and not _world.great_tree.visible,
+		"Ash raises the courtyard gate and exposes the burnt approach.")
+	_check(_world.castle_ash.visible and not _world.castle_life.visible and not _world.court_lanterns.visible,
+		"The courtyard changes in Ash.")
+	_check_courtyard_fire(true)
+	var smoke := _world.fire_particles_group.get_node("Fire1/Smoke") as CPUParticles3D
+	_check(smoke.emitting and smoke.is_visible_in_tree() and not _world.corridor_forest.visible,
+		"Active fire and charred trees replace the living grove.")
+	_check(not _bridge_is_intact() and _world.collapsed_bridge.visible and not _seal.visible,
+		"The ruined bridge has a real gap rather than a magical lock.")
+	_check(_world.collapsed_bridge.get_node("BurnedShoring").is_visible_in_tree()
+		and not _world.intact_bridge.get_node("Shoring").is_visible_in_tree() and _remnant_smoke().emitting,
+		"The bridge ruins expose burned shoring, a burned shed and smoldering debris.")
+	_check(_tower_has_solid_base(), "Direct entry into the tower from the courtyard is unavailable.")
+	_check(_tower_wall_is_closed() and _balcony_rail_is_intact(), "Ash keeps the masonry and balcony intact.")
+	_barracks.interact()
+	await get_tree().create_timer(0.8).timeout
+	var ash_entry := _ray(Vector3(14.0, 1.6, -112.6), Vector3(17.4, 1.6, -112.6))
+	_check(ash_entry.is_empty(), "The barracks doorway is clear when opened in Ash.")
+	_barracks.restore_door()
+	_captain_seal.interact()
+	_keep.interact()
+	await get_tree().create_timer(0.82).timeout
+	_check(InventoryManager.has_item("throne_hall_key") and _keep.is_open and absf(_keep.left_wing.rotation.y) > 1.0,
+		"The reusable captain's seal opens the physical keep doors.")
+	_chest.interact()
+	_check(InventoryManager.notes.has("captains_sealed_report") == has_shard,
+		"The barracks chest gives its report only to the carried crystal shard.")
 
-	var burn_path: Node3D = clearing.get_node_or_null("BurningPath") as Node3D
-	if burn_path and burn_path.visible:
-		print("PASS: BurningPath is visible on Path B!")
+func _take_quill_and_rewrite() -> void:
+	QuestManager.complete_quest("deal_at_the_throne", "accept_deal")
+	var quill := _level.find_child("GreatQuillPickup", true, false) as PickupItem
+	quill.interact()
+	_check(InventoryManager.has_item("great_quill"), "The throne quest gives the Great Quill.")
+	_check(_book.get_interaction_prompt() == _book.rewrite_prompt, "The Quill restores the grove book prompt.")
+	await _rewrite()
+
+func _verify_life_blockers() -> void:
+	_barracks.interact()
+	await get_tree().create_timer(0.8).timeout
+	var roots_span_door := true
+	for height in [0.5, 1.45, 2.4, 3.35]:
+		for z in [-113.67, -112.6, -111.53]:
+			var hit := _ray(Vector3(14.0, height, z), Vector3(17.4, height, z))
+			var body: Node = hit.get("collider")
+			roots_span_door = roots_span_door and body != null and _world.courtyard_roots.is_ancestor_of(body)
+	_barracks.restore_door()
+	_check(roots_span_door, "Life roots fill the barracks frame even if its door is open.")
+
+func _remnant_smoke() -> CPUParticles3D:
+	return _world.castle_ash.get_node("RemnantFires/Embers5/Smoke")
+
+func _check_courtyard_fire(burned: bool) -> void:
+	var surfaces_match: bool = _world.courtyard_surfaces.size() == 3
+	for surface: MeshInstance3D in _world.courtyard_surfaces:
+		var material := surface.get_active_material(0) as ShaderMaterial
+		surfaces_match = surfaces_match and material != null and material.get_shader_parameter("courtyard_burned") == burned
+	var ruined_cargo: Node3D = _world.castle_ash.get_node("GateCargo")
+	var intact_cargo: Node3D = _world.castle_verge.get_node("GateCargo")
+	_check(surfaces_match and ruined_cargo.is_visible_in_tree() == burned
+		and intact_cargo.is_visible_in_tree() != burned,
+		"The gate paving, courtyard ground and cargo respond to the same fire state.")
+
+func _rewrite() -> void:
+	var times: int = InventoryManager.quill_uses_count
+	_level.find_child("PedestalWithBook", true, false).interact()
+	await get_tree().create_timer(2.15).timeout
+	_check(not QuestManager.is_quest_completed("burning_grove") and InventoryManager.quill_uses_count == times + 1,
+		"The starting altar rewrites the grove.")
+
+func _gate_blocks() -> bool:
+	var center := Vector3(_gate.global_position.x, 1.3, _gate.global_position.z)
+	return _ray(center + Vector3.BACK * 3.0, center + Vector3.FORWARD * 3.0).get("collider") == _gate
+
+func _bridge_is_intact() -> bool:
+	var center: Vector3 = _world.intact_bridge.get_node("CentralBridgeDeck").global_position
+	return not _ray(center + Vector3.UP * 0.65, center - Vector3.UP * 0.35).is_empty()
+
+func _tower_has_solid_base() -> bool:
+	var hit := _ray(Vector3(-30.4, 1.3, -104), Vector3(-30.4, 1.3, -107))
+	return not hit.is_empty() and hit.collider.name == "TowerWall_3_Top"
+
+func _tower_wall_is_closed() -> bool:
+	return _ray(Vector3(-37.6, 21.2, -110.25), Vector3(-33.8, 21.2, -110.25)).get("collider") == _world.tower_infill
+
+func _balcony_rail_is_intact() -> bool:
+	return _ray(Vector3(-37.4, 20.65, -110.25), Vector3(-36.25, 20.65, -110.25)).get("collider") \
+		== _world.tower_infill.get_node("IntactBalconyCenter")
+
+func _ray(from: Vector3, to: Vector3) -> Dictionary:
+	return _level.get_world_3d().direct_space_state.intersect_ray(
+		PhysicsRayQueryParameters3D.create(from, to, 1))
+
+func _check(condition: bool, description: String) -> void:
+	if condition:
+		print("PASS: ", description)
 	else:
-		push_error("FAIL: BurningPath is not visible on Path B")
-		all_passed = false
-
-	var charred_zone: Node3D = clearing.get_node_or_null("CharredForestZone") as Node3D
-	if charred_zone and charred_zone.visible:
-		print("PASS: CharredForestZone is visible on Path B!")
-	else:
-		push_error("FAIL: CharredForestZone is not visible on Path B")
-		all_passed = false
-
-	# Check Chapel lore note in courtyard
-	var chapel: Node3D = clearing.find_child("ChapelBuilding", true, false)
-	if chapel:
-		var chapel_note: Node = chapel.find_child("ChapelNote", true, false)
-		if chapel_note:
-			print("PASS: Chapel lore note 'Молитва Незримому Наблюдателю' found in Chapel!")
-		else:
-			push_error("FAIL: ChapelNote not found in ChapelBuilding")
-			all_passed = false
-	else:
-		push_error("FAIL: ChapelBuilding not found")
-		all_passed = false
-
-	# Check Barracks key in courtyard
-	var barracks: Node3D = clearing.find_child("BarracksBuilding", true, false)
-	if barracks:
-		var key_pickup: Node = barracks.find_child("ThroneHallKey", true, false)
-		if key_pickup:
-			print("PASS: Throne hall key found in Barracks!")
-			key_pickup.interact()
-			if InventoryManager.has_item("throne_hall_key"):
-				print("PASS: Key added to inventory!")
-			else:
-				push_error("FAIL: Key not in inventory")
-				all_passed = false
-		else:
-			push_error("FAIL: ThroneHallKey not found in Barracks")
-			all_passed = false
-	else:
-		push_error("FAIL: BarracksBuilding not found")
-		all_passed = false
-
-	# Check MainKeep entrance doors can be opened by the key
-	var keep_doors: Node = main_keep.find_child("ThroneRoomEntranceDoors", true, false)
-	if keep_doors:
-		if keep_doors.is_locked:
-			keep_doors.interact()
-			if not keep_doors.is_locked and keep_doors.is_open:
-				print("PASS: ThroneRoomEntranceDoors unlocked and opened with throne_hall_key!")
-			else:
-				push_error("FAIL: Doors did not open with key")
-				all_passed = false
-	else:
-		push_error("FAIL: ThroneRoomEntranceDoors not found")
-		all_passed = false
-
-	# Check that on Path B, entering the Mage Tower from the Library is blocked by ArcaneBarrier
-	if mage_tower:
-		var barrier_b: Node3D = mage_tower.find_child("ArcaneBarrier", true, false)
-		# Reset barrier for test
-		barrier_b.visible = true
-		for ch in barrier_b.get_children():
-			if ch is CollisionShape3D:
-				ch.disabled = false
-		if barrier_b.visible:
-			print("PASS: The Sealed Threshold: ArcaneBarrier blocks entry into Mage Tower from castle/library side!")
-		else:
-			push_error("FAIL: ArcaneBarrier not blocking on Path B")
-			all_passed = false
-
-	print("\n==================================================================")
-	if all_passed:
-		print("ALL 2-PATH LEVEL DESIGN & REWRITE TESTS PASSED SUCCESSFULLY (0 ERRORS)!")
-	else:
-		push_error("SOME TESTS FAILED!")
-	print("==================================================================")
-
-	get_tree().quit(0 if all_passed else 1)
+		push_error("FAIL: " + description)
+		_passed = false

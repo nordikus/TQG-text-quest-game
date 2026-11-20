@@ -16,11 +16,16 @@ var is_open: bool = false
 var _initial_left_rot: float = 0.0
 var _initial_right_rot: float = 0.0
 var _animating: bool = false
+var _initial_lock: bool
+var _initial_hint: String
+var _swing: Tween
 
 func _ready():
 	super._ready()
 	if not required_item_id.is_empty():
 		is_locked = true
+	_initial_lock = is_locked
+	_initial_hint = locked_hint
 	if left_wing:
 		_initial_left_rot = left_wing.rotation.y
 	if right_wing:
@@ -80,15 +85,29 @@ func _toggle_door():
 	_update_prompt()
 	GameManager.interaction_prompt_changed.emit(interaction_prompt)
 
-	var tween := create_tween().set_parallel(true)
-	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_swing = create_tween().set_parallel(true).set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+	_swing.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	var target_left_rad := _initial_left_rot + (deg_to_rad(-open_angle_deg) if is_open else 0.0)
 	if left_wing:
-		tween.tween_property(left_wing, "rotation:y", target_left_rad, 0.7)
+		_swing.tween_property(left_wing, "rotation:y", target_left_rad, 0.7)
 
 	if is_double_door and right_wing:
 		var target_right_rad := _initial_right_rot + (deg_to_rad(open_angle_deg) if is_open else 0.0)
-		tween.tween_property(right_wing, "rotation:y", target_right_rad, 0.7)
+		_swing.tween_property(right_wing, "rotation:y", target_right_rad, 0.7)
 
-	tween.finished.connect(func(): _animating = false)
+	_swing.finished.connect(func(): _animating = false)
+
+func restore_door() -> void:
+	if _swing:
+		_swing.kill()
+	_animating = false
+	is_open = false
+	is_locked = _initial_lock
+	locked_hint = _initial_hint
+	if left_wing:
+		left_wing.rotation.y = _initial_left_rot
+	if right_wing:
+		right_wing.rotation.y = _initial_right_rot
+	_update_blockers()
+	_update_prompt()

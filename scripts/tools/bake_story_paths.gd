@@ -176,28 +176,16 @@ class Spline3D:
 # -----------------------------------------------------------------------------
 # Main Tool Logic
 # -----------------------------------------------------------------------------
+const Layout := preload("res://scripts/world/forest_layout.gd")
+
 func _init() -> void:
 	print("--- Starting Story Paths Baker ---")
 
-	var nature_spline := Spline3D.new([
-		Vector3(-4.5, 0.0, -17.5),
-		Vector3(-6.2, 0.0, -25.0),
-		Vector3(-9.0, 0.0, -35.5),
-		Vector3(-13.8, 0.0, -47.5),
-		Vector3(-17.3, 0.0, -56.8)
-	])
+	var nature_spline := Spline3D.new(Layout.LIFE_PATH)
+	var burning_spline := Spline3D.new(Layout.ASH_PATH)
 
-	var burning_spline := Spline3D.new([
-		Vector3(11.0, 0.0, -6.5),
-		Vector3(15.2, 0.0, -9.0),
-		Vector3(18.5, 0.0, -17.0),
-		Vector3(17.5, 0.0, -35.0),
-		Vector3(12.0, 0.0, -53.0),
-		Vector3(5.5, 0.0, -68.0),
-		Vector3(0.0, 0.0, -82.0)
-	])
-
-	_bake_nature_trail(nature_spline)
+	if not OS.get_cmdline_user_args().has("ash-only"):
+		_bake_nature_trail(nature_spline)
 	_bake_burning_path(burning_spline)
 
 	print("--- Story Paths Baking Finished Successfully ---")
@@ -352,38 +340,6 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 			b_ground.add_index(i0); b_ground.add_index(i2); b_ground.add_index(i1)
 			b_ground.add_index(i1); b_ground.add_index(i2); b_ground.add_index(i3)
 
-	# Living Root Borders
-	for side in [-1.0, 1.0]:
-		var r_steps: int = 70
-		var r_circ: int = 7
-		var r_grid_base: int = b_ground.vert_count
-
-		for rs in range(r_steps + 1):
-			var t: float = float(rs) / float(r_steps)
-			var f: PathFrame = spline.sample(t)
-			var half_w: float = 2.2
-			if t > 0.68:
-				half_w = lerpf(2.2, 5.4, pow((t - 0.68) / 0.32, 2.0))
-
-			var undulate: float = sin(t * TAU * 5.0 + (0.8 if side > 0 else 0.0))
-			var root_h: float = 0.12 + 0.22 * maxf(0.0, undulate)
-			var root_r: float = 0.22 + 0.08 * undulate
-			var c_pos: Vector3 = f.pos + f.right * (side * (half_w + 0.20)) + f.up * root_h
-
-			for ci in range(r_circ):
-				var ca: float = float(ci) * TAU / float(r_circ)
-				var cp: Vector3 = c_pos + (f.right * cos(ca) + f.up * sin(ca)) * root_r
-				var cn: Vector3 = (f.right * cos(ca) + f.up * sin(ca)).normalized()
-
-				var r_col: Color = Color(0.28, 0.18, 0.11)
-				if cn.y > 0.2:
-					r_col = r_col.lerp(Color(0.26, 0.48, 0.20), 0.65)
-				b_ground.set_color(r_col)
-				b_ground.set_normal(cn)
-				b_ground.add_vertex(cp)
-
-		_connect_tube_grid(b_ground, r_grid_base, r_steps + 1, r_circ, true)
-
 	# Fern Clusters
 	var fern_count: int = 40
 	for fc in range(fern_count):
@@ -400,7 +356,7 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 			var mid_l: Vector3 = base_p + frond_dir * 0.50 + f.right * 0.22 + f.up * 0.26
 			var mid_r: Vector3 = base_p + frond_dir * 0.50 - f.right * 0.22 + f.up * 0.26
 
-			b_foliage.set_color(Color(0.22, 0.58, 0.18))
+			b_foliage.set_color(Color(0.24, 0.43, 0.18))
 			b_foliage.set_normal(f.up)
 			var v0: int = b_foliage.add_vertex(base_p)
 			var v1: int = b_foliage.add_vertex(mid_l)
@@ -409,23 +365,6 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 
 			b_foliage.add_index(v0); b_foliage.add_index(v1); b_foliage.add_index(v2)
 			b_foliage.add_index(v1); b_foliage.add_index(v3); b_foliage.add_index(v2)
-
-	# 3 Living Tree Arches with full boughs and foliage canopies
-	var arch_ts: Array[float] = [0.25, 0.55, 0.80]
-	for at in arch_ts:
-		var f: PathFrame = spline.sample(at)
-		var arch_w: float = 2.3
-		var arch_h: float = 4.4
-
-		_build_arch_bough(b_foliage, f, arch_w, arch_h, 0.28, 0.18)
-
-		var puff_count: int = 9
-		for pfi in range(puff_count):
-			var pa: float = float(pfi) / float(puff_count - 1)
-			var ang: float = lerpf(0.18 * PI, 0.82 * PI, pa)
-			var puff_p: Vector3 = f.pos + f.right * (cos(ang) * (arch_w + 0.15)) + f.up * (sin(ang) * arch_h + 0.15)
-			var puff_r: float = 0.85 + 0.25 * sin(float(pfi) * 2.1)
-			_add_foliage_puff(b_foliage, puff_p, puff_r, Color(0.20, 0.56, 0.18))
 
 	# Bioluminescent 3D Spore Mushrooms firmly rooted in ground/roots
 	var shroom_count: int = 50
@@ -439,29 +378,6 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 		var sh_rad: float = 0.12 + 0.04 * cos(float(sc) * 3.4)
 
 		_build_3d_mushroom(b_ground, b_biolum, sh_base, sh_h, sh_rad, Color(0.30, 0.95, 0.75))
-
-	# -------------------------------------------------------------------------
-	# Nature Trail Collision: Solid 5.0m Guide Walls (No floor seams!)
-	# -------------------------------------------------------------------------
-	for i in range(steps):
-		var t0: float = float(i) / float(steps)
-		var t1: float = float(i + 1) / float(steps)
-		var f0: PathFrame = spline.sample(t0)
-		var f1: PathFrame = spline.sample(t1)
-
-		var w0: float = 2.5 if t0 < 0.68 else lerpf(2.5, 5.4, pow((t0 - 0.68) / 0.32, 2.0))
-		var w1: float = 2.5 if t1 < 0.68 else lerpf(2.5, 5.4, pow((t1 - 0.68) / 0.32, 2.0))
-
-		# Flare out at entrance to embed into clearing boundary
-		if t0 < 0.08:
-			w0 = lerpf(4.5, 2.5, t0 / 0.08)
-		if t1 < 0.08:
-			w1 = lerpf(4.5, 2.5, t1 / 0.08)
-
-		var l0: Vector3 = f0.pos - f0.right * w0
-		var r0: Vector3 = f0.pos + f0.right * w0
-		var l1: Vector3 = f1.pos - f1.right * w1
-		var r1: Vector3 = f1.pos + f1.right * w1
 
 	# Commit Nature Trail Mesh & Collisions
 	b_ground.generate_normals()
@@ -522,47 +438,39 @@ func _bake_burning_path(spline: Spline3D) -> void:
 	var steps: int = 110
 	var trans_pts: int = 13
 	var base_idx: int = 0
+	const GATE_EDGE := -79.75
+	var before_gate := 0.0
+	var beyond_gate := 1.0
+	for i in 16:
+		var middle := (before_gate + beyond_gate) * 0.5
+		if spline.sample(middle).pos.z > GATE_EDGE:
+			before_gate = middle
+		else:
+			beyond_gate = middle
 
 	# 1. Charred Road & Ash Field Surface
 	for i in range(steps + 1):
-		var t: float = float(i) / float(steps)
+		var t := before_gate * float(i) / steps
 		var f: PathFrame = spline.sample(t)
 
 		var pos: Vector3 = f.pos
 		var right: Vector3 = f.right
 		var up: Vector3 = f.up
 
-		var total_half_w: float = 6.5
-		var core_half_w: float = 2.6
-		if t < 0.08:
-			total_half_w = lerpf(3.8, 6.5, t / 0.08)
-			core_half_w = lerpf(2.0, 2.6, t / 0.08)
-
+		var approach := 1.0 - smoothstep(-77.5, -67.0, pos.z)
+		var total_half_w := lerpf(lerpf(7.5, 12.0, smoothstep(0.0, 0.18, t)), 3.1, approach)
 		for j in range(trans_pts):
-			var u_norm: float = -1.0 + 2.0 * float(j) / float(trans_pts - 1)
-			var dist: float = u_norm * total_half_w
-			var abs_d: float = absf(dist)
-
-			var h: float = 0.08
-			var col: Color = Color(0.06, 0.05, 0.045)
-
-			if abs_d <= core_half_w:
-				var rut_factor: float = abs_d / core_half_w
-				h = lerpf(0.09, 0.06, sin(rut_factor * PI))
-				col = Color(0.07, 0.06, 0.05) if rut_factor < 0.4 else Color(0.045, 0.04, 0.035)
-			else:
-				var flank_factor: float = (abs_d - core_half_w) / (total_half_w - core_half_w)
-				var mound: float = 0.06 + sin(flank_factor * PI) * (0.24 + 0.12 * sin(t * 28.0 + dist))
-				h = lerpf(mound, 0.015, flank_factor * flank_factor)
-				col = Color(0.05, 0.04, 0.035).lerp(Color(0.02, 0.02, 0.02), flank_factor)
-
-			if t < 0.08:
-				h = lerpf(0.005, h, t / 0.08)
-				col = Color(0.24, 0.28, 0.18).lerp(col, t / 0.08)
-
-			var vpos: Vector3 = pos + right * dist + up * h
+			var u := -1.0 + 2.0 * float(j) / float(trans_pts - 1)
+			var dist := u * total_half_w + pow(absf(u), 2.0) * 1.65 * sin(t * 28.0) * (1.0 - approach)
+			var weight := smoothstep(0.60, 1.0, absf(u))
+			var ash := 0.5 + 0.5 * sin(t * 151.0 + dist * 3.7) * cos(t * 93.0 - dist * 2.4)
+			var col := Color(0.07, 0.058, 0.052).lerp(Color(0.19, 0.169, 0.146), ash)
+			var vpos: Vector3 = pos + right * dist
+			vpos.z = lerpf(vpos.z, pos.z, approach)
+			vpos.y = 0.018
+			col.a = (1.0 - weight) * smoothstep(0.0, 0.045, t) * smoothstep(GATE_EDGE, -77.1, vpos.z)
 			b_charred.set_color(col)
-			b_charred.set_uv(Vector2(u_norm * 0.5 + 0.5, t * 30.0))
+			b_charred.set_uv(Vector2(u * 0.5 + 0.5, t * 30.0))
 			b_charred.set_normal(up)
 			b_charred.add_vertex(vpos)
 
@@ -573,8 +481,10 @@ func _bake_burning_path(spline: Spline3D) -> void:
 	for cc in range(crack_count):
 		var t: float = 0.06 + 0.88 * (float(cc) / float(crack_count - 1))
 		var f: PathFrame = spline.sample(t)
+		if f.pos.z < -75.8:
+			continue
 		var side: float = -1.0 if (cc % 2 == 0) else 1.0
-		var crack_pos: Vector3 = f.pos + f.right * (side * 2.3) + f.up * 0.04
+		var crack_pos: Vector3 = f.pos + f.right * (side * 3.4) + f.up * 0.04
 		var crack_len: float = 2.4 + 0.6 * sin(float(cc) * 1.8)
 
 		var c_p0: Vector3 = crack_pos - f.tangent * (crack_len * 0.5)
@@ -606,51 +516,6 @@ func _bake_burning_path(spline: Spline3D) -> void:
 		# Jagged stump root
 		_add_cylinder_beam(b_timber, stump_pos, stump_pos + Vector3.UP * 1.2, 0.44, 0.32, Color(0.05, 0.045, 0.045))
 
-	# -------------------------------------------------------------------------
-	# Burning Path Collision: Solid 5.0m Guide Walls directly to Castle Gate
-	# -------------------------------------------------------------------------
-	for i in range(steps):
-		var t0: float = float(i) / float(steps)
-		var t1: float = float(i + 1) / float(steps)
-		var f0: PathFrame = spline.sample(t0)
-		var f1: PathFrame = spline.sample(t1)
-
-		# DO NOT place guide walls inside the clearing (t < 0.06)
-		if t1 < 0.06:
-			continue
-
-		var w0: float = 2.8
-		var w1: float = 2.8
-
-		# Flare out at perimeter (t = 0.06..0.14) to meet ClearingImpassableBoundary
-		if t0 < 0.14:
-			w0 = lerpf(4.6, 2.8, clampf((t0 - 0.06) / 0.08, 0.0, 1.0))
-		if t1 < 0.14:
-			w1 = lerpf(4.6, 2.8, clampf((t1 - 0.06) / 0.08, 0.0, 1.0))
-
-		# Funnel straight into gate towers (GateTowerLeft is at X = -3.25, GateTowerRight at X = +3.25)
-		if t0 > 0.85:
-			w0 = lerpf(2.8, 3.25, (t0 - 0.85) / 0.15)
-		if t1 > 0.85:
-			w1 = lerpf(2.8, 3.25, (t1 - 0.85) / 0.15)
-
-		var l0: Vector3 = f0.pos - f0.right * w0
-		var r0: Vector3 = f0.pos + f0.right * w0
-		var l1: Vector3 = f1.pos - f1.right * w1
-		var r1: Vector3 = f1.pos + f1.right * w1
-
-		# Left guide wall (height 5.0m)
-		var l0_top: Vector3 = l0 + Vector3.UP * 5.0
-		var l1_top: Vector3 = l1 + Vector3.UP * 5.0
-		col_faces.append(l0); col_faces.append(l0_top); col_faces.append(l1)
-		col_faces.append(l1); col_faces.append(l0_top); col_faces.append(l1_top)
-
-		# Right guide wall (height 5.0m)
-		var r0_top: Vector3 = r0 + Vector3.UP * 5.0
-		var r1_top: Vector3 = r1 + Vector3.UP * 5.0
-		col_faces.append(r0); col_faces.append(r1); col_faces.append(r0_top)
-		col_faces.append(r1); col_faces.append(r1_top); col_faces.append(r0_top)
-
 	# Commit Burning Path Mesh & Collisions
 	b_charred.generate_normals()
 	b_lava.generate_normals()
@@ -658,6 +523,7 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 	var m_charred := StandardMaterial3D.new()
 	m_charred.cull_mode = BaseMaterial3D.CULL_DISABLED
+	m_charred.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	m_charred.vertex_color_use_as_albedo = true
 	m_charred.vertex_color_is_srgb = true
 	m_charred.roughness = 0.92
@@ -699,30 +565,6 @@ func _bake_burning_path(spline: Spline3D) -> void:
 # -----------------------------------------------------------------------------
 # Detailed 3D Procedural Helpers
 # -----------------------------------------------------------------------------
-func _build_arch_bough(b: ToolMeshBuilder, f: PathFrame, arch_w: float, arch_h: float, r_base: float, r_top: float) -> void:
-	var segs: int = 16
-	var circ: int = 7
-	var vbase: int = b.vert_count
-
-	for s in range(segs + 1):
-		var sa: float = float(s) / float(segs)
-		var ang: float = sa * PI
-		var u_pos: float = cos(ang) * arch_w
-		var v_h: float = sin(ang) * arch_h
-		var center_p: Vector3 = f.pos + f.right * u_pos + f.up * v_h
-		var rad: float = lerpf(r_base, r_top, sin(ang))
-
-		for c in range(circ):
-			var ca: float = float(c) * TAU / float(circ)
-			var n: Vector3 = (f.right * cos(ca) + f.tangent * sin(ca)).normalized()
-			var v: Vector3 = center_p + (f.right * cos(ca) + f.tangent * sin(ca)) * rad
-			b.set_color(Color(0.28, 0.18, 0.12))
-			b.set_normal(n)
-			b.add_vertex(v)
-
-	_connect_tube_grid(b, vbase, segs + 1, circ, true)
-
-
 func _build_3d_mushroom(b_ground: ToolMeshBuilder, b_bio: ToolMeshBuilder, base: Vector3, h: float, rad: float, glow_col: Color) -> void:
 	var stalk_segs: int = 5
 	var stalk_r: float = 0.035
@@ -793,23 +635,3 @@ func _add_ember_rock(b: ToolMeshBuilder, pos: Vector3, rad: float) -> void:
 		var v0: int = b.add_vertex(ring[s])
 		var v1: int = b.add_vertex(ring[s_next])
 		b.add_index(vt); b.add_index(v0); b.add_index(v1)
-
-
-func _add_foliage_puff(b: ToolMeshBuilder, center: Vector3, radius: float, color: Color) -> void:
-	var rings: int = 4
-	var ring_pts: int = 6
-	var vbase: int = b.vert_count
-
-	for r in range(rings):
-		var phi: float = (float(r + 1) / float(rings + 1)) * PI
-		var y: float = cos(phi) * radius
-		var ring_r: float = sin(phi) * radius
-		for p in range(ring_pts):
-			var theta: float = float(p) * TAU / float(ring_pts)
-			var jitter: float = 1.0 + 0.15 * sin(theta * 3.0 + phi * 2.0)
-			var v: Vector3 = center + Vector3(cos(theta) * ring_r * jitter, y * jitter, sin(theta) * ring_r * jitter)
-			b.set_color(color)
-			b.set_normal((v - center).normalized())
-			b.add_vertex(v)
-
-	_connect_tube_grid(b, vbase, rings, ring_pts, true)

@@ -22,9 +22,9 @@ func _update_state() -> void:
 		if pedestal_light:
 			pedestal_light.light_color = Color(1.0, 0.85, 0.45, 1.0)
 	else:
+		interaction_prompt = ""
 		var ending := QuestManager.get_quest_ending(quest_id)
 		if ending == "accept_deal":
-			interaction_prompt = "Книга растворилась в сиянии."
 			if book_node:
 				book_node.visible = false
 			if quill_pickup and is_instance_valid(quill_pickup):
@@ -33,7 +33,6 @@ func _update_state() -> void:
 			if pedestal_light:
 				pedestal_light.light_color = Color(0.85, 0.45, 1.0, 1.0)
 		else:
-			interaction_prompt = "Страницы запечатаны навсегда."
 			if book_node:
 				book_node.visible = true
 			if quill_pickup:
@@ -43,9 +42,9 @@ func _update_state() -> void:
 func _on_quest_completed(completed_id: String, ending_id: String) -> void:
 	if completed_id != quest_id:
 		return
-	
+
+	interaction_prompt = ""
 	if ending_id == "accept_deal":
-		interaction_prompt = "Книга растворилась в сиянии."
 		if book_node:
 			var tween := create_tween()
 			tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -67,16 +66,13 @@ func _on_quest_completed(completed_id: String, ending_id: String) -> void:
 			l_tween.parallel().tween_property(pedestal_light, "light_energy", 3.5, 0.8)
 		GameManager.notify("Сделка принята! На постаменте появилось Великое перо.")
 	else:
-		interaction_prompt = "Страницы запечатаны навсегда."
 		GameManager.notify("Сделка отвергнута. История запечатана.")
 
-	GameManager.interaction_prompt_changed.emit(interaction_prompt)
+	GameManager.interaction_prompt_cleared.emit()
 
 func interact() -> void:
 	if not QuestManager.is_quest_completed(quest_id):
 		GameManager.open_quest(quest_id)
-	else:
-		GameManager.interaction_prompt_changed.emit(interaction_prompt)
 
 func _set_collision(node: Node, enabled: bool) -> void:
 	if not node:

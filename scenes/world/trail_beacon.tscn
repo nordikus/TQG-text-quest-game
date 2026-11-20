@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/trail_beacon.gd" id="1_beacon"]
+
+[sub_resource type="StandardMaterial3D" id="Stone"]
+albedo_color = Color(0.29, 0.31, 0.29, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="Foot"]
+material = SubResource("Stone")
+top_radius = 0.27
+bottom_radius = 0.42
+height = 0.18
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="Shaft"]
+material = SubResource("Stone")
+top_radius = 0.17
+bottom_radius = 0.29
+height = 0.84
+radial_segments = 5
+
+[sub_resource type="SphereMesh" id="Crystal"]
+radius = 0.16
+height = 0.54
+radial_segments = 5
+rings = 2
+
+[node name="TrailBeacon" type="Node3D"]
+script = ExtResource("1_beacon")
+
+[node name="Foot" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, 0)
+mesh = SubResource("Foot")
+
+[node name="Shaft" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.52, 0)
+mesh = SubResource("Shaft")
+
+[node name="Crystal" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.13, 0)
+rotation = Vector3(0, 0, 0.18)
+mesh = SubResource("Crystal")
+
+[node name="Light" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.22, 0)
+light_energy = 1.1
+omni_range = 5.0

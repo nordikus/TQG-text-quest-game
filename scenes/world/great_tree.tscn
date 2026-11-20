@@ -30,23 +30,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
 light_color = Color(0.4, 0.92, 0.65, 1)
 light_energy = 2.2
 omni_range = 22.0
-
-[node name="AncientBoughBridge" type="Node3D" parent="."]
-
-[node name="BoughArch1" type="Node3D" parent="AncientBoughBridge"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13, 19.48, -21.1)
-
-[node name="FireflyLight" type="OmniLight3D" parent="AncientBoughBridge/BoughArch1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-light_color = Color(0.4, 0.9, 0.5, 1)
-light_energy = 1.2
-omni_range = 6.0
-
-[node name="BoughArch2" type="Node3D" parent="AncientBoughBridge"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 20.33, -30.7)
-
-[node name="FireflyLight" type="OmniLight3D" parent="AncientBoughBridge/BoughArch2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-light_color = Color(0.4, 0.9, 0.5, 1)
-light_energy = 1.2
-omni_range = 6.0

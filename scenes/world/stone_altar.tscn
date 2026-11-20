@@ -77,8 +77,8 @@ albedo_color = Color(0.3, 0.9, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_sparkle"]
 material = SubResource("StandardMaterial3D_sparkle")
-radius = 0.04
-height = 0.08
+radius = 0.017
+height = 0.034
 
 [node name="StoneAltar" type="StaticBody3D"]
 collision_layer = 1

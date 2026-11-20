@@ -1,0 +1,913 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="DressStone"]
+albedo_color = Color(0.43, 0.42, 0.38, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="EdgeStone"]
+albedo_color = Color(0.55, 0.53, 0.46, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="RoofSlate"]
+albedo_color = Color(0.16, 0.225, 0.30, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Recess"]
+albedo_color = Color(0.105, 0.12, 0.14, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Burgundy"]
+albedo_color = Color(0.43, 0.09, 0.105, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Heraldry"]
+albedo_color = Color(0.83, 0.61, 0.27, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Glass"]
+albedo_color = Color(0.7, 0.46, 0.18, 1)
+roughness = 0.87
+emission_enabled = true
+emission = Color(0.7, 0.46, 0.18, 1)
+emission_energy_multiplier = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Flame"]
+albedo_color = Color(1.0, 0.51, 0.18, 1)
+roughness = 0.87
+emission_enabled = true
+emission = Color(1.0, 0.51, 0.18, 1)
+emission_energy_multiplier = 1.25
+
+[sub_resource type="BoxMesh" id="PortalColumn"]
+material = SubResource("DressStone")
+size = Vector3(1.05, 5.9, 1.45)
+
+[sub_resource type="BoxMesh" id="PortalFoot"]
+material = SubResource("EdgeStone")
+size = Vector3(1.55, 0.72, 1.9)
+
+[sub_resource type="BoxMesh" id="PortalVoussoir"]
+material = SubResource("EdgeStone")
+size = Vector3(0.82, 0.81, 1.2)
+
+[sub_resource type="BoxMesh" id="PortalBacking"]
+material = SubResource("Recess")
+size = Vector3(8.5, 2.35, 0.21)
+
+[sub_resource type="BoxMesh" id="Pilaster"]
+material = SubResource("DressStone")
+size = Vector3(1.14, 15.25, 1.02)
+
+[sub_resource type="BoxMesh" id="PilasterBase"]
+material = SubResource("EdgeStone")
+size = Vector3(1.55, 1.05, 1.45)
+
+[sub_resource type="BoxMesh" id="BeltCourse"]
+material = SubResource("EdgeStone")
+size = Vector3(64.8, 0.4, 1.35)
+
+[sub_resource type="BoxMesh" id="Crenel"]
+material = SubResource("DressStone")
+size = Vector3(1.75, 1.85, 1.6)
+
+[sub_resource type="BoxMesh" id="CentralCrown"]
+material = SubResource("DressStone")
+size = Vector3(15.8, 5.05, 13.7)
+
+[sub_resource type="BoxMesh" id="CrownGuard"]
+material = SubResource("EdgeStone")
+size = Vector3(2.2, 1.4, 1.4)
+
+[sub_resource type="BoxMesh" id="WindowFrame"]
+material = SubResource("Recess")
+size = Vector3(1.25, 3.15, 0.16)
+
+[sub_resource type="BoxMesh" id="WindowPane"]
+material = SubResource("Glass")
+size = Vector3(0.76, 2.48, 0.2)
+
+[sub_resource type="BoxMesh" id="WindowSill"]
+material = SubResource("EdgeStone")
+size = Vector3(1.75, 0.26, 0.55)
+
+[sub_resource type="BoxMesh" id="Mullion"]
+material = SubResource("Recess")
+size = Vector3(0.1, 2.5, 0.23)
+
+[sub_resource type="BoxMesh" id="Banner"]
+material = SubResource("Burgundy")
+size = Vector3(1.85, 4.4, 0.075)
+
+[sub_resource type="BoxMesh" id="BannerRod"]
+material = SubResource("Heraldry")
+size = Vector3(2.36, 0.135, 0.16)
+
+[sub_resource type="BoxMesh" id="BannerMark"]
+material = SubResource("Heraldry")
+size = Vector3(0.62, 0.62, 0.09)
+
+[sub_resource type="BoxMesh" id="HallPillar"]
+material = SubResource("DressStone")
+size = Vector3(1.1, 12.5, 1.2)
+
+[sub_resource type="BoxMesh" id="HallPillarCap"]
+material = SubResource("EdgeStone")
+size = Vector3(1.5, 0.38, 1.6)
+
+[sub_resource type="BoxMesh" id="ApsePanel"]
+material = SubResource("Recess")
+size = Vector3(8.9, 11.7, 0.32)
+
+[sub_resource type="BoxMesh" id="ApseBand"]
+material = SubResource("EdgeStone")
+size = Vector3(10.0, 0.35, 0.49)
+
+[sub_resource type="BoxMesh" id="ThroneBanner"]
+material = SubResource("Burgundy")
+size = Vector3(4.9, 7.8, 0.09)
+
+[sub_resource type="BoxMesh" id="ThroneBannerRod"]
+material = SubResource("Heraldry")
+size = Vector3(5.7, 0.17, 0.17)
+
+[sub_resource type="BoxMesh" id="ThroneBannerMark"]
+material = SubResource("Heraldry")
+size = Vector3(1.65, 1.65, 0.11)
+
+[sub_resource type="BoxMesh" id="TorchPlate"]
+material = SubResource("Recess")
+size = Vector3(0.29, 0.56, 0.16)
+
+[sub_resource type="BoxMesh" id="TorchShelf"]
+material = SubResource("EdgeStone")
+size = Vector3(0.65, 0.16, 0.62)
+
+[sub_resource type="PrismMesh" id="BannerPoint"]
+material = SubResource("Burgundy")
+size = Vector3(1.85, 0.7, 0.075)
+
+[sub_resource type="PrismMesh" id="ThroneBannerPoint"]
+material = SubResource("Burgundy")
+size = Vector3(4.9, 1.1, 0.09)
+
+[sub_resource type="CylinderMesh" id="TurretDrum"]
+material = SubResource("DressStone")
+top_radius = 3.05
+bottom_radius = 3.25
+height = 7.7
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="TurretRim"]
+material = SubResource("EdgeStone")
+top_radius = 3.3
+bottom_radius = 3.3
+height = 0.6
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="TurretRoof"]
+material = SubResource("RoofSlate")
+top_radius = 0.08
+bottom_radius = 3.62
+height = 4.3
+radial_segments = 8
+
+[sub_resource type="SphereMesh" id="SconceFlame"]
+material = SubResource("Flame")
+radius = 0.16
+height = 0.46
+radial_segments = 5
+rings = 2
+
+[node name="KeepArchitecture" type="Node3D"]
+
+[node name="GateArchBacking" type="MeshInstance3D" parent="."]
+position = Vector3(0, 7.18, 15.63)
+mesh = SubResource("PortalBacking")
+
+[node name="GatePierLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-3.94, 2.95, 16.1)
+mesh = SubResource("PortalColumn")
+
+[node name="GatePierFootLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-3.94, 0.36, 16.24)
+mesh = SubResource("PortalFoot")
+
+[node name="GatePierCapLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-3.94, 5.62, 16.24)
+mesh = SubResource("PortalFoot")
+
+[node name="RoyalStandardLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-6.45, 8.7, 16.01)
+mesh = SubResource("Banner")
+
+[node name="StandardTailLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-6.45, 6.15, 16.01)
+rotation = Vector3(0, 0, 3.141593)
+mesh = SubResource("BannerPoint")
+
+[node name="StandardRodLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-6.45, 10.94, 16.05)
+mesh = SubResource("BannerRod")
+
+[node name="StandardEmblemLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-6.45, 9.36, 16.11)
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("BannerMark")
+
+[node name="RoyalTurretLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-8.15, 22.02, 7.55)
+mesh = SubResource("TurretDrum")
+
+[node name="RoyalTurretRimLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-8.15, 25.67, 7.55)
+mesh = SubResource("TurretRim")
+
+[node name="RoyalTurretRoofLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-8.15, 28, 7.55)
+mesh = SubResource("TurretRoof")
+
+[node name="GateLightLeft" type="OmniLight3D" parent="."]
+position = Vector3(-5.3, 4.1, 16.9)
+light_color = Color(1.0, 0.68, 0.42, 1)
+light_energy = 2.1
+omni_range = 8
+
+[node name="GatePierRight" type="MeshInstance3D" parent="."]
+position = Vector3(3.94, 2.95, 16.1)
+mesh = SubResource("PortalColumn")
+
+[node name="GatePierFootRight" type="MeshInstance3D" parent="."]
+position = Vector3(3.94, 0.36, 16.24)
+mesh = SubResource("PortalFoot")
+
+[node name="GatePierCapRight" type="MeshInstance3D" parent="."]
+position = Vector3(3.94, 5.62, 16.24)
+mesh = SubResource("PortalFoot")
+
+[node name="RoyalStandardRight" type="MeshInstance3D" parent="."]
+position = Vector3(6.45, 8.7, 16.01)
+mesh = SubResource("Banner")
+
+[node name="StandardTailRight" type="MeshInstance3D" parent="."]
+position = Vector3(6.45, 6.15, 16.01)
+rotation = Vector3(0, 0, 3.141593)
+mesh = SubResource("BannerPoint")
+
+[node name="StandardRodRight" type="MeshInstance3D" parent="."]
+position = Vector3(6.45, 10.94, 16.05)
+mesh = SubResource("BannerRod")
+
+[node name="StandardEmblemRight" type="MeshInstance3D" parent="."]
+position = Vector3(6.45, 9.36, 16.11)
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("BannerMark")
+
+[node name="RoyalTurretRight" type="MeshInstance3D" parent="."]
+position = Vector3(8.15, 22.02, 7.55)
+mesh = SubResource("TurretDrum")
+
+[node name="RoyalTurretRimRight" type="MeshInstance3D" parent="."]
+position = Vector3(8.15, 25.67, 7.55)
+mesh = SubResource("TurretRim")
+
+[node name="RoyalTurretRoofRight" type="MeshInstance3D" parent="."]
+position = Vector3(8.15, 28, 7.55)
+mesh = SubResource("TurretRoof")
+
+[node name="GateLightRight" type="OmniLight3D" parent="."]
+position = Vector3(5.3, 4.1, 16.9)
+light_color = Color(1.0, 0.68, 0.42, 1)
+light_energy = 2.1
+omni_range = 8
+
+[node name="GateArchStone1" type="MeshInstance3D" parent="."]
+position = Vector3(3.94, 5.82, 16.03)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone2" type="MeshInstance3D" parent="."]
+position = Vector3(3.841, 6.448, 16.03)
+rotation = Vector3(0, 0, 0.224399)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone3" type="MeshInstance3D" parent="."]
+position = Vector3(3.55, 7.044, 16.03)
+rotation = Vector3(0, 0, 0.448799)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone4" type="MeshInstance3D" parent="."]
+position = Vector3(3.08, 7.578, 16.03)
+rotation = Vector3(0, 0, 0.673198)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone5" type="MeshInstance3D" parent="."]
+position = Vector3(2.457, 8.025, 16.03)
+rotation = Vector3(0, 0, 0.897598)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone6" type="MeshInstance3D" parent="."]
+position = Vector3(1.71, 8.361, 16.03)
+rotation = Vector3(0, 0, 1.121997)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone7" type="MeshInstance3D" parent="."]
+position = Vector3(0.877, 8.569, 16.03)
+rotation = Vector3(0, 0, 1.346397)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone8" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 8.64, 16.03)
+rotation = Vector3(0, 0, 1.570796)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone9" type="MeshInstance3D" parent="."]
+position = Vector3(-0.877, 8.569, 16.03)
+rotation = Vector3(0, 0, 1.795196)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone10" type="MeshInstance3D" parent="."]
+position = Vector3(-1.71, 8.361, 16.03)
+rotation = Vector3(0, 0, 2.019595)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone11" type="MeshInstance3D" parent="."]
+position = Vector3(-2.457, 8.025, 16.03)
+rotation = Vector3(0, 0, 2.243995)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone12" type="MeshInstance3D" parent="."]
+position = Vector3(-3.08, 7.578, 16.03)
+rotation = Vector3(0, 0, 2.468394)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone13" type="MeshInstance3D" parent="."]
+position = Vector3(-3.55, 7.044, 16.03)
+rotation = Vector3(0, 0, 2.692794)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone14" type="MeshInstance3D" parent="."]
+position = Vector3(-3.841, 6.448, 16.03)
+rotation = Vector3(0, 0, 2.917193)
+mesh = SubResource("PortalVoussoir")
+
+[node name="GateArchStone15" type="MeshInstance3D" parent="."]
+position = Vector3(-3.94, 5.82, 16.03)
+rotation = Vector3(0, 0, 3.141593)
+mesh = SubResource("PortalVoussoir")
+
+[node name="FacadeButtress1" type="MeshInstance3D" parent="."]
+position = Vector3(-30.75, 7.7, 15.92)
+mesh = SubResource("Pilaster")
+
+[node name="FacadeButtressFoot1" type="MeshInstance3D" parent="."]
+position = Vector3(-30.75, 0.53, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtressCap1" type="MeshInstance3D" parent="."]
+position = Vector3(-30.75, 15.12, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtress2" type="MeshInstance3D" parent="."]
+position = Vector3(-19.0, 7.7, 15.92)
+mesh = SubResource("Pilaster")
+
+[node name="FacadeButtressFoot2" type="MeshInstance3D" parent="."]
+position = Vector3(-19.0, 0.53, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtressCap2" type="MeshInstance3D" parent="."]
+position = Vector3(-19.0, 15.12, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtress3" type="MeshInstance3D" parent="."]
+position = Vector3(-10.6, 7.7, 15.92)
+mesh = SubResource("Pilaster")
+
+[node name="FacadeButtressFoot3" type="MeshInstance3D" parent="."]
+position = Vector3(-10.6, 0.53, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtressCap3" type="MeshInstance3D" parent="."]
+position = Vector3(-10.6, 15.12, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtress4" type="MeshInstance3D" parent="."]
+position = Vector3(10.6, 7.7, 15.92)
+mesh = SubResource("Pilaster")
+
+[node name="FacadeButtressFoot4" type="MeshInstance3D" parent="."]
+position = Vector3(10.6, 0.53, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtressCap4" type="MeshInstance3D" parent="."]
+position = Vector3(10.6, 15.12, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtress5" type="MeshInstance3D" parent="."]
+position = Vector3(20.3, 7.7, 15.92)
+mesh = SubResource("Pilaster")
+
+[node name="FacadeButtressFoot5" type="MeshInstance3D" parent="."]
+position = Vector3(20.3, 0.53, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtressCap5" type="MeshInstance3D" parent="."]
+position = Vector3(20.3, 15.12, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtress6" type="MeshInstance3D" parent="."]
+position = Vector3(30.75, 7.7, 15.92)
+mesh = SubResource("Pilaster")
+
+[node name="FacadeButtressFoot6" type="MeshInstance3D" parent="."]
+position = Vector3(30.75, 0.53, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeButtressCap6" type="MeshInstance3D" parent="."]
+position = Vector3(30.75, 15.12, 16.08)
+mesh = SubResource("PilasterBase")
+
+[node name="FacadeCornice" type="MeshInstance3D" parent="."]
+position = Vector3(0, 17.8, 15.75)
+mesh = SubResource("BeltCourse")
+
+[node name="ParapetMerlon1" type="MeshInstance3D" parent="."]
+position = Vector3(-30, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon2" type="MeshInstance3D" parent="."]
+position = Vector3(-26, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon3" type="MeshInstance3D" parent="."]
+position = Vector3(-22, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon4" type="MeshInstance3D" parent="."]
+position = Vector3(-18, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon5" type="MeshInstance3D" parent="."]
+position = Vector3(-14, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon6" type="MeshInstance3D" parent="."]
+position = Vector3(-10, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon7" type="MeshInstance3D" parent="."]
+position = Vector3(-6, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon8" type="MeshInstance3D" parent="."]
+position = Vector3(-2, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon9" type="MeshInstance3D" parent="."]
+position = Vector3(2, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon10" type="MeshInstance3D" parent="."]
+position = Vector3(6, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon11" type="MeshInstance3D" parent="."]
+position = Vector3(10, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon12" type="MeshInstance3D" parent="."]
+position = Vector3(14, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon13" type="MeshInstance3D" parent="."]
+position = Vector3(18, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon14" type="MeshInstance3D" parent="."]
+position = Vector3(22, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon15" type="MeshInstance3D" parent="."]
+position = Vector3(26, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="ParapetMerlon16" type="MeshInstance3D" parent="."]
+position = Vector3(30, 19.22, 14.85)
+mesh = SubResource("Crenel")
+
+[node name="RoofCrown" type="MeshInstance3D" parent="."]
+position = Vector3(0, 20.55, 6.7)
+mesh = SubResource("CentralCrown")
+
+[node name="CrownMerlon1" type="MeshInstance3D" parent="."]
+position = Vector3(-5.8, 23.6, 13.1)
+mesh = SubResource("CrownGuard")
+
+[node name="CrownMerlon2" type="MeshInstance3D" parent="."]
+position = Vector3(-2.9, 23.6, 13.1)
+mesh = SubResource("CrownGuard")
+
+[node name="CrownMerlon3" type="MeshInstance3D" parent="."]
+position = Vector3(0, 23.6, 13.1)
+mesh = SubResource("CrownGuard")
+
+[node name="CrownMerlon4" type="MeshInstance3D" parent="."]
+position = Vector3(2.9, 23.6, 13.1)
+mesh = SubResource("CrownGuard")
+
+[node name="CrownMerlon5" type="MeshInstance3D" parent="."]
+position = Vector3(5.8, 23.6, 13.1)
+mesh = SubResource("CrownGuard")
+
+[node name="LanternWindow1Frame" type="MeshInstance3D" parent="."]
+position = Vector3(-27.5, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow1Pane" type="MeshInstance3D" parent="."]
+position = Vector3(-27.5, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow1Sill" type="MeshInstance3D" parent="."]
+position = Vector3(-27.5, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow1Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(-27.5, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow2Frame" type="MeshInstance3D" parent="."]
+position = Vector3(-23.4, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow2Pane" type="MeshInstance3D" parent="."]
+position = Vector3(-23.4, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow2Sill" type="MeshInstance3D" parent="."]
+position = Vector3(-23.4, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow2Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(-23.4, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow3Frame" type="MeshInstance3D" parent="."]
+position = Vector3(-16.5, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow3Pane" type="MeshInstance3D" parent="."]
+position = Vector3(-16.5, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow3Sill" type="MeshInstance3D" parent="."]
+position = Vector3(-16.5, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow3Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(-16.5, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow4Frame" type="MeshInstance3D" parent="."]
+position = Vector3(-13.2, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow4Pane" type="MeshInstance3D" parent="."]
+position = Vector3(-13.2, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow4Sill" type="MeshInstance3D" parent="."]
+position = Vector3(-13.2, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow4Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(-13.2, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow5Frame" type="MeshInstance3D" parent="."]
+position = Vector3(-7.1, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow5Pane" type="MeshInstance3D" parent="."]
+position = Vector3(-7.1, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow5Sill" type="MeshInstance3D" parent="."]
+position = Vector3(-7.1, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow5Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(-7.1, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow6Frame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow6Pane" type="MeshInstance3D" parent="."]
+position = Vector3(0, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow6Sill" type="MeshInstance3D" parent="."]
+position = Vector3(0, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow6Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow7Frame" type="MeshInstance3D" parent="."]
+position = Vector3(7.1, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow7Pane" type="MeshInstance3D" parent="."]
+position = Vector3(7.1, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow7Sill" type="MeshInstance3D" parent="."]
+position = Vector3(7.1, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow7Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(7.1, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow8Frame" type="MeshInstance3D" parent="."]
+position = Vector3(13.2, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow8Pane" type="MeshInstance3D" parent="."]
+position = Vector3(13.2, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow8Sill" type="MeshInstance3D" parent="."]
+position = Vector3(13.2, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow8Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(13.2, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow9Frame" type="MeshInstance3D" parent="."]
+position = Vector3(16.5, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow9Pane" type="MeshInstance3D" parent="."]
+position = Vector3(16.5, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow9Sill" type="MeshInstance3D" parent="."]
+position = Vector3(16.5, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow9Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(16.5, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow10Frame" type="MeshInstance3D" parent="."]
+position = Vector3(23.4, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow10Pane" type="MeshInstance3D" parent="."]
+position = Vector3(23.4, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow10Sill" type="MeshInstance3D" parent="."]
+position = Vector3(23.4, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow10Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(23.4, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="LanternWindow11Frame" type="MeshInstance3D" parent="."]
+position = Vector3(27.5, 12.9, 15.56)
+mesh = SubResource("WindowFrame")
+
+[node name="LanternWindow11Pane" type="MeshInstance3D" parent="."]
+position = Vector3(27.5, 12.9, 15.61)
+mesh = SubResource("WindowPane")
+
+[node name="LanternWindow11Sill" type="MeshInstance3D" parent="."]
+position = Vector3(27.5, 11.26, 15.68)
+mesh = SubResource("WindowSill")
+
+[node name="LanternWindow11Mullion" type="MeshInstance3D" parent="."]
+position = Vector3(27.5, 12.9, 15.66)
+mesh = SubResource("Mullion")
+
+[node name="HallPillar1_1" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 6.46, -13.6)
+mesh = SubResource("HallPillar")
+
+[node name="HallPillarFoot1_1" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 0.44, -13.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="HallPillarCap1_1" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 12.6, -13.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="TorchBack1_1" type="MeshInstance3D" parent="."]
+position = Vector3(-11.29305, 3.2, -13.6)
+mesh = SubResource("TorchPlate")
+
+[node name="TorchLedge1_1" type="MeshInstance3D" parent="."]
+position = Vector3(-11.22195, 3.0, -13.6)
+mesh = SubResource("TorchShelf")
+
+[node name="TorchFlame1_1" type="MeshInstance3D" parent="."]
+position = Vector3(-11.10345, 3.26, -13.6)
+mesh = SubResource("SconceFlame")
+
+[node name="TorchLight1_1" type="OmniLight3D" parent="."]
+position = Vector3(-10.84275, 3.36, -13.6)
+light_color = Color(1.0, 0.64, 0.31, 1)
+light_energy = 3.0
+omni_range = 11
+
+[node name="HallPillar1_2" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 6.46, -3.2)
+mesh = SubResource("HallPillar")
+
+[node name="HallPillarFoot1_2" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 0.44, -3.2)
+mesh = SubResource("HallPillarCap")
+
+[node name="HallPillarCap1_2" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 12.6, -3.2)
+mesh = SubResource("HallPillarCap")
+
+[node name="TorchBack1_2" type="MeshInstance3D" parent="."]
+position = Vector3(-11.29305, 3.2, -3.2)
+mesh = SubResource("TorchPlate")
+
+[node name="TorchLedge1_2" type="MeshInstance3D" parent="."]
+position = Vector3(-11.22195, 3.0, -3.2)
+mesh = SubResource("TorchShelf")
+
+[node name="TorchFlame1_2" type="MeshInstance3D" parent="."]
+position = Vector3(-11.10345, 3.26, -3.2)
+mesh = SubResource("SconceFlame")
+
+[node name="TorchLight1_2" type="OmniLight3D" parent="."]
+position = Vector3(-10.84275, 3.36, -3.2)
+light_color = Color(1.0, 0.64, 0.31, 1)
+light_energy = 3.0
+omni_range = 11
+
+[node name="HallPillar1_3" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 6.46, 7.6)
+mesh = SubResource("HallPillar")
+
+[node name="HallPillarFoot1_3" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 0.44, 7.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="HallPillarCap1_3" type="MeshInstance3D" parent="."]
+position = Vector3(-11.85, 12.6, 7.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="TorchBack1_3" type="MeshInstance3D" parent="."]
+position = Vector3(-11.29305, 3.2, 7.6)
+mesh = SubResource("TorchPlate")
+
+[node name="TorchLedge1_3" type="MeshInstance3D" parent="."]
+position = Vector3(-11.22195, 3.0, 7.6)
+mesh = SubResource("TorchShelf")
+
+[node name="TorchFlame1_3" type="MeshInstance3D" parent="."]
+position = Vector3(-11.10345, 3.26, 7.6)
+mesh = SubResource("SconceFlame")
+
+[node name="TorchLight1_3" type="OmniLight3D" parent="."]
+position = Vector3(-10.84275, 3.36, 7.6)
+light_color = Color(1.0, 0.64, 0.31, 1)
+light_energy = 3.0
+omni_range = 11
+
+[node name="HallPillar2_1" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 6.46, -13.6)
+mesh = SubResource("HallPillar")
+
+[node name="HallPillarFoot2_1" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 0.44, -13.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="HallPillarCap2_1" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 12.6, -13.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="TorchBack2_1" type="MeshInstance3D" parent="."]
+position = Vector3(11.29305, 3.2, -13.6)
+mesh = SubResource("TorchPlate")
+
+[node name="TorchLedge2_1" type="MeshInstance3D" parent="."]
+position = Vector3(11.22195, 3.0, -13.6)
+mesh = SubResource("TorchShelf")
+
+[node name="TorchFlame2_1" type="MeshInstance3D" parent="."]
+position = Vector3(11.10345, 3.26, -13.6)
+mesh = SubResource("SconceFlame")
+
+[node name="TorchLight2_1" type="OmniLight3D" parent="."]
+position = Vector3(10.84275, 3.36, -13.6)
+light_color = Color(1.0, 0.64, 0.31, 1)
+light_energy = 3.0
+omni_range = 11
+
+[node name="HallPillar2_2" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 6.46, -3.2)
+mesh = SubResource("HallPillar")
+
+[node name="HallPillarFoot2_2" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 0.44, -3.2)
+mesh = SubResource("HallPillarCap")
+
+[node name="HallPillarCap2_2" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 12.6, -3.2)
+mesh = SubResource("HallPillarCap")
+
+[node name="TorchBack2_2" type="MeshInstance3D" parent="."]
+position = Vector3(11.29305, 3.2, -3.2)
+mesh = SubResource("TorchPlate")
+
+[node name="TorchLedge2_2" type="MeshInstance3D" parent="."]
+position = Vector3(11.22195, 3.0, -3.2)
+mesh = SubResource("TorchShelf")
+
+[node name="TorchFlame2_2" type="MeshInstance3D" parent="."]
+position = Vector3(11.10345, 3.26, -3.2)
+mesh = SubResource("SconceFlame")
+
+[node name="TorchLight2_2" type="OmniLight3D" parent="."]
+position = Vector3(10.84275, 3.36, -3.2)
+light_color = Color(1.0, 0.64, 0.31, 1)
+light_energy = 3.0
+omni_range = 11
+
+[node name="HallPillar2_3" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 6.46, 7.6)
+mesh = SubResource("HallPillar")
+
+[node name="HallPillarFoot2_3" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 0.44, 7.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="HallPillarCap2_3" type="MeshInstance3D" parent="."]
+position = Vector3(11.85, 12.6, 7.6)
+mesh = SubResource("HallPillarCap")
+
+[node name="TorchBack2_3" type="MeshInstance3D" parent="."]
+position = Vector3(11.29305, 3.2, 7.6)
+mesh = SubResource("TorchPlate")
+
+[node name="TorchLedge2_3" type="MeshInstance3D" parent="."]
+position = Vector3(11.22195, 3.0, 7.6)
+mesh = SubResource("TorchShelf")
+
+[node name="TorchFlame2_3" type="MeshInstance3D" parent="."]
+position = Vector3(11.10345, 3.26, 7.6)
+mesh = SubResource("SconceFlame")
+
+[node name="TorchLight2_3" type="OmniLight3D" parent="."]
+position = Vector3(10.84275, 3.36, 7.6)
+light_color = Color(1.0, 0.64, 0.31, 1)
+light_energy = 3.0
+omni_range = 11
+
+[node name="ThroneAlcove" type="MeshInstance3D" parent="."]
+position = Vector3(0, 6.09, -14.24)
+mesh = SubResource("ApsePanel")
+
+[node name="ThroneAlcoveCornice" type="MeshInstance3D" parent="."]
+position = Vector3(0, 11.96, -14.07)
+mesh = SubResource("ApseBand")
+
+[node name="ThroneStandard" type="MeshInstance3D" parent="."]
+position = Vector3(0, 7.07, -13.98)
+mesh = SubResource("ThroneBanner")
+
+[node name="ThroneStandardTail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.62, -13.98)
+rotation = Vector3(0, 0, 3.141593)
+mesh = SubResource("ThroneBannerPoint")
+
+[node name="ThroneStandardRod" type="MeshInstance3D" parent="."]
+position = Vector3(0, 11.03, -13.91)
+mesh = SubResource("ThroneBannerRod")
+
+[node name="ThroneStandardEmblem" type="MeshInstance3D" parent="."]
+position = Vector3(0, 8.12, -13.89)
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("ThroneBannerMark")
+
+[node name="DaisLightLeft" type="OmniLight3D" parent="."]
+position = Vector3(-4.25, 3.1, -11.2)
+light_color = Color(1.0, 0.72, 0.43, 1)
+light_energy = 4.3
+omni_range = 10.5
+
+[node name="DaisLightRight" type="OmniLight3D" parent="."]
+position = Vector3(4.25, 3.1, -11.2)
+light_color = Color(1.0, 0.72, 0.43, 1)
+light_energy = 4.3
+omni_range = 10.5

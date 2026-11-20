@@ -3,9 +3,16 @@
 [ext_resource type="Script" path="res://scripts/interaction/interactable_door.gd" id="1_door"]
 [ext_resource type="Script" path="res://scripts/interaction/pickup_item.gd" id="2_item"]
 
-[sub_resource type="StandardMaterial3D" id="Mat_Stone"]
-albedo_color = Color(0.40, 0.42, 0.44, 1.0)
-roughness = 0.90
+[ext_resource type="Shader" path="res://scenes/world/castle/masonry.gdshader" id="10_masonry"]
+
+[ext_resource type="Script" path="res://scripts/world/wooden_door_leaf.gd" id="12_door_leaf"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/castle/rune_chest.tscn" id="15_rune_chest"]
+
+[ext_resource type="Script" path="res://scripts/world/castle_outbuilding_details.gd" id="13_details"]
+
+[sub_resource type="ShaderMaterial" id="Mat_Stone"]
+shader = ExtResource("10_masonry")
 
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
@@ -62,10 +69,11 @@ size = Vector3(16.4, 0.44, 22.4)
 
 [sub_resource type="BoxMesh" id="Mesh_EntranceStep"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(1.8, 0.22, 3.6)
+size = Vector3(2.7, 0.28, 3.0)
 
-[sub_resource type="BoxShape3D" id="Shape_EntranceStep"]
-size = Vector3(1.8, 0.22, 3.6)
+[sub_resource type="ConcavePolygonShape3D" id="Shape_EntranceStep"]
+backface_collision = true
+data = PackedVector3Array(-10.55, -0.04, -1.5, -10.55, -0.04, 1.5, -7.65, 0.25, -1.5, -10.55, -0.04, 1.5, -7.65, 0.25, 1.5, -7.65, 0.25, -1.5)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor"]
 material = SubResource("Mat_Wood")
@@ -132,17 +140,10 @@ size = Vector3(1.6, 7.5, 1.6)
 
 [sub_resource type="BoxMesh" id="Mesh_InteriorPartition"]
 material = SubResource("Mat_Wood")
-size = Vector3(0.4, 5.0, 12.0)
+size = Vector3(0.4, 5.0, 6.5)
 
 [sub_resource type="BoxShape3D" id="Shape_InteriorPartition"]
-size = Vector3(0.4, 5.0, 12.0)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksDoorWing"]
-material = SubResource("Mat_Wood")
-size = Vector3(0.18, 3.5, 2.8)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksDoorWing"]
-size = Vector3(0.18, 3.5, 2.8)
+size = Vector3(0.4, 5.0, 6.5)
 
 [sub_resource type="BoxMesh" id="Mesh_CaptainsDesk"]
 material = SubResource("Mat_Wood")
@@ -154,9 +155,19 @@ size = Vector3(3.2, 0.9, 1.6)
 [sub_resource type="BoxShape3D" id="Shape_KeyCol"]
 size = Vector3(0.5, 0.4, 0.5)
 
-[sub_resource type="BoxMesh" id="Mesh_KeyGold"]
+[sub_resource type="CylinderMesh" id="Mesh_KeyGold"]
 material = SubResource("Mat_Gold")
-size = Vector3(0.24, 0.12, 0.45)
+top_radius = 0.159
+bottom_radius = 0.184
+height = 0.075
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="Mesh_SealHandle"]
+material = SubResource("Mat_Wood")
+top_radius = 0.063
+bottom_radius = 0.047
+height = 0.12
+radial_segments = 8
 
 [sub_resource type="BoxMesh" id="Mesh_NotePaper"]
 material = SubResource("Mat_Paper")
@@ -183,6 +194,21 @@ size = Vector3(2.4, 1.8, 1.2)
 [sub_resource type="BoxShape3D" id="Shape_BunkBed_2"]
 size = Vector3(2.4, 1.8, 1.2)
 
+[sub_resource type="BoxMesh" id="Mesh_ArmoryPartitionSouth"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4, 5, 3.5)
+
+[sub_resource type="BoxShape3D" id="Shape_ArmoryPartitionSouth"]
+size = Vector3(0.4, 5, 3.5)
+
+[sub_resource type="BoxMesh" id="PortalJamb"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.94, 3.9, 0.34)
+
+[sub_resource type="BoxMesh" id="PortalLintel"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.98, 0.38, 3.62)
+
 [node name="BarracksBuilding" type="Node3D"]
 
 [node name="PlinthBase" type="StaticBody3D" parent="."]
@@ -195,9 +221,9 @@ mesh = SubResource("Mesh_PlinthBase")
 shape = SubResource("Shape_PlinthBase")
 
 [node name="EntranceStep" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0.11, 0.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="EntranceStep"]
+transform = Transform3D(0.99438726, -0.10580161, 0, 0.10580161, 0.99438726, 0, 0, 0, 1, -8.98, -0.012, 0)
 mesh = SubResource("Mesh_EntranceStep")
 
 [node name="Col" type="CollisionShape3D" parent="EntranceStep"]
@@ -285,7 +311,7 @@ mesh = SubResource("Mesh_Chimney")
 shape = SubResource("Shape_Chimney")
 
 [node name="InteriorPartition" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.7, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.7, -7.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="InteriorPartition"]
 mesh = SubResource("Mesh_InteriorPartition")
@@ -293,22 +319,27 @@ mesh = SubResource("Mesh_InteriorPartition")
 [node name="Col" type="CollisionShape3D" parent="InteriorPartition"]
 shape = SubResource("Shape_InteriorPartition")
 
+[node name="ArmoryPartitionSouth" type="StaticBody3D" parent="."]
+position = Vector3(0, 2.7, -0.25)
+
+[node name="Mesh" type="MeshInstance3D" parent="ArmoryPartitionSouth"]
+mesh = SubResource("Mesh_ArmoryPartitionSouth")
+
+[node name="Col" type="CollisionShape3D" parent="ArmoryPartitionSouth"]
+shape = SubResource("Shape_ArmoryPartitionSouth")
+
 [node name="BarracksDoor" type="StaticBody3D" parent="." node_paths=PackedStringArray("left_wing")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 1.97, -1.4)
 script = ExtResource("1_door")
 left_wing = NodePath("DoorWing")
-open_angle_deg = 95.0
+open_angle_deg = -92.0
 
-[node name="DoorWing" type="Node3D" parent="BarracksDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="BarracksDoor/DoorWing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4)
-mesh = SubResource("Mesh_BarracksDoorWing")
-
-[node name="DoorBlocker" type="CollisionShape3D" parent="BarracksDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4)
-shape = SubResource("Shape_BarracksDoorWing")
+[node name="DoorWing" type="AnimatableBody3D" parent="BarracksDoor"]
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, -1.57079633, 0)
+script = ExtResource("12_door_leaf")
+panel_size = Vector3(2.8, 3.5, 0.18)
+style = 0
 
 [node name="CaptainsDesk" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.67, -7.0)
@@ -323,12 +354,17 @@ shape = SubResource("Shape_CaptainsDesk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1.18, -7.0)
 script = ExtResource("2_item")
 item_id = "throne_hall_key"
+restore_on_rewrite = true
 
 [node name="Col" type="CollisionShape3D" parent="ThroneHallKey"]
 shape = SubResource("Shape_KeyCol")
 
 [node name="KeyMesh" type="MeshInstance3D" parent="ThroneHallKey"]
 mesh = SubResource("Mesh_KeyGold")
+
+[node name="SealHandle" type="MeshInstance3D" parent="ThroneHallKey"]
+position = Vector3(0, 0.088, 0)
+mesh = SubResource("Mesh_SealHandle")
 
 [node name="KeyLight" type="OmniLight3D" parent="ThroneHallKey"]
 light_color = Color(1.0, 0.85, 0.4, 1.0)
@@ -379,3 +415,23 @@ light_color = Color(1.0, 0.82, 0.55, 1.0)
 light_energy = 2.0
 omni_range = 15.0
 
+
+[node name="PortalJambNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-8.07, 1.95, -1.59)
+mesh = SubResource("PortalJamb")
+
+[node name="PortalJambSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-8.07, 1.95, 1.59)
+mesh = SubResource("PortalJamb")
+
+[node name="PortalLintel" type="MeshInstance3D" parent="."]
+position = Vector3(-8.07, 3.90, 0)
+mesh = SubResource("PortalLintel")
+
+[node name="RuneChest" parent="." instance=ExtResource("15_rune_chest")]
+position = Vector3(4.6, 0.25, -7.65)
+rotation = Vector3(0, -0.16, 0)
+
+[node name="ArchitecturalDetails" type="Node3D" parent="."]
+script = ExtResource("13_details")
+building = 1

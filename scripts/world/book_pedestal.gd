@@ -3,7 +3,6 @@ extends Interactable
 
 @export var quest_id: String = "burning_grove"
 @export var uncompleted_prompt: String = "[E] Прочесть книгу: Горящая роща"
-@export var completed_prompt: String = "Страницы застыли."
 @export var rewrite_prompt: String = "[E] Переписать историю Великим пером"
 
 func _ready():
@@ -18,7 +17,7 @@ func _update_prompt():
 		if InventoryManager.has_item("great_quill"):
 			interaction_prompt = rewrite_prompt
 		else:
-			interaction_prompt = completed_prompt
+			interaction_prompt = ""
 	else:
 		interaction_prompt = uncompleted_prompt
 
@@ -35,8 +34,6 @@ func interact():
 		GameManager.open_quest(quest_id)
 	elif InventoryManager.has_item("great_quill"):
 		_rewrite_reality()
-	else:
-		GameManager.interaction_prompt_changed.emit(completed_prompt)
 
 func _rewrite_reality():
 	InventoryManager.use_item("great_quill")

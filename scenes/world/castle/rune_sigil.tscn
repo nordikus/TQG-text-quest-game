@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Rune"]
+shading_mode = 0
+albedo_color = Color(0.38, 0.87, 0.95, 1)
+emission_enabled = true
+emission = Color(0.18, 0.66, 0.90, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="BoxMesh" id="DiamondEdge"]
+material = SubResource("Rune")
+size = Vector3(0.57, 0.045, 0.025)
+
+[sub_resource type="BoxMesh" id="Notch"]
+material = SubResource("Rune")
+size = Vector3(0.28, 0.032, 0.025)
+
+[node name="RuneSigil" type="Node3D"]
+
+[node name="UpperLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, 0.2, 0)
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("DiamondEdge")
+
+[node name="UpperRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.2, 0.2, 0)
+rotation = Vector3(0, 0, -0.785398)
+mesh = SubResource("DiamondEdge")
+
+[node name="LowerLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.2, -0.2, 0)
+rotation = Vector3(0, 0, -0.785398)
+mesh = SubResource("DiamondEdge")
+
+[node name="LowerRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.2, -0.2, 0)
+rotation = Vector3(0, 0, 0.785398)
+mesh = SubResource("DiamondEdge")
+
+[node name="TopNotch" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.061, 0)
+mesh = SubResource("Notch")
+
+[node name="BottomNotch" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.061, 0)
+mesh = SubResource("Notch")

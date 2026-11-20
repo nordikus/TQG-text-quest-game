@@ -13,8 +13,10 @@ func _physics_process(_delta: float):
 
 	force_raycast_update()
 	var collider := get_collider()
+	if collider is AnimatableBody3D and collider.get_parent() is InteractableDoor:
+		collider = collider.get_parent()
 
-	if collider is Interactable:
+	if collider is Interactable and not collider.get_interaction_prompt().is_empty():
 		if collider != current_target:
 			if current_target and current_target.has_method("set_highlighted"):
 				current_target.set_highlighted(false)
@@ -31,5 +33,5 @@ func _physics_process(_delta: float):
 func _unhandled_input(event: InputEvent):
 	if GameManager.ui_open:
 		return
-	if event.is_action_pressed("interact") and current_target:
+	if event.is_action_pressed("interact") and current_target and not current_target.get_interaction_prompt().is_empty():
 		current_target.interact()

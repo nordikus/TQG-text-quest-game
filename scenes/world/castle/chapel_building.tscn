@@ -3,9 +3,14 @@
 [ext_resource type="Script" path="res://scripts/interaction/interactable_door.gd" id="1_door"]
 [ext_resource type="Script" path="res://scripts/interaction/pickup_item.gd" id="2_item"]
 
-[sub_resource type="StandardMaterial3D" id="Mat_Stone"]
-albedo_color = Color(0.40, 0.42, 0.44, 1.0)
-roughness = 0.90
+[ext_resource type="Shader" path="res://scenes/world/castle/masonry.gdshader" id="10_masonry"]
+
+[ext_resource type="Script" path="res://scripts/world/wooden_door_leaf.gd" id="12_door_leaf"]
+
+[ext_resource type="Script" path="res://scripts/world/castle_outbuilding_details.gd" id="13_details"]
+
+[sub_resource type="ShaderMaterial" id="Mat_Stone"]
+shader = ExtResource("10_masonry")
 
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
@@ -62,10 +67,11 @@ size = Vector3(14.4, 0.44, 14.4)
 
 [sub_resource type="BoxMesh" id="Mesh_EntranceStep"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(1.6, 0.22, 3.6)
+size = Vector3(2.7, 0.28, 3.0)
 
-[sub_resource type="BoxShape3D" id="Shape_EntranceStep"]
-size = Vector3(1.6, 0.22, 3.6)
+[sub_resource type="ConcavePolygonShape3D" id="Shape_EntranceStep"]
+backface_collision = true
+data = PackedVector3Array(9.6, -0.04, -1.5, 9.6, -0.04, 1.5, 6.7, 0.25, -1.5, 9.6, -0.04, 1.5, 6.7, 0.25, 1.5, 6.7, 0.25, -1.5)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor"]
 material = SubResource("Mat_StoneDark")
@@ -144,13 +150,6 @@ size = Vector3(14.8, 4.5, 14.8)
 [sub_resource type="ConvexPolygonShape3D" id="Shape_Roof"]
 points = PackedVector3Array(-7.4, -2.25, -7.4, 7.4, -2.25, -7.4, 0, 2.25, -7.4, -7.4, -2.25, 7.4, 7.4, -2.25, 7.4, 0, 2.25, 7.4)
 
-[sub_resource type="BoxMesh" id="Mesh_ChapelDoorWing"]
-material = SubResource("Mat_Wood")
-size = Vector3(0.18, 3.9, 2.8)
-
-[sub_resource type="BoxShape3D" id="Shape_ChapelDoorWing"]
-size = Vector3(0.18, 3.9, 2.8)
-
 [sub_resource type="CylinderMesh" id="Mesh_WatcherPedestal"]
 material = SubResource("Mat_StoneDark")
 top_radius = 1.0
@@ -197,6 +196,14 @@ size = Vector3(1.0, 0.8, 3.8)
 [sub_resource type="BoxShape3D" id="Shape_Pew_12"]
 size = Vector3(1.0, 0.8, 3.8)
 
+[sub_resource type="BoxMesh" id="PortalJamb"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.94, 4.3, 0.34)
+
+[sub_resource type="BoxMesh" id="PortalLintel"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.98, 0.38, 3.62)
+
 [node name="ChapelBuilding" type="Node3D"]
 
 [node name="PlinthBase" type="StaticBody3D" parent="."]
@@ -209,9 +216,9 @@ mesh = SubResource("Mesh_PlinthBase")
 shape = SubResource("Shape_PlinthBase")
 
 [node name="EntranceStep" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.2, 0.11, 0.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="EntranceStep"]
+transform = Transform3D(0.99438726, 0.10580161, 0, -0.10580161, 0.99438726, 0, 0, 0, 1, 8.03, -0.012, 0)
 mesh = SubResource("Mesh_EntranceStep")
 
 [node name="Col" type="CollisionShape3D" parent="EntranceStep"]
@@ -305,7 +312,8 @@ mesh = SubResource("Mesh_WallEastLintel")
 shape = SubResource("Shape_WallEastLintel")
 
 [node name="Roof" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 9.4, 0.0)
+position = Vector3(0, 9.4, 0)
+rotation = Vector3(0, 1.570796, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="Roof"]
 mesh = SubResource("Mesh_Roof")
@@ -317,18 +325,14 @@ shape = SubResource("Shape_Roof")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 2.17, -1.4)
 script = ExtResource("1_door")
 left_wing = NodePath("DoorWing")
-open_angle_deg = 95.0
+open_angle_deg = 92.0
 
-[node name="DoorWing" type="Node3D" parent="ChapelDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="ChapelDoor/DoorWing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4)
-mesh = SubResource("Mesh_ChapelDoorWing")
-
-[node name="DoorBlocker" type="CollisionShape3D" parent="ChapelDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.4)
-shape = SubResource("Shape_ChapelDoorWing")
+[node name="DoorWing" type="AnimatableBody3D" parent="ChapelDoor"]
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, -1.57079633, 0)
+script = ExtResource("12_door_leaf")
+panel_size = Vector3(2.8, 3.9, 0.18)
+style = 1
 
 [node name="WatcherPedestal" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.82, 0.0)
@@ -387,3 +391,19 @@ light_color = Color(0.70, 0.85, 1.0, 1.0)
 light_energy = 2.2
 omni_range = 15.0
 
+
+[node name="PortalJambNorth" type="MeshInstance3D" parent="."]
+position = Vector3(7.05, 2.15, -1.59)
+mesh = SubResource("PortalJamb")
+
+[node name="PortalJambSouth" type="MeshInstance3D" parent="."]
+position = Vector3(7.05, 2.15, 1.59)
+mesh = SubResource("PortalJamb")
+
+[node name="PortalLintel" type="MeshInstance3D" parent="."]
+position = Vector3(7.05, 4.30, 0)
+mesh = SubResource("PortalLintel")
+
+[node name="ArchitecturalDetails" type="Node3D" parent="."]
+script = ExtResource("13_details")
+building = 0

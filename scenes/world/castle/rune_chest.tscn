@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/interaction/rune_chest.gd" id="1_chest"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/rune_sigil.tscn" id="2_sigil"]
+
+[sub_resource type="StandardMaterial3D" id="Oak"]
+albedo_color = Color(0.27, 0.146, 0.079, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="Iron"]
+albedo_color = Color(0.14, 0.16, 0.18, 1)
+metallic = 0.64
+
+[sub_resource type="BoxMesh" id="Body"]
+material = SubResource("Oak")
+size = Vector3(1.22, 0.16, 0.77)
+
+[sub_resource type="BoxMesh" id="LongWall"]
+material = SubResource("Oak")
+size = Vector3(1.04, 0.5, 0.095)
+
+[sub_resource type="BoxMesh" id="EndWall"]
+material = SubResource("Oak")
+size = Vector3(0.106, 0.5, 0.77)
+
+[sub_resource type="StandardMaterial3D" id="Parchment"]
+albedo_color = Color(0.68, 0.55, 0.31, 1)
+roughness = 0.91
+
+[sub_resource type="BoxMesh" id="Report"]
+material = SubResource("Parchment")
+size = Vector3(0.51, 0.027, 0.34)
+
+[sub_resource type="BoxShape3D" id="Collider"]
+size = Vector3(1.27, 0.84, 0.82)
+
+[sub_resource type="BoxMesh" id="Lid"]
+material = SubResource("Oak")
+size = Vector3(1.28, 0.18, 0.82)
+
+[sub_resource type="BoxMesh" id="Strap"]
+material = SubResource("Iron")
+size = Vector3(0.115, 0.195, 0.836)
+
+[sub_resource type="BoxMesh" id="Lockplate"]
+material = SubResource("Iron")
+size = Vector3(0.41, 0.34, 0.055)
+
+[node name="RuneChest" type="StaticBody3D"]
+script = ExtResource("1_chest")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, 0)
+mesh = SubResource("Body")
+
+[node name="Front" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.36, 0.339)
+mesh = SubResource("LongWall")
+
+[node name="Back" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.36, -0.339)
+mesh = SubResource("LongWall")
+
+[node name="Left" type="MeshInstance3D" parent="."]
+position = Vector3(-0.568, 0.36, 0)
+mesh = SubResource("EndWall")
+
+[node name="Right" type="MeshInstance3D" parent="."]
+position = Vector3(0.568, 0.36, 0)
+mesh = SubResource("EndWall")
+
+[node name="Report" type="MeshInstance3D" parent="."]
+position = Vector3(-0.16, 0.174, 0.044)
+rotation = Vector3(0, 0.21, 0)
+mesh = SubResource("Report")
+
+[node name="Col" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.42, 0)
+shape = SubResource("Collider")
+
+[node name="Lid" type="Node3D" parent="."]
+position = Vector3(0, 0.635, -0.38)
+
+[node name="Top" type="MeshInstance3D" parent="Lid"]
+position = Vector3(0, 0.061, 0.38)
+mesh = SubResource("Lid")
+
+[node name="LeftStrap" type="MeshInstance3D" parent="Lid"]
+position = Vector3(-0.439, 0.063, 0.38)
+mesh = SubResource("Strap")
+
+[node name="RightStrap" type="MeshInstance3D" parent="Lid"]
+position = Vector3(0.439, 0.063, 0.38)
+mesh = SubResource("Strap")
+
+[node name="Lockplate" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.48, 0.39)
+mesh = SubResource("Lockplate")
+
+[node name="Seal" parent="." instance=ExtResource("2_sigil")]
+position = Vector3(0, 0.48, 0.424)
+scale = Vector3(0.38, 0.38, 0.38)

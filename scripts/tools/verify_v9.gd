@@ -1,8 +1,10 @@
 @tool
 extends SceneTree
 
-func _init() -> void:
-	_run_verification()
+const Layout := preload("res://scripts/world/forest_layout.gd")
+
+func _initialize() -> void:
+	_run_verification.call_deferred()
 
 func _run_verification() -> void:
 	print("==================================================")
@@ -18,45 +20,37 @@ func _run_verification() -> void:
 	var clearing: Node3D = clearing_scene.instantiate() as Node3D
 	root.add_child(clearing)
 
-	var wc: Node = clearing.get_node_or_null("WorldChanger")
-	if wc and wc.has_method("_apply_extinguish_outcome"):
-		print("Activating Nature Trail & Great Tree via WorldChanger...")
-		wc._apply_extinguish_outcome()
-
-	var tree_node: Node3D = clearing.get_node_or_null("GreatTree") as Node3D
-	if tree_node:
-		tree_node.position.y = 0.0
-		if wc and wc.has_method("_set_collision_recursive"):
-			wc._set_collision_recursive(tree_node, true)
-
-	var ncorr_node: Node3D = clearing.get_node_or_null("NatureCorridorForest") as Node3D
-	if ncorr_node:
-		# Immediately set to post-tween outcome state for headless test
-		ncorr_node.position.y = -14.0
-		ncorr_node.visible = false
-		if wc and wc.has_method("_set_collision_recursive"):
-			wc._set_collision_recursive(ncorr_node, false)
-
-	await physics_frame
-	await physics_frame
-	await physics_frame
+	var quests := root.get_node("QuestManager")
+	quests.complete_quest("burning_grove", "extinguish_fire")
+	await create_timer(3.7).timeout
 
 	var all_passed: bool = true
 
 	# -------------------------------------------------------------------------
-	# 1. TEST ISSUE 1: NATURE CORRIDOR FOREST SINKS & NO INVISIBLE WALL AT TREE BASE
+	# 1. Forest boundaries and the approach to the Great Tree.
 	# -------------------------------------------------------------------------
-	print("\n--- 1. Testing Ground Traversal Near Great Tree Base ---")
-	var ncorr: Node3D = clearing.get_node_or_null("NatureCorridorForest") as Node3D
-	if ncorr:
-		# Should sink or be hidden when extinguish_fire is chosen
-		if is_equal_approx(ncorr.position.y, -14.0) or not ncorr.visible:
-			print("PASS: NatureCorridorForest sinks/hides to open Nature Trail!")
-		else:
-			push_error("FAIL: NatureCorridorForest is still blocking path: visible=" + str(ncorr.visible) + " y=" + str(ncorr.position.y))
-			all_passed = false
+	print("\n--- 1. Testing Open Forest and Great Tree Approach ---")
+	if clearing.has_node("OuterRidge") or clearing.has_node("ForestBarrier") or clearing.has_node("NatureBarrier"):
+		push_error("FAIL: Old forest walls or barricades still exist.")
+		all_passed = false
+	for grove in ["ClearingGroves", "CorridorForest", "GateApproachGrove"]:
+		for tree in clearing.get_node(grove).get_children():
+			if not tree.scene_file_path.ends_with("tree_lowpoly.tscn") and not tree.scene_file_path.ends_with("tree_deciduous_lowpoly.tscn"):
+				continue
+			var trunk := tree as Node3D
+			var point := Vector2(trunk.global_position.x, trunk.global_position.z)
+			if Layout.clear_for_life(point, 0.5 * trunk.scale.x):
+				push_error("FAIL: Placed tree %s overlaps the living trail or root landing." % trunk.name)
+				all_passed = false
 
 	var space_state: PhysicsDirectSpaceState3D = clearing.get_world_3d().direct_space_state
+	var ash_mesh := clearing.get_node("BurningPath/BurningPathBody/BurningPathMesh") as MeshInstance3D
+	var ash_ground: PackedVector3Array = ash_mesh.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	for point in ash_ground:
+		if point.z < -79.76:
+			push_error("FAIL: The baked ash surface extends past the threshold into the paved yard.")
+			all_passed = false
+			break
 	# Test raycasts on ground along Nature Trail where 5m invisible walls used to be
 	# Cast horizontal ray across the approach plaza border: must NOT hit any invisible walls!
 	var ground_ray := PhysicsRayQueryParameters3D.create(
@@ -91,18 +85,18 @@ func _run_verification() -> void:
 		all_passed = false
 
 	# -------------------------------------------------------------------------
-	# 3. TEST ISSUE 3: MAGE TOWER SPIRAL STAIRS (427 nodes, 96 wedge steps)
+	# 3. TEST ISSUE 3: MAGE TOWER SPIRAL STAIRS
 	# -------------------------------------------------------------------------
 	print("\n--- 3. Testing Mage Tower Spiral Stairs Traversal ---")
-	# Mage Tower is at world (-26, 0, -110) in CastleFacade (0, 0, -90)
+	# Mage Tower is at world (-30.4, 0, -110) on the western curtain.
 	# Sample floor points up the helix from Y = 1.0 to Y = 19.5
 	var tower_steps_ok: bool = true
 	var revs: float = 3.42
-	for s_idx in [5, 20, 40, 60, 80, 95]:
+	for s_idx in range(2, 96, 2):
 		var t_norm: float = float(s_idx) / 95.0
 		var expected_y: float = 0.35 + t_norm * 19.65
 		var theta: float = float(s_idx) * (revs * TAU / 95.0)
-		var world_x: float = -26.0 + 1.915 * cos(theta)
+		var world_x: float = -30.4 + 1.915 * cos(theta)
 		var world_z: float = -110.0 + 1.915 * sin(theta)
 		# Cast down from 0.5m above expected step surface
 		var ray_step := PhysicsRayQueryParameters3D.create(
@@ -215,6 +209,48 @@ func _run_verification() -> void:
 		print("PASS: East Grand Portal to Royal Banquet Hall is wide open for traversal!")
 	else:
 		push_error("FAIL: East Grand Portal is blocked by: " + str(pe_hit.collider.name) + " at " + str(pe_hit.position))
+		all_passed = false
+
+	# The keep is approachable from outside, but the rear perimeter is closed.
+	for x in [-33.2, 0.0, 33.2]:
+		var rear_ray := PhysicsRayQueryParameters3D.create(
+			Vector3(x, 1.3, -171), Vector3(x, 1.3, -164))
+		rear_ray.hit_from_inside = true
+		var rear_hit := space_state.intersect_ray(rear_ray)
+		if rear_hit.is_empty() or rear_hit.collider.name not in ["RearCurtainWall", "CornerTowerNW", "CornerTowerNE"]:
+			push_error("FAIL: The rear curtain does not join the castle perimeter at x=%s." % x)
+			all_passed = false
+
+	for z in [-105.83, -114.04]:
+		var wall_joint := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(-35.20, 1.3, z), Vector3(-29.0, 1.3, z)))
+		if wall_joint.is_empty():
+			push_error("FAIL: The western curtain must meet the cylindrical tower wall.")
+			all_passed = false
+	for z in [-140.0, -155.0, -165.0]:
+		var library_wall := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(-29.6, 4.8, z), Vector3(-32.1, 4.8, z)))
+		if library_wall.is_empty() or library_wall.collider.name != "KeepWallWest":
+			push_error("FAIL: An exterior buttress or turret penetrates the lower library at z=%s." % z)
+			all_passed = false
+	var portal := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-37.8, 21.1, -110.25), Vector3(-33.85, 21.1, -110.25)))
+	var sill_base := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-36.0, 15.0, -110.25), Vector3(-33.6, 15.0, -110.25)))
+	if not portal.is_empty() or sill_base.is_empty() or sill_base.collider.name != "ObservatoryWestBase":
+		push_error("FAIL: The forest entry must be clear at floor level and closed beneath the sill.")
+		all_passed = false
+	var right_guard := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-36.8, 23.6, -108.74), Vector3(-36.8, 20.6, -108.74)))
+	if right_guard.is_empty() or right_guard.collider.name != "BalconySouthWindbreak" or right_guard.position.y < 22.2:
+		push_error("FAIL: The right side of the balcony must rise continuously above jump height.")
+		all_passed = false
+	var open_sky := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-27.5, 31.0, -110), Vector3(-27.5, 23.0, -110)))
+	var covered_roof := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-33.3, 31.0, -110), Vector3(-33.3, 23.0, -110)))
+	if not open_sky.is_empty() or covered_roof.is_empty():
+		push_error("FAIL: The observatory roof must leave the east quarter open to the sky.")
 		all_passed = false
 
 	print("\n==================================================")

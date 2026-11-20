@@ -6,83 +6,57 @@
 [ext_resource type="PackedScene" path="res://scenes/world/castle/mage_tower.tscn" id="4_tower"]
 [ext_resource type="PackedScene" path="res://scenes/world/castle/main_keep.tscn" id="5_keep"]
 
-[sub_resource type="StandardMaterial3D" id="Mat_Stone"]
-albedo_color = Color(0.40, 0.42, 0.44, 1.0)
-roughness = 0.90
+[ext_resource type="PackedScene" path="res://scenes/world/trail_beacon.tscn" id="6_beacon"]
+
+[ext_resource type="Shader" path="res://scenes/world/castle/flagstones.gdshader" id="7_paving"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/bush_lowpoly.tscn" id="8_shrubs"]
+[ext_resource type="PackedScene" path="res://scenes/world/flowers_lowpoly.tscn" id="9_flowers"]
+
+[ext_resource type="Script" path="res://scripts/world/courtyard_roots.gd" id="20_roots"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/castle/rune_sigil.tscn" id="21_sigil"]
+
+[ext_resource type="Shader" path="res://scenes/world/castle/scorch_marks.gdshader" id="22_scorch"]
+[ext_resource type="PackedScene" path="res://scenes/world/wildfire.tscn" id="23_fire"]
+
+[ext_resource type="Script" path="res://scripts/world/courtyard_cargo.gd" id="24_cargo"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
 roughness = 0.92
 
-[sub_resource type="StandardMaterial3D" id="Mat_Roof"]
-albedo_color = Color(0.18, 0.22, 0.32, 1.0)
-roughness = 0.65
-
 [sub_resource type="StandardMaterial3D" id="Mat_Wood"]
 albedo_color = Color(0.38, 0.26, 0.18, 1.0)
 roughness = 0.85
 
-[sub_resource type="StandardMaterial3D" id="Mat_Carpet"]
-albedo_color = Color(0.65, 0.12, 0.16, 1.0)
-roughness = 0.95
+[sub_resource type="ShaderMaterial" id="Mat_Flagstones"]
+resource_local_to_scene = true
+shader = ExtResource("7_paving")
 
-[sub_resource type="StandardMaterial3D" id="Mat_Gold"]
-albedo_color = Color(0.95, 0.80, 0.28, 1.0)
-metallic = 0.85
-roughness = 0.32
+[sub_resource type="BoxMesh" id="Mesh_MainAvenue"]
+material = SubResource("Mat_Flagstones")
+size = Vector3(4.5, 0.04, 55.4)
 
-[sub_resource type="StandardMaterial3D" id="Mat_Iron"]
-albedo_color = Color(0.15, 0.15, 0.18, 1.0)
-metallic = 0.80
-roughness = 0.40
+[sub_resource type="BoxMesh" id="Mesh_BarracksPath"]
+material = SubResource("Mat_Flagstones")
+size = Vector3(14.25, 0.04, 3.2)
 
-[sub_resource type="StandardMaterial3D" id="Mat_Crystal"]
-albedo_color = Color(0.35, 0.85, 0.95, 1.0)
-emission_enabled = true
-emission = Color(0.35, 0.85, 0.95, 1.0)
-emission_energy_multiplier = 2.5
+[sub_resource type="BoxMesh" id="Mesh_ChapelPath"]
+material = SubResource("Mat_Flagstones")
+size = Vector3(13.2, 0.04, 3.2)
 
-[sub_resource type="StandardMaterial3D" id="Mat_Paper"]
-albedo_color = Color(0.90, 0.85, 0.72, 1.0)
-roughness = 0.90
+[sub_resource type="BoxMesh" id="Mesh_TowerPath"]
+material = SubResource("Mat_Flagstones")
+size = Vector3(26.5, 0.04, 2.8)
 
-[sub_resource type="StandardMaterial3D" id="Mat_DirtPath"]
-albedo_color = Color(0.36, 0.28, 0.18, 1.0)
-roughness = 0.95
+[sub_resource type="BoxMesh" id="Mesh_TowerLandingPath"]
+material = SubResource("Mat_Flagstones")
+size = Vector3(2.8, 0.04, 2.5)
 
-[sub_resource type="StandardMaterial3D" id="Mat_StainedGlass"]
-albedo_color = Color(0.25, 0.65, 0.85, 1.0)
-emission_enabled = true
-emission = Color(0.20, 0.60, 0.80, 1.0)
-emission_energy_multiplier = 1.6
-
-[sub_resource type="BoxMesh" id="Mesh_MainAvenueDirt"]
-material = SubResource("Mat_DirtPath")
-size = Vector3(4.5, 0.04, 54.5)
-
-[sub_resource type="BoxShape3D" id="Shape_MainAvenueDirt"]
-size = Vector3(4.5, 0.04, 54.5)
-
-[sub_resource type="BoxMesh" id="Mesh_BarracksPathDirt"]
-material = SubResource("Mat_DirtPath")
-size = Vector3(14.0, 0.04, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BarracksPathDirt"]
-size = Vector3(14.0, 0.04, 3.2)
-
-[sub_resource type="BoxMesh" id="Mesh_ChapelPathDirt"]
-material = SubResource("Mat_DirtPath")
-size = Vector3(13.0, 0.04, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_ChapelPathDirt"]
-size = Vector3(13.0, 0.04, 3.2)
-
-[sub_resource type="BoxMesh" id="Mesh_TowerPathDirt"]
-material = SubResource("Mat_DirtPath")
-size = Vector3(15.0, 0.04, 2.8)
-
-[sub_resource type="BoxShape3D" id="Shape_TowerPathDirt"]
-size = Vector3(15.0, 0.04, 2.8)
+[sub_resource type="BoxMesh" id="Mesh_WellPost"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.16, 2.0, 0.16)
 
 [sub_resource type="CylinderMesh" id="Mesh_CourtyardWell"]
 material = SubResource("Mat_StoneDark")
@@ -102,27 +76,63 @@ bottom_radius = 1.6
 height = 1.2
 radial_segments = 8
 
-[sub_resource type="CylinderShape3D" id="Shape_WellRoof"]
-radius = 1.6
-height = 1.2
+[sub_resource type="BoxMesh" id="PlanterBase"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.5, 0.52, 5.4)
+
+[sub_resource type="BoxShape3D" id="PlanterCollision"]
+size = Vector3(2.5, 0.52, 5.4)
+
+[sub_resource type="BoxMesh" id="PlanterEdge"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.72, 0.16, 5.64)
+
+[sub_resource type="BoxMesh" id="PlanterEarth"]
+material = SubResource("Mat_Wood")
+size = Vector3(2.28, 0.045, 5.22)
+
+[sub_resource type="BoxMesh" id="Mesh_LibraryPlaque"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(0.9, 1.0, 0.095)
+
+[sub_resource type="ShaderMaterial" id="Mat_AshStain"]
+shader = ExtResource("22_scorch")
+
+[sub_resource type="QuadMesh" id="Mesh_AshStain"]
+material = SubResource("Mat_AshStain")
+size = Vector2(1, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_LivingVerge"]
+albedo_color = Color(0.24, 0.39, 0.17, 1)
+cull_mode = 2
+roughness = 0.92
+
+[sub_resource type="PrismMesh" id="Mesh_LivingVerge"]
+material = SubResource("Mat_LivingVerge")
+size = Vector3(0.19, 0.67, 0.06)
+
+[sub_resource type="StandardMaterial3D" id="Mat_CharredVerge"]
+albedo_color = Color(0.14, 0.085, 0.052, 1)
+cull_mode = 2
+roughness = 0.92
+
+[sub_resource type="PrismMesh" id="Mesh_CharredVerge"]
+material = SubResource("Mat_CharredVerge")
+size = Vector3(0.19, 0.67, 0.06)
 
 [node name="CastleFacade" type="Node3D"]
 
-[node name="MainAvenueDirt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.02, -18.75)
-mesh = SubResource("Mesh_MainAvenueDirt")
+[node name="MainAvenue" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.02, -19.2)
+mesh = SubResource("Mesh_MainAvenue")
 
-[node name="BarracksPathDirt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0, 0.02, -19.0)
-mesh = SubResource("Mesh_BarracksPathDirt")
+[node name="BarracksPath" type="MeshInstance3D" parent="."]
+position = Vector3(9.375, 0.02, -22.6)
+mesh = SubResource("Mesh_BarracksPath")
 
-[node name="ChapelPathDirt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.0, 0.02, -2.0)
-mesh = SubResource("Mesh_ChapelPathDirt")
-
-[node name="TowerPathDirt" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0, 0.02, -20.0)
-mesh = SubResource("Mesh_TowerPathDirt")
+[node name="ChapelPath" type="MeshInstance3D" parent="."]
+position = Vector3(8.85, 0.02, -3.0)
+mesh = SubResource("Mesh_ChapelPath")
 
 [node name="CourtyardWell" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 0.6, -10.0)
@@ -137,17 +147,871 @@ shape = SubResource("Shape_CourtyardWell")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 mesh = SubResource("Mesh_WellRoof")
 
+[node name="LeftWellPost" type="MeshInstance3D" parent="CourtyardWell"]
+position = Vector3(-0.94, 0.75, 0)
+mesh = SubResource("Mesh_WellPost")
+
+[node name="RightWellPost" type="MeshInstance3D" parent="CourtyardWell"]
+position = Vector3(0.94, 0.75, 0)
+mesh = SubResource("Mesh_WellPost")
+
 [node name="CourtyardWalls" parent="." instance=ExtResource("1_walls")]
 
 [node name="BarracksBuilding" parent="." instance=ExtResource("2_barracks")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.0, 0.0, -19.0)
+position = Vector3(24, 0, -22.6)
 
 [node name="ChapelBuilding" parent="." instance=ExtResource("3_chapel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.0, 0.0, -2.0)
+position = Vector3(20, 0, -2.7)
+rotation = Vector3(0, 3.141593, 0)
 
 [node name="MageTower" parent="." instance=ExtResource("4_tower")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0, 0.0, -20.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.4, 0.0, -20.0)
 
 [node name="MainKeep" parent="." instance=ExtResource("5_keep")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.0, -61.0)
 
+
+[node name="BarracksTurnBeacon" parent="." instance=ExtResource("6_beacon")]
+position = Vector3(3.6, 0, -20.5)
+glow_color = Color(1, 0.68, 0.36, 1)
+
+[node name="BarracksDoorBeacon" parent="." instance=ExtResource("6_beacon")]
+position = Vector3(15, 0, -20.5)
+glow_color = Color(1, 0.68, 0.36, 1)
+
+[node name="ChapelDoorBeacon" parent="." instance=ExtResource("6_beacon")]
+position = Vector3(12.4, 0, -1.1)
+glow_color = Color(0.62, 0.77, 1, 1)
+
+[node name="KeepApproachLeftBeacon" parent="." instance=ExtResource("6_beacon")]
+position = Vector3(-3.8, 0, -41.5)
+glow_color = Color(1, 0.77, 0.42, 1)
+
+[node name="WestGardenBed" type="StaticBody3D" parent="."]
+position = Vector3(-6.7, 0.26, -31.5)
+
+[node name="Base" type="MeshInstance3D" parent="WestGardenBed"]
+mesh = SubResource("PlanterBase")
+
+[node name="Rim" type="MeshInstance3D" parent="WestGardenBed"]
+position = Vector3(0, 0.22, 0)
+mesh = SubResource("PlanterEdge")
+
+[node name="Earth" type="MeshInstance3D" parent="WestGardenBed"]
+position = Vector3(0, 0.304, 0)
+mesh = SubResource("PlanterEarth")
+
+[node name="Collision" type="CollisionShape3D" parent="WestGardenBed"]
+shape = SubResource("PlanterCollision")
+
+[node name="Shrub1" parent="WestGardenBed" instance=ExtResource("8_shrubs")]
+position = Vector3(-0.34, 0.31, -1.66)
+rotation = Vector3(0, 0.72, 0)
+scale = Vector3(0.7, 0.7, 0.7)
+
+[node name="Shrub2" parent="WestGardenBed" instance=ExtResource("8_shrubs")]
+position = Vector3(0.26, 0.31, 0.09)
+rotation = Vector3(0, 1.44, 0)
+scale = Vector3(0.63, 0.63, 0.63)
+
+[node name="Shrub3" parent="WestGardenBed" instance=ExtResource("8_shrubs")]
+position = Vector3(-0.16, 0.31, 1.58)
+rotation = Vector3(0, 2.16, 0)
+scale = Vector3(0.67, 0.67, 0.67)
+
+[node name="Flowers1" parent="WestGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(0.72, 0.31, -1.36)
+rotation = Vector3(0, 0.72, 0)
+
+[node name="Flowers2" parent="WestGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(-0.64, 0.31, -0.62)
+rotation = Vector3(0, 1.44, 0)
+
+[node name="Flowers3" parent="WestGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(0.6, 0.31, 1.29)
+rotation = Vector3(0, 2.16, 0)
+
+[node name="Flowers4" parent="WestGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(-0.54, 0.31, 2.07)
+rotation = Vector3(0, 2.88, 0)
+
+[node name="EastGardenBed" type="StaticBody3D" parent="."]
+position = Vector3(6.7, 0.26, -31.5)
+
+[node name="Base" type="MeshInstance3D" parent="EastGardenBed"]
+mesh = SubResource("PlanterBase")
+
+[node name="Rim" type="MeshInstance3D" parent="EastGardenBed"]
+position = Vector3(0, 0.22, 0)
+mesh = SubResource("PlanterEdge")
+
+[node name="Earth" type="MeshInstance3D" parent="EastGardenBed"]
+position = Vector3(0, 0.304, 0)
+mesh = SubResource("PlanterEarth")
+
+[node name="Collision" type="CollisionShape3D" parent="EastGardenBed"]
+shape = SubResource("PlanterCollision")
+
+[node name="Shrub1" parent="EastGardenBed" instance=ExtResource("8_shrubs")]
+position = Vector3(-0.34, 0.31, -1.66)
+rotation = Vector3(0, 0.72, 0)
+scale = Vector3(0.7, 0.7, 0.7)
+
+[node name="Shrub2" parent="EastGardenBed" instance=ExtResource("8_shrubs")]
+position = Vector3(0.26, 0.31, 0.09)
+rotation = Vector3(0, 1.44, 0)
+scale = Vector3(0.63, 0.63, 0.63)
+
+[node name="Shrub3" parent="EastGardenBed" instance=ExtResource("8_shrubs")]
+position = Vector3(-0.16, 0.31, 1.58)
+rotation = Vector3(0, 2.16, 0)
+scale = Vector3(0.67, 0.67, 0.67)
+
+[node name="Flowers1" parent="EastGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(0.72, 0.31, -1.36)
+rotation = Vector3(0, 0.72, 0)
+
+[node name="Flowers2" parent="EastGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(-0.64, 0.31, -0.62)
+rotation = Vector3(0, 1.44, 0)
+
+[node name="Flowers3" parent="EastGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(0.6, 0.31, 1.29)
+rotation = Vector3(0, 2.16, 0)
+
+[node name="Flowers4" parent="EastGardenBed" instance=ExtResource("9_flowers")]
+position = Vector3(-0.54, 0.31, 2.07)
+rotation = Vector3(0, 2.88, 0)
+
+[node name="RootIncursion" type="Node3D" parent="."]
+visible = false
+script = ExtResource("20_roots")
+
+[node name="LifeRunes" type="Node3D" parent="."]
+visible = false
+
+[node name="Plaque1" type="MeshInstance3D" parent="LifeRunes"]
+position = Vector3(-31.57, 8.72, -68.0)
+rotation = Vector3(0, 1.570796, 0)
+mesh = SubResource("Mesh_LibraryPlaque")
+
+[node name="Rune" parent="LifeRunes/Plaque1" instance=ExtResource("21_sigil")]
+position = Vector3(0, 0, 0.048)
+
+[node name="Glow" type="OmniLight3D" parent="LifeRunes/Plaque1"]
+position = Vector3(0, 0, 0.19)
+light_color = Color(0.24, 0.72, 0.90, 1)
+light_energy = 0.56
+omni_range = 3.2
+
+[node name="Plaque2" type="MeshInstance3D" parent="LifeRunes"]
+position = Vector3(-31.57, 8.72, -61.0)
+rotation = Vector3(0, 1.570796, 0)
+mesh = SubResource("Mesh_LibraryPlaque")
+
+[node name="Rune" parent="LifeRunes/Plaque2" instance=ExtResource("21_sigil")]
+position = Vector3(0, 0, 0.048)
+
+[node name="Glow" type="OmniLight3D" parent="LifeRunes/Plaque2"]
+position = Vector3(0, 0, 0.19)
+light_color = Color(0.24, 0.72, 0.90, 1)
+light_energy = 0.56
+omni_range = 3.2
+
+[node name="Plaque3" type="MeshInstance3D" parent="LifeRunes"]
+position = Vector3(-31.57, 8.72, -54.0)
+rotation = Vector3(0, 1.570796, 0)
+mesh = SubResource("Mesh_LibraryPlaque")
+
+[node name="Rune" parent="LifeRunes/Plaque3" instance=ExtResource("21_sigil")]
+position = Vector3(0, 0, 0.048)
+
+[node name="Glow" type="OmniLight3D" parent="LifeRunes/Plaque3"]
+position = Vector3(0, 0, 0.19)
+light_color = Color(0.24, 0.72, 0.90, 1)
+light_energy = 0.56
+omni_range = 3.2
+
+[node name="AshCastle" type="Node3D" parent="."]
+visible = false
+
+[node name="GateOutsideWest" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-4.9, 2.28, 10.263)
+rotation = Vector3(0, 0, -0.21)
+scale = Vector3(4.4, 5.3, 1)
+cast_shadow = 0
+mesh = SubResource("Mesh_AshStain")
+instance_shader_parameters/seed = 4.9
+
+[node name="GateOutsideEast" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(5.3, 1.55, 10.263)
+rotation = Vector3(0, 0, 0.26)
+scale = Vector3(5.15, 3.8, 1)
+cast_shadow = 0
+mesh = SubResource("Mesh_AshStain")
+instance_shader_parameters/seed = 9.8
+
+[node name="GateInsideWest" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-6.1, 2.15, 6.732)
+rotation = Vector3(0, 3.141593, 0.19)
+scale = Vector3(4.85, 5.55, 1)
+cast_shadow = 0
+mesh = SubResource("Mesh_AshStain")
+instance_shader_parameters/seed = 14.7
+
+[node name="WestCurtainSoot1" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-30.891, 1.65, -6.25)
+rotation = Vector3(0, 1.570796, -0.1)
+scale = Vector3(8.8, 4.2, 1)
+cast_shadow = 0
+mesh = SubResource("Mesh_AshStain")
+instance_shader_parameters/seed = 19.6
+
+[node name="WestCurtainSoot2" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-30.891, 1.26, -14.0)
+rotation = Vector3(0, 1.570796, 0.09)
+scale = Vector3(7.2, 3.4, 1)
+cast_shadow = 0
+mesh = SubResource("Mesh_AshStain")
+instance_shader_parameters/seed = 24.5
+
+[node name="WestCurtainSoot3" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-31.771, 1.75, -23.65)
+rotation = Vector3(0, 1.570796, -0.16)
+scale = Vector3(9.5, 4.5, 1)
+cast_shadow = 0
+mesh = SubResource("Mesh_AshStain")
+instance_shader_parameters/seed = 29.4
+
+[node name="WestCurtainSoot4" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-31.771, 2.5, -35.75)
+rotation = Vector3(0, 1.570796, -0.08)
+scale = Vector3(11.2, 6.3, 1)
+cast_shadow = 0
+mesh = SubResource("Mesh_AshStain")
+instance_shader_parameters/seed = 34.3
+
+[node name="RemnantFires" type="Node3D" parent="AshCastle"]
+
+[node name="Embers1" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-4.7, 0, 10.9)
+scale = Vector3(0.22, 0.22, 0.22)
+phase = 1.13
+smoke_density = 0.54
+smoke_size = 0.68
+
+[node name="Embers2" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-15.4, 0, 5.5)
+scale = Vector3(0.27, 0.27, 0.27)
+phase = 2.26
+smoke_density = 0.54
+smoke_size = 0.68
+
+[node name="Embers3" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-27.37, 0, -9.75)
+scale = Vector3(0.25, 0.25, 0.25)
+phase = 3.39
+smoke_density = 0.54
+smoke_size = 0.68
+
+[node name="Embers4" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-23.3, 0, -29.9)
+scale = Vector3(0.4, 0.4, 0.4)
+phase = 4.52
+smoke_density = 0.54
+smoke_size = 0.68
+
+[node name="Embers5" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-26.88, 0, -35.17)
+scale = Vector3(0.32, 0.32, 0.32)
+phase = 5.65
+smoke_density = 0.54
+smoke_size = 0.68
+
+[node name="Embers6" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-24.1, 0, -38.05)
+scale = Vector3(0.23, 0.23, 0.23)
+phase = 6.78
+smoke_density = 0.54
+smoke_size = 0.68
+
+[node name="LivingVerge" type="Node3D" parent="."]
+
+[node name="Clump1" type="Node3D" parent="LivingVerge"]
+position = Vector3(-4.15, 0, 13.22)
+rotation = Vector3(0, 1.35, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump1"]
+position = Vector3(-0.125, 0.339, 0.093)
+rotation = Vector3(0.39, 0.00, -0.23)
+scale = Vector3(1, 1.018, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump1"]
+position = Vector3(0.000, 0.302, 0.100)
+rotation = Vector3(0.17, 2.10, 0.00)
+scale = Vector3(1, 0.907, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump1"]
+position = Vector3(0.125, 0.205, 0.016)
+rotation = Vector3(0.35, 4.20, 0.23)
+scale = Vector3(1, 0.616, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump2" type="Node3D" parent="LivingVerge"]
+position = Vector3(-6.55, 0, 6.25)
+rotation = Vector3(0, 2.70, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump2"]
+position = Vector3(-0.125, 0.261, 0.100)
+rotation = Vector3(0.25, 0.00, -0.23)
+scale = Vector3(1, 0.784, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump2"]
+position = Vector3(0.000, 0.165, 0.016)
+rotation = Vector3(0.22, 2.10, 0.00)
+scale = Vector3(1, 0.496, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump2"]
+position = Vector3(0.125, 0.135, -0.083)
+rotation = Vector3(0.44, 4.20, 0.23)
+scale = Vector3(1, 0.406, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump3" type="Node3D" parent="LivingVerge"]
+position = Vector3(-13.13, 0, 5.69)
+rotation = Vector3(0, 4.05, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump3"]
+position = Vector3(-0.125, 0.140, 0.016)
+rotation = Vector3(0.17, 0.00, -0.23)
+scale = Vector3(1, 0.420, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump3"]
+position = Vector3(0.000, 0.154, -0.083)
+rotation = Vector3(0.35, 2.10, 0.00)
+scale = Vector3(1, 0.461, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump3"]
+position = Vector3(0.125, 0.244, -0.105)
+rotation = Vector3(0.42, 4.20, 0.23)
+scale = Vector3(1, 0.732, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump4" type="Node3D" parent="LivingVerge"]
+position = Vector3(-20.85, 0, 6.0)
+rotation = Vector3(0, 5.40, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump4"]
+position = Vector3(-0.125, 0.189, -0.083)
+rotation = Vector3(0.22, 0.00, -0.23)
+scale = Vector3(1, 0.567, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump4"]
+position = Vector3(0.000, 0.288, -0.105)
+rotation = Vector3(0.44, 2.10, 0.00)
+scale = Vector3(1, 0.864, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump4"]
+position = Vector3(0.125, 0.340, -0.031)
+rotation = Vector3(0.29, 4.20, 0.23)
+scale = Vector3(1, 1.020, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump5" type="Node3D" parent="LivingVerge"]
+position = Vector3(-27.6, 0, 4.7)
+rotation = Vector3(0, 0.47, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump5"]
+position = Vector3(-0.125, 0.322, -0.105)
+rotation = Vector3(0.35, 0.00, -0.23)
+scale = Vector3(1, 0.966, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump5"]
+position = Vector3(0.000, 0.332, -0.031)
+rotation = Vector3(0.42, 2.10, 0.00)
+scale = Vector3(1, 0.995, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump5"]
+position = Vector3(0.125, 0.254, 0.072)
+rotation = Vector3(0.18, 4.20, 0.23)
+scale = Vector3(1, 0.762, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump6" type="Node3D" parent="LivingVerge"]
+position = Vector3(-27.40, 0, -4.3)
+rotation = Vector3(0, 1.82, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump6"]
+position = Vector3(-0.125, 0.305, -0.031)
+rotation = Vector3(0.44, 0.00, -0.23)
+scale = Vector3(1, 0.914, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump6"]
+position = Vector3(0.000, 0.208, 0.072)
+rotation = Vector3(0.29, 2.10, 0.00)
+scale = Vector3(1, 0.624, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump6"]
+position = Vector3(0.125, 0.138, 0.109)
+rotation = Vector3(0.19, 4.20, 0.23)
+scale = Vector3(1, 0.413, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump7" type="Node3D" parent="LivingVerge"]
+position = Vector3(-27.35, 0, -12.1)
+rotation = Vector3(0, 3.17, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump7"]
+position = Vector3(-0.125, 0.168, 0.072)
+rotation = Vector3(0.42, 0.00, -0.23)
+scale = Vector3(1, 0.503, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump7"]
+position = Vector3(0.000, 0.135, 0.109)
+rotation = Vector3(0.18, 2.10, 0.00)
+scale = Vector3(1, 0.404, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump7"]
+position = Vector3(0.125, 0.196, 0.045)
+rotation = Vector3(0.31, 4.20, 0.23)
+scale = Vector3(1, 0.587, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump8" type="Node3D" parent="LivingVerge"]
+position = Vector3(-28.13, 0, -16.36)
+rotation = Vector3(0, 4.52, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump8"]
+position = Vector3(-0.125, 0.152, 0.109)
+rotation = Vector3(0.29, 0.00, -0.23)
+scale = Vector3(1, 0.456, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump8"]
+position = Vector3(0.000, 0.241, 0.045)
+rotation = Vector3(0.19, 2.10, 0.00)
+scale = Vector3(1, 0.723, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump8"]
+position = Vector3(0.125, 0.326, -0.060)
+rotation = Vector3(0.43, 4.20, 0.23)
+scale = Vector3(1, 0.978, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump9" type="Node3D" parent="LivingVerge"]
+position = Vector3(-28.05, 0, -22.3)
+rotation = Vector3(0, 5.87, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump9"]
+position = Vector3(-0.125, 0.286, 0.045)
+rotation = Vector3(0.18, 0.00, -0.23)
+scale = Vector3(1, 0.857, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump9"]
+position = Vector3(0.000, 0.340, -0.060)
+rotation = Vector3(0.31, 2.10, 0.00)
+scale = Vector3(1, 1.019, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump9"]
+position = Vector3(0.125, 0.299, -0.110)
+rotation = Vector3(0.44, 4.20, 0.23)
+scale = Vector3(1, 0.897, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump10" type="Node3D" parent="LivingVerge"]
+position = Vector3(-23.27, 0, -24.1)
+rotation = Vector3(0, 0.94, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump10"]
+position = Vector3(-0.125, 0.333, -0.060)
+rotation = Vector3(0.19, 0.00, -0.23)
+scale = Vector3(1, 0.999, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump10"]
+position = Vector3(0.000, 0.257, -0.110)
+rotation = Vector3(0.43, 2.10, 0.00)
+scale = Vector3(1, 0.771, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump10"]
+position = Vector3(0.125, 0.162, -0.059)
+rotation = Vector3(0.33, 4.20, 0.23)
+scale = Vector3(1, 0.487, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump11" type="Node3D" parent="LivingVerge"]
+position = Vector3(-18.66, 0, -27.83)
+rotation = Vector3(0, 2.29, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump11"]
+position = Vector3(-0.125, 0.211, -0.110)
+rotation = Vector3(0.31, 0.00, -0.23)
+scale = Vector3(1, 0.632, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump11"]
+position = Vector3(0.000, 0.139, -0.059)
+rotation = Vector3(0.44, 2.10, 0.00)
+scale = Vector3(1, 0.416, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump11"]
+position = Vector3(0.125, 0.156, 0.046)
+rotation = Vector3(0.20, 4.20, 0.23)
+scale = Vector3(1, 0.469, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Clump12" type="Node3D" parent="LivingVerge"]
+position = Vector3(-27.34, 0, -39.37)
+rotation = Vector3(0, 3.64, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="LivingVerge/Clump12"]
+position = Vector3(-0.125, 0.134, -0.059)
+rotation = Vector3(0.43, 0.00, -0.23)
+scale = Vector3(1, 0.403, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="LivingVerge/Clump12"]
+position = Vector3(0.000, 0.193, 0.046)
+rotation = Vector3(0.33, 2.10, 0.00)
+scale = Vector3(1, 0.579, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="LivingVerge/Clump12"]
+position = Vector3(0.125, 0.292, 0.109)
+rotation = Vector3(0.18, 4.20, 0.23)
+scale = Vector3(1, 0.875, 1)
+mesh = SubResource("Mesh_LivingVerge")
+
+[node name="CharredVerge" type="Node3D" parent="AshCastle"]
+
+[node name="Clump1" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-4.15, 0, 13.22)
+rotation = Vector3(0, 1.35, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump1"]
+position = Vector3(-0.125, 0.221, 0.093)
+rotation = Vector3(0.39, 0.00, -0.23)
+scale = Vector3(1, 0.662, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump1"]
+position = Vector3(0.000, 0.197, 0.100)
+rotation = Vector3(0.17, 2.10, 0.00)
+scale = Vector3(1, 0.590, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump1"]
+position = Vector3(0.125, 0.133, 0.016)
+rotation = Vector3(0.35, 4.20, 0.23)
+scale = Vector3(1, 0.400, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump2" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-6.55, 0, 6.25)
+rotation = Vector3(0, 2.70, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump2"]
+position = Vector3(-0.125, 0.170, 0.100)
+rotation = Vector3(0.25, 0.00, -0.23)
+scale = Vector3(1, 0.509, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump2"]
+position = Vector3(0.000, 0.108, 0.016)
+rotation = Vector3(0.22, 2.10, 0.00)
+scale = Vector3(1, 0.323, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump2"]
+position = Vector3(0.125, 0.088, -0.083)
+rotation = Vector3(0.44, 4.20, 0.23)
+scale = Vector3(1, 0.264, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump3" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-13.13, 0, 5.69)
+rotation = Vector3(0, 4.05, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump3"]
+position = Vector3(-0.125, 0.091, 0.016)
+rotation = Vector3(0.17, 0.00, -0.23)
+scale = Vector3(1, 0.273, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump3"]
+position = Vector3(0.000, 0.100, -0.083)
+rotation = Vector3(0.35, 2.10, 0.00)
+scale = Vector3(1, 0.300, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump3"]
+position = Vector3(0.125, 0.159, -0.105)
+rotation = Vector3(0.42, 4.20, 0.23)
+scale = Vector3(1, 0.476, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump4" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-20.85, 0, 6.0)
+rotation = Vector3(0, 5.40, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump4"]
+position = Vector3(-0.125, 0.123, -0.083)
+rotation = Vector3(0.22, 0.00, -0.23)
+scale = Vector3(1, 0.369, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump4"]
+position = Vector3(0.000, 0.187, -0.105)
+rotation = Vector3(0.44, 2.10, 0.00)
+scale = Vector3(1, 0.562, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump4"]
+position = Vector3(0.125, 0.221, -0.031)
+rotation = Vector3(0.29, 4.20, 0.23)
+scale = Vector3(1, 0.663, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump5" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-27.6, 0, 4.7)
+rotation = Vector3(0, 0.47, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump5"]
+position = Vector3(-0.125, 0.209, -0.105)
+rotation = Vector3(0.35, 0.00, -0.23)
+scale = Vector3(1, 0.628, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump5"]
+position = Vector3(0.000, 0.216, -0.031)
+rotation = Vector3(0.42, 2.10, 0.00)
+scale = Vector3(1, 0.647, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump5"]
+position = Vector3(0.125, 0.165, 0.072)
+rotation = Vector3(0.18, 4.20, 0.23)
+scale = Vector3(1, 0.496, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump6" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-27.40, 0, -4.3)
+rotation = Vector3(0, 1.82, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump6"]
+position = Vector3(-0.125, 0.198, -0.031)
+rotation = Vector3(0.44, 0.00, -0.23)
+scale = Vector3(1, 0.594, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump6"]
+position = Vector3(0.000, 0.135, 0.072)
+rotation = Vector3(0.29, 2.10, 0.00)
+scale = Vector3(1, 0.406, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump6"]
+position = Vector3(0.125, 0.089, 0.109)
+rotation = Vector3(0.19, 4.20, 0.23)
+scale = Vector3(1, 0.268, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump7" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-27.35, 0, -12.1)
+rotation = Vector3(0, 3.17, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump7"]
+position = Vector3(-0.125, 0.109, 0.072)
+rotation = Vector3(0.42, 0.00, -0.23)
+scale = Vector3(1, 0.327, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump7"]
+position = Vector3(0.000, 0.088, 0.109)
+rotation = Vector3(0.18, 2.10, 0.00)
+scale = Vector3(1, 0.263, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump7"]
+position = Vector3(0.125, 0.127, 0.045)
+rotation = Vector3(0.31, 4.20, 0.23)
+scale = Vector3(1, 0.381, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump8" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-28.13, 0, -16.36)
+rotation = Vector3(0, 4.52, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump8"]
+position = Vector3(-0.125, 0.099, 0.109)
+rotation = Vector3(0.29, 0.00, -0.23)
+scale = Vector3(1, 0.297, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump8"]
+position = Vector3(0.000, 0.157, 0.045)
+rotation = Vector3(0.19, 2.10, 0.00)
+scale = Vector3(1, 0.470, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump8"]
+position = Vector3(0.125, 0.212, -0.060)
+rotation = Vector3(0.43, 4.20, 0.23)
+scale = Vector3(1, 0.635, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump9" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-28.05, 0, -22.3)
+rotation = Vector3(0, 5.87, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump9"]
+position = Vector3(-0.125, 0.186, 0.045)
+rotation = Vector3(0.18, 0.00, -0.23)
+scale = Vector3(1, 0.557, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump9"]
+position = Vector3(0.000, 0.221, -0.060)
+rotation = Vector3(0.31, 2.10, 0.00)
+scale = Vector3(1, 0.662, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump9"]
+position = Vector3(0.125, 0.194, -0.110)
+rotation = Vector3(0.44, 4.20, 0.23)
+scale = Vector3(1, 0.583, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump10" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-23.27, 0, -24.1)
+rotation = Vector3(0, 0.94, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump10"]
+position = Vector3(-0.125, 0.216, -0.060)
+rotation = Vector3(0.19, 0.00, -0.23)
+scale = Vector3(1, 0.649, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump10"]
+position = Vector3(0.000, 0.167, -0.110)
+rotation = Vector3(0.43, 2.10, 0.00)
+scale = Vector3(1, 0.501, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump10"]
+position = Vector3(0.125, 0.106, -0.059)
+rotation = Vector3(0.33, 4.20, 0.23)
+scale = Vector3(1, 0.317, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump11" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-18.66, 0, -27.83)
+rotation = Vector3(0, 2.29, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump11"]
+position = Vector3(-0.125, 0.137, -0.110)
+rotation = Vector3(0.31, 0.00, -0.23)
+scale = Vector3(1, 0.411, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump11"]
+position = Vector3(0.000, 0.090, -0.059)
+rotation = Vector3(0.44, 2.10, 0.00)
+scale = Vector3(1, 0.270, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump11"]
+position = Vector3(0.125, 0.102, 0.046)
+rotation = Vector3(0.20, 4.20, 0.23)
+scale = Vector3(1, 0.305, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Clump12" type="Node3D" parent="AshCastle/CharredVerge"]
+position = Vector3(-27.34, 0, -39.37)
+rotation = Vector3(0, 3.64, 0)
+
+[node name="Shoot1" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump12"]
+position = Vector3(-0.125, 0.087, -0.059)
+rotation = Vector3(0.43, 0.00, -0.23)
+scale = Vector3(1, 0.262, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot2" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump12"]
+position = Vector3(0.000, 0.125, 0.046)
+rotation = Vector3(0.33, 2.10, 0.00)
+scale = Vector3(1, 0.376, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="Shoot3" type="MeshInstance3D" parent="AshCastle/CharredVerge/Clump12"]
+position = Vector3(0.125, 0.190, 0.109)
+rotation = Vector3(0.18, 4.20, 0.23)
+scale = Vector3(1, 0.569, 1)
+mesh = SubResource("Mesh_CharredVerge")
+
+[node name="GateCargo" type="Node3D" parent="LivingVerge"]
+position = Vector3(-6.12, 0, 4.7)
+rotation = Vector3(0, -0.19, 0)
+script = ExtResource("24_cargo")
+
+[node name="WallCargo" type="Node3D" parent="LivingVerge"]
+position = Vector3(-13.75, 0, 5.08)
+rotation = Vector3(0, 0.18, 0)
+script = ExtResource("24_cargo")
+
+[node name="CornerCargo" type="Node3D" parent="LivingVerge"]
+position = Vector3(-24.7, 0, 3.69)
+rotation = Vector3(0, 1.09, 0)
+script = ExtResource("24_cargo")
+
+[node name="GateCargo" type="Node3D" parent="AshCastle"]
+position = Vector3(-6.12, 0, 4.7)
+rotation = Vector3(0, -0.19, 0)
+script = ExtResource("24_cargo")
+burned = true
+
+[node name="WallCargo" type="Node3D" parent="AshCastle"]
+position = Vector3(-13.75, 0, 5.08)
+rotation = Vector3(0, 0.18, 0)
+script = ExtResource("24_cargo")
+burned = true
+
+[node name="CornerCargo" type="Node3D" parent="AshCastle"]
+position = Vector3(-24.7, 0, 3.69)
+rotation = Vector3(0, 1.09, 0)
+script = ExtResource("24_cargo")
+burned = true
+
+[node name="GateCargoEmbers" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-5.86, 0, 4.79)
+scale = Vector3(0.20, 0.20, 0.20)
+phase = 5.1
+smoke_density = 0.49
+smoke_size = 0.54
+
+[node name="CourtLanterns" type="Node3D" parent="."]
+[node name="ChapelTurnBeacon" parent="CourtLanterns" instance=ExtResource("6_beacon")]
+position = Vector3(3.5, 0, -1.1)
+glow_color = Color(0.62, 0.77, 1, 1)
+
+[node name="KeepApproachRightBeacon" parent="CourtLanterns" instance=ExtResource("6_beacon")]
+position = Vector3(3.8, 0, -41.5)
+glow_color = Color(1, 0.77, 0.42, 1)
