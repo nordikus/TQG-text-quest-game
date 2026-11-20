@@ -56,7 +56,7 @@ func _bake_flight(name: String, section: Callable, risers: int, subdivisions: in
 				if previous_visual_end.is_empty():
 					previous_visual_end = previous_grade
 				_face(mesh, previous_visual_end[0], previous_visual_end[1], start[1], start[0])
-			_flight_segment(mesh, start, finish)
+			_flight_segment(mesh, start, finish, not solid_base)
 			_walk_segment(collision, previous_grade, next_grade, solid_base)
 			previous_grade = next_grade
 			previous_visual_end = finish
@@ -78,11 +78,15 @@ func _bake_flight(name: String, section: Callable, risers: int, subdivisions: in
 	print("Baked %s: %d collision faces" % [name, collision.size() / 3])
 	return true
 
-func _flight_segment(mesh: SurfaceTool, a: PackedVector3Array, b: PackedVector3Array) -> void:
+func _flight_segment(mesh: SurfaceTool, a: PackedVector3Array, b: PackedVector3Array, curved: bool) -> void:
 	_face(mesh, a[0], a[1], b[1], b[0])
 	_face(mesh, a[2], a[0], b[0], b[2])
 	_face(mesh, a[3], b[3], b[1], a[1])
+	# Smooth the underside of the spiral across its twisted radial sections.
+	if curved:
+		mesh.set_smooth_group(0)
 	_face(mesh, a[3], a[2], b[2], b[3])
+	mesh.set_smooth_group(-1)
 
 func _walk_segment(out: PackedVector3Array, a: PackedVector3Array, b: PackedVector3Array, solid_base: bool) -> void:
 	if solid_base:

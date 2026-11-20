@@ -22,6 +22,8 @@
 
 [ext_resource type="Script" path="res://scripts/world/courtyard_cargo.gd" id="24_cargo"]
 
+[ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
+
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
 roughness = 0.92
@@ -415,14 +417,14 @@ smoke_density = 0.54
 smoke_size = 0.68
 
 [node name="Embers4" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
-position = Vector3(-23.3, 0, -29.9)
+position = Vector3(-24.3, 0, -28.3)
 scale = Vector3(0.4, 0.4, 0.4)
 phase = 4.52
 smoke_density = 0.54
 smoke_size = 0.68
 
 [node name="Embers5" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
-position = Vector3(-26.88, 0, -35.17)
+position = Vector3(-29.15, 0, -35.17)
 scale = Vector3(0.32, 0.32, 0.32)
 phase = 5.65
 smoke_density = 0.54
@@ -1015,3 +1017,26 @@ glow_color = Color(0.62, 0.77, 1, 1)
 [node name="KeepApproachRightBeacon" parent="CourtLanterns" instance=ExtResource("6_beacon")]
 position = Vector3(3.8, 0, -41.5)
 glow_color = Color(1, 0.77, 0.42, 1)
+
+[node name="WellGardenAndPracticeYard" type="Node3D" parent="."]
+script = ExtResource("26_furnishing")
+place = 1
+
+[node name="SupplyShelter" type="Node3D" parent="LivingVerge"]
+position = Vector3(-20.35, 0, -17.4)
+rotation = Vector3(0, -0.16, 0)
+script = ExtResource("26_furnishing")
+place = 2
+
+[node name="SupplyShelter" type="Node3D" parent="AshCastle"]
+position = Vector3(-20.35, 0, -17.4)
+rotation = Vector3(0, -0.16, 0)
+script = ExtResource("26_furnishing")
+place = 3
+
+[node name="SupplyShelterEmbers" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-20.32, 0, -17.68)
+scale = Vector3(0.27, 0.27, 0.27)
+phase = 1.35
+smoke_density = 0.56
+smoke_size = 0.64

@@ -17,6 +17,8 @@
 
 [ext_resource type="Script" path="res://scripts/world/tower_breach.gd" id="18_breach"]
 
+[ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
+
 [sub_resource type="StandardMaterial3D" id="Mat_Stone"]
 albedo_color = Color(0.40, 0.42, 0.44, 1.0)
 roughness = 0.90
@@ -430,17 +432,6 @@ size = Vector3(1.14, 0.78, 1.72)
 [sub_resource type="BoxShape3D" id="Shape_Fracture7"]
 size = Vector3(1.14, 0.78, 1.72)
 
-[sub_resource type="BoxMesh" id="Mesh_WorkshopBench"]
-material = SubResource("Mat_WoodDark")
-size = Vector3(1.28, 0.77, 0.84)
-
-[sub_resource type="BoxShape3D" id="Shape_WorkshopBench"]
-size = Vector3(1.28, 0.77, 0.84)
-
-[sub_resource type="BoxMesh" id="Mesh_WorkshopDrawer"]
-material = SubResource("Mat_WoodDark")
-size = Vector3(1.05, 0.28, 0.89)
-
 [sub_resource type="BoxMesh" id="Mesh_WorkshopTool1"]
 material = SubResource("Mat_Iron")
 size = Vector3(0.34, 0.075, 0.067)
@@ -647,7 +638,7 @@ mesh = SubResource("Mesh_TowerWall_11")
 shape = SubResource("Shape_TowerWall_11")
 
 [node name="CorniceTier2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 8.0, 0.0)
+position = Vector3(0, 5.68, 0)
 scale = Vector3(1, 0.48, 1)
 mesh = SubResource("Mesh_CorniceTier2")
 
@@ -1067,20 +1058,6 @@ position = Vector3(0, 0, -0.167)
 rotation = Vector3(0, 3.141593, 0)
 scale = Vector3(1.35, 1.35, 1.35)
 
-[node name="WorkshopBench" type="StaticBody3D" parent="."]
-position = Vector3(-2.4, 0.66, 1.85)
-
-
-[node name="Mesh" type="MeshInstance3D" parent="WorkshopBench"]
-mesh = SubResource("Mesh_WorkshopBench")
-
-[node name="Col" type="CollisionShape3D" parent="WorkshopBench"]
-shape = SubResource("Shape_WorkshopBench")
-
-[node name="WorkshopDrawer" type="MeshInstance3D" parent="."]
-position = Vector3(-2.4, 0.57, 1.84)
-mesh = SubResource("Mesh_WorkshopDrawer")
-
 [node name="WorkshopTool1" type="MeshInstance3D" parent="."]
 position = Vector3(-2.82, 1.08, 1.75)
 rotation = Vector3(0, 0.7, 0)
@@ -1097,7 +1074,7 @@ rotation = Vector3(0, 0.4, 0)
 mesh = SubResource("Mesh_WorkshopTool3")
 
 [node name="WorkshopLamp" type="OmniLight3D" parent="."]
-position = Vector3(-2.5, 2.05, 2.38)
+position = Vector3(-2.56, 1.60, 2.15)
 light_color = Color(0.88, 0.65, 0.36, 1)
 light_energy = 1.21
 omni_range = 4.1
@@ -1204,3 +1181,6 @@ shape = SubResource("Shape_BalconyCorbelSouth")
 
 [node name="AstronomicalRoof" type="Node3D" parent="."]
 script = ExtResource("17_observatory")
+
+[node name="AstromancerWorkshop" type="Node3D" parent="."]
+script = ExtResource("26_furnishing")

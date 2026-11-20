@@ -255,6 +255,10 @@ func _run_verification() -> void:
 	if not balcony_join or not bridge_join:
 		push_error("FAIL: The balcony and bridge thresholds must meet their landings edge to edge.")
 		all_passed = false
+	var bridge_cornice := tower.get_node("CorniceTier2") as MeshInstance3D
+	if _bounds(bridge_cornice).end.y >= _bounds(bridge_floor).end.y:
+		push_error("FAIL: The tower cornice projects into the bridge entrance.")
+		all_passed = false
 	for shelf_name in ["AlcoveShelf_1", "AlcoveShelf_2"]:
 		var shelf := clearing.find_child(shelf_name, true, false).get_node("Mesh") as MeshInstance3D
 		if _bounds(shelf).end.x >= -25.2:

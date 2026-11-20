@@ -170,6 +170,12 @@ func _check_courtyard_fire(burned: bool) -> void:
 	_check(surfaces_match and ruined_cargo.is_visible_in_tree() == burned
 		and intact_cargo.is_visible_in_tree() != burned,
 		"The gate paving, courtyard ground and cargo respond to the same fire state.")
+	var ruined_shelter: Node3D = _world.castle_ash.get_node("SupplyShelter")
+	var intact_shelter: Node3D = _world.castle_verge.get_node("SupplyShelter")
+	var shelter_smoke: CPUParticles3D = _world.castle_ash.get_node("RemnantFires/SupplyShelterEmbers/Smoke")
+	_check(ruined_shelter.is_visible_in_tree() == burned
+		and intact_shelter.is_visible_in_tree() != burned and shelter_smoke.emitting == burned,
+		"The supply shelter burns in Ash and is restored when the fire state resets.")
 
 func _rewrite() -> void:
 	var times: int = InventoryManager.quill_uses_count
