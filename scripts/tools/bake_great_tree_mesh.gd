@@ -434,14 +434,14 @@ const BOUGH_TERRACE := -7.55
 const BOUGH_END := -49.0
 const BOUGH_SPINE: Array[Vector3] = [
 	Vector3(-0.09, 17.00, -7.55),
-	Vector3(-4.6, 17.46, -7.80),
-	Vector3(-12.9, 17.96, -6.75),
-	Vector3(-21.5, 18.45, -8.10),
-	Vector3(-26.8, 18.76, -17.60),
-	Vector3(-27.8, 18.90, -29.80),
-	Vector3(-26.6, 19.24, -39.10),
-	Vector3(-22.6, 19.62, -46.80),
-	Vector3(-17.7, 19.90, -49.85),
+	Vector3(-4.7, 17.43, -8.65),
+	Vector3(-12.0, 17.82, -12.20),
+	Vector3(-18.9, 18.19, -19.70),
+	Vector3(-23.0, 18.58, -28.65),
+	Vector3(-24.6, 18.94, -37.40),
+	Vector3(-24.2, 19.27, -43.65),
+	Vector3(-22.4, 19.60, -48.25),
+	Vector3(-19.45, 19.83, -49.99),
 	Vector3(-16.05, 19.94, -50.25),
 ]
 
@@ -452,7 +452,7 @@ func _bough_spine_z(z: float) -> Vector3:
 			17.0 - 1.62 * smoothstep(-5.25, -3.02, z), z)
 	var index := inverse_lerp(BOUGH_TERRACE, BOUGH_END, z) * (BOUGH_SPINE.size() - 1)
 	var i := mini(floori(index), BOUGH_SPINE.size() - 2)
-	var before := BOUGH_SPINE[i - 1] if i > 0 else BOUGH_SPINE[1] - Vector3(-0.35, 0, -2.2)
+	var before := BOUGH_SPINE[i - 1] if i > 0 else BOUGH_SPINE[0] + Vector3(0, -0.13, 2.4)
 	return BOUGH_SPINE[i].cubic_interpolate(BOUGH_SPINE[i + 1],
 		before, BOUGH_SPINE[mini(BOUGH_SPINE.size() - 1, i + 2)], index - i)
 
@@ -502,9 +502,11 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		var trunk_flare := exp(-pow((z - (-1.2)) / 2.8, 2.0))
 		var taper := smoothstep(BOUGH_END, -8.0, z)
 		var knots := (0.16 * sin(z * 0.42) + 0.12 * cos(z * 0.89)) * (1.0 - terrace_w)
-		var half_width := lerpf(1.18 + 0.64 * taper + knots, 3.15, terrace_w) + 0.45 * trunk_flare
+		var branch_width := 1.13 + 0.63 * taper + knots
+		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare
 		var belly_depth := lerpf(0.78, 1.31, taper) + 0.65 * terrace_w + 1.45 * trunk_flare
 		var width_meander := 0.08 * sin(z * 0.28) * (1.0 - terrace_w * 0.7)
+		var tip := 1.0 - smoothstep(BOUGH_END, -45.2, z)
 
 		for j in m_b:
 			var uv := prof_b[j]
@@ -534,6 +536,9 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 				var flute := 0.18 * sin(float(j) * 1.8 + z * 0.22) + 0.16 * noise.get_noise_3d(ux * 0.6, uy * 0.6, z * 0.22)
 				ux = ux * (1.0 + 0.08 * flute) + width_meander
 				uy += flute * 0.55
+			# The split wood lies flat where the branch hits the balcony.
+			if is_east_parapet or is_west_parapet:
+				uy = lerpf(uy, 0.24, tip)
 
 			var pt := c + right * ux + up * uy
 			g.v.append(pt)
@@ -541,8 +546,10 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 			var col := BARK
 			if is_moss or (is_west_parapet and z >= -6.2):
 				var edge_f := clampf(1.0 - absf(uv.x) / 0.78, 0.0, 1.0)
-				var moss_patch := 0.45 + 0.35 * noise.get_noise_2d(z * 0.45, ux * 2.5)
-				col = BARK_WARM.lerp(MOSS.lerp(MOSS_PATH, edge_f * 0.55), 0.30 + edge_f * moss_patch)
+				var moss_patch := 0.51 + 0.39 * noise.get_noise_2d(z * 0.34, ux * 1.8)
+				var grain := pow(absf(sin(z * 0.32 + ux * 5.2 + 3.0 * noise.get_noise_2d(z * 0.19, ux))), 5.0)
+				var wood := BARK_WARM.lerp(BARK_DARK, 0.28 * grain)
+				col = wood.lerp(MOSS.lerp(MOSS_PATH, edge_f * 0.32), 0.23 + edge_f * moss_patch)
 			elif j == 3 or j == 17:
 				col = MOSS.lerp(BARK_WARM, 0.45)
 			elif j == 4 or j == 16:
@@ -575,8 +582,8 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 	_tube(g, arch_buttress_2, 1.15, 0.58, 10, 0.28, 0.16)
 
 	var trailing_fork := _bezier(_bough_spine_z(-43.0) - Vector3.UP,
-		Vector3(-20.3, 18.25, -49.9), Vector3(-17.8, 17.5, -50.8),
-		Vector3(-15.9, 16.9, -51.2), 12)
+		Vector3(-21.0, 18.25, -49.7), Vector3(-18.7, 17.7, -51.0),
+		Vector3(-16.5, 17.1, -51.65), 12)
 	_tube(g, trailing_fork, 0.62, 0.17, 9, 0.30, 0.16)
 
 	for z_sp in [-6.8, -12.0, -18.5, -25.0, -31.5, -38.0, -43.5, -47.5]:

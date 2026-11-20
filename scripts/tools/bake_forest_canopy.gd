@@ -62,7 +62,7 @@ const HAND_PLACED_POSITIONS: Array[Vector2] = [
 	Vector2(-2.1, -58.6),
 	Vector2(-1.1, -64.5),
 	Vector2(-3.8, -67),
-	Vector2(1.1, -73.9),
+	Vector2(7.5, -75),
 	Vector2(-3.8, -77.8),
 ]
 

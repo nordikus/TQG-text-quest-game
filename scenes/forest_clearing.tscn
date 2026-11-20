@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" path="res://scenes/world/castle_facade.tscn" id="4_castle"]
 [ext_resource type="PackedScene" path="res://scenes/world/tree_lowpoly.tscn" id="5_tree_pine"]
 [ext_resource type="PackedScene" path="res://scenes/world/tree_deciduous_lowpoly.tscn" id="6_tree_deciduous"]
-[ext_resource type="PackedScene" path="res://scenes/world/tree_dead_charred.tscn" id="7_tree_charred"]
 [ext_resource type="PackedScene" path="res://scenes/world/rock_lowpoly.tscn" id="8_rock"]
 [ext_resource type="PackedScene" path="res://scenes/world/bush_lowpoly.tscn" id="9_bush"]
 [ext_resource type="PackedScene" path="res://scenes/world/fern_lowpoly.tscn" id="10_fern"]
@@ -227,27 +226,29 @@ multimesh = ExtResource("19_corr_pines")
 [node name="CorridorOaks" type="MultiMeshInstance3D" parent="CorridorForest" unique_id=833518555]
 multimesh = ExtResource("20_corr_oaks")
 
-[node name="FireSiteTree1" parent="CorridorForest" instance=ExtResource("5_tree_pine")]
+[node name="HandPlanted" type="Node3D" parent="CorridorForest"]
+
+[node name="FireSiteTree1" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(9.8, 0, -1.5)
 scale = Vector3(1.2, 1.2, 1.2)
 
-[node name="FireSiteTree2" parent="CorridorForest" instance=ExtResource("5_tree_pine")]
+[node name="FireSiteTree2" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(10.55, 0, -10.5)
 scale = Vector3(1.31, 1.31, 1.31)
 
-[node name="FireSiteTree3" parent="CorridorForest" instance=ExtResource("5_tree_pine")]
+[node name="FireSiteTree3" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(19.2, 0, -9.1)
 scale = Vector3(1.44, 1.44, 1.44)
 
-[node name="FireSiteTree4" parent="CorridorForest" instance=ExtResource("5_tree_pine")]
+[node name="FireSiteTree4" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(14.3, 0, -19.8)
 scale = Vector3(1.28, 1.28, 1.28)
 
-[node name="FireSiteTree5" parent="CorridorForest" instance=ExtResource("5_tree_pine")]
+[node name="FireSiteTree5" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(4.7, 0, -58)
 scale = Vector3(1.45, 1.45, 1.45)
 
-[node name="FireSiteTree6" parent="CorridorForest" instance=ExtResource("5_tree_pine")]
+[node name="FireSiteTree6" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(-5.5, 0, -74.5)
 scale = Vector3(1.16, 1.16, 1.16)
 
@@ -259,30 +260,6 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 22, 0, -18
 
 [node name="CharredLog2" parent="CharredForestZone" unique_id=935088707 instance=ExtResource("12_log")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -1.95, 0, -60.5)
-
-[node name="FireSiteTree1" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
-position = Vector3(9.8, 0, -1.5)
-scale = Vector3(1.2, 1.2, 1.2)
-
-[node name="FireSiteTree2" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
-position = Vector3(10.55, 0, -10.5)
-scale = Vector3(1.31, 1.31, 1.31)
-
-[node name="FireSiteTree3" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
-position = Vector3(19.2, 0, -9.1)
-scale = Vector3(1.44, 1.44, 1.44)
-
-[node name="FireSiteTree4" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
-position = Vector3(14.3, 0, -19.8)
-scale = Vector3(1.28, 1.28, 1.28)
-
-[node name="FireSiteTree5" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
-position = Vector3(4.7, 0, -58)
-scale = Vector3(1.45, 1.45, 1.45)
-
-[node name="FireSiteTree6" parent="CharredForestZone" instance=ExtResource("7_tree_charred")]
-position = Vector3(-5.5, 0, -74.5)
-scale = Vector3(1.16, 1.16, 1.16)
 
 [node name="BurningPath" type="Node3D" parent="." unique_id=7678707]
 visible = false
@@ -316,7 +293,7 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 5, 0, 5)
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -4.8, 0, 4.5)
 
 [node name="Rock_MidEast" parent="ClearingDetails" unique_id=1611447330 instance=ExtResource("8_rock")]
-transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 9.5, 0, 0.5)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 11.5, -0.23, 5.55)
 
 [node name="Rock_MidWest" parent="ClearingDetails" unique_id=1558643430 instance=ExtResource("8_rock")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -10.5, 0, 1.5)
@@ -467,10 +444,10 @@ transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -12.5, 0, -23.5)
 [node name="Pine_N1" parent="ClearingGroves" unique_id=999439995 instance=ExtResource("5_tree_pine")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -10.2, 0, -15.7)
 
-[node name="Oak_N2" parent="ClearingGroves" unique_id=312850935 instance=ExtResource("6_tree_deciduous")]
+[node name="Oak_N2" parent="CorridorForest/HandPlanted" unique_id=312850935 instance=ExtResource("6_tree_deciduous")]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 7.5, 0, -15.1)
 
-[node name="Pine_N3" parent="ClearingGroves" unique_id=1331625763 instance=ExtResource("5_tree_pine")]
+[node name="Pine_N3" parent="CorridorForest/HandPlanted" unique_id=1331625763 instance=ExtResource("5_tree_pine")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8.9, 0, -20.9)
 
 [node name="Oak_N4" parent="ClearingGroves" unique_id=1369035636 instance=ExtResource("6_tree_deciduous")]
@@ -506,10 +483,10 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 18.1, 0, 9.1)
 [node name="Pine_E1" parent="ClearingGroves" unique_id=858905475 instance=ExtResource("5_tree_pine")]
 transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 21.0, 0, 6.0)
 
-[node name="Oak_E2" parent="ClearingGroves" unique_id=2114503782 instance=ExtResource("6_tree_deciduous")]
+[node name="Oak_E2" parent="CorridorForest/HandPlanted" unique_id=2114503782 instance=ExtResource("6_tree_deciduous")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 19.5, 0, -1.5)
 
-[node name="Pine_NE1" parent="ClearingGroves" unique_id=942531092 instance=ExtResource("5_tree_pine")]
+[node name="Pine_NE1" parent="CorridorForest/HandPlanted" unique_id=942531092 instance=ExtResource("5_tree_pine")]
 transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 22.5, 0, -4.2)
 
 [node name="BorderRock1" parent="ClearingGroves" unique_id=424060703 instance=ExtResource("8_rock")]
@@ -522,13 +499,13 @@ transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, -18.343634, -0.8548465,
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 14, 0, 9)
 
 [node name="BorderRock4" parent="ClearingGroves" unique_id=1097319767 instance=ExtResource("8_rock")]
-transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 13, 0, -4)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 17.2, -0.32, 3.4)
 
 [node name="BorderRock5" parent="ClearingGroves" unique_id=1754532455 instance=ExtResource("8_rock")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -11, 0, -21)
 
 [node name="BorderRock6" parent="ClearingGroves" unique_id=1347485456 instance=ExtResource("8_rock")]
-transform = Transform3D(2.3, 0, 0, 0, 2.3, 0, 0, 0, 2.3, 8, 0, -15)
+transform = Transform3D(1.55, 0, 0, 0, 1.55, 0, 0, 0, 1.55, 5, -0.25, -14.6)
 
 [node name="BorderRock7" parent="ClearingGroves" unique_id=1698084961 instance=ExtResource("8_rock")]
 transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, -8, 0, 16)
@@ -554,10 +531,10 @@ transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, 22, 0, 20)
 [node name="OuterOak6" parent="ClearingGroves" unique_id=1712900591 instance=ExtResource("6_tree_deciduous")]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -16.9, 0, -29.1)
 
-[node name="OuterPine7" parent="ClearingGroves" unique_id=2010941473 instance=ExtResource("5_tree_pine")]
+[node name="OuterPine7" parent="CorridorForest/HandPlanted" unique_id=2010941473 instance=ExtResource("5_tree_pine")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.3, 0, -29.2)
 
-[node name="OuterOak8" parent="ClearingGroves" unique_id=666658049 instance=ExtResource("6_tree_deciduous")]
+[node name="OuterOak8" parent="CorridorForest/HandPlanted" unique_id=666658049 instance=ExtResource("6_tree_deciduous")]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 26.0, 0, -8)
 
 [node name="OuterPine9" parent="ClearingGroves" unique_id=1198741245 instance=ExtResource("5_tree_pine")]
@@ -619,7 +596,7 @@ position = Vector3(-5.5, 0, -74.5)
 scale = Vector3(0.83, 0.83, 0.83)
 phase = 7.10
 
-[node name="ForestTrunks" type="Node3D" parent="." node_paths=PackedStringArray("player", "pines", "oaks", "burn_pines", "burn_oaks", "ash_grove")]
+[node name="ForestTrunks" type="Node3D" parent="." node_paths=PackedStringArray("player", "pines", "oaks", "burn_pines", "burn_oaks", "ash_grove", "hand_planted")]
 script = ExtResource("28_trunks")
 player = NodePath("../Player")
 pines = NodePath("../ForestPines")
@@ -627,6 +604,7 @@ oaks = NodePath("../ForestOaks")
 burn_pines = NodePath("../CorridorForest/CorridorPines")
 burn_oaks = NodePath("../CorridorForest/CorridorOaks")
 ash_grove = NodePath("../CharredForestZone")
+hand_planted = NodePath("../CorridorForest/HandPlanted")
 
 [node name="GateApproachGrove" type="Node3D" parent="."]
 
@@ -660,7 +638,7 @@ position = Vector3(-2.9, 0, -40.7)
 rotation = Vector3(0, 1.58, 0)
 scale = Vector3(1.33, 1.33, 1.33)
 
-[node name="Tree7" parent="GateApproachGrove" instance=ExtResource("6_tree_deciduous")]
+[node name="Tree7" parent="CorridorForest/HandPlanted" instance=ExtResource("6_tree_deciduous")]
 position = Vector3(2.0, 0, -41.5)
 rotation = Vector3(0, 2.89, 0)
 scale = Vector3(1.45, 1.45, 1.45)
@@ -670,7 +648,7 @@ position = Vector3(-1.0, 0, -46.8)
 rotation = Vector3(0, 4.20, 0)
 scale = Vector3(1.24, 1.24, 1.24)
 
-[node name="Tree9" parent="GateApproachGrove" instance=ExtResource("5_tree_pine")]
+[node name="Tree9" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(1.7, 0, -51.1)
 rotation = Vector3(0, 5.51, 0)
 scale = Vector3(1.34, 1.34, 1.34)
@@ -680,27 +658,27 @@ position = Vector3(-3.4, 0, -53.3)
 rotation = Vector3(0, 0.54, 0)
 scale = Vector3(1.07, 1.07, 1.07)
 
-[node name="Tree11" parent="GateApproachGrove" instance=ExtResource("6_tree_deciduous")]
+[node name="Tree11" parent="CorridorForest/HandPlanted" instance=ExtResource("6_tree_deciduous")]
 position = Vector3(-2.1, 0, -58.6)
 rotation = Vector3(0, 1.85, 0)
 scale = Vector3(1.3, 1.3, 1.3)
 
-[node name="Tree12" parent="GateApproachGrove" instance=ExtResource("5_tree_pine")]
+[node name="Tree12" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(-1.1, 0, -64.5)
 rotation = Vector3(0, 3.16, 0)
 scale = Vector3(1.23, 1.23, 1.23)
 
-[node name="Tree13" parent="GateApproachGrove" instance=ExtResource("6_tree_deciduous")]
+[node name="Tree13" parent="CorridorForest/HandPlanted" instance=ExtResource("6_tree_deciduous")]
 position = Vector3(-3.8, 0, -67)
 rotation = Vector3(0, 4.47, 0)
 scale = Vector3(1.18, 1.18, 1.18)
 
-[node name="Tree14" parent="GateApproachGrove" instance=ExtResource("6_tree_deciduous")]
-position = Vector3(1.1, 0, -73.9)
+[node name="Tree14" parent="CorridorForest/HandPlanted" instance=ExtResource("6_tree_deciduous")]
+position = Vector3(7.5, 0, -75)
 rotation = Vector3(0, 5.78, 0)
 scale = Vector3(1.43, 1.43, 1.43)
 
-[node name="Tree15" parent="GateApproachGrove" instance=ExtResource("5_tree_pine")]
+[node name="Tree15" parent="CorridorForest/HandPlanted" instance=ExtResource("5_tree_pine")]
 position = Vector3(-3.8, 0, -77.8)
 rotation = Vector3(0, 0.81, 0)
 scale = Vector3(1.28, 1.28, 1.28)

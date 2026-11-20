@@ -9,6 +9,7 @@ const CHARRED_TREE := preload("res://scenes/world/tree_dead_charred.tscn")
 @export var burn_pines: MultiMeshInstance3D
 @export var burn_oaks: MultiMeshInstance3D
 @export var ash_grove: Node3D
+@export var hand_planted: Node3D
 
 # Each tile contains transform, unscaled radius, unscaled height and its visual grove.
 var _tiles: Dictionary[Vector2i, Array] = {}
@@ -21,6 +22,8 @@ func _ready() -> void:
 	_index_grove(oaks, 0.45, 3.2, false)
 	_index_grove(burn_pines, 0.36, 2.4, true)
 	_index_grove(burn_oaks, 0.45, 3.2, true)
+	for living: Node3D in hand_planted.get_children():
+		_add_charred_tree(ash_grove.global_transform.affine_inverse() * living.global_transform, living.name)
 	_sync(_tile_of(to_local(player.global_position)))
 
 func _physics_process(_delta: float) -> void:
@@ -53,9 +56,14 @@ func _index_grove(grove: MultiMeshInstance3D, radius: float, height: float, burn
 		var dimensions := placement.basis.get_scale()
 		_tiles[tile].append([point, radius * dimensions.x, height * dimensions.y, burns])
 		if burns:
-			var burned_tree := CHARRED_TREE.instantiate() as Node3D
-			burned_tree.transform = grove_to_ash * instance
-			ash_grove.add_child(burned_tree)
+			_add_charred_tree(grove_to_ash * instance)
+
+func _add_charred_tree(placement: Transform3D, tree_name: StringName = &"") -> void:
+	var burned_tree := CHARRED_TREE.instantiate() as Node3D
+	if not tree_name.is_empty():
+		burned_tree.name = tree_name
+	burned_tree.transform = placement
+	ash_grove.add_child(burned_tree)
 
 func _sync(tile: Vector2i) -> void:
 	_center = tile
