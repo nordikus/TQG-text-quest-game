@@ -452,6 +452,8 @@ const BOUGH_TERRACE := -7.55
 const BOUGH_END := -24.14
 const BOUGH_X := -2.0
 const RAMPART_FLOOR := 14.89
+const COURTYARD_BRANCH_START := BOUGH_END + 0.07
+const COURTYARD_BRANCH_END := -45.34
 
 func _bough_spine_z(z: float) -> Vector3:
 	if z >= BOUGH_TERRACE:
@@ -658,8 +660,6 @@ func _blend_walkway_fork(g: Geo, centers: Array[Vector3], end_ring: PackedVector
 func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 	# Beyond the rampart junction, the hollow branch descends into the tower.
 	const RINGS := 46
-	const START_Z := BOUGH_END + 0.07
-	const END_Z := -45.34
 	var section := PackedVector2Array([
 		Vector2(-0.96, 0.04), Vector2(-0.70, 0), Vector2(0.68, 0), Vector2(0.96, 0.08),
 		Vector2(1.12, 0.49), Vector2(1.24, 1.19), Vector2(1.18, 1.93), Vector2(0.88, 2.44),
@@ -673,8 +673,8 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 		starts.append(bark.v.size())
 		for i in RINGS:
 			var t := float(i) / (RINGS - 1)
-			var z := lerpf(START_Z, END_Z, t)
-			var floor_y := lerpf(RAMPART_FLOOR - 0.025, 13.28, smoothstep(0.0, 1.0, t))
+			var z := lerpf(COURTYARD_BRANCH_START, COURTYARD_BRANCH_END, t)
+			var floor_y := _courtyard_branch_floor(t)
 			var reveal := smoothstep(0.0, 0.16, t) * (1.0 - smoothstep(0.83, 1.0, t))
 			var split := 1.0 - smoothstep(0.0, 0.19, t)
 			var center := Vector3(BOUGH_X, floor_y, z)
@@ -714,9 +714,17 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 	var spur := _bezier(Vector3(-0.7, 14.2, -28.2), Vector3(0.20, 13.7, -29.3),
 		Vector3(1.34, 12.3, -32.4), Vector3(1.48, 10.1, -33.8), 13)
 	_tube(bark, spur, 0.47, 0.09, 8, 0.26, 0.12)
-	var lower_fork := _bezier(Vector3(-2.7, 13.75, -37.0), Vector3(-3.9, 12.55, -38.6),
+	# Seat the wide end below the inner floor so its bark joins the outer shell.
+	const FORK_Z := -37.0
+	var fork_t := inverse_lerp(COURTYARD_BRANCH_START, COURTYARD_BRANCH_END, FORK_Z)
+	var lower_base := Vector3(-2.7, _courtyard_branch_floor(fork_t) - 0.72, FORK_Z)
+	var lower_fork := _bezier(lower_base, Vector3(-3.9, 12.55, -38.6),
 		Vector3(-5.2, 10.5, -41.2), Vector3(-5.75, 9.95, -43.2), 12)
 	_tube(bark, lower_fork, 0.53, 0.075, 9, 0.29, 0.12)
+
+func _courtyard_branch_floor(t: float) -> float:
+	return lerpf(RAMPART_FLOOR - 0.025, 13.28, smoothstep(0.0, 1.0, t))
+
 
 func _courtyard_branch_rim(g: Geo, inner: int, outer: int, count: int, outward: Vector3) -> void:
 	for j in count:

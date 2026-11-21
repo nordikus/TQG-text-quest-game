@@ -299,6 +299,8 @@ func _run_verification() -> void:
 			push_error("FAIL: The visible bark must enclose the route across the courtyard.")
 			all_passed = false
 			break
+	if not _verify_branch_floor_at_fork(space_state):
+		all_passed = false
 	var tower := clearing.find_child("MageTower", true, false) as Node3D
 	var sill := tower.get_node("SouthEntryLanding/Mesh") as MeshInstance3D
 	var bridge_floor := tower.get_node("CoveredBridge/TowerBridgeDeck/Mesh") as MeshInstance3D
@@ -342,6 +344,23 @@ func _run_verification() -> void:
 
 func _bounds(model: MeshInstance3D) -> AABB:
 	return model.global_transform * model.get_aabb()
+
+func _verify_branch_floor_at_fork(space: PhysicsDirectSpaceState3D) -> bool:
+	# The outer fork joins the shell underneath this stretch of the tunnel.
+	for step in 9:
+		var center := Vector3(-23.0, 15.8, -96.65 - 0.16 * step)
+		var floor := space.intersect_ray(PhysicsRayQueryParameters3D.create(center, center + Vector3.DOWN * 3.0))
+		if floor.is_empty() or floor.collider.name != "TrunkBody":
+			push_error("FAIL: The tunnel needs a continuous floor above the outer fork.")
+			return false
+		for edge: float in [-0.82, -0.54, 0.54, 0.82]:
+			var at := center + Vector3.RIGHT * edge
+			var tread := space.intersect_ray(PhysicsRayQueryParameters3D.create(at, at + Vector3.DOWN * 3.0))
+			if tread.is_empty() or tread.collider != floor.collider or absf(tread.position.y - floor.position.y) > 0.075:
+				push_error("FAIL: The outer fork must stay below the tunnel floor at %s." % at)
+				return false
+	print("PASS: The outer fork is clear of the tunnel floor.")
+	return true
 
 func _verify_front_breach(space: PhysicsDirectSpaceState3D) -> bool:
 	var approach := space.intersect_ray(PhysicsRayQueryParameters3D.create(
