@@ -88,7 +88,7 @@ func _run_verification() -> void:
 	# 3. TEST ISSUE 3: MAGE TOWER SPIRAL STAIRS
 	# -------------------------------------------------------------------------
 	print("\n--- 3. Testing Mage Tower Spiral Stairs Traversal ---")
-	# Mage Tower is at world (-30.4, 0, -110) on the western curtain.
+	# The freestanding observatory has its original stair in local space.
 	# Sample floor points up the helix from Y = 1.0 to Y = 19.5
 	var tower_steps_ok: bool = true
 	var revs: float = 3.42
@@ -96,7 +96,7 @@ func _run_verification() -> void:
 		var t_norm: float = float(s_idx) / 95.0
 		var expected_y: float = 0.35 + t_norm * 19.65
 		var theta: float = float(s_idx) * (revs * TAU / 95.0)
-		var world_x: float = -30.4 + 1.915 * cos(theta)
+		var world_x: float = -23.0 + 1.915 * cos(theta)
 		var world_z: float = -110.0 + 1.915 * sin(theta)
 		# Cast down from 0.5m above expected step surface
 		var ray_step := PhysicsRayQueryParameters3D.create(
@@ -221,12 +221,28 @@ func _run_verification() -> void:
 			push_error("FAIL: The rear curtain does not join the castle perimeter at x=%s." % x)
 			all_passed = false
 
-	for z in [-105.83, -114.04]:
-		var wall_joint := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-			Vector3(-35.20, 1.3, z), Vector3(-29.0, 1.3, z)))
-		if wall_joint.is_empty():
-			push_error("FAIL: The western curtain must meet the cylindrical tower wall.")
+	for z in [-98.0, -105.83, -114.04, -130.0]:
+		var wall_hit := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(-39.0, 11.3, z), Vector3(-30.9, 11.3, z)))
+		if wall_hit.is_empty() or wall_hit.collider.name != "WallWest" or absf(wall_hit.position.x + 34.4) > 0.01:
+			push_error("FAIL: The western curtain must have a continuous outer face.")
 			all_passed = false
+	for z in range(-162, -86):
+		var walker := Vector3(-33.22, 14.8, z)
+		var foot := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			walker + Vector3.UP * 0.4, walker - Vector3.UP * 0.2))
+		var chest := walker + Vector3.UP * 1.55
+		var lane := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			chest + Vector3.LEFT * 0.53, chest + Vector3.RIGHT * 0.53))
+		if foot.is_empty() or absf(foot.position.y - walker.y) > 0.025 or not lane.is_empty():
+			push_error("FAIL: The west guard walk must remain continuous and at least one metre wide.")
+			all_passed = false
+			break
+	var undercrossing := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-30.5, 2.1, -110.12), Vector3(-29.0, 2.1, -110.12)))
+	if not undercrossing.is_empty():
+		push_error("FAIL: The observatory and the western curtain should have open ground between them.")
+		all_passed = false
 	for z in [-140.0, -155.0, -165.0]:
 		var library_wall := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
 			Vector3(-29.6, 4.8, z), Vector3(-32.1, 4.8, z)))
@@ -234,26 +250,25 @@ func _run_verification() -> void:
 			push_error("FAIL: An exterior buttress or turret penetrates the lower library at z=%s." % z)
 			all_passed = false
 	var portal := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-37.8, 21.1, -110.25), Vector3(-33.85, 21.1, -110.25)))
+		Vector3(-35.0, 21.1, -110.12), Vector3(-26.72, 21.1, -110.12)))
 	var sill_base := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-36.0, 15.0, -110.25), Vector3(-33.6, 15.0, -110.25)))
-	if not portal.is_empty() or sill_base.is_empty() or sill_base.collider.name != "ObservatoryWestBase":
-		push_error("FAIL: The forest entry must be clear at floor level and closed beneath the sill.")
-		all_passed = false
-	var right_guard := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-36.8, 23.6, -108.74), Vector3(-36.8, 20.6, -108.74)))
-	if right_guard.is_empty() or right_guard.collider.name != "BalconySouthWindbreak" or right_guard.position.y < 22.2:
-		push_error("FAIL: The right side of the balcony must rise continuously above jump height.")
+		Vector3(-36.0, 15.0, -110.12), Vector3(-33.6, 15.0, -110.12)))
+	var outside_jamb := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-35, 22.45, -108.55), Vector3(-33.75, 22.45, -108.55)))
+	var covered_walk := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-33.21, 16.38, -110.12), Vector3(-33.21, 20.4, -110.12)))
+	if not portal.is_empty() or sill_base.is_empty() or outside_jamb.is_empty() or covered_walk.is_empty():
+		push_error("FAIL: The upper breach must lead to the observatory while the guard walk stays covered below.")
 		all_passed = false
 	var tower := clearing.find_child("MageTower", true, false) as Node3D
 	var sill := tower.get_node("ForestPortalSill/Mesh") as MeshInstance3D
 	var hall_floor := tower.get_node("TowerFloor3_North/Mesh") as MeshInstance3D
 	var bridge_floor := tower.get_node("CoveredBridge/TowerBridgeDeck/Mesh") as MeshInstance3D
 	var stair_floor := tower.get_node("TowerFloor2_West/Mesh") as MeshInstance3D
-	var balcony_join := is_equal_approx(_bounds(sill).end.x, _bounds(hall_floor).position.x)
+	var crossing_join := is_equal_approx(_bounds(sill).end.x, _bounds(hall_floor).position.x)
 	var bridge_join := is_equal_approx(_bounds(bridge_floor).end.z, _bounds(stair_floor).position.z)
-	if not balcony_join or not bridge_join:
-		push_error("FAIL: The balcony and bridge thresholds must meet their landings edge to edge.")
+	if not crossing_join or not bridge_join:
+		push_error("FAIL: The observatory and bridge thresholds must meet their landings edge to edge.")
 		all_passed = false
 	var bridge_cornice := tower.get_node("CorniceTier2") as MeshInstance3D
 	if _bounds(bridge_cornice).end.y >= _bounds(bridge_floor).end.y:
@@ -265,9 +280,9 @@ func _run_verification() -> void:
 			push_error("FAIL: A library bookcase reaches into the stairwell.")
 			all_passed = false
 	var open_sky := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-27.5, 31.0, -110), Vector3(-27.5, 23.0, -110)))
+		Vector3(-20.1, 31.0, -110), Vector3(-20.1, 23.0, -110)))
 	var covered_roof := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-33.3, 31.0, -110), Vector3(-33.3, 23.0, -110)))
+		Vector3(-25.9, 31.0, -110), Vector3(-25.9, 23.0, -110)))
 	if not open_sky.is_empty() or covered_roof.is_empty():
 		push_error("FAIL: The observatory roof must leave the east quarter open to the sky.")
 		all_passed = false

@@ -367,15 +367,15 @@ position = Vector3(-32.22, 15.12, 16.08)
 mesh = SubResource("PilasterBase")
 
 [node name="FacadeButtress2" type="MeshInstance3D" parent="."]
-position = Vector3(-19.0, 7.7, 15.92)
+position = Vector3(-16.75, 7.7, 15.92)
 mesh = SubResource("Pilaster")
 
 [node name="FacadeButtressFoot2" type="MeshInstance3D" parent="."]
-position = Vector3(-19.0, 0.53, 16.08)
+position = Vector3(-16.75, 0.53, 16.08)
 mesh = SubResource("PilasterBase")
 
 [node name="FacadeButtressCap2" type="MeshInstance3D" parent="."]
-position = Vector3(-19.0, 15.12, 16.08)
+position = Vector3(-16.75, 15.12, 16.08)
 mesh = SubResource("PilasterBase")
 
 [node name="FacadeButtress3" type="MeshInstance3D" parent="."]

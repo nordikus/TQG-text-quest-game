@@ -8,6 +8,9 @@
 
 [ext_resource type="Script" path="res://scripts/world/curtain_trim.gd" id="13_trim"]
 
+[ext_resource type="Script" path="res://scripts/world/western_ramparts.gd" id="14_west"]
+[ext_resource type="Script" path="res://scripts/world/tower_breach.gd" id="15_breach"]
+
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("10_masonry")
 
@@ -57,12 +60,7 @@ emission_enabled = true
 emission = Color(0.20, 0.60, 0.80, 1.0)
 emission_energy_multiplier = 1.6
 
-[sub_resource type="BoxMesh" id="Mesh_WallWest"]
-material = SubResource("Mat_Stone")
-size = Vector3(3.5, 21.4, 25.4)
 
-[sub_resource type="BoxShape3D" id="Shape_WallWest"]
-size = Vector3(3.5, 21.4, 25.4)
 
 [sub_resource type="BoxMesh" id="Mesh_WallEast"]
 material = SubResource("Mat_Stone")
@@ -187,16 +185,7 @@ size = Vector3(7.0, 5.0, 3.5)
 [sub_resource type="BoxShape3D" id="Shape_Portcullis"]
 size = Vector3(5.66, 6.3, 0.26)
 
-[sub_resource type="CylinderMesh" id="Mesh_CornerTowerSW"]
-material = SubResource("Mat_StoneDark")
-top_radius = 4.2
-bottom_radius = 4.8
-height = 23.1
-radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_CornerTowerSW"]
-radius = 4.8
-height = 23.1
 
 [sub_resource type="CylinderMesh" id="Mesh_TowerRoof"]
 material = SubResource("Mat_Roof")
@@ -220,16 +209,7 @@ radial_segments = 16
 radius = 4.8
 height = 18.0
 
-[sub_resource type="CylinderMesh" id="Mesh_CornerTowerNW"]
-material = SubResource("Mat_StoneDark")
-top_radius = 4.2
-bottom_radius = 4.8
-height = 23.1
-radial_segments = 16
 
-[sub_resource type="CylinderShape3D" id="Shape_CornerTowerNW"]
-radius = 4.8
-height = 23.1
 
 [sub_resource type="CylinderMesh" id="Mesh_CornerTowerNE"]
 material = SubResource("Mat_StoneDark")
@@ -280,23 +260,17 @@ size = Vector3(5.55, 0.04, 1.75)
 material = SubResource("Mat_Iron")
 size = Vector3(0.23, 0.4, 0.17)
 
-[sub_resource type="BoxMesh" id="Mesh_WallWestRear"]
-material = SubResource("Mat_Stone")
-size = Vector3(2.62, 21.4, 57.8)
 
-[sub_resource type="BoxShape3D" id="Shape_WallWestRear"]
-size = Vector3(2.62, 21.4, 57.8)
+
+
+[sub_resource type="BoxMesh" id="WestWallPanelMesh"]
+material = SubResource("Mat_Stone")
+size = Vector3(1.01, 2.82, 2.76)
+
+[sub_resource type="BoxShape3D" id="WestWallPanelShape"]
+size = Vector3(1.01, 2.82, 2.76)
 
 [node name="CourtyardWalls" type="Node3D"]
-
-[node name="WallWest" type="StaticBody3D" parent="."]
-position = Vector3(-32.65, 10.7, -3.85)
-
-[node name="Mesh" type="MeshInstance3D" parent="WallWest"]
-mesh = SubResource("Mesh_WallWest")
-
-[node name="Col" type="CollisionShape3D" parent="WallWest"]
-shape = SubResource("Shape_WallWest")
 
 [node name="WallEast" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 7.4, -34.75)
@@ -756,23 +730,6 @@ position = Vector3(-2.85, 4.07, 6.86)
 rotation = Vector3(0, 0, 1.5708)
 mesh = SubResource("ArchStone")
 
-[node name="CornerTowerSW" type="StaticBody3D" parent="."]
-position = Vector3(-32.65, 11.55, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="CornerTowerSW"]
-mesh = SubResource("Mesh_CornerTowerSW")
-
-[node name="Col" type="CollisionShape3D" parent="CornerTowerSW"]
-shape = SubResource("Shape_CornerTowerSW")
-
-[node name="Roof" type="MeshInstance3D" parent="CornerTowerSW"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.96, 0)
-mesh = SubResource("Mesh_TowerRoof")
-
-[node name="RoofCol" type="CollisionShape3D" parent="CornerTowerSW"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.96, 0)
-shape = SubResource("Shape_TowerRoof")
-
 [node name="CornerTowerSE" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 7.0, 8.5)
 
@@ -788,23 +745,6 @@ mesh = SubResource("Mesh_TowerRoof")
 
 [node name="RoofCol" type="CollisionShape3D" parent="CornerTowerSE"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.0, 0)
-shape = SubResource("Shape_TowerRoof")
-
-[node name="CornerTowerNW" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.40, 11.55, -79.2)
-
-[node name="Mesh" type="MeshInstance3D" parent="CornerTowerNW"]
-mesh = SubResource("Mesh_CornerTowerNW")
-
-[node name="Col" type="CollisionShape3D" parent="CornerTowerNW"]
-shape = SubResource("Shape_CornerTowerNW")
-
-[node name="Roof" type="MeshInstance3D" parent="CornerTowerNW"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.96, 0)
-mesh = SubResource("Mesh_TowerRoof")
-
-[node name="RoofCol" type="CollisionShape3D" parent="CornerTowerNW"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.96, 0)
 shape = SubResource("Shape_TowerRoof")
 
 [node name="CornerTowerNE" type="StaticBody3D" parent="."]
@@ -837,36 +777,6 @@ light_energy = 1.8
 omni_range = 8.0
 
 
-[node name="WestBattlements" type="StaticBody3D" parent="."]
-
-[node name="WallWestRear" type="StaticBody3D" parent="."]
-position = Vector3(-33.09, 10.7, -51.85)
-
-[node name="Mesh" type="MeshInstance3D" parent="WallWestRear"]
-mesh = SubResource("Mesh_WallWestRear")
-
-[node name="Col" type="CollisionShape3D" parent="WallWestRear"]
-shape = SubResource("Shape_WallWestRear")
-
-[node name="WestFrontParapet" type="StaticBody3D" parent="."]
-position = Vector3(-32.65, 21.4, -4.25)
-rotation = Vector3(0, 0, 0)
-script = ExtResource("13_trim")
-length = 24.2
-outer_edge = -1.33
-stone = SubResource("Mat_Stone")
-cap_stone = SubResource("Mat_StoneDark")
-
-[node name="WestRearParapet" type="StaticBody3D" parent="."]
-position = Vector3(-33.09, 21.4, -51.65)
-rotation = Vector3(0, 0, 0)
-script = ExtResource("13_trim")
-length = 55.65
-width = 2.62
-outer_edge = -0.89
-stone = SubResource("Mat_Stone")
-cap_stone = SubResource("Mat_StoneDark")
-
 [node name="EastParapet" type="StaticBody3D" parent="."]
 position = Vector3(36, 14.8, -34.75)
 rotation = Vector3(0, 0, 0)
@@ -877,19 +787,19 @@ stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
 
 [node name="RearParapet" type="StaticBody3D" parent="."]
-position = Vector3(0, 14.8, -77.6)
+position = Vector3(1.35, 14.8, -77.6)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
-length = 63.4
+length = 60.7
 outer_edge = 1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
 
 [node name="FrontWestParapet" type="StaticBody3D" parent="."]
-position = Vector3(-19.0, 13.8, 8.5)
+position = Vector3(-17.0, 13.8, 8.5)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
-length = 26.5
+length = 22.5
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
@@ -903,3 +813,23 @@ outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
 
+
+[node name="WesternRamparts" type="Node3D" parent="."]
+script = ExtResource("14_west")
+stone = SubResource("Mat_Stone")
+trim = SubResource("Mat_StoneDark")
+roof_material = SubResource("Mat_Roof")
+
+[node name="IntactPanel" type="StaticBody3D" parent="WesternRamparts"]
+position = Vector3(-33.895, 21.56, -20.12)
+
+[node name="Mesh" type="MeshInstance3D" parent="WesternRamparts/IntactPanel"]
+mesh = SubResource("WestWallPanelMesh")
+
+[node name="Col" type="CollisionShape3D" parent="WesternRamparts/IntactPanel"]
+shape = SubResource("WestWallPanelShape")
+
+[node name="BreachedPanel" type="StaticBody3D" parent="WesternRamparts"]
+visible = false
+position = Vector3(-29.593, 0, -20.12)
+script = ExtResource("15_breach")

@@ -25,16 +25,16 @@ vec3 apply_courtyard_scorch(vec3 color, vec2 p, float relief) {
 	distance = min(distance, distance_to_scorch(p, vec2(-18.0, -85.6), vec2(-25.7, -87.4)));
 	distance = min(distance, distance_to_scorch(p, vec2(-25.7, -87.4), vec2(-26.2, -105.0)));
 	distance = min(distance, distance_to_scorch(p, vec2(-26.2, -105.0), vec2(-23.5, -117.6)));
-	distance = min(distance, distance_to_scorch(p, vec2(-23.5, -117.6), vec2(-27.75, -126.0)));
+	distance = min(distance, distance_to_scorch(p, vec2(-23.5, -117.6), vec2(-20.35, -126.0)));
 	float cloud = scorch_noise(p * 0.53);
 	float flecks = scorch_noise(p * 4.1);
 	float width = mix(2.7, 5.3, smoothstep(-87.0, -81.0, p.y));
 	float edge = distance + 1.75 * (cloud - 0.48) + 0.52 * flecks;
 	float strength = (1.0 - smoothstep(width * 0.29, width, edge));
 	strength *= 1.0 - smoothstep(-79.75, -76.5, p.y);
-	float repairs = 1.0 - smoothstep(2.0, 7.2, length((p - vec2(-27.5, -123.5)) * vec2(1.05, 0.72)) + cloud);
+	float repairs = 1.0 - smoothstep(2.0, 7.2, length((p - vec2(-21.1, -123.5)) * vec2(1.05, 0.72)) + cloud);
 	float supplies = 1.0 - smoothstep(1.6, 4.4,
-		distance_to_scorch(p, vec2(-24.8, -106.9), vec2(-20.35, -107.4)) + 1.2 * cloud);
+		distance_to_scorch(p, vec2(-24.8, -106.9), vec2(-15.60, -118.70)) + 1.2 * cloud);
 	strength = max(strength, 0.97 * repairs);
 	strength = max(strength, 0.94 * supplies);
 	vec3 ash = mix(vec3(0.024, 0.021, 0.018), vec3(0.113, 0.097, 0.080), cloud * flecks);

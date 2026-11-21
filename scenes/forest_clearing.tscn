@@ -852,11 +852,11 @@ position = Vector3(3.8, 0, -72.1)
 rotation = Vector3(0, 5.69, 0)
 scale = Vector3(0.95, 0.95, 0.95)
 
-[node name="WorldChanger" type="Node3D" parent="." unique_id=773051624 groups=["world_changer"] node_paths=PackedStringArray("great_tree", "tower_infill", "tower_breach", "nature_trail", "charred_forest_zone", "fire_particles_group", "burning_path", "ambient_light", "corridor_forest", "keep_door", "keep_key", "forest_trunks", "outer_gate", "world_environment", "bridge_seal", "shard", "rune_chest", "intact_bridge", "collapsed_bridge", "courtyard_roots", "castle_life", "castle_ash", "castle_verge", "castle_embers", "courtyard_surfaces", "court_lanterns", "life_thicket", "ash_thicket", "living_arches")]
+[node name="WorldChanger" type="Node3D" parent="." unique_id=773051624 groups=["world_changer"] node_paths=PackedStringArray("great_tree", "wall_infill", "wall_breach", "nature_trail", "charred_forest_zone", "fire_particles_group", "burning_path", "ambient_light", "corridor_forest", "keep_door", "keep_key", "forest_trunks", "outer_gate", "world_environment", "bridge_seal", "shard", "rune_chest", "intact_bridge", "collapsed_bridge", "courtyard_roots", "castle_life", "castle_ash", "castle_verge", "castle_embers", "courtyard_surfaces", "court_lanterns", "life_thicket", "ash_thicket", "living_arches")]
 script = ExtResource("16_wc")
 great_tree = NodePath("../GreatTree")
-tower_infill = NodePath("../CastleFacade/MageTower/TowerInfill")
-tower_breach = NodePath("../CastleFacade/MageTower/TowerBreach")
+wall_infill = NodePath("../CastleFacade/CourtyardWalls/WesternRamparts/IntactPanel")
+wall_breach = NodePath("../CastleFacade/CourtyardWalls/WesternRamparts/BreachedPanel")
 nature_trail = NodePath("../NatureTrail")
 charred_forest_zone = NodePath("../CharredForestZone")
 fire_particles_group = NodePath("../FireParticlesGroup")

@@ -15,7 +15,6 @@
 
 [ext_resource type="Script" path="res://scripts/world/observatory_crown.gd" id="17_observatory"]
 
-[ext_resource type="Script" path="res://scripts/world/tower_breach.gd" id="18_breach"]
 
 [ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
 
@@ -453,10 +452,10 @@ size = Vector3(1.0, 1.29, 2.45)
 
 [sub_resource type="BoxMesh" id="Mesh_ForestPortalSill"]
 material = SubResource("Mat_Stone")
-size = Vector3(2.915, 0.44, 2.8)
+size = Vector3(1.10, 0.44, 2.8)
 
 [sub_resource type="BoxShape3D" id="Shape_ForestPortalSill"]
-size = Vector3(2.915, 0.44, 2.8)
+size = Vector3(1.10, 0.44, 2.8)
 
 [sub_resource type="BoxMesh" id="Mesh_ObservatoryEntryLanding"]
 material = SubResource("Mat_Stone")
@@ -465,51 +464,7 @@ size = Vector3(1.105, 0.3, 1.045)
 [sub_resource type="BoxShape3D" id="Shape_ObservatoryEntryLanding"]
 size = Vector3(1.105, 0.3, 1.045)
 
-[sub_resource type="BoxMesh" id="Mesh_TowerInfill"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(1.00, 2.805, 2.72)
 
-[sub_resource type="BoxShape3D" id="Shape_TowerInfill"]
-size = Vector3(1.00, 2.805, 2.72)
-
-[sub_resource type="BoxMesh" id="Mesh_BreachStone"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(0.58, 0.58, 0.51)
-
-[sub_resource type="BoxMesh" id="Mesh_BalconyNorthWindbreak"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(2.88, 2.18, 0.28)
-
-[sub_resource type="BoxShape3D" id="Shape_BalconyNorthWindbreak"]
-size = Vector3(2.88, 2.18, 0.28)
-
-[sub_resource type="BoxMesh" id="Mesh_BalconySouthWindbreak"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(2.88, 2.18, 0.28)
-
-[sub_resource type="BoxShape3D" id="Shape_BalconySouthWindbreak"]
-size = Vector3(2.88, 2.18, 0.28)
-
-[sub_resource type="BoxMesh" id="Mesh_BalconyCorbelNorth"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(1.82, 0.55, 0.47)
-
-[sub_resource type="BoxShape3D" id="Shape_BalconyCorbelNorth"]
-size = Vector3(1.82, 0.55, 0.47)
-
-[sub_resource type="BoxMesh" id="Mesh_BalconyCorbelSouth"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(1.82, 0.55, 0.47)
-
-[sub_resource type="BoxShape3D" id="Shape_BalconyCorbelSouth"]
-size = Vector3(1.82, 0.55, 0.47)
-
-[sub_resource type="BoxMesh" id="Mesh_BalconyIntactCenter"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(0.21, 0.91, 1.84)
-
-[sub_resource type="BoxShape3D" id="Shape_BalconyIntactCenter"]
-size = Vector3(0.21, 0.91, 1.84)
 
 
 [sub_resource type="BoxMesh" id="Mesh_WallSouthInfill"]
@@ -1136,7 +1091,7 @@ mesh = SubResource("Mesh_ObservatoryWestLintel")
 shape = SubResource("Shape_ObservatoryWestLintel")
 
 [node name="ForestPortalSill" type="StaticBody3D" parent="."]
-position = Vector3(-5.1575, 19.93, -0.12)
+position = Vector3(-4.25, 19.93, -0.12)
 
 [node name="Mesh" type="MeshInstance3D" parent="ForestPortalSill"]
 mesh = SubResource("Mesh_ForestPortalSill")
@@ -1152,70 +1107,6 @@ mesh = SubResource("Mesh_ObservatoryEntryLanding")
 
 [node name="Col" type="CollisionShape3D" parent="ObservatoryEntryLanding"]
 shape = SubResource("Shape_ObservatoryEntryLanding")
-
-[node name="TowerInfill" type="StaticBody3D" parent="."]
-position = Vector3(-4.3, 21.55, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="TowerInfill"]
-mesh = SubResource("Mesh_TowerInfill")
-
-[node name="Col" type="CollisionShape3D" parent="TowerInfill"]
-shape = SubResource("Shape_TowerInfill")
-
-[node name="IntactBalconyCenter" type="StaticBody3D" parent="TowerInfill"]
-position = Vector3(-2.21, -0.95, -0.08)
-
-[node name="Mesh" type="MeshInstance3D" parent="TowerInfill/IntactBalconyCenter"]
-mesh = SubResource("Mesh_BalconyIntactCenter")
-
-[node name="Col" type="CollisionShape3D" parent="TowerInfill/IntactBalconyCenter"]
-shape = SubResource("Shape_BalconyIntactCenter")
-
-[node name="TowerBreach" type="StaticBody3D" parent="."]
-visible = false
-script = ExtResource("18_breach")
-
-[node name="BrokenParapetStone" type="MeshInstance3D" parent="TowerBreach"]
-position = Vector3(-5.96, 20.24, -1.07)
-rotation = Vector3(0.51, 0.34, 0.21)
-scale = Vector3(0.68, 0.35, 0.45)
-mesh = SubResource("Mesh_BreachStone")
-
-[node name="BalconyNorthWindbreak" type="StaticBody3D" parent="."]
-position = Vector3(-5.18, 21.22, -1.48)
-
-[node name="Mesh" type="MeshInstance3D" parent="BalconyNorthWindbreak"]
-mesh = SubResource("Mesh_BalconyNorthWindbreak")
-
-[node name="Col" type="CollisionShape3D" parent="BalconyNorthWindbreak"]
-shape = SubResource("Shape_BalconyNorthWindbreak")
-
-[node name="BalconySouthWindbreak" type="StaticBody3D" parent="."]
-position = Vector3(-5.18, 21.22, 1.26)
-
-[node name="Mesh" type="MeshInstance3D" parent="BalconySouthWindbreak"]
-mesh = SubResource("Mesh_BalconySouthWindbreak")
-
-[node name="Col" type="CollisionShape3D" parent="BalconySouthWindbreak"]
-shape = SubResource("Shape_BalconySouthWindbreak")
-
-[node name="BalconyCorbelNorth" type="StaticBody3D" parent="."]
-position = Vector3(-5.0, 19.45, -0.99)
-
-[node name="Mesh" type="MeshInstance3D" parent="BalconyCorbelNorth"]
-mesh = SubResource("Mesh_BalconyCorbelNorth")
-
-[node name="Col" type="CollisionShape3D" parent="BalconyCorbelNorth"]
-shape = SubResource("Shape_BalconyCorbelNorth")
-
-[node name="BalconyCorbelSouth" type="StaticBody3D" parent="."]
-position = Vector3(-5.0, 19.45, 0.82)
-
-[node name="Mesh" type="MeshInstance3D" parent="BalconyCorbelSouth"]
-mesh = SubResource("Mesh_BalconyCorbelSouth")
-
-[node name="Col" type="CollisionShape3D" parent="BalconyCorbelSouth"]
-shape = SubResource("Shape_BalconyCorbelSouth")
 
 [node name="AstronomicalRoof" type="Node3D" parent="."]
 script = ExtResource("17_observatory")

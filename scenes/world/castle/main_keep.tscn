@@ -177,10 +177,10 @@ size = Vector3(64.8, 0.5, 30.8)
 
 [sub_resource type="BoxMesh" id="Mesh_KeepFrontWest_Outer"]
 material = SubResource("Mat_Stone")
-size = Vector3(2.65, 18.0, 1.0)
+size = Vector3(10.05, 18.0, 1.0)
 
 [sub_resource type="BoxShape3D" id="Shape_KeepFrontWest_Outer"]
-size = Vector3(2.65, 18.0, 1.0)
+size = Vector3(10.05, 18.0, 1.0)
 
 [sub_resource type="BoxMesh" id="Mesh_BridgeLintel"]
 material = SubResource("Mat_Stone")
@@ -198,10 +198,10 @@ size = Vector3(3.2, 6.0, 1.0)
 
 [sub_resource type="BoxMesh" id="Mesh_KeepFrontWest_Inner"]
 material = SubResource("Mat_Stone")
-size = Vector3(22.95, 18.0, 1.0)
+size = Vector3(15.55, 18.0, 1.0)
 
 [sub_resource type="BoxShape3D" id="Shape_KeepFrontWest_Inner"]
-size = Vector3(22.95, 18.0, 1.0)
+size = Vector3(15.55, 18.0, 1.0)
 
 [sub_resource type="BoxMesh" id="Mesh_KeepFrontRight"]
 material = SubResource("Mat_Stone")
@@ -884,7 +884,7 @@ mesh = SubResource("Mesh_Roof")
 shape = SubResource("Shape_Roof")
 
 [node name="KeepFrontWest_Outer" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.675, 9.22, 15.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.975, 9.22, 15.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="KeepFrontWest_Outer"]
 mesh = SubResource("Mesh_KeepFrontWest_Outer")
@@ -893,7 +893,7 @@ mesh = SubResource("Mesh_KeepFrontWest_Outer")
 shape = SubResource("Shape_KeepFrontWest_Outer")
 
 [node name="BridgeLintel" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.75, 14.01, 15.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.35, 14.01, 15.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="BridgeLintel"]
 mesh = SubResource("Mesh_BridgeLintel")
@@ -902,7 +902,7 @@ mesh = SubResource("Mesh_BridgeLintel")
 shape = SubResource("Shape_BridgeLintel")
 
 [node name="BridgeSill" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.75, 3.22, 15.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.35, 3.22, 15.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="BridgeSill"]
 mesh = SubResource("Mesh_BridgeSill")
@@ -911,7 +911,7 @@ mesh = SubResource("Mesh_BridgeSill")
 shape = SubResource("Shape_BridgeSill")
 
 [node name="LibraryBridgeThreshold" type="StaticBody3D" parent="."]
-position = Vector3(-27.75, 6.285, 15.25)
+position = Vector3(-20.35, 6.285, 15.25)
 
 [node name="Mesh" type="MeshInstance3D" parent="LibraryBridgeThreshold"]
 mesh = SubResource("Mesh_LibraryBridgeThreshold")
@@ -920,7 +920,7 @@ mesh = SubResource("Mesh_LibraryBridgeThreshold")
 shape = SubResource("Shape_LibraryBridgeThreshold")
 
 [node name="KeepFrontWest_Inner" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.675, 9.22, 15.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.975, 9.22, 15.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="KeepFrontWest_Inner"]
 mesh = SubResource("Mesh_KeepFrontWest_Inner")

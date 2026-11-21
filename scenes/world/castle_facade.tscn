@@ -185,7 +185,7 @@ position = Vector3(20, 0, -2.7)
 rotation = Vector3(0, 3.141593, 0)
 
 [node name="MageTower" parent="." instance=ExtResource("4_tower")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.4, 0.0, -20.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.0, 0.0, -20.0)
 
 [node name="MainKeep" parent="." instance=ExtResource("5_keep")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.0, -61.0)
@@ -442,7 +442,7 @@ smoke_density = 0.54
 smoke_size = 0.68
 
 [node name="Embers5" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
-position = Vector3(-27.15, 0, -35.17)
+position = Vector3(-19.75, 0, -35.17)
 scale = Vector3(0.32, 0.32, 0.32)
 phase = 5.65
 smoke_density = 0.54
@@ -1041,19 +1041,19 @@ script = ExtResource("26_furnishing")
 place = 1
 
 [node name="SupplyShelter" type="Node3D" parent="LivingVerge"]
-position = Vector3(-20.35, 0, -17.4)
+position = Vector3(-15.60, 0, -28.7)
 rotation = Vector3(0, -0.16, 0)
 script = ExtResource("26_furnishing")
 place = 2
 
 [node name="SupplyShelter" type="Node3D" parent="AshCastle"]
-position = Vector3(-20.35, 0, -17.4)
+position = Vector3(-15.60, 0, -28.7)
 rotation = Vector3(0, -0.16, 0)
 script = ExtResource("26_furnishing")
 place = 3
 
 [node name="SupplyShelterEmbers" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
-position = Vector3(-20.32, 0, -17.68)
+position = Vector3(-15.57, 0, -28.98)
 scale = Vector3(0.27, 0.27, 0.27)
 phase = 1.35
 smoke_density = 0.56

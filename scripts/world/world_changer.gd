@@ -1,8 +1,8 @@
 extends Node3D
 
 @export var great_tree: Node3D
-@export var tower_infill: Node3D
-@export var tower_breach: Node3D
+@export var wall_infill: Node3D
+@export var wall_breach: Node3D
 @export var nature_trail: Node3D
 @export var charred_forest_zone: Node3D
 @export var fire_particles_group: Node3D
@@ -74,7 +74,7 @@ func _apply_extinguish_outcome() -> void:
 		_move_vertical(great_tree, 0.0, 3.5).finished.connect(
 			func():
 				_set_collision_recursive(great_tree, true)
-				_set_tower_breach(true)
+				_set_wall_breach(true)
 		)
 	if living_arches:
 		for i in living_arches.get_child_count():
@@ -136,7 +136,7 @@ func _set_castle_state(life: bool, burned: bool) -> void:
 		if material:
 			material.set_shader_parameter("courtyard_burned", burned)
 	if not life:
-		_set_tower_breach(false)
+		_set_wall_breach(false)
 	_set_enabled(courtyard_roots, life)
 	_set_enabled(castle_life, life)
 	_set_enabled(castle_ash, burned)
@@ -150,9 +150,9 @@ func _set_castle_state(life: bool, burned: bool) -> void:
 	if bridge_seal:
 		bridge_seal.restore_seal(life)
 
-func _set_tower_breach(opened: bool) -> void:
-	_set_enabled(tower_infill, not opened)
-	_set_enabled(tower_breach, opened)
+func _set_wall_breach(opened: bool) -> void:
+	_set_enabled(wall_infill, not opened)
+	_set_enabled(wall_breach, opened)
 
 func _ignite(fire: Node3D) -> void:
 	fire.show()

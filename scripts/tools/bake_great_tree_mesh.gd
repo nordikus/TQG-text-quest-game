@@ -431,30 +431,21 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 
 
 const BOUGH_TERRACE := -7.55
+const BOUGH_TURN := -19.6
 const BOUGH_END := -49.0
-const BOUGH_SPINE: Array[Vector3] = [
-	Vector3(-0.09, 17.00, -7.55),
-	Vector3(-4.7, 17.43, -8.65),
-	Vector3(-12.0, 17.82, -12.20),
-	Vector3(-18.9, 18.19, -19.70),
-	Vector3(-23.0, 18.58, -28.65),
-	Vector3(-24.6, 18.94, -37.40),
-	Vector3(-24.2, 19.27, -43.65),
-	Vector3(-22.4, 19.60, -48.25),
-	Vector3(-19.45, 19.83, -49.99),
-	Vector3(-16.05, 19.94, -50.25),
-]
+const WEST_FORK := Vector3(-21.85, 17.80, -9.80)
+const OUTLOOK := Vector3(-16.38, 19.86, -50.26)
 
 func _bough_spine_z(z: float) -> Vector3:
 	if z >= BOUGH_TERRACE:
 		var terrace := exp(-pow((z + 5.2) / 2.2, 2.0))
 		return Vector3(lerpf(0.13, -0.55, terrace),
 			17.0 - 1.62 * smoothstep(-5.25, -3.02, z), z)
-	var index := inverse_lerp(BOUGH_TERRACE, BOUGH_END, z) * (BOUGH_SPINE.size() - 1)
-	var i := mini(floori(index), BOUGH_SPINE.size() - 2)
-	var before := BOUGH_SPINE[i - 1] if i > 0 else BOUGH_SPINE[0] + Vector3(0, -0.13, 2.4)
-	return BOUGH_SPINE[i].cubic_interpolate(BOUGH_SPINE[i + 1],
-		before, BOUGH_SPINE[mini(BOUGH_SPINE.size() - 1, i + 2)], index - i)
+	if z >= BOUGH_TURN:
+		var t := inverse_lerp(BOUGH_TERRACE, BOUGH_TURN, z)
+		return Vector3(-0.10, 17.0, BOUGH_TERRACE).bezier_interpolate(
+			Vector3(-7.9, 17.18, -8.02), WEST_FORK - Vector3(0.89, 0.34, -6.6), WEST_FORK, t)
+	return WEST_FORK.lerp(OUTLOOK, inverse_lerp(BOUGH_TURN, BOUGH_END, z))
 
 
 func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void:
@@ -499,11 +490,12 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		centers.append(c - up * 0.45)
 
 		var terrace_w := exp(-pow((z - (-5.35)) / 2.45, 2.0))
+		var fork_flare := 0.97 * exp(-pow((z - BOUGH_TURN) / 2.55, 2.0))
 		var trunk_flare := exp(-pow((z - (-1.2)) / 2.8, 2.0))
 		var taper := smoothstep(BOUGH_END, -8.0, z)
 		var knots := (0.16 * sin(z * 0.42) + 0.12 * cos(z * 0.89)) * (1.0 - terrace_w)
 		var branch_width := 1.13 + 0.63 * taper + knots
-		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare
+		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare + fork_flare
 		var belly_depth := lerpf(0.78, 1.31, taper) + 0.65 * terrace_w + 1.45 * trunk_flare
 		var width_meander := 0.08 * sin(z * 0.28) * (1.0 - terrace_w * 0.7)
 		var tip := 1.0 - smoothstep(BOUGH_END, -45.2, z)
@@ -582,9 +574,10 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 	_tube(g, arch_buttress_2, 1.15, 0.58, 10, 0.28, 0.16)
 
 	var trailing_fork := _bezier(_bough_spine_z(-43.0) - Vector3.UP,
-		Vector3(-21.0, 18.25, -49.7), Vector3(-18.7, 17.7, -51.0),
-		Vector3(-16.5, 17.1, -51.65), 12)
+		Vector3(-17.7, 18.25, -49.1), Vector3(-15.7, 17.7, -50.5),
+		Vector3(-14.04, 17.1, -51.00), 12)
 	_tube(g, trailing_fork, 0.62, 0.17, 9, 0.30, 0.16)
+	_build_breach_shoot(g, spores)
 
 	for z_sp in [-6.8, -12.0, -18.5, -25.0, -31.5, -38.0, -43.5, -47.5]:
 		var ring := roundi(inverse_lerp(z_start, z_end, z_sp) * (n_stations - 1))
@@ -636,6 +629,27 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		arch_foliage.append([p3 + Vector3(0.0, 0.4, 0.0), crown])
 		arch_foliage.append([p3 + side * 1.1 - Vector3.UP * 0.2 + forward * 0.8, crown * 0.69])
 		arch_foliage.append([f3 + Vector3(0.0, 0.35, 0.0), crown * 0.74])
+
+func _build_breach_shoot(g: Geo, spores: Geo) -> void:
+	var start := g.v.size()
+	var profile := PackedVector2Array([
+		Vector2(-1, 0), Vector2(-0.72, 0.03), Vector2(0, 0.03), Vector2(0.72, 0.03),
+		Vector2(1, 0), Vector2(1.08, -0.27), Vector2(0.71, -0.56), Vector2(0, -0.78),
+		Vector2(-0.71, -0.56), Vector2(-1.08, -0.27),
+	])
+	var centers: Array = []
+	for i in 13:
+		var t := i / 12.0
+		var center := Vector3(-17.0, 19.98, -49.43).lerp(Vector3(-13.385, 20.12, -50.12), t)
+		var half_width := lerpf(1.42, 1.16, t) + 0.075 * sin(t * TAU)
+		centers.append(center - Vector3.UP * 0.24)
+		for j in profile.size():
+			var offset := profile[j]
+			g.v.append(center + Vector3(0, offset.y, offset.x * half_width))
+			g.c.append(BARK_WARM.lerp(MOSS, 0.57) if j in [1, 2, 3] else BARK_WARM)
+	_connect_tube_grid(g, start, 13, profile.size(), centers, Vector3.LEFT, Vector3.RIGHT)
+	_add_spore_cluster(spores, g.v[start + 7 * profile.size()], Vector3.UP, 2)
+	_add_spore_cluster(spores, g.v[start + 7 * profile.size() + 4], Vector3.UP, 2)
 
 
 func _build_canopy(leaves: Geo, tips: Array, arch_foliage: Array) -> void:
