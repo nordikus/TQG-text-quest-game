@@ -39,6 +39,7 @@ func _verify() -> void:
 	await get_tree().physics_frame
 	_check(not _observer.visible and _observer.get_node("Shape").disabled and _observer.get_interaction_prompt().is_empty(),
 		"The Observer is absent until a qualifying choice.")
+	_check_sanctuaries()
 	if OS.get_cmdline_user_args().has("reject-deal"):
 		await _choose_throne_ending(1)
 		_check(QuestManager.get_quest_ending("deal_at_the_throne") == "reject_deal"
@@ -222,6 +223,7 @@ func _choose_throne_ending(choice: int) -> void:
 	await get_tree().process_frame
 
 func _verify_observer_epilogue(expected_line: String) -> void:
+	_check_sanctuaries()
 	var player := _level.get_node("Player") as CharacterBody3D
 	var camera := player.get_node("Camera3D") as Camera3D
 	var ray := camera.get_node("InteractionRay") as RayCast3D
@@ -342,16 +344,25 @@ func _verify_chapel_door() -> void:
 	_check(not door.is_open and _ray(outside_left, inside_left).get("collider") == left
 		and _ray(inside_right, outside_right).get("collider") == right,
 		"The chapel leaves close back into the door frame.")
-	var altar := chapel.get_node("ChapelNote") as PickupItem
+	var note := chapel.get_node("ChapelNote") as PickupItem
+	_check(note.visible, "The chapel prayer remains available at the altar.")
+
+func _check_sanctuaries() -> void:
+	var chapel := _level.get_node("CastleFacade/ChapelBuilding") as Node3D
 	var observer_model := (_observer.get_node("Model") as MeshInstance3D).mesh
-	var chapel_has_observer := false
-	for part: MeshInstance3D in chapel.find_children("*", "MeshInstance3D", true, false):
-		chapel_has_observer = chapel_has_observer or part.mesh == observer_model
-	_check(not chapel_has_observer and altar.visible, "The chapel keeps its note and contains no Observer model.")
+	var model_found := false
+	for sanctuary: Node3D in [chapel, _level.get_node("StoneAltar")]:
+		for part: MeshInstance3D in sanctuary.find_children("*", "MeshInstance3D", true, false):
+			model_found = model_found or part.mesh == observer_model
+	var behind_altar := _ray(chapel.to_global(Vector3(-4.5, 0.9, -1.3)),
+		chapel.to_global(Vector3(-4.5, 0.9, 1.3)))
+	_check(not model_found and behind_altar.is_empty(),
+		"Neither sanctuary contains an Observer model and the former statue site is clear.")
 
 func _check_watchtower_passages() -> void:
 	var walls := _level.get_node("CastleFacade/CourtyardWalls")
-	for tower_name in ["GateWestWatchtower", "GateEastWatchtower", "WestWatchtower", "EastWatchtower"]:
+	for tower_name in ["GateWestWatchtower", "GateEastWatchtower", "WestWatchtower", "EastWatchtower",
+			"RearWestWatchtower", "RearEastWatchtower"]:
 		var tower := walls.get_node(tower_name) as StaticBody3D
 		var clear := true
 		for x in [-0.46, 0.0, 0.46]:
@@ -363,13 +374,24 @@ func _check_watchtower_passages() -> void:
 			clear = clear and not _ray(floor_sample, floor_sample - Vector3.UP * 0.5).is_empty()
 		var outer_wall := _ray(tower.to_global(Vector3(0, 16.1, 0)), tower.to_global(Vector3(4, 16.1, 0)))
 		_check(clear and outer_wall.get("collider") == tower, "%s has a continuous passage and physical walls." % tower_name)
-	var corner := walls.get_node("CornerTowerSE") as StaticBody3D
-	var turn := corner.to_global(Vector3(0, 16.9, 0))
-	var west_entry := turn + Vector3.LEFT * 4.1
-	var north_entry := turn + Vector3.FORWARD * 4.1
-	_check(_ray(west_entry, turn).is_empty() and _ray(north_entry, turn).is_empty()
-		and not _ray(turn + Vector3.DOWN * 1.85, turn + Vector3.DOWN * 2.2).is_empty(),
-		"The southeastern corner tower connects the front and east wall walks.")
+	for tower_name in ["CornerTowerSE", "CornerTowerSW", "CornerTowerNE", "CornerTowerNW"]:
+		var corner := walls.get_node(tower_name) as StaticBody3D
+		var turn := corner.to_global(Vector3(0, 16.9, 0))
+		var first_entry := corner.to_global(Vector3(-4.1, 16.9, 0))
+		var second_entry := corner.to_global(Vector3(0, 16.9, -4.1))
+		_check(_ray(first_entry, turn).is_empty() and _ray(second_entry, turn).is_empty()
+			and not _ray(turn + Vector3.DOWN * 1.85, turn + Vector3.DOWN * 2.2).is_empty(),
+			"%s connects two curtain walks through a playable corner." % tower_name)
+
+	var forest := _level.get_node("ForestPines") as MultiMeshInstance3D
+	var groves := [forest, _level.get_node("ForestOaks"), _world.corridor_forest.get_node("CorridorPines"),
+		_world.corridor_forest.get_node("CorridorOaks")]
+	var trees_clear := true
+	for grove: MultiMeshInstance3D in groves:
+		for i in grove.multimesh.instance_count:
+			var at := grove.to_global(grove.multimesh.get_instance_transform(i).origin)
+			trees_clear = trees_clear and not ForestLayout.CASTLE_TREE_CLEARANCE.has_point(Vector2(at.x, at.z))
+	_check(trees_clear, "Forest trees stay outside the expanded curtain and the service yard.")
 
 func _check_courtyard_fire(burned: bool) -> void:
 	var surfaces_match: bool = _world.courtyard_surfaces.size() == 3

@@ -12,6 +12,7 @@ const ASH_PATH: Array[Vector3] = [
 const TREE_BASE := Vector2(-21, -60)
 const ROOT_CLEARANCE := 9.5
 const ASH_CORE := 2.75
+const CASTLE_TREE_CLEARANCE := Rect2(-50.5, -188, 101, 111)
 
 static func distance_to_path(point: Vector2, path: Array[Vector3]) -> float:
 	var distance := INF

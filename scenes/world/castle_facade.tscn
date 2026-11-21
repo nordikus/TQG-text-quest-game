@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
 [ext_resource type="Script" path="res://scripts/world/courtyard_well_model.gd" id="27_well"]
 [ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="28_slates"]
+[ext_resource type="Script" path="res://scripts/world/rear_bailey.gd" id="29_rear_bailey"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
@@ -188,6 +189,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.0, 0.0, -20.0)
 [node name="MainKeep" parent="." instance=ExtResource("5_keep")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.0, -61.0)
 
+[node name="RearBailey" type="Node3D" parent="."]
+script = ExtResource("29_rear_bailey")
 
 [node name="BarracksTurnBeacon" parent="." instance=ExtResource("6_beacon")]
 position = Vector3(3.6, 0, -20.5)

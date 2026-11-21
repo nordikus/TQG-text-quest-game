@@ -114,6 +114,7 @@ func _init() -> void:
 			if Layout.clear_for_life(tree_pos, 1.15) or ash_distance < Layout.ASH_CORE + 0.8:
 				continue
 
+			# Keep the original sampling sequence around both story paths.
 			if pos_x > -39.0 and pos_x < 39.0 and pos_z > -174.0 and pos_z < -79.0:
 				continue
 
@@ -176,6 +177,12 @@ func _init() -> void:
 					var ub_xform := Transform3D(Basis(Vector3.UP, rng.randf_range(0, TAU)).scaled(Vector3(sc, sc, sc)), Vector3(ub_pos.x, 0.0, ub_pos.y))
 					undergrowth_transforms.append(ub_xform)
 
+	persistent_pines = persistent_pines.filter(_outside_castle)
+	persistent_oaks = persistent_oaks.filter(_outside_castle)
+	corridor_pines = corridor_pines.filter(_outside_castle)
+	corridor_oaks = corridor_oaks.filter(_outside_castle)
+	undergrowth_transforms = undergrowth_transforms.filter(_outside_castle)
+
 	print("Persistent: %d pines, %d oaks." % [persistent_pines.size(), persistent_oaks.size()])
 	print("Burn corridor: %d pines, %d oaks." % [corridor_pines.size(), corridor_oaks.size()])
 	print("Undergrowth bushes: %d." % undergrowth_transforms.size())
@@ -196,6 +203,9 @@ func _init() -> void:
 	ResourceSaver.save(mm_pers_oaks.mesh, "res://scenes/world/deciduous_model.res", ResourceSaver.FLAG_COMPRESS)
 	print("Saved the five grove batches and two individual tree models.")
 	quit(0)
+
+func _outside_castle(placement: Transform3D) -> bool:
+	return not Layout.CASTLE_TREE_CLEARANCE.has_point(Vector2(placement.origin.x, placement.origin.z))
 
 func _create_pine_multimesh(transforms: Array[Transform3D]) -> MultiMesh:
 	var bark := _surface()

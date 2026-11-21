@@ -72,7 +72,7 @@ func _run() -> void:
 	vp.get_texture().get_image().save_png(ARTIFACT_DIR + "/v6_barracks_interior.png")
 	print("Saved: v6_barracks_interior.png")
 
-	# 4. Capture Chapel Interior with Altar, Lore Note & Statue
+	# 4. Capture the chapel interior and the prayer on the altar.
 	cam.global_position = Vector3(-20.5, 1.8, -92.0)
 	cam.look_at(Vector3(-28.0, 1.4, -92.0), Vector3.UP)
 	cam.fov = 65.0

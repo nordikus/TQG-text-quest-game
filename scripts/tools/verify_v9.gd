@@ -208,24 +208,24 @@ func _run_verification() -> void:
 	if not _verify_gate_wall_walk(space_state):
 		all_passed = false
 
-	# The keep is approachable from outside, but the rear perimeter is closed.
-	for x in [-33.2, 0.0, 33.2]:
+	# Test the new corner joins and the center of the rear curtain.
+	for x in [-45.1, -42.1, -32.6, -16.0, 0.0, 16.0, 32.6, 42.1, 45.1]:
 		var rear_ray := PhysicsRayQueryParameters3D.create(
-			Vector3(x, 1.3, -171), Vector3(x, 1.3, -164))
-		rear_ray.hit_from_inside = true
+			Vector3(x, 1.3, -188), Vector3(x, 1.3, -178))
 		var rear_hit := space_state.intersect_ray(rear_ray)
-		if rear_hit.is_empty() or rear_hit.collider.name not in ["RearCurtainWall", "CornerTowerNW", "CornerTowerNE"]:
+		if rear_hit.is_empty() or rear_hit.collider.name not in ["RearCurtainWall", "CornerTowerNW", "CornerTowerNE",
+				"RearEastWatchtower", "RearWestWatchtower"]:
 			push_error("FAIL: The rear curtain does not join the castle perimeter at x=%s." % x)
 			all_passed = false
 
-	for z in [-98.0, -105.83, -114.04, -130.0]:
+	for z in [-98.0, -105.83, -114.04, -130.0, -160.0, -177.0]:
 		var wall_hit := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-			Vector3(-39.0, 11.3, z), Vector3(-30.9, 11.3, z)))
-		if wall_hit.is_empty() or wall_hit.collider.name != "WallWest" or absf(wall_hit.position.x + 34.4) > 0.01:
+			Vector3(-49.0, 11.3, z), Vector3(-40.9, 11.3, z)))
+		if wall_hit.is_empty() or wall_hit.collider.name != "WallWest" or absf(wall_hit.position.x + 45.75) > 0.01:
 			push_error("FAIL: The western curtain must have a continuous outer face.")
 			all_passed = false
-	for z in range(-162, -86):
-		var walker := Vector3(-33.22, 14.8, z)
+	for z in range(-176, -86):
+		var walker := Vector3(-44.0, 14.8, z)
 		var foot := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
 			walker + Vector3.UP * 0.4, walker - Vector3.UP * 0.2))
 		var chest := walker + Vector3.UP * 1.55
@@ -247,12 +247,34 @@ func _run_verification() -> void:
 				or absf(library_wall.position.x + 31.6) > 0.03:
 			push_error("FAIL: An exterior buttress or turret penetrates the lower library at z=%s." % z)
 			all_passed = false
-	for side in [Vector2(-33.15, -100), Vector2(15, -81.5), Vector2(36.0, -116), Vector2(0, -167.6)]:
+	for side in [Vector2(-44, -100), Vector2(15, -81.5), Vector2(44, -116),
+			Vector2(0, -181.5), Vector2(-16, -181.5), Vector2(44, -181.5), Vector2(-44, -181.5)]:
 		var foot := Vector3(side.x, 14.8, side.y)
 		var crest := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
 			foot + Vector3.UP * 0.22, foot - Vector3.UP * 0.22))
 		if crest.is_empty() or not is_equal_approx(crest.position.y, 14.8):
 			push_error("FAIL: All curtain walks should meet the 14.8 m height.")
+			all_passed = false
+	var keep_back := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(0, 4.0, -172.0), Vector3(0, 4.0, -164.0)))
+	var curtain_back := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(0, 4.0, -172.0), Vector3(0, 4.0, -184.0)))
+	if (keep_back.is_empty() or curtain_back.is_empty()
+			or keep_back.collider.name != "KeepWallNorth" or curtain_back.collider.name != "RearCurtainWall"
+			or keep_back.position.z - curtain_back.position.z < 13.0):
+		push_error("FAIL: The rear curtain must leave at least thirteen metres of courtyard behind the keep.")
+		all_passed = false
+	else:
+		print("PASS: The rear courtyard is %.2f m deep." % (keep_back.position.z - curtain_back.position.z))
+	for direction: float in [-1.0, 1.0]:
+		var alley := Vector3(direction * 36.8, 12.0, -157.5)
+		var keep_side := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			alley, alley - Vector3.RIGHT * direction * 7.0))
+		var curtain_side := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			alley, alley + Vector3.RIGHT * direction * 7.0))
+		if (keep_side.is_empty() or curtain_side.is_empty()
+				or absf(keep_side.position.x - curtain_side.position.x) < 9.5):
+			push_error("FAIL: The side curtains must leave a walkable lane clear of the keep.")
 			all_passed = false
 	for step in 25:
 		var z := lerpf(-67.7, -79.63, float(step) / 24)

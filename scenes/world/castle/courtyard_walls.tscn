@@ -11,8 +11,7 @@
 [ext_resource type="Script" path="res://scripts/world/western_ramparts.gd" id="14_west"]
 [ext_resource type="Script" path="res://scripts/world/tower_breach.gd" id="15_breach"]
 [ext_resource type="PackedScene" path="res://scenes/world/castle/rampart_watchtower.tscn" id="16_watchtower"]
-
-[ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="40_slates"]
+[ext_resource type="Script" path="res://scripts/world/rampart_stair.gd" id="17_stair"]
 
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("10_masonry")
@@ -20,9 +19,6 @@ shader = ExtResource("10_masonry")
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
 roughness = 0.92
-
-[sub_resource type="ShaderMaterial" id="Mat_Roof"]
-shader = ExtResource("40_slates")
 
 [sub_resource type="StandardMaterial3D" id="Mat_Wood"]
 albedo_color = Color(0.38, 0.26, 0.18, 1.0)
@@ -66,17 +62,17 @@ emission_energy_multiplier = 1.6
 
 [sub_resource type="BoxMesh" id="Mesh_WallEast"]
 material = SubResource("Mat_Stone")
-size = Vector3(3.5, 14.8, 86.5)
+size = Vector3(3.5, 14.8, 96)
 
 [sub_resource type="BoxShape3D" id="Shape_WallEast"]
-size = Vector3(3.5, 14.8, 86.5)
+size = Vector3(3.5, 14.8, 96)
 
 [sub_resource type="BoxMesh" id="Mesh_WallFrontRight"]
 material = SubResource("Mat_Stone")
-size = Vector3(31.0, 14.8, 3.5)
+size = Vector3(37, 14.8, 3.5)
 
 [sub_resource type="BoxShape3D" id="Shape_WallFrontRight"]
-size = Vector3(31.0, 14.8, 3.5)
+size = Vector3(37, 14.8, 3.5)
 
 [sub_resource type="BoxMesh" id="Mesh_ButtressW_0"]
 material = SubResource("Mat_StoneDark")
@@ -167,41 +163,6 @@ size = Vector3(5.66, 6.3, 0.26)
 
 
 
-[sub_resource type="CylinderMesh" id="Mesh_TowerRoof"]
-material = SubResource("Mat_Roof")
-top_radius = 0.1
-bottom_radius = 5.2
-height = 5.0
-radial_segments = 16
-
-[sub_resource type="CylinderShape3D" id="Shape_TowerRoof"]
-radius = 5.2
-height = 5.0
-
-[sub_resource type="CylinderMesh" id="Mesh_CornerTowerSE"]
-material = SubResource("Mat_StoneDark")
-top_radius = 4.2
-bottom_radius = 4.8
-height = 18.0
-radial_segments = 16
-
-[sub_resource type="CylinderShape3D" id="Shape_CornerTowerSE"]
-radius = 4.8
-height = 18.0
-
-
-
-[sub_resource type="CylinderMesh" id="Mesh_CornerTowerNE"]
-material = SubResource("Mat_StoneDark")
-top_radius = 4.2
-bottom_radius = 4.8
-height = 18.0
-radial_segments = 16
-
-[sub_resource type="CylinderShape3D" id="Shape_CornerTowerNE"]
-radius = 4.8
-height = 18.0
-
 [sub_resource type="BoxMesh" id="IronBar"]
 material = SubResource("Mat_Iron")
 size = Vector3(0.121, 6.25, 0.18)
@@ -223,10 +184,10 @@ roughness = 0.95
 
 [sub_resource type="BoxMesh" id="RearCurtain"]
 material = SubResource("Mat_Stone")
-size = Vector3(72, 14.8, 3.5)
+size = Vector3(84, 14.8, 3.5)
 
 [sub_resource type="BoxShape3D" id="RearCurtainShape"]
-size = Vector3(72, 14.8, 3.5)
+size = Vector3(84, 14.8, 3.5)
 
 [sub_resource type="ShaderMaterial" id="GatePaving"]
 resource_local_to_scene = true
@@ -253,7 +214,7 @@ size = Vector3(2.76, 2.84, 3.5)
 [node name="CourtyardWalls" type="Node3D"]
 
 [node name="WallEast" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 7.4, -34.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 7.4, -41.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="WallEast"]
 mesh = SubResource("Mesh_WallEast")
@@ -262,7 +223,7 @@ mesh = SubResource("Mesh_WallEast")
 shape = SubResource("Shape_WallEast")
 
 [node name="WallFrontRight" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.5, 7.4, 8.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5, 7.4, 8.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="WallFrontRight"]
 mesh = SubResource("Mesh_WallFrontRight")
@@ -271,7 +232,7 @@ mesh = SubResource("Mesh_WallFrontRight")
 shape = SubResource("Shape_WallFrontRight")
 
 [node name="ButtressW_0" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.56, 4.5, -65.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.94, 4.5, -65.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressW_0"]
 mesh = SubResource("Mesh_ButtressW_0")
@@ -280,7 +241,7 @@ mesh = SubResource("Mesh_ButtressW_0")
 shape = SubResource("Shape_ButtressW_0")
 
 [node name="ButtressE_0" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.0, 4.5, -65.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.94, 4.5, -65.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressE_0"]
 mesh = SubResource("Mesh_ButtressE_0")
@@ -289,7 +250,7 @@ mesh = SubResource("Mesh_ButtressE_0")
 shape = SubResource("Shape_ButtressE_0")
 
 [node name="ButtressW_1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.56, 4.5, -50.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.94, 4.5, -50.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressW_1"]
 mesh = SubResource("Mesh_ButtressW_1")
@@ -298,7 +259,7 @@ mesh = SubResource("Mesh_ButtressW_1")
 shape = SubResource("Shape_ButtressW_1")
 
 [node name="ButtressE_1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.0, 4.5, -50.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.94, 4.5, -50.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressE_1"]
 mesh = SubResource("Mesh_ButtressE_1")
@@ -316,7 +277,7 @@ mesh = SubResource("Mesh_ButtressW_2")
 shape = SubResource("Shape_ButtressW_2")
 
 [node name="ButtressE_2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.0, 4.5, -35.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.94, 4.5, -35.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressE_2"]
 mesh = SubResource("Mesh_ButtressE_2")
@@ -325,7 +286,7 @@ mesh = SubResource("Mesh_ButtressE_2")
 shape = SubResource("Shape_ButtressE_2")
 
 [node name="ButtressE_3" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.0, 4.5, -20.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.94, 4.5, -20.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressE_3"]
 mesh = SubResource("Mesh_ButtressE_3")
@@ -334,7 +295,7 @@ mesh = SubResource("Mesh_ButtressE_3")
 shape = SubResource("Shape_ButtressE_3")
 
 [node name="ButtressE_4" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.0, 4.5, -5.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.94, 4.5, -5.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressE_4"]
 mesh = SubResource("Mesh_ButtressE_4")
@@ -585,7 +546,7 @@ stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
 
 [node name="RearCurtainWall" type="StaticBody3D" parent="."]
-position = Vector3(0, 7.4, -77.6)
+position = Vector3(0, 7.4, -91.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="RearCurtainWall"]
 position = Vector3(0, 0, 0)
@@ -612,53 +573,53 @@ omni_range = 8.0
 
 
 [node name="WestParapet" type="StaticBody3D" parent="."]
-position = Vector3(-33.1, 14.8, -34.55)
+position = Vector3(-44, 14.8, -41.5)
 script = ExtResource("13_trim")
-length = 79.4
-width = 2.60
-outer_edge = -0.91
+length = 94.2
+outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
-gaps = PackedVector2Array(2.25, 8.85)
+gaps = PackedVector2Array(9.2, 15.8)
 
 [node name="EastParapet" type="StaticBody3D" parent="."]
-position = Vector3(36, 14.8, -34.75)
+position = Vector3(44, 14.8, -41.5)
 rotation = Vector3(0, 0, 0)
 script = ExtResource("13_trim")
-length = 79.7
+length = 94.2
 outer_edge = 1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
-gaps = PackedVector2Array(2.45, 9.05)
+gaps = PackedVector2Array(9.2, 15.8)
 
 [node name="RearParapet" type="StaticBody3D" parent="."]
-position = Vector3(1.35, 14.8, -77.6)
+position = Vector3(0, 14.8, -91.5)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
-length = 60.7
+length = 82.2
 outer_edge = 1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
+gaps = PackedVector2Array(-19.3, -12.7, 12.7, 19.3)
 
 [node name="FrontWestParapet" type="StaticBody3D" parent="."]
-position = Vector3(-16.625, 14.8, 8.5)
+position = Vector3(-23.05, 14.8, 8.5)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
-length = 23.25
+length = 36.1
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
-gaps = PackedVector2Array(2.325, 8.925)
+gaps = PackedVector2Array(8.75, 15.35)
 
 [node name="FrontEastParapet" type="StaticBody3D" parent="."]
-position = Vector3(20.175, 14.8, 8.5)
+position = Vector3(23.05, 14.8, 8.5)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
-length = 30.35
+length = 36.1
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
-gaps = PackedVector2Array(-12.475, -5.875, 12.525, 15.175)
+gaps = PackedVector2Array(-15.35, -8.75)
 
 [node name="GateWestWatchtower" parent="." instance=ExtResource("16_watchtower")]
 position = Vector3(-11, 0, 8.5)
@@ -669,20 +630,55 @@ position = Vector3(11, 0, 8.5)
 rotation = Vector3(0, 1.5707963, 0)
 
 [node name="WestWatchtower" parent="." instance=ExtResource("16_watchtower")]
-position = Vector3(-33.1, 0, -29)
+position = Vector3(-44, 0, -29)
 
 [node name="EastWatchtower" parent="." instance=ExtResource("16_watchtower")]
-position = Vector3(36, 0, -29)
+position = Vector3(44, 0, -29)
 
 [node name="CornerTowerSE" parent="." instance=ExtResource("16_watchtower")]
-position = Vector3(36, 0, 8.5)
+position = Vector3(44, 0, 8.5)
 corner = true
+
+[node name="CornerTowerSW" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(-44, 0, 8.5)
+rotation = Vector3(0, -1.5707963, 0)
+corner = true
+
+[node name="CornerTowerNE" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(44, 0, -91.5)
+rotation = Vector3(0, 1.5707963, 0)
+corner = true
+
+[node name="CornerTowerNW" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(-44, 0, -91.5)
+rotation = Vector3(0, 3.1415927, 0)
+corner = true
+
+[node name="RearWestWatchtower" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(-16, 0, -91.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="RearEastWatchtower" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(16, 0, -91.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="CourtyardWallStair" type="StaticBody3D" parent="."]
+position = Vector3(-45.11, 0, -26.36)
+rotation = Vector3(0, 1.5707963, 0)
+script = ExtResource("17_stair")
+stone = SubResource("Mat_Stone")
+trim = SubResource("Mat_StoneDark")
+
+[node name="EastRampartStair" type="StaticBody3D" parent="."]
+position = Vector3(45.11, 0, -43.5)
+rotation = Vector3(0, -1.5707963, 0)
+script = ExtResource("17_stair")
+stone = SubResource("Mat_Stone")
+trim = SubResource("Mat_StoneDark")
 
 [node name="WesternRamparts" type="Node3D" parent="."]
 script = ExtResource("14_west")
 stone = SubResource("Mat_Stone")
-trim = SubResource("Mat_StoneDark")
-roof_material = SubResource("Mat_Roof")
 
 [node name="IntactPanel" type="StaticBody3D" parent="WesternRamparts"]
 position = Vector3(-23, 13.25, 8.5)

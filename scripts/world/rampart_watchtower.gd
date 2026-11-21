@@ -2,7 +2,7 @@
 extends StaticBody3D
 
 const WALK_HEIGHT := 14.8
-const SILL := WALK_HEIGHT - 0.06
+const SILL := WALK_HEIGHT - 0.018
 const EAVES := 19.0
 const SIDES := 16
 const SECTOR := TAU / SIDES
@@ -24,7 +24,7 @@ func _ready() -> void:
 		var radial := _radial(i * SECTOR - SECTOR * 0.5)
 		foundation_base.append(radial * 3.52)
 		foundation_top.append(radial * OUTSIDE + Vector3.UP * SILL)
-	_prism(foundation_base, foundation_top)
+	_prism(foundation_base, foundation_top, WALK_HEIGHT)
 
 	for i in SIDES:
 		var start := (i - 0.5) * SECTOR
@@ -99,7 +99,7 @@ func _sector(start: float, finish: float, bottom: float, top: float) -> void:
 		high.append(point + Vector3.UP * top)
 	_prism(low, high)
 
-func _prism(low: PackedVector3Array, high: PackedVector3Array) -> void:
+func _prism(low: PackedVector3Array, high: PackedVector3Array, collision_top := -1.0) -> void:
 	var side_count := low.size()
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -116,7 +116,11 @@ func _prism(low: PackedVector3Array, high: PackedVector3Array) -> void:
 	_visual(surface.commit())
 
 	var shape := ConvexPolygonShape3D.new()
-	shape.points = low + high
+	var collision_points := low + high
+	if collision_top >= 0:
+		for i in range(side_count, collision_points.size()):
+			collision_points[i].y = collision_top
+	shape.points = collision_points
 	var collider := CollisionShape3D.new()
 	collider.shape = shape
 	add_child(collider)
