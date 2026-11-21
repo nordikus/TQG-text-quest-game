@@ -281,8 +281,21 @@ func _run_verification() -> void:
 	var lintel := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
 		Vector3(-23, 14.1, -81.55), Vector3(-23, 14.87, -81.55)))
 	if not portal.is_empty() or lintel.is_empty() or lintel.collider.name != "WallFrontLeft":
-		push_error("FAIL: The broken front curtain must lead into a gallery below the guard walk.")
+		push_error("FAIL: The living passage must enter through the front curtain below the guard walk.")
 		all_passed = false
+	for step in 29:
+		var z := lerpf(-83.45, -105.03, step / 28.0)
+		var inside := Vector3(-23.0, 14.04, z)
+		var shell := true
+		for direction in [Vector3.LEFT, Vector3.RIGHT, Vector3.DOWN, Vector3.UP]:
+			var hit := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+				inside, inside + direction * 3.2))
+			if hit.is_empty() or hit.collider.name != "TrunkBody":
+				shell = false
+		if not shell:
+			push_error("FAIL: The visible bark must enclose the route across the courtyard.")
+			all_passed = false
+			break
 	var tower := clearing.find_child("MageTower", true, false) as Node3D
 	var sill := tower.get_node("SouthEntryLanding/Mesh") as MeshInstance3D
 	var bridge_floor := tower.get_node("CoveredBridge/TowerBridgeDeck/Mesh") as MeshInstance3D

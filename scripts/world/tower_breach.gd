@@ -3,6 +3,8 @@ extends StaticBody3D
 
 const MASONRY := preload("res://scenes/world/castle/masonry.gdshader")
 
+@export var opening_width := 2.76
+
 func _ready() -> void:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -11,7 +13,7 @@ func _ready() -> void:
 	fracture.begin(Mesh.PRIMITIVE_TRIANGLES)
 	fracture.set_smooth_group(-1)
 	# Profiles are in the plane of the original wall, measured along Z and Y.
-	_build_edge(surface, fracture, PackedVector2Array([
+	var profile := PackedVector2Array([
 		Vector2(-1.38, 20.13), Vector2(-0.92, 20.13), Vector2(-1.04, 20.50),
 		Vector2(-0.93, 20.87), Vector2(-1.12, 21.34), Vector2(-0.99, 21.78),
 		Vector2(-1.12, 22.33), Vector2(-0.88, 22.68), Vector2(-0.43, 22.80),
@@ -20,7 +22,10 @@ func _ready() -> void:
 		Vector2(1.05, 21.45), Vector2(0.94, 20.91), Vector2(1.11, 20.57),
 		Vector2(1.01, 20.13), Vector2(1.38, 20.13), Vector2(1.38, 22.97),
 		Vector2(-1.38, 22.97),
-	]))
+	])
+	for index in profile.size():
+		profile[index].x *= opening_width / 2.76
+	_build_edge(surface, fracture, profile)
 	surface.generate_normals()
 	fracture.generate_normals()
 	var mesh := surface.commit()

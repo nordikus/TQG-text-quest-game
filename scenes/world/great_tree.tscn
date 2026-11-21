@@ -30,3 +30,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0)
 light_color = Color(0.4, 0.92, 0.65, 1)
 light_energy = 2.2
 omni_range = 22.0
+
+[node name="BreachFungi" type="OmniLight3D" parent="."]
+position = Vector3(-2.61, 12.35, -24.24)
+light_color = Color(0.68, 0.85, 0.72, 1)
+light_energy = 1.08
+omni_range = 5.4
+
+[node name="FirstForkFungi" type="OmniLight3D" parent="."]
+position = Vector3(-1.38, 12.74, -30.77)
+light_color = Color(0.68, 0.85, 0.72, 1)
+light_energy = 1.08
+omni_range = 5.4
+
+[node name="SecondForkFungi" type="OmniLight3D" parent="."]
+position = Vector3(-2.61, 13.34, -37.30)
+light_color = Color(0.68, 0.85, 0.72, 1)
+light_energy = 1.08
+omni_range = 5.4
+
+[node name="TowerFungi" type="OmniLight3D" parent="."]
+position = Vector3(-1.38, 13.74, -43.83)
+light_color = Color(0.68, 0.85, 0.72, 1)
+light_energy = 1.08
+omni_range = 5.4

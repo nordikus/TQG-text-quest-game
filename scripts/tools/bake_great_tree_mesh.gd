@@ -3,6 +3,7 @@ extends SceneTree
 
 const OUT_MESH := "res://scenes/world/great_tree_mesh.res"
 const OUT_SHAPE := "res://scenes/world/great_tree_trunk_shape.res"
+const BRANCH_BARK := preload("res://scenes/world/great_tree_branch.gdshader")
 
 const SEG := 56
 const TRUNK_TOP := 41.0
@@ -71,6 +72,7 @@ func _init() -> void:
 	_build_trunk(trunk)
 
 	var bark := Geo.new()
+	var courtyard_branch := Geo.new()
 	var spores := Geo.new()
 	var leaves := Geo.new()
 	var tips: Array = []
@@ -80,17 +82,23 @@ func _init() -> void:
 	_build_spiral_walkway(bark, spores)
 	_build_terrace_and_bridge(bark, spores, arch_foliage)
 	_build_canopy(leaves, tips, arch_foliage)
+	_build_front_wall_root(courtyard_branch)
+	_build_courtyard_branch(courtyard_branch, spores)
 
 	var mesh := ArrayMesh.new()
 	var bark_mat := _bark_material()
+	var branch_mat := ShaderMaterial.new()
+	branch_mat.shader = BRANCH_BARK
 	_commit_smooth(mesh, trunk, bark_mat)
 	_commit_smooth(mesh, bark, bark_mat)
+	_commit_smooth(mesh, courtyard_branch, branch_mat)
 	_commit_smooth(mesh, spores, _spore_material())
 	_commit_smooth(mesh, leaves, _leaf_material())
 
 	var col_mesh := ArrayMesh.new()
 	_commit_smooth(col_mesh, trunk, bark_mat)
 	_commit_smooth(col_mesh, bark, bark_mat)
+	_commit_smooth(col_mesh, courtyard_branch, bark_mat)
 	var shape := col_mesh.create_trimesh_shape()
 
 	_report_normal(mesh)
@@ -115,7 +123,8 @@ func _detect_winding() -> void:
 
 # Connects a closed tubular grid (n_rings x seg) with 100% uniform manifold topology
 # so individual triangles never flip or tear along curved/noisy sections.
-func _connect_tube_grid(g: Geo, start: int, n_rings: int, seg: int, centers: Array, cap_start_dir: Vector3, cap_end_dir: Vector3) -> void:
+func _connect_tube_grid(g: Geo, start: int, n_rings: int, seg: int, centers: Array,
+		cap_start_dir: Vector3, cap_end_dir: Vector3, inward := false) -> void:
 	var acc := 0.0
 	for k in n_rings - 1:
 		var mid: Vector3 = (centers[k] + centers[k + 1]) * 0.5
@@ -126,7 +135,7 @@ func _connect_tube_grid(g: Geo, start: int, n_rings: int, seg: int, centers: Arr
 			var n := (g.v[b] - g.v[a]).cross(g.v[c] - g.v[a])
 			var out := (g.v[a] + g.v[c]) * 0.5 - mid
 			acc += n.dot(out) * wind_sign
-	var flip := acc < 0.0
+	var flip := (acc < 0.0) != inward
 	for k in n_rings - 1:
 		for j in seg:
 			var a := start + k * seg + j
@@ -604,6 +613,104 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		arch_foliage.append([p3 + Vector3(0.0, 0.4, 0.0), crown])
 		arch_foliage.append([p3 + side * 1.1 - Vector3.UP * 0.2 + forward * 0.8, crown * 0.69])
 		arch_foliage.append([f3 + Vector3(0.0, 0.35, 0.0), crown * 0.74])
+
+func _build_front_wall_root(bark: Geo) -> void:
+	const RINGS := 14
+	var profile := PackedVector2Array([
+		Vector2(-0.86, 0.012), Vector2(-0.48, 0.026), Vector2(0.51, 0.026), Vector2(0.84, 0.008),
+		Vector2(0.91, -0.09), Vector2(0.48, -0.20), Vector2(-0.49, -0.19), Vector2(-0.91, -0.08),
+	])
+	var start := bark.v.size()
+	var centers: Array[Vector3] = []
+	for i in RINGS:
+		var t := float(i) / (RINGS - 1)
+		var z := lerpf(-19.74, -22.78, t)
+		var center := Vector3(BOUGH_X, lerpf(11.826, 11.852, t), z)
+		centers.append(center - Vector3.UP * 0.08)
+		for j in profile.size():
+			var p := profile[j]
+			var grain := noise.get_noise_2d(z * 1.8, j * 0.37)
+			p.x *= 0.93 + 0.15 * grain
+			bark.v.append(center + Vector3(p.x, p.y, 0))
+			var moss := 0.48 if j in [1, 2] else 0.18
+			bark.c.append(BARK_WARM.lerp(MOSS, moss + 0.09 * grain))
+	_connect_tube_grid(bark, start, RINGS, profile.size(), centers, Vector3.ZERO, Vector3.ZERO)
+
+
+func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
+	# The branch splits into a hollow trunk after breaking the front wall.
+	const RINGS := 46
+	const START_Z := -22.73
+	const END_Z := -45.34
+	var section := PackedVector2Array([
+		Vector2(-0.96, 0.04), Vector2(-0.70, 0), Vector2(0.68, 0), Vector2(0.96, 0.08),
+		Vector2(1.12, 0.49), Vector2(1.24, 1.19), Vector2(1.18, 1.93), Vector2(0.88, 2.44),
+		Vector2(0.40, 2.69), Vector2(-0.19, 2.77), Vector2(-0.74, 2.52), Vector2(-1.04, 2.15),
+		Vector2(-1.21, 1.54), Vector2(-1.25, 0.78), Vector2(-1.10, 0.27),
+	])
+	var count := section.size()
+	var centers: Array[Vector3] = []
+	var starts: Array[int] = []
+	for outside in [false, true]:
+		starts.append(bark.v.size())
+		for i in RINGS:
+			var t := float(i) / (RINGS - 1)
+			var z := lerpf(START_Z, END_Z, t)
+			var floor_y := lerpf(11.853, 13.278, smoothstep(0.0, 1.0, t))
+			var reveal := smoothstep(0.0, 0.16, t) * (1.0 - smoothstep(0.83, 1.0, t))
+			var center := Vector3(BOUGH_X, floor_y, z)
+			if not outside:
+				centers.append(center + Vector3.UP * 1.24)
+				if i in [3, 10, 16, 23, 29, 36, 42]:
+					var side := 1.0 if i % 2 == 0 else -1.0
+					_add_spore_cluster(spores, center + Vector3(0.92 * side, 0.09, 0), Vector3.UP, 2)
+			for j in count:
+				var xy := section[j]
+				var grain := noise.get_noise_2d(z * 0.47, float(j) * 0.69)
+				var color := BARK_WARM.lerp(BARK_DARK, clampf(0.21 + 0.42 * grain, 0.0, 1.0))
+				if outside:
+					# Uneven growth rings flare into the stones at each end.
+					var radial := xy - Vector2(0, 1.24)
+					var twist := 0.12 * sin(t * TAU * 1.8 + j * 0.72)
+					var swelling := 1.26 + reveal * (0.14 * sin(t * TAU * 1.25) + 0.11 * grain)
+					xy = Vector2(0.12 * sin(t * TAU * 1.4) * reveal, 1.24) + radial.rotated(twist * reveal) * swelling
+					xy.y = minf(xy.y, lerpf(2.78, 3.40, reveal))
+					if j in [0, 1, 2, 3]:
+						xy.y -= (0.29 + 0.14 * sin(t * TAU)) * reveal
+					if j in [7, 8, 9, 10, 11]:
+						color = color.lerp(MOSS, clampf(0.43 + 0.29 * grain, 0.0, 0.8))
+				elif j <= 3:
+					color = color.lerp(MOSS_PATH, 0.27 + 0.17 * grain)
+				else:
+					xy.x += reveal * (0.078 * grain + 0.065 * sin(t * TAU * 2.0 + j * 0.62))
+					xy.y += 0.12 * grain * reveal
+					color = color.lerp(MOSS, 0.06 + 0.10 * absf(grain))
+				bark.v.append(center + Vector3(xy.x, xy.y, 0))
+				bark.c.append(color)
+		_connect_tube_grid(bark, starts.back(), RINGS, count, centers, Vector3.ZERO, Vector3.ZERO, not outside)
+	_courtyard_branch_rim(bark, starts[0], starts[1], count, Vector3.BACK)
+	var last := (RINGS - 1) * count
+	_courtyard_branch_rim(bark, starts[0] + last, starts[1] + last, count, Vector3.FORWARD)
+	var spur := _bezier(Vector3(-0.7, 12.8, -28.2), Vector3(0.20, 12.7, -29.3),
+		Vector3(1.34, 11.8, -32.4), Vector3(1.48, 10.1, -33.8), 13)
+	_tube(bark, spur, 0.47, 0.09, 8, 0.26, 0.12)
+	var lower_fork := _bezier(Vector3(-2.7, 12.1, -37.0), Vector3(-3.9, 11.75, -38.6),
+		Vector3(-5.2, 10.5, -41.2), Vector3(-5.75, 9.95, -43.2), 12)
+	_tube(bark, lower_fork, 0.53, 0.075, 9, 0.29, 0.12)
+
+func _courtyard_branch_rim(g: Geo, inner: int, outer: int, count: int, outward: Vector3) -> void:
+	for j in count:
+		var next := (j + 1) % count
+		var a := inner + j
+		var b := inner + next
+		var c := outer + next
+		var d := outer + j
+		var normal := (g.v[b] - g.v[a]).cross(g.v[c] - g.v[a])
+		if normal.dot(outward) * wind_sign < 0.0:
+			g.i.append_array([a, c, b, a, d, c])
+		else:
+			g.i.append_array([a, b, c, a, c, d])
+
 
 func _build_canopy(leaves: Geo, tips: Array, arch_foliage: Array) -> void:
 	var sphere := SphereMesh.new()

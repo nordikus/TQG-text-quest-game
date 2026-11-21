@@ -65,6 +65,7 @@ func _check_initial() -> void:
 	_check(_gate_blocks(), "Physical outer gate is closed.")
 	_check(_front_panel_is_closed(),
 		"The front masonry is intact before the choice and after a rewrite.")
+	_check_courtyard_branch(false)
 	_check(_world.intact_bridge.visible and not _world.collapsed_bridge.visible and not _world.courtyard_roots.visible,
 		"The castle returns to its initial geometry.")
 	_check(_world.intact_bridge.get_node("Shoring").is_visible_in_tree() and not _remnant_smoke().emitting,
@@ -82,7 +83,8 @@ func _verify_life() -> void:
 	_check_courtyard_fire(false)
 	_check(_world.living_arches.get_child(3).position.y >= -0.02, "The last living arch rose.")
 	_check(_crossing_is_open() and _world.wall_breach.is_visible_in_tree(),
-		"The Great Tree breaks the front masonry and opens the crossing to the observatory.")
+		"The Great Tree breaks the front masonry and opens the living passage.")
+	_check_courtyard_branch(true)
 	if not InventoryManager.has_item("great_quill"):
 		_check(_book.get_interaction_prompt().is_empty(), "The completed grove book stays quiet without the Quill.")
 	await _verify_life_blockers()
@@ -134,6 +136,7 @@ func _verify_ash(has_shard: bool) -> void:
 		"The bridge ruins expose burned shoring, a burned shed and smoldering debris.")
 	_check(_tower_has_solid_base(), "Direct entry into the tower from the courtyard is unavailable.")
 	_check(_front_panel_is_closed(), "Ash keeps the front masonry intact.")
+	_check_courtyard_branch(false)
 	_barracks.interact()
 	await get_tree().create_timer(0.8).timeout
 	var ash_entry := _ray(Vector3(14.0, 1.6, -112.6), Vector3(17.4, 1.6, -112.6))
@@ -251,6 +254,19 @@ func _front_panel_is_closed() -> bool:
 
 func _crossing_is_open() -> bool:
 	return _ray(Vector3(-23, 13.05, -79.0), Vector3(-23, 14.5, -105.3)).is_empty()
+
+func _check_courtyard_branch(grown: bool) -> void:
+	var tower_face := _ray(Vector3(-23, 14.55, -104.8), Vector3(-23, 14.55, -106.1))
+	if grown:
+		var footing := _ray(Vector3(-23, 14.12, -94.2), Vector3(-23, 11.0, -94.2))
+		var trunk: Node = footing.get("collider")
+		_check(tower_face.is_empty() and _world.tower_breach.is_visible_in_tree()
+			and trunk != null and _world.great_tree.is_ancestor_of(trunk),
+			"The growing branch spans the courtyard and breaks the tower's stonework.")
+	else:
+		var span := _ray(Vector3(-23, 17.8, -94.2), Vector3(-23, 10.8, -94.2))
+		_check(span.is_empty() and tower_face.get("collider") == _world.tower_infill,
+			"The courtyard has no span and the tower wall is sealed.")
 
 func _ray(from: Vector3, to: Vector3) -> Dictionary:
 	return _level.get_world_3d().direct_space_state.intersect_ray(

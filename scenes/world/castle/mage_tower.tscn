@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/world/bridge_repair.gd" id="16_shoring"]
 
 [ext_resource type="Script" path="res://scripts/world/observatory_crown.gd" id="17_observatory"]
+[ext_resource type="Script" path="res://scripts/world/tower_breach.gd" id="18_breach"]
 
 
 [ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
@@ -489,6 +490,13 @@ size = Vector3(2.45, 8.1, 1)
 
 [sub_resource type="BoxShape3D" id="Shape_TowerWallSouthHead"]
 size = Vector3(2.45, 8.1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_TowerEntryInfill"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.45, 3.02, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_TowerEntryInfill"]
+size = Vector3(2.45, 3.02, 1)
 
 [node name="MageTower" type="Node3D"]
 
@@ -1098,6 +1106,22 @@ mesh = SubResource("Mesh_SouthEntryLanding")
 
 [node name="Col" type="CollisionShape3D" parent="SouthEntryLanding"]
 shape = SubResource("Shape_SouthEntryLanding")
+
+[node name="TowerEntryInfill" type="StaticBody3D" parent="."]
+position = Vector3(0, 14.61, 4.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="TowerEntryInfill"]
+mesh = SubResource("Mesh_TowerEntryInfill")
+
+[node name="Col" type="CollisionShape3D" parent="TowerEntryInfill"]
+shape = SubResource("Shape_TowerEntryInfill")
+
+[node name="TowerEntryBreach" type="StaticBody3D" parent="."]
+visible = false
+position = Vector3(0, -6.85, -0.007)
+rotation = Vector3(0, 1.57079633, 0)
+script = ExtResource("18_breach")
+opening_width = 2.45
 
 [node name="ObservatoryEntryLanding" type="StaticBody3D" parent="."]
 position = Vector3(-3.1475, 20.0, 0.6225)

@@ -3,6 +3,8 @@ extends Node3D
 @export var great_tree: Node3D
 @export var wall_infill: Node3D
 @export var wall_breach: Node3D
+@export var tower_infill: Node3D
+@export var tower_breach: Node3D
 @export var nature_trail: Node3D
 @export var charred_forest_zone: Node3D
 @export var fire_particles_group: Node3D
@@ -153,6 +155,8 @@ func _set_castle_state(life: bool, burned: bool) -> void:
 func _set_wall_breach(opened: bool) -> void:
 	_set_enabled(wall_infill, not opened)
 	_set_enabled(wall_breach, opened)
+	_set_enabled(tower_infill, not opened)
+	_set_enabled(tower_breach, opened)
 
 func _ignite(fire: Node3D) -> void:
 	fire.show()

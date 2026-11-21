@@ -14,9 +14,7 @@ const NORTH := -77.6
 const APPROACH_X := -23.0
 const EXTERIOR_FACE := 10.25
 const COURTYARD_FACE := 6.75
-const TOWER_FACE := -15.2
 const BREACH_FLOOR := 11.83
-const LANDING_FLOOR := 13.28
 const PASSAGE_HEIGHT := 2.84
 const PASSAGE_HALF_WIDTH := 1.38
 
@@ -24,7 +22,6 @@ func _ready() -> void:
 	var wall := _body("WallWest")
 	_span(wall, WEST_FACE, EAST_FACE, 0.0, WALK_Y, NORTH, SOUTH, stone)
 	_front_wall()
-	_approach_gallery()
 	_corner("CornerTowerSW", SOUTH, true)
 	_corner("CornerTowerNW", NORTH, false)
 	_stairs()
@@ -38,53 +35,6 @@ func _front_wall() -> void:
 	_span(front, right, -5.0, 0.0, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE, stone)
 	_span(front, left, right, 0.0, BREACH_FLOOR, COURTYARD_FACE, EXTERIOR_FACE, stone)
 	_span(front, left, right, lintel, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE, stone)
-
-func _approach_gallery() -> void:
-	var gallery := _body("ObservatoryCrossing")
-	var left := APPROACH_X - PASSAGE_HALF_WIDTH
-	var right := APPROACH_X + PASSAGE_HALF_WIDTH
-	_grade_piece(gallery, left, right, -0.38, 0.0, TOWER_FACE, COURTYARD_FACE, stone)
-	_grade_piece(gallery, left - 0.43, right + 0.43, PASSAGE_HEIGHT, PASSAGE_HEIGHT + 0.28,
-		TOWER_FACE, COURTYARD_FACE, trim)
-	for edge: float in [left - 0.35, right]:
-		_grade_piece(gallery, edge, edge + 0.35, -0.28, 1.12, TOWER_FACE, COURTYARD_FACE, stone)
-		_grade_piece(gallery, edge, edge + 0.35, 2.41, PASSAGE_HEIGHT, TOWER_FACE, COURTYARD_FACE, stone)
-		for i in 6:
-			var near := lerpf(TOWER_FACE, COURTYARD_FACE, float(i) / 6)
-			var far := lerpf(TOWER_FACE, COURTYARD_FACE, float(i + 1) / 6)
-			_grade_piece(gallery, edge, edge + 0.35, 1.12, 2.41, near, far - 0.43, stone)
-		_grade_piece(gallery, edge, edge + 0.35, 1.12, 2.41,
-			COURTYARD_FACE - 0.43, COURTYARD_FACE, stone)
-	for z in [-7.5, 0.5]:
-		var crown := _crossing_height(z) - 0.38
-		_span(gallery, APPROACH_X - 0.66, APPROACH_X + 0.66, 0.0, crown - 0.36, z - 0.60, z + 0.60, stone)
-		_span(gallery, APPROACH_X - 0.85, APPROACH_X + 0.85, 0.0, 0.38, z - 0.75, z + 0.75, trim)
-		_span(gallery, APPROACH_X - 1.24, APPROACH_X + 1.24, crown - 0.36, crown, z - 0.78, z + 0.78, trim)
-
-func _crossing_height(z: float) -> float:
-	return lerpf(LANDING_FLOOR, BREACH_FLOOR, inverse_lerp(TOWER_FACE, COURTYARD_FACE, z))
-
-func _grade_piece(body: StaticBody3D, left: float, right: float, low: float, high: float,
-	start: float, finish: float, material: Material) -> void:
-	var near_y := _crossing_height(start)
-	var far_y := _crossing_height(finish)
-	var points := PackedVector3Array([
-		Vector3(left, near_y + low, start), Vector3(right, near_y + low, start),
-		Vector3(right, far_y + low, finish), Vector3(left, far_y + low, finish),
-		Vector3(left, near_y + high, start), Vector3(right, near_y + high, start),
-		Vector3(right, far_y + high, finish), Vector3(left, far_y + high, finish),
-	])
-	var shape := ConvexPolygonShape3D.new()
-	shape.points = points
-	_collision(body, shape, Vector3.ZERO)
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	surface.set_smooth_group(-1)
-	for indices in [[4, 7, 6, 5], [0, 1, 2, 3], [0, 4, 5, 1], [3, 2, 6, 7], [0, 3, 7, 4], [1, 5, 6, 2]]:
-		_face(surface, [points[indices[0]], points[indices[1]], points[indices[2]], points[indices[3]]])
-	surface.generate_normals()
-	surface.set_material(material)
-	_visual(body, surface.commit(), Vector3.ZERO)
 
 func _corner(tower_name: String, z: float, is_south: bool) -> void:
 	var tower := _body(tower_name)
