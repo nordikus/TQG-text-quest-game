@@ -17,7 +17,7 @@ func interact() -> void:
 	if _opened:
 		return
 	if not InventoryManager.has_item(ArcaneBarrier.SHARD_ID):
-		GameManager.notify("Крышка не поддаётся.")
+		GameManager.notify(LOCKED_TEXT)
 		return
 	_opened = true
 	_rune.hide()

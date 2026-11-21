@@ -1,10 +1,7 @@
 class_name InteractableDoor
 extends Interactable
 
-const ItemDb = preload("res://scripts/inventory/item_database.gd")
-
 @export var required_item_id: String = ""
-@export var locked_hint: String = ""
 @export var is_locked: bool = false
 @export var is_double_door: bool = false
 @export var left_wing: Node3D
@@ -17,7 +14,6 @@ var _initial_left_rot: float = 0.0
 var _initial_right_rot: float = 0.0
 var _animating: bool = false
 var _initial_lock: bool
-var _initial_hint: String
 var _swing: Tween
 
 func _ready():
@@ -25,7 +21,6 @@ func _ready():
 	if not required_item_id.is_empty():
 		is_locked = true
 	_initial_lock = is_locked
-	_initial_hint = locked_hint
 	if left_wing:
 		_initial_left_rot = left_wing.rotation.y
 	if right_wing:
@@ -47,12 +42,7 @@ func _update_blockers():
 
 func _update_prompt():
 	if is_locked:
-		if not locked_hint.is_empty():
-			interaction_prompt = "[E] Заперто (%s)" % locked_hint
-		else:
-			var def := ItemDb.get_item(required_item_id)
-			var item_title: String = def.get("title", "ключ") if not def.is_empty() else "ключ"
-			interaction_prompt = "[E] Открыть (требуется: %s)" % item_title
+		interaction_prompt = LOCKED_TEXT
 	else:
 		interaction_prompt = "[E] Закрыть двери" if is_open else "[E] Открыть двери"
 
@@ -66,12 +56,7 @@ func interact():
 			InventoryManager.use_item(required_item_id)
 			_toggle_door()
 		else:
-			if not locked_hint.is_empty():
-				GameManager.notify("Заперто: " + locked_hint)
-			else:
-				var def := ItemDb.get_item(required_item_id)
-				var item_title: String = def.get("title", "ключ") if not def.is_empty() else "ключ"
-				GameManager.notify("Заперто. Нужен: " + item_title)
+			GameManager.notify(LOCKED_TEXT)
 			_update_prompt()
 			GameManager.interaction_prompt_changed.emit(interaction_prompt)
 		return
@@ -104,7 +89,6 @@ func restore_door() -> void:
 	_animating = false
 	is_open = false
 	is_locked = _initial_lock
-	locked_hint = _initial_hint
 	if left_wing:
 		left_wing.rotation.y = _initial_left_rot
 	if right_wing:

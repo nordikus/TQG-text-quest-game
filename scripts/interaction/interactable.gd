@@ -1,6 +1,8 @@
 class_name Interactable
 extends StaticBody3D
 
+const LOCKED_TEXT := "Заперто"
+
 @export var interaction_prompt: String = "[E] Взаимодействовать"
 
 static var _shared_highlight_mat: StandardMaterial3D = null

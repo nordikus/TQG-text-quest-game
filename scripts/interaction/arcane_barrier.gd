@@ -18,7 +18,7 @@ func interact() -> void:
 	if not _available or not _sealed:
 		return
 	if not InventoryManager.has_item(SHARD_ID):
-		GameManager.notify("Печать не дрогнула.")
+		GameManager.notify(LOCKED_TEXT)
 		return
 	_sealed = false
 	_collider.disabled = true

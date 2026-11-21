@@ -1878,7 +1878,6 @@ shape = SubResource("Shape_ServiceRoomLintel")
 position = Vector3(21.75, 7.71, -3.95)
 script = ExtResource("1_door")
 required_item_id = "throne_hall_key"
-locked_hint = "клеймо замкового караула"
 open_angle_deg = -92.0
 left_wing = NodePath("DoorWing")
 

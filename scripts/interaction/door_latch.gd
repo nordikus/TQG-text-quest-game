@@ -26,7 +26,6 @@ func interact():
 
 	if is_instance_valid(target_door):
 		target_door.is_locked = false
-		target_door.locked_hint = ""
 		target_door._update_prompt()
 
 	_slide = create_tween()
