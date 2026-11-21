@@ -1,6 +1,7 @@
 extends Node
 
 const ForestLayout := preload("res://scripts/world/forest_layout.gd")
+const ForestTrunks := preload("res://scripts/world/forest_trunks.gd")
 
 var _passed := true
 var _level: Node3D
@@ -52,6 +53,7 @@ func _verify() -> void:
 	_check_initial()
 	_check_rooms()
 	_check_watchtower_passages()
+	_check_forest_batches()
 	await _verify_chapel_door()
 
 	var ash_first := OS.get_cmdline_user_args().has("ash-first")
@@ -416,15 +418,46 @@ func _check_watchtower_passages() -> void:
 			and not _ray(turn + Vector3.DOWN * 1.85, turn + Vector3.DOWN * 2.2).is_empty(),
 			"%s connects two curtain walks through a playable corner." % tower_name)
 
-	var forest := _level.get_node("ForestPines") as MultiMeshInstance3D
-	var groves := [forest, _level.get_node("ForestOaks"), _world.corridor_forest.get_node("CorridorPines"),
+func _check_forest_batches() -> void:
+	var groves := [_level.get_node("ForestPines"), _level.get_node("ForestOaks"), _world.corridor_forest.get_node("CorridorPines"),
 		_world.corridor_forest.get_node("CorridorOaks")]
 	var trees_clear := true
+	var batches_match := true
+	var nearest := Vector3.INF
+	var player_at: Vector3 = _level.get_node("Player").global_position
 	for grove: MultiMeshInstance3D in groves:
+		var chunks: Node3D = _world.forest_trunks.get_node_or_null("%sChunks" % grove.name)
+		var source := grove.multimesh.buffer
+		var original: Dictionary[Transform3D, bool] = {}
 		for i in grove.multimesh.instance_count:
-			var at := grove.to_global(grove.multimesh.get_instance_transform(i).origin)
+			var placement := ForestTrunks.read_placement(source, i * ForestTrunks.TRANSFORM_STRIDE)
+			var at := grove.to_global(placement.origin)
 			trees_clear = trees_clear and not ForestLayout.CASTLE_TREE_CLEARANCE.has_point(Vector2(at.x, at.z))
+			if chunks:
+				original[placement] = true
+				if at.distance_squared_to(player_at) < nearest.distance_squared_to(player_at):
+					nearest = at
+		if grove.get_parent() != _level:
+			continue
+		if not chunks:
+			batches_match = false
+			continue
+		batches_match = batches_match and not grove.visible and chunks.global_transform.is_equal_approx(grove.global_transform)
+		for chunk: MultiMeshInstance3D in chunks.get_children():
+			var batch := chunk.multimesh
+			var buffer := batch.buffer
+			for i in batch.instance_count:
+				var placement := ForestTrunks.read_placement(buffer, i * ForestTrunks.TRANSFORM_STRIDE)
+				batches_match = original.erase(placement) and batches_match
+		batches_match = original.is_empty() and batches_match
 	_check(trees_clear, "Forest trees stay outside the expanded curtain and the service yard.")
+	_check(batches_match, "Canopy batches draw each original placement exactly once.")
+	var trunk: Node
+	if nearest.is_finite():
+		var chest_height := nearest + Vector3.UP * 1.08
+		trunk = _ray(chest_height + Vector3.LEFT, chest_height).get("collider")
+	_check(trunk != null and trunk.get_parent() == _world.forest_trunks,
+		"A nearby baked tree has a trunk collider at its rendered position.")
 
 func _check_courtyard_fire(burned: bool) -> void:
 	var surfaces_match: bool = _world.courtyard_surfaces.size() == 4

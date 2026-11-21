@@ -1,6 +1,8 @@
 extends Node3D
 
 const CHUNK_SIZE := 24.0
+const CANOPY_CHUNK_SIZE := 32.0
+const TRANSFORM_STRIDE := 12
 const CHARRED_TREE := preload("res://scenes/world/tree_dead_charred.tscn")
 
 @export var player: Node3D
@@ -11,7 +13,7 @@ const CHARRED_TREE := preload("res://scenes/world/tree_dead_charred.tscn")
 @export var ash_grove: Node3D
 @export var hand_planted: Node3D
 
-# Each tile contains transform, unscaled radius, unscaled height and its visual grove.
+# Each tile stores the trunk position, scaled cylinder dimensions and fire state.
 var _tiles: Dictionary[Vector2i, Array] = {}
 var _active: Dictionary[Vector2i, StaticBody3D] = {}
 var _center := Vector2i(99999, 99999)
@@ -43,11 +45,14 @@ func _tile_of(point: Vector3) -> Vector2i:
 	return Vector2i(floori(point.x / CHUNK_SIZE), floori(point.z / CHUNK_SIZE))
 
 func _index_grove(grove: MultiMeshInstance3D, radius: float, height: float, burns: bool) -> void:
-	var multimesh := grove.multimesh
+	var instances := grove.multimesh
+	var buffer := instances.buffer
 	var grove_to_local := global_transform.affine_inverse() * grove.global_transform
 	var grove_to_ash := ash_grove.global_transform.affine_inverse() * grove.global_transform
-	for index in multimesh.instance_count:
-		var instance := multimesh.get_instance_transform(index)
+	var canopy: Dictionary[Vector2i, PackedFloat32Array] = {}
+	for index in instances.instance_count:
+		var offset := index * TRANSFORM_STRIDE
+		var instance := read_placement(buffer, offset)
 		var placement := grove_to_local * instance
 		var point := placement.origin
 		var tile := _tile_of(point)
@@ -57,6 +62,42 @@ func _index_grove(grove: MultiMeshInstance3D, radius: float, height: float, burn
 		_tiles[tile].append([point, radius * dimensions.x, height * dimensions.y, burns])
 		if burns:
 			_add_charred_tree(grove_to_ash * instance)
+		else:
+			var cell := Vector2i(floori(instance.origin.x / CANOPY_CHUNK_SIZE),
+				floori(instance.origin.z / CANOPY_CHUNK_SIZE))
+			if not canopy.has(cell):
+				canopy[cell] = PackedFloat32Array()
+			canopy[cell].append_array(buffer.slice(offset, offset + TRANSFORM_STRIDE))
+	if not burns:
+		_add_canopy_chunks(grove, grove_to_local, canopy)
+
+static func read_placement(buffer: PackedFloat32Array, offset: int) -> Transform3D:
+	# The baked MultiMesh stores the three rows of each affine transform in order.
+	return Transform3D(
+		Vector3(buffer[offset], buffer[offset + 4], buffer[offset + 8]),
+		Vector3(buffer[offset + 1], buffer[offset + 5], buffer[offset + 9]),
+		Vector3(buffer[offset + 2], buffer[offset + 6], buffer[offset + 10]),
+		Vector3(buffer[offset + 3], buffer[offset + 7], buffer[offset + 11]))
+
+func _add_canopy_chunks(source: MultiMeshInstance3D, placement: Transform3D,
+		canopy: Dictionary[Vector2i, PackedFloat32Array]) -> void:
+	var chunks := Node3D.new()
+	chunks.name = "%sChunks" % source.name
+	chunks.transform = placement
+	for cell in canopy:
+		var buffer := canopy[cell]
+		var batch := MultiMesh.new()
+		batch.transform_format = MultiMesh.TRANSFORM_3D
+		batch.mesh = source.multimesh.mesh
+		batch.instance_count = buffer.size() / TRANSFORM_STRIDE
+		batch.buffer = buffer
+		var model := MultiMeshInstance3D.new()
+		model.name = "Grove_%d_%d" % [cell.x, cell.y]
+		model.multimesh = batch
+		chunks.add_child(model)
+	# The unsplit grove remains the editor preview and the source of tree placements.
+	source.hide()
+	add_child(chunks)
 
 func _add_charred_tree(placement: Transform3D, tree_name: StringName = &"") -> void:
 	var burned_tree := CHARRED_TREE.instantiate() as Node3D

@@ -27,17 +27,33 @@ func _span(start: float, end: float) -> void:
 	var count := maxi(1, roundi(span / 2.7))
 	var spacing := span / count
 	var merlon_width := minf(MERLON_WIDTH, spacing * 0.65)
+	var size := Vector3(MERLON_DEPTH, MERLON_HEIGHT, merlon_width)
+	var merlons := _row(size, stone, count)
+	var caps := _row(Vector3(0.91, 0.14, merlon_width + 0.12), cap_stone, count)
+	var shape := BoxShape3D.new()
+	shape.size = size
 	for i in count:
 		var at := Vector3(outer_edge, 0.49, start + (i + 0.5) * spacing)
-		var size := Vector3(MERLON_DEPTH, MERLON_HEIGHT, merlon_width)
-		_block(size, at, stone)
-		var shape := BoxShape3D.new()
-		shape.size = size
+		merlons.set_instance_transform(i, Transform3D(Basis.IDENTITY, at))
+		caps.set_instance_transform(i, Transform3D(Basis.IDENTITY, at + Vector3.UP * 0.47))
 		var collision := CollisionShape3D.new()
 		collision.shape = shape
 		collision.position = at
 		add_child(collision)
-		_block(Vector3(0.91, 0.14, merlon_width + 0.12), at + Vector3.UP * 0.47, cap_stone)
+	for row: MultiMesh in [merlons, caps]:
+		var model := MultiMeshInstance3D.new()
+		model.multimesh = row
+		add_child(model)
+
+func _row(size: Vector3, material: Material, count: int) -> MultiMesh:
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	mesh.material = material
+	var row := MultiMesh.new()
+	row.transform_format = MultiMesh.TRANSFORM_3D
+	row.mesh = mesh
+	row.instance_count = count
+	return row
 
 func _block(size: Vector3, at: Vector3, material: Material) -> void:
 	var mesh := BoxMesh.new()

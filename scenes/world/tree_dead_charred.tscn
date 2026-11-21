@@ -50,6 +50,8 @@ albedo_color = Color(1, 0.35, 0.05, 1)
 material = SubResource("StandardMaterial3D_ember")
 radius = 0.04
 height = 0.08
+radial_segments = 8
+rings = 3
 
 [node name="TreeDeadCharred" type="StaticBody3D"]
 collision_layer = 1
@@ -78,3 +80,4 @@ mesh = SubResource("CylinderMesh_broken_branch2")
 [node name="EmberGlow" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.2, 0.25)
 mesh = SubResource("SphereMesh_ember")
+cast_shadow = 0

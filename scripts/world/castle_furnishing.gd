@@ -15,8 +15,13 @@ const BLUE := Color(0.25, 0.43, 0.60)
 const CHAR := Color(0.125, 0.086, 0.061)
 const LINEN := Color(0.67, 0.60, 0.46)
 const RED := Color(0.43, 0.15, 0.13)
+const BATCH_SIZE := Vector3(9.0, 4.0, 9.0)
 
 var _materials: Dictionary[Color, StandardMaterial3D]
+var _boxes: Dictionary[Color, BoxMesh]
+var _cylinders: Dictionary[Color, CylinderMesh]
+var _batches: Dictionary[Vector3i, Dictionary]
+var _candle_flame: SphereMesh
 
 func _ready() -> void:
 	match place:
@@ -40,6 +45,19 @@ func _ready() -> void:
 			_bridge()
 		Place.BURNED_YARD:
 			_burned_yard()
+	for meshes: Dictionary in _batches.values():
+		for mesh: Mesh in meshes:
+			var placements: Array[Transform3D] = meshes[mesh]
+			var batch := MultiMesh.new()
+			batch.transform_format = MultiMesh.TRANSFORM_3D
+			batch.mesh = mesh
+			batch.instance_count = placements.size()
+			for i in placements.size():
+				batch.set_instance_transform(i, placements[i])
+			var model := MultiMeshInstance3D.new()
+			model.multimesh = batch
+			add_child(model)
+	_batches.clear()
 
 func _chapel() -> void:
 	_box(Vector3(0.93, 0.260, 0), Vector3(8.62, 0.015, 1.52), BLUE.darkened(0.48))
@@ -85,21 +103,19 @@ func _chapel() -> void:
 func _candle(at: Vector3, height: float) -> void:
 	_round(at + Vector3.UP * 0.025, 0.095, 0.05, BRASS)
 	_round(at + Vector3.UP * (0.05 + height * 0.5), 0.042, height, LINEN.lightened(0.16))
-	var glow := StandardMaterial3D.new()
-	glow.albedo_color = Color(1.0, 0.69, 0.24)
-	glow.emission_enabled = true
-	glow.emission = Color(1.0, 0.45, 0.10)
-	glow.emission_energy_multiplier = 1.28
-	var flame := SphereMesh.new()
-	flame.radius = 0.026
-	flame.height = 0.082
-	flame.radial_segments = 6
-	flame.rings = 3
-	flame.material = glow
-	var wick := MeshInstance3D.new()
-	wick.mesh = flame
-	wick.position = at + Vector3.UP * (height + 0.085)
-	add_child(wick)
+	if not _candle_flame:
+		var glow := StandardMaterial3D.new()
+		glow.albedo_color = Color(1.0, 0.69, 0.24)
+		glow.emission_enabled = true
+		glow.emission = Color(1.0, 0.45, 0.10)
+		glow.emission_energy_multiplier = 1.28
+		_candle_flame = SphereMesh.new()
+		_candle_flame.radius = 0.026
+		_candle_flame.height = 0.082
+		_candle_flame.radial_segments = 6
+		_candle_flame.rings = 3
+		_candle_flame.material = glow
+	_append_detail(_candle_flame, Transform3D(Basis.IDENTITY, at + Vector3.UP * (height + 0.085)))
 
 func _workshop() -> void:
 	var table := Vector3(-2.40, 0, 1.85)
@@ -325,7 +341,7 @@ func _observatory() -> void:
 	ring.outer_radius = 0.635
 	ring.rings = 16
 	ring.ring_segments = 6
-	_place(ring, Vector3(0, 21.70, 0), BRASS, Vector3(-0.21, 0.3, 0.24), null)
+	_place(ring, Vector3(0, 21.70, 0), BRASS, Vector3(-0.21, 0.3, 0.24))
 
 	var chart_table := Vector3(0.65, 20.15, -2.90)
 	_table(chart_table, Vector2(1.17, 0.75))
@@ -426,7 +442,7 @@ func _chandelier(at: Vector3) -> void:
 	ring.outer_radius = 0.77
 	ring.rings = 12
 	ring.ring_segments = 6
-	_place(ring, at, IRON, Vector3.ZERO, null)
+	_place(ring, at, IRON, Vector3.ZERO)
 	var drop := 6.05 - at.y
 	_round(at + Vector3.UP * drop * 0.5, 0.038, drop, IRON)
 	for angle in [0.0, PI / 2.0]:
@@ -619,7 +635,7 @@ func _earthenware(at: Vector3, size: float, color: Color) -> void:
 		jar.height = band.w * size
 		jar.radial_segments = 10
 		jar.rings = 0
-		_place(jar, at + Vector3.UP * band.x * size, color.lightened(0.04 * band.x), Vector3.ZERO, null)
+		_place(jar, at + Vector3.UP * band.x * size, color.lightened(0.04 * band.x), Vector3.ZERO)
 	_round(at + Vector3.UP * (0.387 * size), 0.082 * size, 0.035 * size, color.lightened(0.09))
 	_round(at + Vector3.UP * (0.407 * size), 0.058 * size, 0.006 * size, CHAR)
 
@@ -911,49 +927,69 @@ func _herbs(center: Vector3) -> void:
 		_round(at, 0.13 + 0.06 * absf(sin(i * 2.3)), 0.16, Color(0.26, 0.41, 0.20))
 		_round(at + Vector3.UP * 0.10, 0.056, 0.08, Color(0.61, 0.48, 0.29))
 
-func _box(at: Vector3, size: Vector3, color: Color, solid := false, tilt := Vector3.ZERO) -> Node3D:
-	var mesh := BoxMesh.new()
-	mesh.size = size
-	var shape: BoxShape3D
-	if solid:
-		shape = BoxShape3D.new()
-		shape.size = size
-	return _place(mesh, at, color, tilt, shape)
+func _box(at: Vector3, size: Vector3, color: Color, solid := false, tilt := Vector3.ZERO) -> StaticBody3D:
+	if not _boxes.has(color):
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3.ONE
+		mesh.material = _material(color)
+		_boxes[color] = mesh
+	var basis := Basis.from_euler(tilt)
+	_append_detail(_boxes[color], Transform3D(basis.scaled_local(size), at))
+	if not solid:
+		return null
+	var shape := BoxShape3D.new()
+	shape.size = size
+	return _add_collider(shape, Transform3D(basis, at))
 
 func _round(at: Vector3, radius: float, height: float, color: Color, solid := false, tilt := Vector3.ZERO) -> void:
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = radius
-	mesh.bottom_radius = radius
-	mesh.height = height
-	mesh.radial_segments = 10
-	mesh.rings = 0
-	var shape: CylinderShape3D
+	if not _cylinders.has(color):
+		var mesh := CylinderMesh.new()
+		mesh.top_radius = 1.0
+		mesh.bottom_radius = 1.0
+		mesh.height = 1.0
+		mesh.radial_segments = 10
+		mesh.rings = 0
+		mesh.material = _material(color)
+		_cylinders[color] = mesh
+	var basis := Basis.from_euler(tilt)
+	_append_detail(_cylinders[color], Transform3D(basis.scaled_local(Vector3(radius, height, radius)), at))
 	if solid:
-		shape = CylinderShape3D.new()
+		var shape := CylinderShape3D.new()
 		shape.radius = radius
 		shape.height = height
-	_place(mesh, at, color, tilt, shape)
+		_add_collider(shape, Transform3D(basis, at))
 
-func _place(mesh: PrimitiveMesh, at: Vector3, color: Color, tilt: Vector3, shape: Shape3D) -> Node3D:
+func _material(color: Color) -> StandardMaterial3D:
 	if not _materials.has(color):
 		var material := StandardMaterial3D.new()
 		material.albedo_color = color
 		material.roughness = 0.9
 		_materials[color] = material
-	mesh.material = _materials[color]
-	var visual := MeshInstance3D.new()
-	visual.mesh = mesh
-	if shape:
-		var body := StaticBody3D.new()
-		body.position = at
-		body.rotation = tilt
-		var collider := CollisionShape3D.new()
-		collider.shape = shape
-		body.add_child(collider)
-		body.add_child(visual)
-		add_child(body)
-		return body
-	visual.position = at
-	visual.rotation = tilt
-	add_child(visual)
-	return visual
+	return _materials[color]
+
+func _place(mesh: PrimitiveMesh, at: Vector3, color: Color, tilt: Vector3) -> void:
+	mesh.material = _material(color)
+	var model := MeshInstance3D.new()
+	model.mesh = mesh
+	model.position = at
+	model.rotation = tilt
+	add_child(model)
+
+func _add_collider(shape: Shape3D, placement: Transform3D) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.transform = placement
+	var collider := CollisionShape3D.new()
+	collider.shape = shape
+	body.add_child(collider)
+	add_child(body)
+	return body
+
+func _append_detail(mesh: PrimitiveMesh, placement: Transform3D) -> void:
+	var cell := Vector3i((placement.origin / BATCH_SIZE).floor())
+	if not _batches.has(cell):
+		_batches[cell] = {}
+	var meshes := _batches[cell]
+	if not meshes.has(mesh):
+		var placements: Array[Transform3D] = []
+		meshes[mesh] = placements
+	meshes[mesh].append(placement)

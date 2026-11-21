@@ -14,7 +14,13 @@ const OUTSIDE := 3.32
 @export var roof: Material
 @export var corner := false
 
+var _masonry: SurfaceTool
+
 func _ready() -> void:
+	_masonry = SurfaceTool.new()
+	_masonry.begin(Mesh.PRIMITIVE_TRIANGLES)
+	_masonry.set_smooth_group(-1)
+	_masonry.set_material(stone)
 	var eaves := EAVES + (2.3 if corner else 0.0)
 	var doorways := [8, 12] if corner else [0, 8]
 	var arrow_slits := [0, 4] if corner else [4, 12]
@@ -38,6 +44,9 @@ func _ready() -> void:
 		else:
 			_sector(start, finish, SILL, eaves)
 
+	_masonry.generate_normals()
+	_visual(_masonry.commit()).name = "Masonry"
+	_masonry = null
 	_cylinder("Cornice", 3.45, 3.39, 0.28, eaves - 0.05, trim)
 	_cylinder("SlateRoof", 0.08, 3.59, 3.52, eaves + 0.09, roof)
 	_watch_station()
@@ -101,19 +110,13 @@ func _sector(start: float, finish: float, bottom: float, top: float) -> void:
 
 func _prism(low: PackedVector3Array, high: PackedVector3Array, collision_top := -1.0) -> void:
 	var side_count := low.size()
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	surface.set_smooth_group(-1)
 	for i in side_count:
 		var next := (i + 1) % side_count
-		_triangle(surface, low[i], low[next], high[next])
-		_triangle(surface, low[i], high[next], high[i])
+		_triangle(low[i], low[next], high[next])
+		_triangle(low[i], high[next], high[i])
 	for i in range(1, side_count - 1):
-		_triangle(surface, low[0], low[i + 1], low[i])
-		_triangle(surface, high[0], high[i], high[i + 1])
-	surface.generate_normals()
-	surface.set_material(stone)
-	_visual(surface.commit())
+		_triangle(low[0], low[i + 1], low[i])
+		_triangle(high[0], high[i], high[i + 1])
 
 	var shape := ConvexPolygonShape3D.new()
 	var collision_points := low + high
@@ -125,10 +128,10 @@ func _prism(low: PackedVector3Array, high: PackedVector3Array, collision_top := 
 	collider.shape = shape
 	add_child(collider)
 
-func _triangle(surface: SurfaceTool, a: Vector3, b: Vector3, c: Vector3) -> void:
-	surface.add_vertex(a)
-	surface.add_vertex(c)
-	surface.add_vertex(b)
+func _triangle(a: Vector3, b: Vector3, c: Vector3) -> void:
+	_masonry.add_vertex(a)
+	_masonry.add_vertex(c)
+	_masonry.add_vertex(b)
 
 func _radial(angle: float) -> Vector3:
 	return Vector3(sin(angle), 0, cos(angle))
