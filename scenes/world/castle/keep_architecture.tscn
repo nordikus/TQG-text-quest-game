@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="40_slates"]
+
 [sub_resource type="StandardMaterial3D" id="DressStone"]
 albedo_color = Color(0.43, 0.42, 0.38, 1)
 roughness = 0.87
@@ -8,9 +10,8 @@ roughness = 0.87
 albedo_color = Color(0.55, 0.53, 0.46, 1)
 roughness = 0.87
 
-[sub_resource type="StandardMaterial3D" id="RoofSlate"]
-albedo_color = Color(0.16, 0.225, 0.30, 1)
-roughness = 0.87
+[sub_resource type="ShaderMaterial" id="RoofSlate"]
+shader = ExtResource("40_slates")
 
 [sub_resource type="StandardMaterial3D" id="Recess"]
 albedo_color = Color(0.105, 0.12, 0.14, 1)

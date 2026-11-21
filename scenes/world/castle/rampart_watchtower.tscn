@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/world/rampart_watchtower.gd" id="1_tower"]
 [ext_resource type="Shader" path="res://scenes/world/castle/masonry.gdshader" id="2_masonry"]
 
+[ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="40_slates"]
+
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("2_masonry")
 
@@ -10,9 +12,8 @@ shader = ExtResource("2_masonry")
 albedo_color = Color(0.24, 0.25, 0.27, 1)
 roughness = 0.92
 
-[sub_resource type="StandardMaterial3D" id="Mat_Slate"]
-albedo_color = Color(0.18, 0.22, 0.32, 1)
-roughness = 0.65
+[sub_resource type="ShaderMaterial" id="Mat_Slate"]
+shader = ExtResource("40_slates")
 
 [node name="RampartWatchtower" type="StaticBody3D"]
 script = ExtResource("1_tower")

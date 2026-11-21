@@ -34,6 +34,8 @@
 [ext_resource type="Shader" path="res://scenes/world/forest_ground.gdshader" id="31_forest_floor"]
 
 [ext_resource type="Script" path="res://scripts/world/living_arch.gd" id="32_arch"]
+[ext_resource type="Script" path="res://scripts/world/distant_ridges.gd" id="33_ridges"]
+[ext_resource type="Script" path="res://scripts/world/forest_floor_details.gd" id="34_floor"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.19, 0.37, 0.61, 1)
@@ -66,34 +68,14 @@ volumetric_fog_albedo = Color(0.85, 0.92, 0.9, 1)
 resource_local_to_scene = true
 shader = ExtResource("31_forest_floor")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mountain"]
-albedo_color = Color(0.24, 0.3, 0.36, 1)
-roughness = 0.95
-
-[sub_resource type="PrismMesh" id="PrismMesh_mountain_large"]
-material = SubResource("StandardMaterial3D_mountain")
-size = Vector3(180, 85, 80)
-
-[sub_resource type="PrismMesh" id="PrismMesh_mountain_med"]
-material = SubResource("StandardMaterial3D_mountain")
-size = Vector3(150, 70, 70)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dirt"]
-albedo_color = Color(0.38, 0.3, 0.2, 1)
-roughness = 0.95
-
-[sub_resource type="BoxMesh" id="BoxMesh_approach_path"]
-material = SubResource("StandardMaterial3D_dirt")
-size = Vector3(2.44, 0.025, 7)
-
 [sub_resource type="StandardMaterial3D" id="Mat_AltarPaving"]
 albedo_color = Color(0.37, 0.40, 0.35, 1)
 roughness = 0.98
 
 [sub_resource type="CylinderMesh" id="Mesh_AltarPaving"]
 material = SubResource("Mat_AltarPaving")
-top_radius = 0.94
-bottom_radius = 0.98
+top_radius = 0.68
+bottom_radius = 0.75
 height = 0.075
 radial_segments = 7
 
@@ -180,38 +162,7 @@ multimesh = ExtResource("18_oaks")
 multimesh = ExtResource("27_undergrowth")
 
 [node name="DistantMountains" type="Node3D" parent="." unique_id=1482031709]
-
-[node name="MountainNorth" type="MeshInstance3D" parent="DistantMountains" unique_id=961213228]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 37, -273)
-mesh = SubResource("PrismMesh_mountain_large")
-
-[node name="MountainNW" type="MeshInstance3D" parent="DistantMountains" unique_id=1895728873]
-transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -160, 36, -240)
-mesh = SubResource("PrismMesh_mountain_large")
-
-[node name="MountainNE" type="MeshInstance3D" parent="DistantMountains" unique_id=956235176]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 160, 36, -240)
-mesh = SubResource("PrismMesh_mountain_med")
-
-[node name="MountainWest" type="MeshInstance3D" parent="DistantMountains" unique_id=1816045727]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -250, 34, -40)
-mesh = SubResource("PrismMesh_mountain_med")
-
-[node name="MountainEast" type="MeshInstance3D" parent="DistantMountains" unique_id=1447325743]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 250, 34, -40)
-mesh = SubResource("PrismMesh_mountain_med")
-
-[node name="MountainSouthEast" type="MeshInstance3D" parent="DistantMountains" unique_id=505168359]
-transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 180, 30, 210)
-mesh = SubResource("PrismMesh_mountain_med")
-
-[node name="MountainSouthWest" type="MeshInstance3D" parent="DistantMountains" unique_id=733430419]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -180, 30, 210)
-mesh = SubResource("PrismMesh_mountain_med")
-
-[node name="ApproachPath" type="MeshInstance3D" parent="." unique_id=594674066]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 7.5)
-mesh = SubResource("BoxMesh_approach_path")
+script = ExtResource("33_ridges")
 
 [node name="AltarPaver1" type="MeshInstance3D" parent="."]
 position = Vector3(0.04, 0.02, 4.42)
@@ -305,6 +256,11 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 22, 0, -18
 
 [node name="CharredLog2" parent="CharredForestZone" unique_id=935088707 instance=ExtResource("12_log")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -1.95, 0, -60.5)
+
+[node name="ForestFloorDetails" type="Node3D" parent="." node_paths=PackedStringArray("living_strip", "burned_strip")]
+script = ExtResource("34_floor")
+living_strip = NodePath("../CorridorForest")
+burned_strip = NodePath("../CharredForestZone")
 
 [node name="BurningPath" type="Node3D" parent="." unique_id=7678707]
 visible = false

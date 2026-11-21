@@ -1,7 +1,7 @@
 @tool
 extends Node3D
 
-enum Place { WORKSHOP, COURTYARD, SUPPLY_SHELTER, BURNED_SHELTER, BARRACKS, KEEP }
+enum Place { WORKSHOP, COURTYARD, SUPPLY_SHELTER, BURNED_SHELTER, BARRACKS, KEEP, CHAPEL, OBSERVATORY, BRIDGE, BURNED_YARD }
 
 @export var place: Place = Place.WORKSHOP
 
@@ -32,6 +32,74 @@ func _ready() -> void:
 			_barracks()
 		Place.KEEP:
 			_keep()
+		Place.CHAPEL:
+			_chapel()
+		Place.OBSERVATORY:
+			_observatory()
+		Place.BRIDGE:
+			_bridge()
+		Place.BURNED_YARD:
+			_burned_yard()
+
+func _chapel() -> void:
+	_box(Vector3(0.93, 0.260, 0), Vector3(8.62, 0.015, 1.52), BLUE.darkened(0.48))
+	for z in [-0.690, 0.690]:
+		_box(Vector3(0.93, 0.269, z), Vector3(8.60, 0.006, 0.038), BRASS.darkened(0.12))
+	for row_x in [4.21, 2.48, 0.72]:
+		for z in [-3.27, 3.27]:
+			var pew := Vector3(row_x, 0.25, z)
+			_box(pew + Vector3.UP * 0.49, Vector3(0.66, 0.12, 2.76), WOOD_EDGE, true)
+			_box(pew + Vector3(0.29, 0.82, 0), Vector3(0.105, 0.65, 2.76), OAK, true,
+				Vector3(0, 0, -0.09))
+			_box(pew + Vector3(0.31, 1.135, 0), Vector3(0.15, 0.077, 2.82), WOOD_EDGE)
+			for end in [-1.32, 1.32]:
+				_box(pew + Vector3(0.012, 0.37, end), Vector3(0.73, 0.73, 0.15), OAK, true)
+				_box(pew + Vector3(0.04, 0.75, end), Vector3(0.61, 0.07, 0.173), WOOD_EDGE)
+
+	var altar := Vector3(-2.5, 1.22, 0)
+	_box(altar + Vector3.UP * 0.011, Vector3(1.05, 0.018, 2.36), BLUE.darkened(0.17))
+	for z in [-1.05, 1.05]:
+		_box(altar + Vector3(0.805, -0.19, z), Vector3(0.015, 0.41, 0.32), BLUE.darkened(0.17))
+		_box(altar + Vector3(0.812, -0.367, z), Vector3(0.018, 0.038, 0.32), BRASS)
+		for i in 3:
+			_candle(altar + Vector3(-0.42 + i * 0.32, 0.0, z), 0.17 + 0.07 * sin(i * 1.5))
+	for z in [-2.02, 2.02]:
+		var stand := Vector3(-3.71, 0.25, z)
+		_round(stand + Vector3.UP * 0.055, 0.225, 0.11, IRON, true)
+		_round(stand + Vector3.UP * 0.57, 0.045, 1.11, IRON, true)
+		_round(stand + Vector3.UP * 1.115, 0.145, 0.06, BRASS)
+		_candle(stand + Vector3.UP * 1.145, 0.37)
+		_light(stand + Vector3.UP * 1.65, 0.66, 3.4)
+	var votive_shelf := Vector3(-6.15, 1.21, 0)
+	_box(votive_shelf, Vector3(0.48, 0.15, 3.87), LIMESTONE, true)
+	for z in [-1.52, 0.0, 1.52]:
+		_box(votive_shelf + Vector3(-0.09, -0.23, z), Vector3(0.34, 0.42, 0.21), LIMESTONE)
+	for i in 8:
+		var z := -1.65 + i * 0.47
+		_candle(votive_shelf + Vector3(0.07 * sin(i * 6.1), 0.075, z), 0.15 + 0.09 * absf(sin(i * 1.6)))
+	_light(votive_shelf + Vector3(0.41, 0.47, 0), 0.52, 3.1)
+	_round(Vector3(5.28, 0.58, 4.79), 0.29, 0.66, LIMESTONE, true)
+	_round(Vector3(5.28, 0.97, 4.79), 0.42, 0.19, LIMESTONE.lightened(0.05), true)
+	_round(Vector3(5.28, 1.069, 4.79), 0.29, 0.012, BLUE.darkened(0.42))
+
+func _candle(at: Vector3, height: float) -> void:
+	_round(at + Vector3.UP * 0.025, 0.095, 0.05, BRASS)
+	_round(at + Vector3.UP * (0.05 + height * 0.5), 0.042, height, LINEN.lightened(0.16))
+	var glow := StandardMaterial3D.new()
+	glow.albedo_color = Color(1.0, 0.69, 0.24)
+	glow.emission_enabled = true
+	glow.emission = Color(1.0, 0.45, 0.10)
+	glow.emission_energy_multiplier = 1.28
+	var flame := SphereMesh.new()
+	flame.radius = 0.026
+	flame.height = 0.082
+	flame.radial_segments = 6
+	flame.rings = 3
+	flame.material = glow
+	var wick := MeshInstance3D.new()
+	wick.mesh = flame
+	wick.position = at + Vector3.UP * (height + 0.085)
+	add_child(wick)
 
 func _workshop() -> void:
 	var table := Vector3(-2.40, 0, 1.85)
@@ -45,6 +113,14 @@ func _workshop() -> void:
 	_round(table + Vector3(-0.51, 1.153, 0.23), 0.085, 0.14, BLUE)
 	_round(table + Vector3(-0.54, 1.09, -0.21), 0.089, 0.022, BRASS)
 	_box(table + Vector3(-0.53, 1.104, -0.21), Vector3(0.13, 0.015, 0.021), IRON, false, Vector3(0, 0.58, 0))
+	var scales := table + Vector3(-0.20, 1.084, 0.22)
+	_round(scales + Vector3.UP * 0.026, 0.13, 0.052, BRASS)
+	_round(scales + Vector3.UP * 0.225, 0.022, 0.43, IRON)
+	_box(scales + Vector3.UP * 0.43, Vector3(0.44, 0.031, 0.024), BRASS, false, Vector3(0, 0, 0.06))
+	for x in [-0.18, 0.18]:
+		_round(scales + Vector3(x, 0.34, 0.0), 0.009, 0.18, BRASS)
+		_round(scales + Vector3(x, 0.242, 0.0), 0.093, 0.022, BRASS)
+	_earthenware(table + Vector3(0.46, 1.084, 0.26), 0.66, BLUE.darkened(0.11))
 
 	var shelves := Vector3(-3.39, 0, 0.05)
 	for z in [-0.69, 0.69]:
@@ -125,15 +201,133 @@ func _barracks() -> void:
 	_locker(Vector3(6.05, 0.25, -9.06))
 	_lantern(Vector3(-3.6, 3.28, -6.2), 3.86)
 	_lantern(Vector3(4.64, 3.28, -5.1), 3.86)
+	_guard_wall_rack(Vector3(7.21, 0.25, -5.92))
+	_candle(Vector3(1.07, 1.096, -7.49), 0.154)
+	_earthenware(Vector3(-5.63, 1.067, -8.34), 1.0, BLUE.darkened(0.16))
+
+func _guard_wall_rack(at: Vector3) -> void:
+	_box(at + Vector3(0.0, 1.64, 0), Vector3(0.14, 0.13, 2.12), OAK)
+	for side: float in [-1.0, 1.0]:
+		var z := side * 0.52
+		_box(at + Vector3(-0.075, 1.56, z), Vector3(0.22, 0.052, 0.079), IRON)
+		_box(at + Vector3(-0.155, 1.225, z), Vector3(0.15, 0.69, 0.44), BLUE.darkened(0.21) if side > 0 else RED)
+		_box(at + Vector3(-0.247, 1.127, z), Vector3(0.034, 0.046, 0.43), BRASS.darkened(0.12))
+		_box(at + Vector3(-0.193, 1.187, z - 0.263), Vector3(0.111, 0.54, 0.14), RED.darkened(0.17),
+			false, Vector3(0.26, 0, 0))
+		_box(at + Vector3(-0.193, 1.187, z + 0.263), Vector3(0.111, 0.54, 0.14), RED.darkened(0.17),
+			false, Vector3(-0.26, 0, 0))
+	_round(at + Vector3(-0.17, 2.05, -0.45), 0.20, 0.18, IRON)
+	_round(at + Vector3(-0.17, 1.92, -0.45), 0.24, 0.055, IRON)
+	_box(at + Vector3(0.008, 1.808, 0), Vector3(0.48, 0.13, 2.16), WOOD_EDGE)
 
 func _keep() -> void:
 	_lower_library()
+	_upper_library()
+	_throne()
 	_dining_room()
 	_keep_kitchen()
 	_keep_cellar()
 	_keep_stair_guards()
 	_upper_service_room()
 	_steward_room()
+
+func _upper_library() -> void:
+	for x in [-29.19, -28.75]:
+		_box(Vector3(x, 7.127, -0.45), Vector3(0.30, 0.034, 0.46), PAPER,
+			false, Vector3(0, (x + 29.0) * 0.7, 0))
+	_round(Vector3(-29.06, 7.17, 0.34), 0.078, 0.11, IRON)
+	_box(Vector3(-29.04, 7.242, 0.34), Vector3(0.016, 0.012, 0.21), BRASS, false, Vector3(0, 0.52, -0.09))
+	_lantern(Vector3(-28.55, 8.32, -6.16), 11.97, 1.5, 5.5)
+	_lantern(Vector3(-28.55, 8.32, 7.73), 11.97, 1.28, 5.4)
+	for at in [Vector3(-26.4, 6.35, -12.2), Vector3(-26.1, 6.35, 8.5)]:
+		_table(at, Vector2(1.32, 0.87))
+		_box(at + Vector3(0.18, 0.835, -0.12), Vector3(0.38, 0.044, 0.26), RED, false, Vector3(0, -0.20, 0))
+		_candle(at + Vector3(-0.44, 0.82, 0.145), 0.15)
+
+func _throne() -> void:
+	const VELVET := Color(0.39, 0.086, 0.095)
+	var dais := Vector3(0, 1.03, -10.20)
+	for x in [-0.83, 0.83]:
+		for z in [-0.63, 0.63]:
+			_box(dais + Vector3(x, 0.23, z), Vector3(0.28, 0.46, 0.27), OAK)
+			_box(dais + Vector3(x, 0.076, z), Vector3(0.30, 0.145, 0.29), BRASS.darkened(0.13))
+		_box(dais + Vector3(x, 0.63, 0.58), Vector3(0.18, 0.75, 0.19), OAK)
+		_box(dais + Vector3(x, 0.96, -0.03), Vector3(0.26, 0.14, 1.36), WOOD_EDGE)
+		_round(dais + Vector3(x, 1.06, 0.63), 0.133, 0.16, BRASS)
+		_box(dais + Vector3(x, 1.67, -0.70), Vector3(0.20, 1.98, 0.30), OAK)
+		_round(dais + Vector3(x, 2.69, -0.70), 0.114, 0.18, BRASS)
+	_box(dais + Vector3(0, 0.58, 0), Vector3(1.97, 0.23, 1.58), OAK)
+	_box(dais + Vector3(0, 0.728, 0.06), Vector3(1.51, 0.14, 1.37), VELVET)
+	_box(dais + Vector3(0, 0.66, 0.792), Vector3(1.76, 0.042, 0.028), BRASS)
+	_box(dais + Vector3(0, 1.74, -0.72), Vector3(1.52, 1.86, 0.25), OAK)
+	_box(dais + Vector3(0, 1.73, -0.545), Vector3(1.38, 1.58, 0.17), VELVET)
+	_box(dais + Vector3(0, 2.60, -0.70), Vector3(1.72, 0.21, 0.31), WOOD_EDGE)
+	_box(dais + Vector3(0, 1.91, -0.447), Vector3(0.30, 0.30, 0.033), BRASS, false,
+		Vector3(0, 0, PI / 4))
+	for side in [-1.0, 1.0]:
+		_box(Vector3(side * 2.21, 0.273, 2.54), Vector3(0.056, 0.004, 17.50), BRASS.darkened(0.24))
+		_box(Vector3(side * 2.05, 0.274, 2.75), Vector3(0.022, 0.005, 17.02), BRASS.darkened(0.24))
+	for x in [-5.48, 5.48]:
+		for z in [2.28, 8.7]:
+			_round(Vector3(x, 0.31, z), 0.28, 0.13, LIMESTONE, true)
+			_round(Vector3(x, 0.94, z), 0.075, 1.15, IRON)
+			_round(Vector3(x, 1.54, z), 0.24, 0.11, BRASS)
+			_candle(Vector3(x, 1.60, z), 0.26)
+			_light(Vector3(x, 2.02, z), 0.52, 4.7)
+
+func _observatory() -> void:
+	_round(Vector3(0, 20.26, 0), 0.69, 0.20, OAK)
+	_round(Vector3(0, 20.41, 0), 0.57, 0.12, BRASS.darkened(0.17))
+	for i in 6:
+		var angle := i * TAU / 6.0
+		var radial := Vector3(cos(angle), 0, sin(angle))
+		_box(Vector3(0, 20.64, 0) + radial * 0.48, Vector3(0.23, 0.42, 0.26), OAK, false, Vector3(0, -angle, 0))
+	_round(Vector3(0, 20.99, 0), 0.83, 0.20, WOOD_EDGE)
+	_round(Vector3(0, 21.095, 0), 0.70, 0.017, BRASS)
+	_round(Vector3(0, 21.108, 0), 0.55, 0.015, IRON)
+	_round(Vector3(0.74, 21.116, 0.53), 0.24, 0.052, BRASS)
+	_round(Vector3(0.74, 21.148, 0.53), 0.19, 0.017, BLUE.darkened(0.45))
+	for angle in [0.42, 2.54, 4.66]:
+		var radial := Vector3(cos(angle), 0, sin(angle))
+		_box(Vector3(0, 21.38, 0) + radial * 0.62, Vector3(0.075, 0.51, 0.095), BRASS,
+			false, Vector3(0, -angle, -0.33))
+	var ring := TorusMesh.new()
+	ring.inner_radius = 0.577
+	ring.outer_radius = 0.635
+	ring.rings = 16
+	ring.ring_segments = 6
+	_place(ring, Vector3(0, 21.70, 0), BRASS, Vector3(-0.21, 0.3, 0.24), null)
+
+	_table(Vector3(1.66, 20.14, 2.42), Vector2(1.17, 0.75))
+	_box(Vector3(1.68, 20.97, 2.39), Vector3(0.66, 0.024, 0.45), PAPER, false, Vector3(0, -0.23, 0))
+	_round(Vector3(1.76, 20.997, 2.53), 0.175, 0.027, BRASS)
+	_candle(Vector3(1.24, 20.96, 2.65), 0.14)
+
+func _bridge() -> void:
+	for z in [-10.6, -13.1, -15.6, -18.1, -20.6]:
+		_box(Vector3(0, 9.53, z), Vector3(3.06, 0.20, 0.21), OAK)
+		for x in [-1.43, 1.43]:
+			_box(Vector3(x, 8.18, z), Vector3(0.15, 2.79, 0.21), OAK)
+	for z in [-12.13, -19.06]:
+		var side := -1.0 if z > -15.0 else 1.0
+		_box(Vector3(side * 1.433, 8.44, z), Vector3(0.19, 0.17, 0.49), IRON)
+		_candle(Vector3(side * 1.37, 8.51, z), 0.20)
+		_light(Vector3(side * 1.25, 8.75, z), 0.54, 4.3)
+
+func _burned_yard() -> void:
+	# Ash collects on the avenue edge. The burned cart stays outside the passage.
+	var cart := Vector3(-7.0, 0, -31.4)
+	for i in 6:
+		_box(cart + Vector3(i * 0.34 - 0.85, 0.16 + 0.05 * sin(i * 1.8), 0.12 * cos(i)),
+			Vector3(0.25, 0.12, 1.62 - 0.07 * i), CHAR.lightened(0.07 * sin(i)), false,
+			Vector3(0.11 * sin(i), 0.38 + 0.21 * i, 0.10 * cos(i)))
+	_round(cart + Vector3(-1.05, 0.32, -0.51), 0.40, 0.12, CHAR, false, Vector3(0, 0, 1.17))
+	_round(cart + Vector3(-1.11, 0.36, -0.49), 0.128, 0.13, IRON, false, Vector3(0, 0, 1.17))
+	_box(cart + Vector3(1.14, 0.17, 0.62), Vector3(0.14, 0.12, 1.67), CHAR, false, Vector3(0.18, -0.52, 0))
+	for i in 13:
+		var board := Vector3(-3.55 - absf(sin(i * 13.8)) * 4.9, 0.045, -8.2 - i * 1.67)
+		_box(board, Vector3(0.12 + 0.035 * sin(i * 3.2), 0.075, 0.35 + 0.30 * absf(cos(i))),
+			CHAR, false, Vector3(0, i * 1.1, 0))
 
 func _lower_library() -> void:
 	for z in [-12.95, -8.78, -4.6, -0.45, 8.8]:
@@ -171,6 +365,8 @@ func _dining_room() -> void:
 				var place_at := table + Vector3(side * 0.62, 0.832, -3.12 + 1.22 * i)
 				_round(place_at, 0.168, 0.034, LINEN)
 				_round(place_at + Vector3(0, 0.071, 0.37), 0.072, 0.14, BRASS if i % 2 == 0 else BLUE)
+		_earthenware(table + Vector3(-0.13, 0.832, -2.68), 1.13, BLUE)
+		_earthenware(table + Vector3(0.13, 0.832, 2.78), 0.92, Color(0.52, 0.31, 0.19))
 		for z in [-2.15, 0.08, 2.2]:
 			var platter := table + Vector3(0, 0.845, z)
 			_round(platter, 0.21, 0.033, BRASS)
@@ -235,6 +431,7 @@ func _keep_kitchen() -> void:
 		for i in 3:
 			_round(bench + Vector3(-0.31, 0.88, -0.69 + i * 0.25), 0.086, 0.145,
 				Color(0.42, 0.29, 0.14).lightened(0.09 * i))
+		_earthenware(bench + Vector3(-0.34, 0.824, 0.75), 1.04, Color(0.55, 0.30, 0.17))
 	_provision_barrel(Vector3(18.48, 0.25, -13.77), 0.38)
 	_box(Vector3(23.4, 2.52, -14.36), Vector3(2.29, 0.13, 0.16), OAK)
 	for i in 4:
@@ -302,6 +499,8 @@ func _keep_cellar() -> void:
 	_table(Vector3(20.96, -3.55, -11.3), Vector2(1.9, 0.9))
 	for x in [20.51, 21.24]:
 		_round(Vector3(x, -2.66, -11.3), 0.184, 0.13, LINEN)
+	_earthenware(Vector3(21.47, -2.73, -11.12), 0.81, BLUE.darkened(0.18))
+	_earthenware(Vector3(20.05, -2.73, -11.12), 1.1, Color(0.53, 0.34, 0.21))
 	_lantern(Vector3(18.5, -1.45, -12.60), -1.0, 1.35, 6.35)
 	_lantern(Vector3(22.45, -1.45, -10.55), -1.0, 1.30, 6.1)
 	_lantern(Vector3(16.3, 1.95, -8.20), 6.05, 0.9, 5.35)
@@ -381,6 +580,19 @@ func _provision_barrel(at: Vector3, radius: float) -> void:
 	for y in [0.18, 0.71]:
 		_round(at + Vector3.UP * y, radius + 0.018, 0.075, IRON)
 
+
+func _earthenware(at: Vector3, size: float, color: Color) -> void:
+	for band: Vector4 in [Vector4(0.04, 0.10, 0.145, 0.080), Vector4(0.154, 0.145, 0.176, 0.15),
+			Vector4(0.271, 0.176, 0.072, 0.105), Vector4(0.351, 0.072, 0.063, 0.073)]:
+		var jar := CylinderMesh.new()
+		jar.bottom_radius = band.y * size
+		jar.top_radius = band.z * size
+		jar.height = band.w * size
+		jar.radial_segments = 10
+		jar.rings = 0
+		_place(jar, at + Vector3.UP * band.x * size, color.lightened(0.04 * band.x), Vector3.ZERO, null)
+	_round(at + Vector3.UP * (0.387 * size), 0.082 * size, 0.035 * size, color.lightened(0.09))
+	_round(at + Vector3.UP * (0.407 * size), 0.058 * size, 0.006 * size, CHAR)
 
 func _bed(at: Vector3, yaw: float, quilt: Color, bed_name: String) -> void:
 	var frame := Transform3D(Basis(Vector3.UP, yaw), at)

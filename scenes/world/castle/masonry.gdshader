@@ -19,10 +19,15 @@ void fragment() {
 	vec2 block = floor(cells);
 	vec2 local = fract(cells);
 	vec2 edge = min(local, 1.0 - local);
-	float grout_distance = min(edge.x * 1.6, edge.y);
+	float chip = sin(face.x * 7.6 + face.y * 10.4) * sin(face.y * 23.2 - face.x * 3.2) * 0.009;
+	float grout_distance = min(edge.x * 1.6, edge.y) + chip;
 	float variation = fract(sin(dot(block, vec2(47.23, 91.77))) * 4231.0);
-	vec3 stone = mix(vec3(0.13, 0.145, 0.157), vec3(0.21, 0.221, 0.22), variation);
-	vec3 grout = vec3(0.085, 0.093, 0.094);
-	ALBEDO = mix(grout, stone, smoothstep(0.009, 0.042, grout_distance));
-	ROUGHNESS = 0.95;
+	float mineral = sin(face.x * 14.1 + sin(face.y * 10.0 + variation) * 1.7)
+		* sin(face.y * 21.6 + face.x * 3.1);
+	float crust = smoothstep(0.015, 0.070, grout_distance);
+	vec3 stone = mix(vec3(0.122, 0.136, 0.15), vec3(0.225, 0.229, 0.209), variation);
+	stone *= 0.97 + mineral * 0.059 + smoothstep(0.1, 0.94, local.y) * 0.074;
+	vec3 grout = vec3(0.077, 0.084, 0.080);
+	ALBEDO = mix(grout, stone, crust);
+	ROUGHNESS = mix(1.0, 0.90, crust);
 }

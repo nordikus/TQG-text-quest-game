@@ -23,6 +23,8 @@
 [ext_resource type="Script" path="res://scripts/world/courtyard_cargo.gd" id="24_cargo"]
 
 [ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
+[ext_resource type="Script" path="res://scripts/world/courtyard_well_model.gd" id="27_well"]
+[ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="28_slates"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
@@ -60,19 +62,15 @@ size = Vector3(2.8, 0.04, 2.5)
 material = SubResource("Mat_Wood")
 size = Vector3(0.16, 2.0, 0.16)
 
-[sub_resource type="CylinderMesh" id="Mesh_CourtyardWell"]
-material = SubResource("Mat_StoneDark")
-top_radius = 1.2
-bottom_radius = 1.4
-height = 1.2
-radial_segments = 12
-
 [sub_resource type="CylinderShape3D" id="Shape_CourtyardWell"]
 radius = 1.4
 height = 1.2
 
+[sub_resource type="ShaderMaterial" id="Mat_WellSlate"]
+shader = ExtResource("28_slates")
+
 [sub_resource type="CylinderMesh" id="Mesh_WellRoof"]
-material = SubResource("Mat_Wood")
+material = SubResource("Mat_WellSlate")
 top_radius = 0.1
 bottom_radius = 1.6
 height = 1.2
@@ -145,8 +143,8 @@ mesh = SubResource("Mesh_ChapelPath")
 [node name="CourtyardWell" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.0, 0.6, -10.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="CourtyardWell"]
-mesh = SubResource("Mesh_CourtyardWell")
+[node name="StoneShaftAndWinch" type="Node3D" parent="CourtyardWell"]
+script = ExtResource("27_well")
 
 [node name="Col" type="CollisionShape3D" parent="CourtyardWell"]
 shape = SubResource("Shape_CourtyardWell")
@@ -1001,6 +999,10 @@ script = ExtResource("24_cargo")
 position = Vector3(-24.7, 0, 3.69)
 rotation = Vector3(0, 1.09, 0)
 script = ExtResource("24_cargo")
+
+[node name="AvenueAsh" type="Node3D" parent="AshCastle"]
+script = ExtResource("26_furnishing")
+place = 9
 
 [node name="GateCargo" type="Node3D" parent="AshCastle"]
 position = Vector3(-6.12, 0, 4.7)

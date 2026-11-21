@@ -309,9 +309,15 @@ func _run_verification() -> void:
 		push_error("FAIL: The tower cornice projects into the bridge entrance.")
 		all_passed = false
 	for shelf_name in ["AlcoveShelf_1", "AlcoveShelf_2"]:
-		var shelf := clearing.find_child(shelf_name, true, false).get_node("Mesh") as MeshInstance3D
-		if _bounds(shelf).end.x >= -25.2:
-			push_error("FAIL: A library bookcase reaches into the stairwell.")
+		var shelf := clearing.find_child(shelf_name, true, false)
+		var cabinet := shelf.get_node("Cabinet")
+		var collider := shelf.get_node("Col") as CollisionShape3D
+		var shape := collider.shape as BoxShape3D
+		var envelope := collider.global_transform * AABB(-shape.size * 0.5, shape.size)
+		for part: VisualInstance3D in cabinet.get_children():
+			envelope = envelope.merge(part.global_transform * part.get_aabb())
+		if cabinet.get_child_count() == 0 or envelope.end.x >= -25.2:
+			push_error("FAIL: A furnished library bookcase is missing or reaches into the stairwell.")
 			all_passed = false
 	var open_sky := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
 		Vector3(-20.1, 31.0, -110), Vector3(-20.1, 23.0, -110)))

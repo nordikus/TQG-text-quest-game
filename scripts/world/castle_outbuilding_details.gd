@@ -17,6 +17,11 @@ func _ready() -> void:
 		_barracks()
 
 func _chapel() -> void:
+	_chapel_side_walls()
+	for x in [-4.9, -1.62, 1.68, 4.95]:
+		_box(Vector3(x, 6.89, 0), Vector3(0.31, 0.32, 13.0), oak)
+		for z in [-6.24, 6.24]:
+			_box(Vector3(x, 6.46, z), Vector3(0.43, 0.58, 0.36), stone)
 	var center := Vector3(5.85, 0, 0)
 	_box(center + Vector3.UP * 9.60, Vector3(2.85, 4.65, 2.85), stone)
 	_box(center + Vector3.UP * 11.85, Vector3(3.03, 0.29, 3.03), edge)
@@ -41,28 +46,97 @@ func _chapel() -> void:
 	_box(Vector3(7.46, 8.36, 0), Vector3(0.09, 1.5, 0.073), iron)
 	_box(Vector3(7.46, 8.41, 0), Vector3(0.09, 0.075, 0.89), iron)
 	_rosette(Vector3(7.035, 5.86, 0), 0.94)
-	_rosette(Vector3(-6.382, 4.62, 0), 1.02, true)
+	_rosette(Vector3(-6.382, 4.62, 0), 1.02)
 	for z in [-3.48, 3.48]:
 		_box(Vector3(7.16, 2.98, z), Vector3(0.52, 5.95, 0.46), stone)
 		_box(Vector3(7.23, 5.78, z), Vector3(0.68, 0.22, 0.64), edge)
 		_box(Vector3(7.24, 0.32, z), Vector3(0.71, 0.64, 0.65), edge)
 
-func _rosette(center: Vector3, radius: float, inside := false) -> void:
-	var direction := -1.0 if inside else 1.0
+func _chapel_side_walls() -> void:
+	var arch := PackedVector2Array([
+		Vector2(-0.72, -1.18), Vector2(0.72, -1.18), Vector2(0.72, 0.82),
+		Vector2(0.59, 1.24), Vector2(0.31, 1.58), Vector2(0, 1.82),
+		Vector2(-0.31, 1.58), Vector2(-0.59, 1.24), Vector2(-0.72, 0.82),
+	])
+	var blocks := ShaderMaterial.new()
+	blocks.shader = preload("res://scenes/world/castle/masonry.gdshader")
+	var glass := [
+		_glass(Color(0.18, 0.40, 0.56)), _glass(Color(0.31, 0.61, 0.67)),
+		_glass(Color(0.60, 0.36, 0.17)), _glass(Color(0.43, 0.25, 0.47)),
+	]
+	for z: float in [-6.7, 6.7]:
+		var wall := CSGBox3D.new()
+		wall.name = "NorthWindowWall" if z < 0 else "SouthWindowWall"
+		wall.size = Vector3(14, 7.0, 0.6)
+		wall.position = Vector3(0, 3.72, z)
+		wall.material = blocks
+		wall.use_collision = true
+		for x: float in [-3.65, 0.0, 3.65]:
+			var opening := CSGPolygon3D.new()
+			opening.operation = CSGShape3D.OPERATION_SUBTRACTION
+			opening.polygon = arch
+			opening.depth = 0.92
+			opening.position = Vector3(x, 0, 0.46)
+			opening.material = blocks
+			wall.add_child(opening)
+			_chapel_window(Vector3(x, 3.72, z), arch, glass)
+		add_child(wall)
+
+func _chapel_window(at: Vector3, arch: PackedVector2Array, glass: Array) -> void:
+	var lead := PackedVector3Array()
+	var panes: Array[PackedVector3Array] = [PackedVector3Array(), PackedVector3Array(), PackedVector3Array(), PackedVector3Array()]
+	var center := Vector3(0, 0.21, 0)
+	var glass_shape := PackedVector3Array()
+	for i in arch.size():
+		var j := (i + 1) % arch.size()
+		var a := Vector3(arch[i].x, arch[i].y, 0.0)
+		var b := Vector3(arch[j].x, arch[j].y, 0.0)
+		glass_shape.append(a + Vector3.FORWARD * 0.044)
+		glass_shape.append(a + Vector3.BACK * 0.044)
+		var mid := (a + b) * 0.5
+		panes[i % panes.size()].append_array(PackedVector3Array([at + center, at + a, at + mid]))
+		panes[(i + 1) % panes.size()].append_array(PackedVector3Array([at + center, at + mid, at + b]))
+		var offset := Vector3(a.y - center.y, center.x - a.x, 0).normalized() * 0.017
+		for point in [center - offset, a - offset, a + offset, center - offset, a + offset, center + offset]:
+			lead.append(at + point + Vector3.FORWARD * 0.006)
+			lead.append(at + point + Vector3.BACK * 0.006)
+		var angle := atan2((b - a).y, (b - a).x)
+		for face: float in [-1.0, 1.0]:
+			_box(at + mid + Vector3.BACK * (0.309 * face), Vector3(a.distance_to(b) + 0.088, 0.18, 0.142),
+				edge, Vector3(0, 0, angle))
+	for i in panes.size():
+		_polygon(panes[i], glass[i])
+	var backing := StaticBody3D.new()
+	backing.position = at
+	var shape := ConvexPolygonShape3D.new()
+	shape.points = glass_shape
+	var collision := CollisionShape3D.new()
+	collision.shape = shape
+	backing.add_child(collision)
+	add_child(backing)
+	# Two planes keep the lead against the glass when viewed from either aisle or courtyard.
+	for side in [0, 1]:
+		var outline := PackedVector3Array()
+		for i in range(side, lead.size(), 2):
+			outline.append(lead[i])
+		_polygon(outline, iron)
+	_box(at + Vector3(0, -1.26, 0), Vector3(1.72, 0.17, 0.91), edge)
+
+func _rosette(center: Vector3, radius: float) -> void:
 	_disc(center, radius * 1.15, edge)
-	_disc(center + Vector3.RIGHT * direction * 0.012, radius * 1.01, iron)
+	_disc(center + Vector3.RIGHT * 0.012, radius * 1.01, iron)
 	var glass := [
 		_glass(Color(0.21, 0.61, 0.71)), _glass(Color(0.56, 0.26, 0.49)),
 		_glass(Color(0.86, 0.51, 0.20)), _glass(Color(0.28, 0.47, 0.74)),
 	]
-	var face := center + Vector3.RIGHT * direction * 0.025
+	var face := center + Vector3.RIGHT * 0.025
 	for i in 8:
 		var theta := TAU * i / 8.0
 		var vertices := PackedVector3Array([face,
 			face + Vector3(0, cos(theta + 0.033), sin(theta + 0.033)) * radius,
 			face + Vector3(0, cos(theta + PI / 4.0 - 0.033), sin(theta + PI / 4.0 - 0.033)) * radius])
 		_polygon(vertices, glass[i % 4])
-	_disc(face + Vector3.RIGHT * direction * 0.018, radius * 0.22, bronze)
+	_disc(face + Vector3.RIGHT * 0.018, radius * 0.22, bronze)
 
 func _disc(center: Vector3, radius: float, material: Material) -> void:
 	var points := PackedVector3Array()

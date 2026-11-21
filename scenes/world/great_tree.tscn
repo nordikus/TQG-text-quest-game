@@ -2,6 +2,10 @@
 
 [ext_resource type="ArrayMesh" path="res://scenes/world/great_tree_mesh.res" id="1_tree_mesh"]
 [ext_resource type="ConcavePolygonShape3D" path="res://scenes/world/great_tree_trunk_shape.res" id="2_trunk_shape"]
+[ext_resource type="Shader" path="res://scenes/world/great_tree_bark.gdshader" id="3_bark"]
+
+[sub_resource type="ShaderMaterial" id="Mat_FurrowedBark"]
+shader = ExtResource("3_bark")
 
 [node name="GreatTree" type="Node3D"]
 
@@ -9,6 +13,8 @@
 
 [node name="TreeMesh" type="MeshInstance3D" parent="TrunkBody"]
 mesh = ExtResource("1_tree_mesh")
+surface_material_override/0 = SubResource("Mat_FurrowedBark")
+surface_material_override/1 = SubResource("Mat_FurrowedBark")
 
 [node name="TrunkCol" type="CollisionShape3D" parent="TrunkBody"]
 shape = ExtResource("2_trunk_shape")

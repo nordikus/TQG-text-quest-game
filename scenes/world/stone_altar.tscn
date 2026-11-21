@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/world/book_pedestal.tscn" id="1_pedestal"]
+[ext_resource type="Shader" path="res://scenes/world/altar_stone.gdshader" id="2_stone"]
+[ext_resource type="Script" path="res://scripts/world/altar_inlay.gd" id="3_inlay"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mossy_stone"]
-albedo_color = Color(0.32, 0.35, 0.3, 1)
-roughness = 0.9
+[sub_resource type="ShaderMaterial" id="StandardMaterial3D_mossy_stone"]
+shader = ExtResource("2_stone")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_tier1"]
 material = SubResource("StandardMaterial3D_mossy_stone")
@@ -39,27 +40,6 @@ radial_segments = 24
 height = 0.35
 radius = 1.65
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cyan_runes"]
-albedo_color = Color(0.1, 0.75, 0.85, 1)
-emission_enabled = true
-emission = Color(0.15, 0.85, 0.95, 1)
-emission_energy_multiplier = 2.5
-roughness = 0.3
-
-[sub_resource type="TorusMesh" id="TorusMesh_rune_ring1"]
-material = SubResource("StandardMaterial3D_cyan_runes")
-inner_radius = 2.85
-outer_radius = 2.98
-rings = 16
-ring_segments = 24
-
-[sub_resource type="TorusMesh" id="TorusMesh_rune_ring2"]
-material = SubResource("StandardMaterial3D_cyan_runes")
-inner_radius = 2.05
-outer_radius = 2.15
-rings = 16
-ring_segments = 24
-
 [sub_resource type="BoxMesh" id="BoxMesh_base_ramp"]
 material = SubResource("StandardMaterial3D_mossy_stone")
 size = Vector3(1.6, 0.16, 0.9)
@@ -91,10 +71,6 @@ mesh = SubResource("CylinderMesh_tier1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, -0.4)
 shape = SubResource("CylinderShape3D_tier1")
 
-[node name="RuneRing1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
-mesh = SubResource("TorusMesh_rune_ring1")
-
 [node name="Tier2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.525, 0)
 mesh = SubResource("CylinderMesh_tier2")
@@ -103,9 +79,8 @@ mesh = SubResource("CylinderMesh_tier2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.525, -0.4)
 shape = SubResource("CylinderShape3D_tier2")
 
-[node name="RuneRing2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, 0)
-mesh = SubResource("TorusMesh_rune_ring2")
+[node name="StoneInlays" type="MeshInstance3D" parent="."]
+script = ExtResource("3_inlay")
 
 [node name="Tier3" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)

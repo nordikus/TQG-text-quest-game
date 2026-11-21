@@ -22,6 +22,11 @@
 [ext_resource type="Script" path="res://scripts/world/observer_presence.gd" id="31_observer_presence"]
 [ext_resource type="ArrayMesh" path="res://scenes/world/castle/observer_low_poly.res" id="32_observer_mesh"]
 [ext_resource type="AnimationLibrary" path="res://scenes/world/castle/observer_idle.tres" id="33_observer_idle"]
+[ext_resource type="Script" path="res://scripts/world/manuscript_model.gd" id="34_book_model"]
+
+[ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="40_slates"]
+
+[ext_resource type="Script" path="res://scripts/world/bookcase_model.gd" id="41_bookcase"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_Observer"]
 radius = 0.56
@@ -38,9 +43,8 @@ roughness = 0.95
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
 roughness = 0.92
 
-[sub_resource type="StandardMaterial3D" id="Mat_Roof"]
-albedo_color = Color(0.18, 0.22, 0.32, 1.0)
-roughness = 0.65
+[sub_resource type="ShaderMaterial" id="Mat_Roof"]
+shader = ExtResource("40_slates")
 
 [sub_resource type="StandardMaterial3D" id="Mat_Wood"]
 albedo_color = Color(0.38, 0.26, 0.18, 1.0)
@@ -81,10 +85,6 @@ roughness = 0.1
 [sub_resource type="StandardMaterial3D" id="Mat_Paper"]
 albedo_color = Color(0.90, 0.85, 0.72, 1.0)
 roughness = 0.90
-
-[sub_resource type="StandardMaterial3D" id="Mat_Books"]
-albedo_color = Color(0.48, 0.22, 0.18, 1.0)
-roughness = 0.85
 
 [sub_resource type="StandardMaterial3D" id="Mat_StainedGlass"]
 albedo_color = Color(0.25, 0.65, 0.85, 1.0)
@@ -299,29 +299,13 @@ size = Vector3(6.0, 0.26, 4.0)
 [sub_resource type="BoxShape3D" id="Shape_DaisTier3"]
 size = Vector3(6.0, 0.26, 4.0)
 
-[sub_resource type="BoxMesh" id="Mesh_ThroneBase"]
-material = SubResource("Mat_Gold")
-size = Vector3(2.0, 0.8, 1.6)
-
 [sub_resource type="BoxShape3D" id="Shape_ThroneBase"]
-size = Vector3(2.0, 0.8, 1.6)
-
-[sub_resource type="BoxMesh" id="Mesh_ThroneBack"]
-material = SubResource("Mat_Carpet")
-size = Vector3(1.8, 1.8, 0.3)
+size = Vector3(1.97, 0.24, 1.58)
 
 [sub_resource type="BoxShape3D" id="Shape_ThroneBack"]
 size = Vector3(1.8, 1.8, 0.3)
 
-[sub_resource type="BoxMesh" id="Mesh_ThroneArmL"]
-material = SubResource("Mat_Gold")
-size = Vector3(0.25, 0.6, 1.4)
-
 [sub_resource type="BoxShape3D" id="Shape_ThroneArmL"]
-size = Vector3(0.25, 0.6, 1.4)
-
-[sub_resource type="BoxMesh" id="Mesh_ThroneArmR"]
-material = SubResource("Mat_Gold")
 size = Vector3(0.25, 0.6, 1.4)
 
 [sub_resource type="BoxShape3D" id="Shape_ThroneArmR"]
@@ -482,71 +466,19 @@ size = Vector3(0.5, 0.08, 0.4)
 [sub_resource type="BoxShape3D" id="Shape_ChronicleScrollMesh"]
 size = Vector3(0.5, 0.08, 0.4)
 
-[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_0"]
-material = SubResource("Mat_WoodDark")
-size = Vector3(0.8, 3.8, 3.6)
-
 [sub_resource type="BoxShape3D" id="Shape_BookcaseWest_0"]
-size = Vector3(0.8, 3.8, 3.6)
-
-[sub_resource type="BoxMesh" id="Mesh_BooksWest_0"]
-material = SubResource("Mat_Books")
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BooksWest_0"]
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_1"]
-material = SubResource("Mat_WoodDark")
 size = Vector3(0.8, 3.8, 3.6)
 
 [sub_resource type="BoxShape3D" id="Shape_BookcaseWest_1"]
 size = Vector3(0.8, 3.8, 3.6)
 
-[sub_resource type="BoxMesh" id="Mesh_BooksWest_1"]
-material = SubResource("Mat_Books")
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BooksWest_1"]
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_2"]
-material = SubResource("Mat_WoodDark")
-size = Vector3(0.8, 3.8, 3.6)
-
 [sub_resource type="BoxShape3D" id="Shape_BookcaseWest_2"]
-size = Vector3(0.8, 3.8, 3.6)
-
-[sub_resource type="BoxMesh" id="Mesh_BooksWest_2"]
-material = SubResource("Mat_Books")
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BooksWest_2"]
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxMesh" id="Mesh_BookcaseWest_3"]
-material = SubResource("Mat_WoodDark")
 size = Vector3(0.8, 3.8, 3.6)
 
 [sub_resource type="BoxShape3D" id="Shape_BookcaseWest_3"]
 size = Vector3(0.8, 3.8, 3.6)
 
-[sub_resource type="BoxMesh" id="Mesh_BooksWest_3"]
-material = SubResource("Mat_Books")
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxShape3D" id="Shape_BooksWest_3"]
-size = Vector3(0.5, 3.4, 3.2)
-
-[sub_resource type="BoxMesh" id="Mesh_AlcoveShelf_1"]
-material = SubResource("Mat_WoodDark")
-size = Vector3(2.85, 3.8, 0.8)
-
 [sub_resource type="BoxShape3D" id="Shape_AlcoveShelf_1"]
-size = Vector3(2.85, 3.8, 0.8)
-
-[sub_resource type="BoxMesh" id="Mesh_AlcoveShelf_2"]
-material = SubResource("Mat_WoodDark")
 size = Vector3(2.85, 3.8, 0.8)
 
 [sub_resource type="BoxShape3D" id="Shape_AlcoveShelf_2"]
@@ -573,14 +505,6 @@ size = Vector3(4.8, 0.02, 11.0)
 [sub_resource type="BoxShape3D" id="Shape_LibraryCarpet"]
 size = Vector3(4.8, 0.02, 11.0)
 
-[sub_resource type="StandardMaterial3D" id="Mat_QuillGlow"]
-albedo_color = Color(0.88, 0.45, 0.98, 1.0)
-metallic = 0.4
-roughness = 0.25
-emission_enabled = true
-emission = Color(0.85, 0.35, 0.98, 1.0)
-emission_energy_multiplier = 2.8
-
 [sub_resource type="CylinderMesh" id="Mesh_ThronePedestalPillar"]
 material = SubResource("Mat_StoneDark")
 top_radius = 0.38
@@ -590,14 +514,6 @@ height = 0.9
 [sub_resource type="CylinderShape3D" id="Shape_ThronePedestalCol"]
 height = 1.3
 radius = 0.5
-
-[sub_resource type="BoxMesh" id="Mesh_ThroneBook"]
-material = SubResource("Mat_Gold")
-size = Vector3(0.55, 0.08, 0.42)
-
-[sub_resource type="PrismMesh" id="Mesh_GreatQuillMesh"]
-material = SubResource("Mat_QuillGlow")
-size = Vector3(0.12, 0.55, 0.03)
 
 [sub_resource type="BoxShape3D" id="Shape_GreatQuillCol"]
 size = Vector3(0.5, 0.6, 0.5)
@@ -1302,10 +1218,7 @@ libraries = {
 }
 
 [node name="ThroneBase" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.45, -10.2)
-
-[node name="Mesh" type="MeshInstance3D" parent="ThroneBase"]
-mesh = SubResource("Mesh_ThroneBase")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.61, -10.2)
 
 [node name="Col" type="CollisionShape3D" parent="ThroneBase"]
 shape = SubResource("Shape_ThroneBase")
@@ -1313,26 +1226,17 @@ shape = SubResource("Shape_ThroneBase")
 [node name="ThroneBack" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.75, -10.9)
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneBack"]
-mesh = SubResource("Mesh_ThroneBack")
-
 [node name="Col" type="CollisionShape3D" parent="ThroneBack"]
 shape = SubResource("Shape_ThroneBack")
 
 [node name="ThroneArmL" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 1.75, -10.2)
 
-[node name="Mesh" type="MeshInstance3D" parent="ThroneArmL"]
-mesh = SubResource("Mesh_ThroneArmL")
-
 [node name="Col" type="CollisionShape3D" parent="ThroneArmL"]
 shape = SubResource("Shape_ThroneArmL")
 
 [node name="ThroneArmR" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 1.75, -10.2)
-
-[node name="Mesh" type="MeshInstance3D" parent="ThroneArmR"]
-mesh = SubResource("Mesh_ThroneArmR")
 
 [node name="Col" type="CollisionShape3D" parent="ThroneArmR"]
 shape = SubResource("Shape_ThroneArmR")
@@ -1609,60 +1513,64 @@ shape = SubResource("Shape_ChronicleScrollMesh")
 [node name="BookcaseWest_0" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, -10.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_0"]
-mesh = SubResource("Mesh_BookcaseWest_0")
+[node name="Cabinet" type="Node3D" parent="BookcaseWest_0"]
+position = Vector3(0, -1.89, 0)
+rotation = Vector3(0, 0, 0)
+script = ExtResource("41_bookcase")
+size = Vector3(0.78, 3.76, 3.52)
+layout_seed = -110
 
 [node name="Col" type="CollisionShape3D" parent="BookcaseWest_0"]
 shape = SubResource("Shape_BookcaseWest_0")
 
-[node name="BooksMesh_0" type="MeshInstance3D" parent="BookcaseWest_0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
-mesh = SubResource("Mesh_BooksWest_0")
-
 [node name="BookcaseWest_1" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, -4.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_1"]
-mesh = SubResource("Mesh_BookcaseWest_1")
+[node name="Cabinet" type="Node3D" parent="BookcaseWest_1"]
+position = Vector3(0, -1.89, 0)
+rotation = Vector3(0, 0, 0)
+script = ExtResource("41_bookcase")
+size = Vector3(0.78, 3.76, 3.52)
+layout_seed = -44
 
 [node name="Col" type="CollisionShape3D" parent="BookcaseWest_1"]
 shape = SubResource("Shape_BookcaseWest_1")
 
-[node name="BooksMesh_1" type="MeshInstance3D" parent="BookcaseWest_1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
-mesh = SubResource("Mesh_BooksWest_1")
-
 [node name="BookcaseWest_2" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, 4.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_2"]
-mesh = SubResource("Mesh_BookcaseWest_2")
+[node name="Cabinet" type="Node3D" parent="BookcaseWest_2"]
+position = Vector3(0, -1.89, 0)
+rotation = Vector3(0, 0, 0)
+script = ExtResource("41_bookcase")
+size = Vector3(0.78, 3.76, 3.52)
+layout_seed = 44
 
 [node name="Col" type="CollisionShape3D" parent="BookcaseWest_2"]
 shape = SubResource("Shape_BookcaseWest_2")
 
-[node name="BooksMesh_2" type="MeshInstance3D" parent="BookcaseWest_2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
-mesh = SubResource("Mesh_BooksWest_2")
-
 [node name="BookcaseWest_3" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2, 8.22, 10.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="BookcaseWest_3"]
-mesh = SubResource("Mesh_BookcaseWest_3")
+[node name="Cabinet" type="Node3D" parent="BookcaseWest_3"]
+position = Vector3(0, -1.89, 0)
+rotation = Vector3(0, 0, 0)
+script = ExtResource("41_bookcase")
+size = Vector3(0.78, 3.76, 3.52)
+layout_seed = 110
 
 [node name="Col" type="CollisionShape3D" parent="BookcaseWest_3"]
 shape = SubResource("Shape_BookcaseWest_3")
 
-[node name="BooksMesh_3" type="MeshInstance3D" parent="BookcaseWest_3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.0, 0.0)
-mesh = SubResource("Mesh_BooksWest_3")
-
 [node name="AlcoveShelf_1" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.55, 8.22, -6.5)
 
-[node name="Mesh" type="MeshInstance3D" parent="AlcoveShelf_1"]
-mesh = SubResource("Mesh_AlcoveShelf_1")
+[node name="Cabinet" type="Node3D" parent="AlcoveShelf_1"]
+position = Vector3(0, -1.89, 0)
+rotation = Vector3(0, -1.5707963, 0)
+script = ExtResource("41_bookcase")
+size = Vector3(0.76, 3.76, 2.8)
+layout_seed = 3
 
 [node name="Col" type="CollisionShape3D" parent="AlcoveShelf_1"]
 shape = SubResource("Shape_AlcoveShelf_1")
@@ -1670,8 +1578,12 @@ shape = SubResource("Shape_AlcoveShelf_1")
 [node name="AlcoveShelf_2" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.7, 8.22, 13.9)
 
-[node name="Mesh" type="MeshInstance3D" parent="AlcoveShelf_2"]
-mesh = SubResource("Mesh_AlcoveShelf_2")
+[node name="Cabinet" type="Node3D" parent="AlcoveShelf_2"]
+position = Vector3(0, -1.89, 0)
+rotation = Vector3(0, 1.5707963, 0)
+script = ExtResource("41_bookcase")
+size = Vector3(0.76, 3.76, 2.8)
+layout_seed = 121
 
 [node name="Col" type="CollisionShape3D" parent="AlcoveShelf_2"]
 shape = SubResource("Shape_AlcoveShelf_2")
@@ -1747,9 +1659,11 @@ mesh = SubResource("Mesh_ThronePedestalPillar")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.65, 0.0)
 shape = SubResource("Shape_ThronePedestalCol")
 
-[node name="ThroneBookMesh" type="MeshInstance3D" parent="ThroneBookPedestal"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0.0, 0.95, -0.05)
-mesh = SubResource("Mesh_ThroneBook")
+[node name="ThroneBookMesh" type="Node3D" parent="ThroneBookPedestal"]
+position = Vector3(0, 0.918, -0.02)
+rotation = Vector3(0.08, -0.12, 0)
+scale = Vector3(1.14, 1.14, 1.14)
+script = ExtResource("34_book_model")
 
 [node name="GreatQuillPickup" type="StaticBody3D" parent="ThroneBookPedestal"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0.0, 1.0, 0.0)
@@ -1757,9 +1671,11 @@ visible = false
 script = ExtResource("2_pickup")
 item_id = "great_quill"
 
-[node name="QuillMesh" type="MeshInstance3D" parent="ThroneBookPedestal/GreatQuillPickup"]
-transform = Transform3D(0.866, -0.5, 0, 0.5, 0.866, 0, 0, 0, 1, 0.0, 0.08, 0.0)
-mesh = SubResource("Mesh_GreatQuillMesh")
+[node name="QuillMesh" type="Node3D" parent="ThroneBookPedestal/GreatQuillPickup"]
+position = Vector3(0, 0.08, 0)
+rotation = Vector3(0, 0, -0.47)
+script = ExtResource("34_book_model")
+feather = true
 
 [node name="Col" type="CollisionShape3D" parent="ThroneBookPedestal/GreatQuillPickup"]
 shape = SubResource("Shape_GreatQuillCol")

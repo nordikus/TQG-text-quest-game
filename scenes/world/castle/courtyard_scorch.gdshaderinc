@@ -35,8 +35,12 @@ vec3 apply_courtyard_scorch(vec3 color, vec2 p, float relief) {
 	float repairs = 1.0 - smoothstep(2.0, 7.2, length((p - vec2(-21.1, -123.5)) * vec2(1.05, 0.72)) + cloud);
 	float supplies = 1.0 - smoothstep(1.6, 4.4,
 		distance_to_scorch(p, vec2(-24.8, -106.9), vec2(-15.60, -118.70)) + 1.2 * cloud);
+	float drift = (1.0 - smoothstep(0.4, 5.2, distance_to_scorch(p,
+		vec2(-1.5, -98.0), vec2(-7.0, -120.8)) + 1.18 * cloud));
+	drift *= 0.37 + 0.68 * smoothstep(0.25, 0.78, cloud);
 	strength = max(strength, 0.97 * repairs);
 	strength = max(strength, 0.94 * supplies);
+	strength = max(strength, drift);
 	vec3 ash = mix(vec3(0.024, 0.021, 0.018), vec3(0.113, 0.097, 0.080), cloud * flecks);
 	return mix(color, mix(ash, ash * 1.32, relief), strength * mix(0.9, 0.75, relief));
 }

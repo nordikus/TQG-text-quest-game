@@ -40,6 +40,41 @@ func _ready() -> void:
 
 	_cylinder("Cornice", 3.45, 3.39, 0.28, eaves - 0.05, trim)
 	_cylinder("SlateRoof", 0.08, 3.59, 3.52, eaves + 0.09, roof)
+	_watch_station()
+
+func _watch_station() -> void:
+	var oak := StandardMaterial3D.new()
+	oak.albedo_color = Color(0.27, 0.18, 0.105)
+	oak.roughness = 0.91
+	_board(Vector3(2.09, 15.14, 0.16), Vector3(0.53, 0.14, 1.82), oak)
+	for z in [-0.51, 0.83]:
+		_board(Vector3(2.09, 14.945, z), Vector3(0.43, 0.36, 0.14), oak)
+	_board(Vector3(2.263, 16.0, 0.32), Vector3(0.58, 0.138, 1.06), oak)
+	var bronze := StandardMaterial3D.new()
+	bronze.albedo_color = Color(0.55, 0.32, 0.13)
+	bronze.metallic = 0.57
+	bronze.roughness = 0.76
+	var lantern := StandardMaterial3D.new()
+	lantern.albedo_color = Color(0.96, 0.67, 0.31)
+	lantern.emission_enabled = true
+	lantern.emission = Color(1.0, 0.54, 0.14)
+	lantern.emission_energy_multiplier = 0.53
+	_board(Vector3(2.07, 16.22, 0.34), Vector3(0.15, 0.27, 0.16), lantern)
+	for y in [16.076, 16.362]:
+		_board(Vector3(2.07, y, 0.34), Vector3(0.21, 0.044, 0.21), bronze)
+	_board(Vector3(2.07, 16.38, 0.34), Vector3(0.09, 0.03, 0.024), bronze)
+	var light := OmniLight3D.new()
+	light.position = Vector3(1.89, 16.24, 0.34)
+	light.light_color = Color(0.99, 0.72, 0.40)
+	light.light_energy = 0.72
+	light.omni_range = 4.2
+	add_child(light)
+
+func _board(at: Vector3, size: Vector3, material: Material) -> void:
+	var plank := BoxMesh.new()
+	plank.size = size
+	plank.material = material
+	_visual(plank).position = at
 
 func _arrow_slit(start: float, finish: float, eaves: float) -> void:
 	const WINDOW_BOTTOM := 16.47

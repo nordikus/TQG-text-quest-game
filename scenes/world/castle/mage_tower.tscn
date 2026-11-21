@@ -19,6 +19,11 @@
 
 [ext_resource type="Script" path="res://scripts/world/castle_furnishing.gd" id="26_furnishing"]
 
+[ext_resource type="Script" path="res://scripts/world/crystal_model.gd" id="30_crystal_model"]
+
+[ext_resource type="Script" path="res://scripts/world/bookcase_model.gd" id="41_bookcase"]
+[ext_resource type="Script" path="res://scripts/world/manuscript_model.gd" id="42_journal"]
+
 [sub_resource type="StandardMaterial3D" id="Mat_Stone"]
 albedo_color = Color(0.40, 0.42, 0.44, 1.0)
 roughness = 0.90
@@ -214,23 +219,8 @@ radial_segments = 16
 radius = 0.45
 height = 20.4
 
-[sub_resource type="BoxMesh" id="Mesh_ArcaneAltarBase"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(1.6, 0.8, 1.6)
-
 [sub_resource type="BoxShape3D" id="Shape_ArcaneAltarBase"]
 size = Vector3(1.6, 0.8, 1.6)
-
-[sub_resource type="PrismMesh" id="Mesh_PrismMesh_crystal"]
-material = SubResource("Mat_Crystal")
-size = Vector3(1.0, 2.0, 1.0)
-
-[sub_resource type="BoxShape3D" id="Shape_PrismMesh_crystal"]
-size = Vector3(1.0, 2.0, 1.0)
-
-[sub_resource type="PrismMesh" id="Mesh_ShardMesh"]
-material = SubResource("Mat_Crystal")
-size = Vector3(0.25, 0.5, 0.25)
 
 [sub_resource type="BoxShape3D" id="Shape_ShardMesh"]
 size = Vector3(0.25, 0.5, 0.25)
@@ -242,16 +232,8 @@ size = Vector3(0.8, 1.2, 0.8)
 [sub_resource type="BoxShape3D" id="Shape_AstromancerLectern"]
 size = Vector3(0.8, 1.2, 0.8)
 
-[sub_resource type="BoxMesh" id="Mesh_JournalMesh"]
-material = SubResource("Mat_Paper")
-size = Vector3(0.45, 0.1, 0.35)
-
 [sub_resource type="BoxShape3D" id="Shape_JournalMesh"]
 size = Vector3(0.45, 0.1, 0.35)
-
-[sub_resource type="BoxMesh" id="Mesh_ObservatoryBookcase"]
-material = SubResource("Mat_WoodDark")
-size = Vector3(0.8, 3.2, 2.2)
 
 [sub_resource type="BoxShape3D" id="Shape_ObservatoryBookcase"]
 size = Vector3(0.8, 3.2, 2.2)
@@ -718,15 +700,14 @@ omni_range = 7.0
 [node name="ArcaneAltarBase" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 20.6, 0.0)
 
-[node name="Mesh" type="MeshInstance3D" parent="ArcaneAltarBase"]
-mesh = SubResource("Mesh_ArcaneAltarBase")
-
 [node name="Col" type="CollisionShape3D" parent="ArcaneAltarBase"]
 shape = SubResource("Shape_ArcaneAltarBase")
 
 [node name="MagicCrystal" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.46669, -0.46669, 0, 0.46669, 0.46669, 0, 0, 0, 0.66, 0, 22.15, 0)
-mesh = SubResource("Mesh_PrismMesh_crystal")
+position = Vector3(0, 21.73, 0)
+rotation = Vector3(0.12, 0.0, -0.18)
+scale = Vector3(0.69, 0.69, 0.69)
+script = ExtResource("30_crystal_model")
 
 [node name="CrystalLight" type="OmniLight3D" parent="MagicCrystal"]
 light_color = Color(0.25, 0.85, 0.98, 1.0)
@@ -735,13 +716,15 @@ shadow_enabled = true
 omni_range = 10.5
 
 [node name="StarCrystalShard" type="StaticBody3D" parent="."]
-position = Vector3(0.75, 21.26, 0.54)
+position = Vector3(0.75, 21.41, 0.54)
 script = ExtResource("5_pickup")
 item_id = "star_crystal_shard"
 restore_on_rewrite = true
 
 [node name="Mesh" type="MeshInstance3D" parent="StarCrystalShard"]
-mesh = SubResource("Mesh_ShardMesh")
+rotation = Vector3(0.12, 0.29, -0.21)
+scale = Vector3(0.26, 0.30, 0.26)
+script = ExtResource("30_crystal_model")
 
 [node name="Col" type="CollisionShape3D" parent="StarCrystalShard"]
 shape = SubResource("Shape_ShardMesh")
@@ -756,12 +739,15 @@ mesh = SubResource("Mesh_AstromancerLectern")
 shape = SubResource("Shape_AstromancerLectern")
 
 [node name="AstromancerJournal" type="StaticBody3D" parent="."]
-position = Vector3(-2.4, 1.15, 1.85)
+position = Vector3(-2.4, 1.125, 1.71)
+rotation = Vector3(0, 0.28, 0)
 script = ExtResource("5_pickup")
 item_id = "astromancer_journal"
 
-[node name="Mesh" type="MeshInstance3D" parent="AstromancerJournal"]
-mesh = SubResource("Mesh_JournalMesh")
+[node name="Manuscript" type="Node3D" parent="AstromancerJournal"]
+position = Vector3(0, -0.014, 0)
+scale = Vector3(0.79, 0.79, 0.79)
+script = ExtResource("42_journal")
 
 [node name="Col" type="CollisionShape3D" parent="AstromancerJournal"]
 shape = SubResource("Shape_JournalMesh")
@@ -769,8 +755,12 @@ shape = SubResource("Shape_JournalMesh")
 [node name="ObservatoryBookcase" type="StaticBody3D" parent="."]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -1.35, 21.6, -3.12)
 
-[node name="Mesh" type="MeshInstance3D" parent="ObservatoryBookcase"]
-mesh = SubResource("Mesh_ObservatoryBookcase")
+[node name="Cabinet" type="Node3D" parent="ObservatoryBookcase"]
+position = Vector3(0, -1.46, 0)
+rotation = Vector3(0, 3.14159265, 0)
+script = ExtResource("41_bookcase")
+size = Vector3(0.76, 3.07, 2.14)
+layout_seed = 178
 
 [node name="Col" type="CollisionShape3D" parent="ObservatoryBookcase"]
 shape = SubResource("Shape_ObservatoryBookcase")
@@ -925,6 +915,10 @@ mesh = SubResource("Mesh_LibraryBridgeRoof")
 
 [node name="Col" type="CollisionShape3D" parent="CoveredBridge/LibraryBridgeRoof"]
 shape = SubResource("Shape_LibraryBridgeRoof")
+
+[node name="BridgeFurniture" type="Node3D" parent="CoveredBridge/IntactBridgeSpan"]
+script = ExtResource("26_furnishing")
+place = 8
 
 [node name="CentralBridgeDeck" type="StaticBody3D" parent="CoveredBridge/IntactBridgeSpan"]
 position = Vector3(0, 6.15, -15.600000000000001)
@@ -1121,6 +1115,10 @@ mesh = SubResource("Mesh_ObservatoryEntryLanding")
 
 [node name="Col" type="CollisionShape3D" parent="ObservatoryEntryLanding"]
 shape = SubResource("Shape_ObservatoryEntryLanding")
+
+[node name="ObservatoryFurniture" type="Node3D" parent="."]
+script = ExtResource("26_furnishing")
+place = 7
 
 [node name="AstronomicalRoof" type="Node3D" parent="."]
 script = ExtResource("17_observatory")

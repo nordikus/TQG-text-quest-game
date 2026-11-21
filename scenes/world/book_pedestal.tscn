@@ -1,40 +1,27 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/world/book_pedestal.gd" id="1_bp"]
+[ext_resource type="Script" path="res://scripts/world/manuscript_model.gd" id="2_book"]
+[ext_resource type="Shader" path="res://scenes/world/altar_stone.gdshader" id="3_stone"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_pedestal"]
 height = 1.3
 radius = 0.5
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
-albedo_color = Color(0.28, 0.3, 0.32, 1)
-roughness = 0.85
+[sub_resource type="ShaderMaterial" id="StandardMaterial3D_stone"]
+shader = ExtResource("3_stone")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_column"]
 material = SubResource("StandardMaterial3D_stone")
 top_radius = 0.35
 bottom_radius = 0.45
 height = 1.0
+radial_segments = 9
+rings = 0
 
 [sub_resource type="BoxMesh" id="BoxMesh_top"]
 material = SubResource("StandardMaterial3D_stone")
-size = Vector3(0.7, 0.1, 0.6)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cover"]
-albedo_color = Color(0.45, 0.15, 0.15, 1)
-roughness = 0.6
-
-[sub_resource type="BoxMesh" id="BoxMesh_cover"]
-material = SubResource("StandardMaterial3D_cover")
-size = Vector3(0.46, 0.04, 0.36)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pages"]
-albedo_color = Color(0.92, 0.87, 0.72, 1)
-roughness = 0.9
-
-[sub_resource type="BoxMesh" id="BoxMesh_pages"]
-material = SubResource("StandardMaterial3D_pages")
-size = Vector3(0.42, 0.05, 0.32)
+size = Vector3(0.7, 0.15, 0.6)
 
 [node name="BookPedestal" type="StaticBody3D"]
 collision_layer = 1
@@ -53,14 +40,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
 mesh = SubResource("BoxMesh_top")
 
 [node name="BookGroup" type="Node3D" parent="."]
-transform = Transform3D(0.965926, -0.0669873, 0.25, 0, 0.965926, 0.258819, -0.258819, -0.25, 0.933013, 0, 1.13, 0)
-
-[node name="CoverMesh" type="MeshInstance3D" parent="BookGroup"]
-mesh = SubResource("BoxMesh_cover")
-
-[node name="PagesMesh" type="MeshInstance3D" parent="BookGroup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
-mesh = SubResource("BoxMesh_pages")
+position = Vector3(0, 1.148, -0.018)
+rotation = Vector3(-0.12, 0.16, 0)
+script = ExtResource("2_book")
 
 [node name="GlowLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)

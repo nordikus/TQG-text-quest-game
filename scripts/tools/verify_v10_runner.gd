@@ -51,6 +51,7 @@ func _verify() -> void:
 	_check_initial()
 	_check_rooms()
 	_check_watchtower_passages()
+	await _verify_chapel_door()
 
 	var ash_first := OS.get_cmdline_user_args().has("ash-first")
 	if ash_first:
@@ -276,6 +277,10 @@ func _remnant_smoke() -> CPUParticles3D:
 	return _world.castle_ash.get_node("RemnantFires/Embers5/Smoke")
 
 func _check_burned_placements(burned: bool) -> void:
+	var green_floor := _world.corridor_forest.get_node("FlammableGrass") as MultiMeshInstance3D
+	var burned_floor := _world.charred_forest_zone.get_node("CharcoalAndBark") as MultiMeshInstance3D
+	_check(green_floor.is_visible_in_tree() == not burned and burned_floor.is_visible_in_tree() == burned,
+		"The forest floor swaps green undergrowth and charcoal with the fire state.")
 	var clear := true
 	var variants_match := true
 	for living: Node3D in _world.corridor_forest.get_node("HandPlanted").get_children():
@@ -312,6 +317,37 @@ func _check_rooms() -> void:
 	var bedroom := castle.get_node("MageTower/AstromancerWorkshop/AstromancerBed") as StaticBody3D
 	_check(bedroom != null and not (bedroom.get_child(0) as CollisionShape3D).disabled,
 		"The astromancer has a bed with collision beside the workshop.")
+
+func _verify_chapel_door() -> void:
+	var chapel := _level.get_node("CastleFacade/ChapelBuilding") as Node3D
+	var door := chapel.get_node("ChapelDoor") as InteractableDoor
+	var left := door.left_wing
+	var right := door.right_wing
+	var outside_left := chapel.to_global(Vector3(9.4, 1.6, -0.52))
+	var outside_right := chapel.to_global(Vector3(9.4, 1.6, 0.52))
+	var inside_left := chapel.to_global(Vector3(4.8, 1.6, -0.52))
+	var inside_right := chapel.to_global(Vector3(4.8, 1.6, 0.52))
+	_check(_ray(outside_left, inside_left).get("collider") == left
+		and _ray(inside_right, outside_right).get("collider") == right,
+		"Both closed chapel leaves sit in the doorway and can be targeted from either side.")
+	door.interact()
+	await get_tree().create_timer(0.78).timeout
+	var left_tip := chapel.to_local(left.to_global(Vector3(1.3, 0, 0)))
+	var right_tip := chapel.to_local(right.to_global(Vector3(-1.3, 0, 0)))
+	_check(door.is_open and left_tip.x > 8.25 and right_tip.x > 8.25
+		and _ray(outside_left, inside_left).is_empty() and _ray(inside_right, outside_right).is_empty(),
+		"Both leaves swing into the yard and clear the chapel aisle.")
+	door.interact()
+	await get_tree().create_timer(0.78).timeout
+	_check(not door.is_open and _ray(outside_left, inside_left).get("collider") == left
+		and _ray(inside_right, outside_right).get("collider") == right,
+		"The chapel leaves close back into the door frame.")
+	var altar := chapel.get_node("ChapelNote") as PickupItem
+	var observer_model := (_observer.get_node("Model") as MeshInstance3D).mesh
+	var chapel_has_observer := false
+	for part: MeshInstance3D in chapel.find_children("*", "MeshInstance3D", true, false):
+		chapel_has_observer = chapel_has_observer or part.mesh == observer_model
+	_check(not chapel_has_observer and altar.visible, "The chapel keeps its note and contains no Observer model.")
 
 func _check_watchtower_passages() -> void:
 	var walls := _level.get_node("CastleFacade/CourtyardWalls")

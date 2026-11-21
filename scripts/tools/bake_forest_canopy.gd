@@ -192,190 +192,119 @@ func _init() -> void:
 	ResourceSaver.save(mm_corr_oaks, "res://scenes/world/corridor_forest_oaks.res")
 	ResourceSaver.save(mm_undergrowth, "res://scenes/world/forest_canopy_undergrowth.res")
 
-	print("Bake completed successfully! All 5 MultiMesh resources saved.")
+	ResourceSaver.save(mm_pers_pines.mesh, "res://scenes/world/pine_model.res", ResourceSaver.FLAG_COMPRESS)
+	ResourceSaver.save(mm_pers_oaks.mesh, "res://scenes/world/deciduous_model.res", ResourceSaver.FLAG_COMPRESS)
+	print("Saved the five grove batches and two individual tree models.")
 	quit(0)
 
 func _create_pine_multimesh(transforms: Array[Transform3D]) -> MultiMesh:
-	var bark_mat := StandardMaterial3D.new()
-	bark_mat.albedo_color = Color(0.28, 0.18, 0.12)
-	bark_mat.roughness = 0.9
+	var bark := _surface()
+	_stem(bark, Vector3(0, -0.055, 0), Vector3(0.04, 1.48, 0.02), 0.41, 0.29, 7)
+	_stem(bark, Vector3(0.04, 1.43, 0.02), Vector3(-0.17, 3.68, 0.08), 0.30, 0.085, 6)
+	_stem(bark, Vector3(0.03, 1.25, 0), Vector3(0.76, 1.74, -0.15), 0.14, 0.047, 5)
+	_stem(bark, Vector3(0.02, 1.53, 0.02), Vector3(-0.83, 2.0, 0.26), 0.12, 0.041, 5)
+	_root_flares(bark, 0.74)
 
-	var leaves_mat := StandardMaterial3D.new()
-	leaves_mat.albedo_color = Color(0.16, 0.38, 0.19)
-	leaves_mat.roughness = 0.85
-
-	var st_bark := SurfaceTool.new()
-	st_bark.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var trunk := CylinderMesh.new()
-	trunk.top_radius = 0.24
-	trunk.bottom_radius = 0.40
-	trunk.height = 2.4
-	st_bark.append_from(trunk, 0, Transform3D(Basis(), Vector3(0.0, 1.2, 0.0)))
-	var trunk_mesh = st_bark.commit()
-
-	var st_foliage := SurfaceTool.new()
-	st_foliage.begin(Mesh.PRIMITIVE_TRIANGLES)
-	# 4 dense tiers extending down to Y = 1.0
-	var l0 := CylinderMesh.new()
-	l0.top_radius = 0.35; l0.bottom_radius = 1.8; l0.height = 1.6; l0.radial_segments = 7
-	st_foliage.append_from(l0, 0, Transform3D(Basis(), Vector3(0.0, 1.7, 0.0)))
-
-	var l1 := CylinderMesh.new()
-	l1.top_radius = 0.25; l1.bottom_radius = 1.45; l1.height = 1.5; l1.radial_segments = 7
-	st_foliage.append_from(l1, 0, Transform3D(Basis(), Vector3(0.0, 2.7, 0.0)))
-
-	var l2 := CylinderMesh.new()
-	l2.top_radius = 0.15; l2.bottom_radius = 1.1; l2.height = 1.4; l2.radial_segments = 7
-	st_foliage.append_from(l2, 0, Transform3D(Basis(), Vector3(0.0, 3.6, 0.0)))
-
-	var l3 := CylinderMesh.new()
-	l3.top_radius = 0.0; l3.bottom_radius = 0.75; l3.height = 1.3; l3.radial_segments = 7
-	st_foliage.append_from(l3, 0, Transform3D(Basis(), Vector3(0.0, 4.5, 0.0)))
-	var fol_mesh = st_foliage.commit()
-
-	var combined := ArrayMesh.new()
-	combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, trunk_mesh.surface_get_arrays(0))
-	combined.surface_set_material(0, bark_mat)
-	combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, fol_mesh.surface_get_arrays(0))
-	combined.surface_set_material(1, leaves_mat)
-
-	var mm := MultiMesh.new()
-	mm.transform_format = MultiMesh.TRANSFORM_3D
-	mm.mesh = combined
-	mm.instance_count = transforms.size()
-
-	var buf := PackedFloat32Array()
-	buf.resize(transforms.size() * 12)
-	for i in range(transforms.size()):
-		var offset = i * 12
-		var t = transforms[i]
-		buf[offset + 0] = t.basis.x.x
-		buf[offset + 1] = t.basis.y.x
-		buf[offset + 2] = t.basis.z.x
-		buf[offset + 3] = t.origin.x
-
-		buf[offset + 4] = t.basis.x.y
-		buf[offset + 5] = t.basis.y.y
-		buf[offset + 6] = t.basis.z.y
-		buf[offset + 7] = t.origin.y
-
-		buf[offset + 8] = t.basis.x.z
-		buf[offset + 9] = t.basis.y.z
-		buf[offset + 10] = t.basis.z.z
-		buf[offset + 11] = t.origin.z
-
-	mm.buffer = buf
-	return mm
+	var needles := _surface()
+	_bough(needles, Vector3(0.06, 1.73, 0.02), 1.77, 0.37, 1.58, 0.01)
+	_bough(needles, Vector3(-0.13, 2.65, 0.16), 1.49, 0.31, 1.62, 0.24)
+	_bough(needles, Vector3(-0.11, 3.57, 0.06), 1.08, 0.18, 1.59, 0.49)
+	_bough(needles, Vector3(-0.26, 4.44, 0.09), 0.72, 0.0, 1.42, 0.76)
+	return _multimesh(_tree_mesh(bark, needles, Color(0.13, 0.29, 0.19), Color(0.36, 0.49, 0.26)), transforms)
 
 func _create_oak_multimesh(transforms: Array[Transform3D]) -> MultiMesh:
-	var bark_mat := StandardMaterial3D.new()
-	bark_mat.albedo_color = Color(0.32, 0.22, 0.15)
-	bark_mat.roughness = 0.9
+	var bark := _surface()
+	_stem(bark, Vector3(0, -0.055, 0), Vector3(-0.06, 1.88, 0.09), 0.52, 0.35, 7)
+	_stem(bark, Vector3(-0.07, 1.80, 0.09), Vector3(0.06, 4.13, 0.16), 0.32, 0.11, 6)
+	_stem(bark, Vector3(-0.08, 1.70, 0.07), Vector3(-1.09, 3.39, -0.48), 0.22, 0.096, 6)
+	_stem(bark, Vector3(-0.05, 2.22, 0.15), Vector3(1.17, 3.32, 0.45), 0.23, 0.091, 6)
+	_stem(bark, Vector3(-0.31, 2.28, -0.08), Vector3(-0.74, 2.85, 0.88), 0.13, 0.053, 5)
+	_root_flares(bark, 1.0)
 
-	var leaves_mat := StandardMaterial3D.new()
-	leaves_mat.albedo_color = Color(0.28, 0.50, 0.22)
-	leaves_mat.roughness = 0.8
-
-	var st_bark := SurfaceTool.new()
-	st_bark.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var trunk := CylinderMesh.new()
-	trunk.top_radius = 0.32
-	trunk.bottom_radius = 0.52
-	trunk.height = 3.2
-	trunk.radial_segments = 7
-	st_bark.append_from(trunk, 0, Transform3D(Basis(), Vector3(0.0, 1.6, 0.0)))
-	var trunk_mesh = st_bark.commit()
-
-	var st_foliage := SurfaceTool.new()
-	st_foliage.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var c0 := SphereMesh.new()
-	c0.radius = 1.7; c0.height = 2.4; c0.radial_segments = 7; c0.rings = 5
-	st_foliage.append_from(c0, 0, Transform3D(Basis(), Vector3(0.0, 2.7, 0.0)))
-
-	var c1 := SphereMesh.new()
-	c1.radius = 1.4; c1.height = 2.0; c1.radial_segments = 7; c1.rings = 5
-	st_foliage.append_from(c1, 0, Transform3D(Basis(), Vector3(0.7, 3.8, 0.4)))
-
-	var c2 := SphereMesh.new()
-	c2.radius = 1.4; c2.height = 2.0; c2.radial_segments = 6; c2.rings = 4
-	st_foliage.append_from(c2, 0, Transform3D(Basis(), Vector3(-0.7, 3.8, -0.4)))
-
-	var c3 := SphereMesh.new()
-	c3.radius = 1.2; c3.height = 1.8; c3.radial_segments = 6; c3.rings = 4
-	st_foliage.append_from(c3, 0, Transform3D(Basis(), Vector3(0.1, 4.6, 0.1)))
-	var fol_mesh = st_foliage.commit()
-
-	var combined := ArrayMesh.new()
-	combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, trunk_mesh.surface_get_arrays(0))
-	combined.surface_set_material(0, bark_mat)
-	combined.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, fol_mesh.surface_get_arrays(0))
-	combined.surface_set_material(1, leaves_mat)
-
-	var mm := MultiMesh.new()
-	mm.transform_format = MultiMesh.TRANSFORM_3D
-	mm.mesh = combined
-	mm.instance_count = transforms.size()
-
-	var buf := PackedFloat32Array()
-	buf.resize(transforms.size() * 12)
-	for i in range(transforms.size()):
-		var offset = i * 12
-		var t = transforms[i]
-		buf[offset + 0] = t.basis.x.x
-		buf[offset + 1] = t.basis.y.x
-		buf[offset + 2] = t.basis.z.x
-		buf[offset + 3] = t.origin.x
-
-		buf[offset + 4] = t.basis.x.y
-		buf[offset + 5] = t.basis.y.y
-		buf[offset + 6] = t.basis.z.y
-		buf[offset + 7] = t.origin.y
-
-		buf[offset + 8] = t.basis.x.z
-		buf[offset + 9] = t.basis.y.z
-		buf[offset + 10] = t.basis.z.z
-		buf[offset + 11] = t.origin.z
-
-	mm.buffer = buf
-	return mm
+	var leaves := _surface()
+	_crown(leaves, Vector3(-1.12, 3.42, -0.32), Vector3(1.29, 0.71, 1.02), 0.46)
+	_crown(leaves, Vector3(1.10, 3.44, 0.38), Vector3(1.45, 0.87, 1.20), 0.8)
+	_crown(leaves, Vector3(-0.62, 3.07, 1.02), Vector3(1.05, 0.72, 1.04), 1.26)
+	_crown(leaves, Vector3(0.02, 4.10, -0.68), Vector3(1.47, 0.94, 1.08), 1.67)
+	_crown(leaves, Vector3(-0.16, 4.65, 0.18), Vector3(1.35, 0.89, 1.19), 2.09)
+	return _multimesh(_tree_mesh(bark, leaves, Color(0.20, 0.34, 0.15), Color(0.47, 0.55, 0.24)), transforms)
 
 func _create_bush_multimesh(transforms: Array[Transform3D]) -> MultiMesh:
-	var bush_mat := StandardMaterial3D.new()
-	bush_mat.albedo_color = Color(0.24, 0.46, 0.20)
-	bush_mat.roughness = 0.85
+	var leaves := _surface()
+	_crown(leaves, Vector3(-0.34, 0.36, 0.12), Vector3(0.72, 0.51, 0.54), 0.26)
+	_crown(leaves, Vector3(0.52, 0.51, -0.12), Vector3(0.67, 0.58, 0.59), 0.91)
+	_crown(leaves, Vector3(0.06, 0.72, 0.10), Vector3(0.65, 0.46, 0.58), 1.40)
+	leaves.set_material(_foliage(Color(0.17, 0.30, 0.15), Color(0.42, 0.49, 0.20)))
+	return _multimesh(leaves.commit(), transforms)
 
-	var st := SurfaceTool.new()
-	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var s1 := SphereMesh.new()
-	s1.radius = 1.1; s1.height = 1.4; s1.radial_segments = 6; s1.rings = 4
-	st.append_from(s1, 0, Transform3D(Basis(), Vector3(0.0, 0.6, 0.0)))
-	var bush_mesh = st.commit()
-	bush_mesh.surface_set_material(0, bush_mat)
+func _tree_mesh(bark: SurfaceTool, leaves: SurfaceTool, base: Color, tips: Color) -> ArrayMesh:
+	var trunk_material := ShaderMaterial.new()
+	trunk_material.shader = preload("res://scenes/world/forest_bark.gdshader")
+	bark.set_material(trunk_material)
+	leaves.set_material(_foliage(base, tips))
+	return leaves.commit(bark.commit())
 
-	var mm := MultiMesh.new()
-	mm.transform_format = MultiMesh.TRANSFORM_3D
-	mm.mesh = bush_mesh
-	mm.instance_count = transforms.size()
+func _foliage(base: Color, tips: Color) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = preload("res://scenes/world/forest_leaves.gdshader")
+	material.set_shader_parameter("leaf_base", base)
+	material.set_shader_parameter("leaf_tip", tips)
+	return material
 
-	var buf := PackedFloat32Array()
-	buf.resize(transforms.size() * 12)
-	for i in range(transforms.size()):
-		var offset = i * 12
-		var t = transforms[i]
-		buf[offset + 0] = t.basis.x.x
-		buf[offset + 1] = t.basis.y.x
-		buf[offset + 2] = t.basis.z.x
-		buf[offset + 3] = t.origin.x
+func _surface() -> SurfaceTool:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	return surface
 
-		buf[offset + 4] = t.basis.x.y
-		buf[offset + 5] = t.basis.y.y
-		buf[offset + 6] = t.basis.z.y
-		buf[offset + 7] = t.origin.y
+func _root_flares(surface: SurfaceTool, size: float) -> void:
+	for i in 4:
+		var direction := Vector3(sin(i * 1.56), 0, cos(i * 1.56))
+		_stem(surface, Vector3.UP * 0.44, direction * (0.61 + i * 0.054) * size + Vector3.DOWN * 0.037,
+			0.144 * size, 0.022 * size, 5)
 
-		buf[offset + 8] = t.basis.x.z
-		buf[offset + 9] = t.basis.y.z
-		buf[offset + 10] = t.basis.z.z
-		buf[offset + 11] = t.origin.z
+func _stem(surface: SurfaceTool, low: Vector3, top: Vector3, start_radius: float, end_radius: float, sides: int) -> void:
+	var tube := CylinderMesh.new()
+	tube.bottom_radius = start_radius
+	tube.top_radius = end_radius
+	tube.height = low.distance_to(top)
+	tube.radial_segments = sides
+	tube.rings = 0
+	var axis := (top - low).normalized()
+	var bend := Basis(Quaternion(Vector3.UP, axis))
+	surface.append_from(tube, 0, Transform3D(bend, (low + top) * 0.5))
 
-	mm.buffer = buf
-	return mm
+func _bough(surface: SurfaceTool, at: Vector3, lower_radius: float, upper_radius: float, height: float, variant: float) -> void:
+	var needles := CylinderMesh.new()
+	needles.bottom_radius = lower_radius
+	needles.top_radius = upper_radius
+	needles.height = height
+	needles.radial_segments = 7
+	needles.rings = 0
+	var spread := Basis.from_euler(Vector3(0.13 * sin(variant * 9.0), variant, 0.10 * cos(variant * 6.0)))
+	surface.append_from(needles, 0, Transform3D(spread.scaled_local(Vector3(1, 1, 0.87)), at))
+
+func _crown(surface: SurfaceTool, at: Vector3, size: Vector3, variant: float) -> void:
+	var cluster := SphereMesh.new()
+	cluster.radius = 1.0
+	cluster.height = 2.0
+	cluster.radial_segments = 7
+	cluster.rings = 3
+	var basis := Basis.from_euler(Vector3(0.24 * sin(variant), variant, 0.28 * cos(variant * 2.0))).scaled_local(size)
+	surface.append_from(cluster, 0, Transform3D(basis, at))
+
+func _multimesh(mesh: Mesh, transforms: Array[Transform3D]) -> MultiMesh:
+	var batch := MultiMesh.new()
+	batch.transform_format = MultiMesh.TRANSFORM_3D
+	batch.mesh = mesh
+	batch.instance_count = transforms.size()
+	var packed := PackedFloat32Array()
+	for placement in transforms:
+		var frame := placement.basis
+		var origin := placement.origin
+		packed.append_array(PackedFloat32Array([
+			frame.x.x, frame.y.x, frame.z.x, origin.x,
+			frame.x.y, frame.y.y, frame.z.y, origin.y,
+			frame.x.z, frame.y.z, frame.z.z, origin.z,
+		]))
+	batch.buffer = packed
+	return batch

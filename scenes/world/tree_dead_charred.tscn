@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_charred_wood"]
-albedo_color = Color(0.12, 0.1, 0.09, 1)
-roughness = 0.95
-emission_enabled = true
-emission = Color(0.3, 0.08, 0.02, 1)
-emission_energy_multiplier = 0.5
+[ext_resource type="Shader" path="res://scenes/world/forest_bark.gdshader" id="1_bark"]
+
+[sub_resource type="ShaderMaterial" id="StandardMaterial3D_charred_wood"]
+shader = ExtResource("1_bark")
+shader_parameter/charred = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_burnt_trunk"]
 material = SubResource("StandardMaterial3D_charred_wood")
@@ -13,6 +12,15 @@ top_radius = 0.18
 bottom_radius = 0.38
 height = 3.6
 radial_segments = 6
+rings = 0
+
+[sub_resource type="CylinderMesh" id="Mesh_Splinter"]
+material = SubResource("StandardMaterial3D_charred_wood")
+top_radius = 0.0
+bottom_radius = 0.105
+height = 0.6
+radial_segments = 5
+rings = 0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_trunk"]
 height = 3.6
@@ -24,6 +32,7 @@ top_radius = 0.05
 bottom_radius = 0.12
 height = 1.4
 radial_segments = 5
+rings = 0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_broken_branch2"]
 material = SubResource("StandardMaterial3D_charred_wood")
@@ -31,6 +40,7 @@ top_radius = 0.04
 bottom_radius = 0.1
 height = 1.1
 radial_segments = 5
+rings = 0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ember"]
 shading_mode = 0
@@ -51,6 +61,11 @@ shape = SubResource("CylinderShape3D_trunk")
 [node name="Trunk" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 mesh = SubResource("CylinderMesh_burnt_trunk")
+
+[node name="SplitTip" type="MeshInstance3D" parent="."]
+position = Vector3(0.082, 3.67, 0.041)
+rotation = Vector3(0.13, 0.0, -0.15)
+mesh = SubResource("Mesh_Splinter")
 
 [node name="BrokenBranch1" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0, 1, 0.45, 2.5, 0)

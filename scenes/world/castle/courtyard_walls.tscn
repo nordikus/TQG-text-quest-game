@@ -12,6 +12,8 @@
 [ext_resource type="Script" path="res://scripts/world/tower_breach.gd" id="15_breach"]
 [ext_resource type="PackedScene" path="res://scenes/world/castle/rampart_watchtower.tscn" id="16_watchtower"]
 
+[ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="40_slates"]
+
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("10_masonry")
 
@@ -19,9 +21,8 @@ shader = ExtResource("10_masonry")
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
 roughness = 0.92
 
-[sub_resource type="StandardMaterial3D" id="Mat_Roof"]
-albedo_color = Color(0.18, 0.22, 0.32, 1.0)
-roughness = 0.65
+[sub_resource type="ShaderMaterial" id="Mat_Roof"]
+shader = ExtResource("40_slates")
 
 [sub_resource type="StandardMaterial3D" id="Mat_Wood"]
 albedo_color = Color(0.38, 0.26, 0.18, 1.0)
