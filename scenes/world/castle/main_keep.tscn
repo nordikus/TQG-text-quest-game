@@ -21,10 +21,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/castle/keep_cellar.tscn" id="30_cellar"]
 [ext_resource type="Script" path="res://scripts/world/observer_presence.gd" id="31_observer_presence"]
 [ext_resource type="ArrayMesh" path="res://scenes/world/castle/observer_low_poly.res" id="32_observer_mesh"]
+[ext_resource type="AnimationLibrary" path="res://scenes/world/castle/observer_idle.tres" id="33_observer_idle"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_Observer"]
 radius = 0.56
-height = 2.62
+height = 2.34
 
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("10_masonry")
@@ -1275,7 +1276,7 @@ shape = SubResource("Shape_DaisTier3")
 
 [node name="Observer" type="Node3D" parent="."]
 visible = false
-position = Vector3(-7.52, 0.258, -10.4)
+position = Vector3(-7.52, 0.249, -10.4)
 rotation = Vector3(0, 0.48, 0)
 script = ExtResource("31_observer_presence")
 
@@ -1285,16 +1286,21 @@ mesh = ExtResource("32_observer_mesh")
 [node name="Body" type="StaticBody3D" parent="Observer"]
 
 [node name="Shape" type="CollisionShape3D" parent="Observer/Body"]
-position = Vector3(0, 1.31, 0)
+position = Vector3(0, 1.17, 0)
 shape = SubResource("Shape_Observer")
 disabled = true
 
 [node name="FlameGlow" type="OmniLight3D" parent="Observer"]
-position = Vector3(-0.83, 1.92, 0.6)
+position = Vector3(-0.70, 1.75, 0.48)
 light_color = Color(0.47, 0.92, 1, 1)
-light_energy = 1.4
+light_energy = 1.15
 omni_range = 3.2
 omni_attenuation = 1.55
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Observer"]
+libraries = {
+&"": ExtResource("33_observer_idle")
+}
 
 [node name="ThroneBase" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.45, -10.2)

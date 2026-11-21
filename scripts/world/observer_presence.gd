@@ -3,6 +3,7 @@ extends Node3D
 const THRONE_QUEST := "deal_at_the_throne"
 
 @onready var body_shape: CollisionShape3D = $Body/Shape
+@onready var idle: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
 	QuestManager.quest_completed.connect(_on_quest_completed)
@@ -22,3 +23,7 @@ func _update_presence() -> void:
 	visible = (QuestManager.get_quest_ending(THRONE_QUEST) == "reject_deal"
 		or InventoryManager.quill_uses_count > 0)
 	body_shape.set_deferred("disabled", not visible)
+	if visible and not idle.is_playing():
+		idle.play(&"idle")
+	elif not visible:
+		idle.stop()
