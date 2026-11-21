@@ -21,9 +21,9 @@ shape = ExtResource("2_trunk_shape")
 
 [node name="TerraceLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 20.4, -5.2)
-light_color = Color(0.4, 0.9, 0.6, 1)
-light_energy = 1.8
-omni_range = 9.0
+light_color = Color(0.69, 0.88, 0.64, 1)
+light_energy = 1.18
+omni_range = 8.5
 
 [node name="MagicAura" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
@@ -38,19 +38,19 @@ light_energy = 2.2
 omni_range = 22.0
 
 [node name="BreachFungi" type="OmniLight3D" parent="."]
-position = Vector3(-2.61, 12.35, -24.24)
+position = Vector3(-2.61, 15.32, -24.55)
 light_color = Color(0.68, 0.85, 0.72, 1)
 light_energy = 1.08
 omni_range = 5.4
 
 [node name="FirstForkFungi" type="OmniLight3D" parent="."]
-position = Vector3(-1.38, 12.74, -30.77)
+position = Vector3(-1.38, 14.82, -30.77)
 light_color = Color(0.68, 0.85, 0.72, 1)
 light_energy = 1.08
 omni_range = 5.4
 
 [node name="SecondForkFungi" type="OmniLight3D" parent="."]
-position = Vector3(-2.61, 13.34, -37.30)
+position = Vector3(-2.61, 14.12, -37.30)
 light_color = Color(0.68, 0.85, 0.72, 1)
 light_energy = 1.08
 omni_range = 5.4

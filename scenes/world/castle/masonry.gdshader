@@ -1,5 +1,8 @@
 shader_type spatial;
 
+uniform vec2 block_size = vec2(2.2, 0.84);
+uniform vec3 stone_tint = vec3(1.0);
+
 varying vec3 stone_position;
 varying vec3 stone_normal;
 
@@ -14,7 +17,7 @@ void fragment() {
 	if (axis.y > max(axis.x, axis.z)) {
 		face = stone_position.xz;
 	}
-	vec2 cells = face / vec2(2.2, 0.84);
+	vec2 cells = face / block_size;
 	cells.x += 0.5 * mod(floor(cells.y), 2.0);
 	vec2 block = floor(cells);
 	vec2 local = fract(cells);
@@ -28,6 +31,6 @@ void fragment() {
 	vec3 stone = mix(vec3(0.122, 0.136, 0.15), vec3(0.225, 0.229, 0.209), variation);
 	stone *= 0.97 + mineral * 0.059 + smoothstep(0.1, 0.94, local.y) * 0.074;
 	vec3 grout = vec3(0.077, 0.084, 0.080);
-	ALBEDO = mix(grout, stone, crust);
+	ALBEDO = mix(grout, stone, crust) * stone_tint;
 	ROUGHNESS = mix(1.0, 0.90, crust);
 }

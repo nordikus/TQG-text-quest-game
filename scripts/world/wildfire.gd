@@ -11,6 +11,7 @@ extends Node3D
 func _ready() -> void:
 	$Flame.set_instance_shader_parameter("phase", phase)
 	$FlameCross.set_instance_shader_parameter("phase", phase + 1.75)
+	$FlameLow.set_instance_shader_parameter("phase", phase + 3.2)
 	_smoke.amount = maxi(1, roundi(_smoke.amount * smoke_density))
 	_smoke.scale_amount_max *= smoke_size
 	_smoke.scale_amount_min *= smoke_size
@@ -18,6 +19,7 @@ func _ready() -> void:
 func set_active(active: bool) -> void:
 	_smoke.emitting = active
 	_sparks.emitting = active
+	_light.visible = active
 	if active:
 		_smoke.restart()
 		_sparks.restart()

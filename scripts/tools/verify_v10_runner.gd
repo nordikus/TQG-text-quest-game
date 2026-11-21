@@ -156,8 +156,12 @@ func _verify_ash(has_shard: bool) -> void:
 	_check(_world.castle_ash.visible and not _world.castle_life.visible and not _world.court_lanterns.visible,
 		"The courtyard changes in Ash.")
 	_check_courtyard_fire(true)
-	var smoke := _world.fire_particles_group.get_node("Fire1/Smoke") as CPUParticles3D
-	_check(smoke.emitting and smoke.is_visible_in_tree() and not _world.corridor_forest.visible,
+	var all_fires_active := true
+	for fire: Node3D in _world.fire_particles_group.get_children():
+		var smoke := fire.get_node("Smoke") as CPUParticles3D
+		var flame := fire.get_node("Flame") as MeshInstance3D
+		all_fires_active = all_fires_active and smoke.emitting and flame.is_visible_in_tree()
+	_check(all_fires_active and not _world.corridor_forest.visible,
 		"Active fire and charred trees replace the living grove.")
 	_check_burned_placements(true)
 	_check(not _bridge_is_intact() and _world.collapsed_bridge.visible and not _seal.visible,
@@ -316,6 +320,26 @@ func _check_rooms() -> void:
 	var partition := _ray(Vector3(24.8, 1.75, -112), Vector3(24.8, 1.75, -108.9))
 	_check(beds == 6 and entry.is_empty() and partition.get("collider") == castle.get_node("BarracksBuilding/DormitoryWallEast"),
 		"The six-bed guard dormitory has a separate walkable doorway.")
+	var rack := _ray(Vector3(29.25, 1.68, -116.25), Vector3(30.8, 1.68, -116.25))
+	var rack_post := _ray(Vector3(13.8, 1.43, -106.99), Vector3(14.6, 1.43, -106.99))
+	_check(not rack.is_empty() and (rack.get("collider") as Node).get_parent() == quarters
+		and not rack_post.is_empty() and (rack_post.get("collider") as Node).get_parent().name == "ArchitecturalDetails",
+		"The barracks racks block the player where their rails and posts are visible.")
+	var target := _ray(Vector3(12.88, 1.46, -105.1), Vector3(14.00, 1.46, -105.1))
+	_check(not target.is_empty() and (target.get("collider") as Node).get_parent().name == "WellGardenAndPracticeYard",
+		"The training targets face the yard and have physical faces.")
+	var hall := castle.get_node("MainKeep/Architecture")
+	var pillars_are_solid := true
+	for side in [1, 2]:
+		for index in [1, 2, 3]:
+			var pillar := hall.get_node("HallPillar%d_%d" % [side, index]) as StaticBody3D
+			var center := pillar.global_position
+			center.y = 1.45
+			var outside := center + Vector3.RIGHT * (0.92 if side == 1 else -0.92)
+			pillars_are_solid = pillars_are_solid and _ray(outside, center).get("collider") == pillar
+	_check(pillars_are_solid, "All six throne hall columns have solid shafts.")
+	_check(_ray(Vector3(18.1, 7.8, -150.6), Vector3(18.1, 7.8, -145.7)).is_empty(),
+		"The gallery above the kitchen opens directly into the steward's room.")
 	var bedroom := castle.get_node("MageTower/AstromancerWorkshop/AstromancerBed") as StaticBody3D
 	_check(bedroom != null and not (bedroom.get_child(0) as CollisionShape3D).disabled,
 		"The astromancer has a bed with collision beside the workshop.")
@@ -409,6 +433,12 @@ func _check_courtyard_fire(burned: bool) -> void:
 	_check(ruined_shelter.is_visible_in_tree() == burned
 		and intact_shelter.is_visible_in_tree() != burned and shelter_smoke.emitting == burned,
 		"The supply shelter burns in Ash and is restored when the fire state resets.")
+	var soot_is_mounted := true
+	for mark_name in ["WestStairSoot1", "WestStairSoot2", "WestCurtainSoot3", "WestCurtainSoot4"]:
+		var mark := _world.castle_ash.get_node(mark_name) as Node3D
+		var wall: Node = _ray(mark.global_position, mark.global_position + Vector3.LEFT * 0.06).get("collider")
+		soot_is_mounted = soot_is_mounted and wall != null and wall.name in ["CourtyardWallStair", "WallWest"]
+	_check(soot_is_mounted, "Soot sits against the current west wall and staircase masonry.")
 
 func _rewrite() -> void:
 	var times: int = InventoryManager.quill_uses_count

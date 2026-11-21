@@ -79,8 +79,10 @@ func _init() -> void:
 	var arch_foliage: Array = []
 
 	_build_limbs(bark, tips)
-	_build_spiral_walkway(bark, spores)
-	_build_terrace_and_bridge(bark, spores, arch_foliage)
+	var walkway_start := bark.v.size()
+	var walkway_centers: Array[Vector3] = []
+	_build_spiral_walkway(bark, spores, walkway_centers)
+	_build_terrace_and_bridge(bark, spores, arch_foliage, walkway_start, walkway_centers)
 	_build_canopy(leaves, tips, arch_foliage)
 	_build_courtyard_branch(courtyard_branch, spores)
 
@@ -355,7 +357,12 @@ func _spiral_frame(s: float) -> Array:
 	return [pos, out_dir]
 
 
-func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
+const WALKWAY_TURN := 20.15
+# Sample the spiral profile in the same order as the bridge, from the middle of the tread.
+const WALKWAY_RING := [3.0, 2.0, 1.0, 0.68, 0.25, 0.0, 15.55, 15.0, 14.0, 13.54,
+	13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0]
+
+func _build_spiral_walkway(g: Geo, spores: Geo, centers: Array[Vector3]) -> void:
 	var prof: Array[Vector2] = [
 		Vector2(-1.90, 0.55),   # 0: inner top fused inside trunk bark
 		Vector2(-1.25, 0.24),   # 1: inner bark-to-moss transition
@@ -377,13 +384,11 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 	var m_prof := prof.size()
 	var n_rings := 152
 	var s_min := -1.8
-	var s_max := 21.6
 	var start := g.v.size()
-	var centers: Array = []
 
 	for k in n_rings:
 		var t_ring := float(k) / (n_rings - 1)
-		var s := lerpf(s_min, s_max, t_ring)
+		var s := lerpf(s_min, WALKWAY_TURN, t_ring)
 		var fr := _spiral_frame(s)
 		var c: Vector3 = fr[0]
 		var out_dir: Vector3 = fr[1]
@@ -391,10 +396,12 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 		centers.append(c - up_dir * 0.4)
 
 		var entry_fade := clampf((s - s_min) / 1.4, 0.0, 1.0)
-		var terrace_fade := clampf((s_max - s) / 1.5, 0.0, 1.0)
+		var terrace_fade := 1.0 - 0.75 * smoothstep(18.55, WALKWAY_TURN, s)
 		var rim_fade := entry_fade * terrace_fade
 		var burl_swell := 0.22 * noise.get_noise_3d(c.x * 0.38, c.y * 0.38, c.z * 0.38) + 0.14 * sin(s * 1.4)
 
+		var points := PackedVector3Array()
+		var colors := PackedColorArray()
 		for j in m_prof:
 			var uv := prof[j]
 			var u := uv.x
@@ -415,7 +422,7 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 			var pt := c + out_dir * u + up_dir * v
 			if s < -0.3 and v < 0.0:
 				pt.y = maxf(pt.y, -0.75)
-			g.v.append(pt)
+			points.append(pt)
 
 			var col := BARK
 			if j >= 2 and j <= 5:
@@ -429,13 +436,16 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 			else:
 				var dark_t := clampf((-v) / 1.5, 0.0, 1.0)
 				col = BARK.lerp(BARK_DARK, dark_t * 0.75)
-			g.c.append(col)
+			colors.append(col)
+		for index: float in WALKWAY_RING:
+			var i := floori(index)
+			var j := (i + 1) % m_prof
+			g.v.append(points[i].lerp(points[j], index - i))
+			g.c.append(colors[i].lerp(colors[j], index - i))
 
-	_connect_tube_grid(g, start, n_rings, m_prof, centers, Vector3(0.8, -0.2, 0.4), Vector3(0.0, -0.1, -0.8))
-
-	for step_idx in [0, 3, 6, 9, 12, 15, 18, 20]:
-		var ring := roundi(inverse_lerp(s_min, s_max, float(step_idx)) * (n_rings - 1))
-		_add_spore_cluster(spores, g.v[start + ring * m_prof + 8], Vector3.UP)
+	for step_idx in [0, 3, 6, 9, 12, 15, 18]:
+		var ring := roundi(inverse_lerp(s_min, WALKWAY_TURN, float(step_idx)) * (n_rings - 1))
+		_add_spore_cluster(spores, g.v[start + ring * WALKWAY_RING.size() + 15], Vector3.UP)
 
 
 const BOUGH_TERRACE := -7.55
@@ -451,7 +461,8 @@ func _bough_spine_z(z: float) -> Vector3:
 	return Vector3(BOUGH_X, lerpf(17.00, RAMPART_FLOOR - 0.21, descent), z)
 
 
-func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void:
+func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array, walkway_start: int,
+		centers: Array[Vector3]) -> void:
 	var prof_b: Array[Vector2] = [
 		Vector2(0.0, 0.21),     # 0: center moss path
 		Vector2(0.36, 0.21),    # 1: inner-east moss path
@@ -476,10 +487,9 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 	]
 	var m_b := prof_b.size()
 	var n_stations := 172
-	var z_start := -3.02
+	var z_start := -6.35
 	var z_end := BOUGH_END
-	var start := g.v.size()
-	var centers: Array = []
+	var start := 0
 
 	for k in n_stations:
 		var t := float(k) / (n_stations - 1)
@@ -490,18 +500,18 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		var fwd := (c_next - c_prev).normalized()
 		var right := fwd.cross(Vector3.UP).normalized()
 		var up := Vector3.UP
-		centers.append(c - up * 0.45)
-
 		var terrace_w := exp(-pow((z - (-5.35)) / 2.45, 2.0))
 		var trunk_flare := exp(-pow((z - (-1.2)) / 2.8, 2.0))
 		var taper := smoothstep(BOUGH_END, -8.0, z)
 		var knots := (0.16 * sin(z * 0.42) + 0.12 * cos(z * 0.89)) * (1.0 - terrace_w)
 		var branch_width := 1.13 + 0.63 * taper + knots
 		var crest := smoothstep(-17.5, -20.05, z)
-		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare + 0.66 * crest
+		var half_width := lerpf(branch_width, 2.58, terrace_w) + 0.45 * trunk_flare + 0.66 * crest
 		var belly_depth := lerpf(0.78, 1.31, taper) + 0.65 * terrace_w + 1.45 * trunk_flare
 		var width_meander := 0.08 * sin(z * 0.28) * (1.0 - terrace_w * 0.7)
 
+		var ring := PackedVector3Array()
+		var colors := PackedColorArray()
 		for j in m_b:
 			var uv := prof_b[j]
 			var ux := uv.x * half_width
@@ -535,7 +545,7 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 				uy = lerpf(uy, 0.21, crest)
 
 			var pt := c + right * ux + up * uy
-			g.v.append(pt)
+			ring.append(pt)
 
 			var col := BARK
 			if is_moss or (is_west_parapet and z >= -6.2):
@@ -543,7 +553,7 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 				var moss_patch := 0.51 + 0.39 * noise.get_noise_2d(z * 0.34, ux * 1.8)
 				var grain := pow(absf(sin(z * 0.32 + ux * 5.2 + 3.0 * noise.get_noise_2d(z * 0.19, ux))), 5.0)
 				var wood := BARK_WARM.lerp(BARK_DARK, 0.28 * grain)
-				col = wood.lerp(MOSS.lerp(MOSS_PATH, edge_f * 0.32), 0.23 + edge_f * moss_patch)
+				col = wood.lerp(MOSS.lerp(MOSS_PATH, edge_f * 0.22), 0.16 + edge_f * moss_patch * 0.78)
 			elif j == 3 or j == 17:
 				col = MOSS.lerp(BARK_WARM, 0.45)
 			elif j == 4 or j == 16:
@@ -552,9 +562,16 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 			else:
 				var depth_f := clampf((-uy) / 2.2, 0.0, 1.0)
 				col = BARK.lerp(BARK_DARK, depth_f * 0.75)
-			g.c.append(col)
+			colors.append(col)
+		if k == 0:
+			_blend_walkway_fork(g, centers, ring, colors, c, right)
+			start = g.v.size()
+		g.v.append_array(ring)
+		g.c.append_array(colors)
+		centers.append(c - up * 0.45)
 
-	_connect_tube_grid(g, start, n_stations, m_b, centers, Vector3(0.0, -0.3, 1.0), Vector3(1.0, -0.2, 0.0))
+	_connect_tube_grid(g, walkway_start, centers.size(), m_b, centers,
+		Vector3(0.8, -0.2, 0.4), Vector3(1.0, -0.2, 0.0))
 
 	# Forks below the bridge carry the weight back into the main trunk.
 	var near_support := _bezier(
@@ -582,8 +599,8 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 
 	# Natural forked lateral branches growing outward and upward from the giant bough flanks
 	var branch_specs := [
-		[-8.8, -1.0, 4.35, 2.1, 1.3, 0.44],
-		[-11.2, 1.0, 3.45, 0.8, 1.1, 0.33],
+		[-8.8, -1.0, 4.85, 2.85, 1.3, 0.44],
+		[-11.2, 1.0, 4.15, 1.70, 1.1, 0.33],
 		[-15.0, -1.0, 2.8, -1.0, 0.6, 0.37],
 	]
 	for bs in branch_specs:
@@ -613,6 +630,29 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		arch_foliage.append([p3 + Vector3(0.0, 0.4, 0.0), crown])
 		arch_foliage.append([p3 + side * 1.1 - Vector3.UP * 0.2 + forward * 0.8, crown * 0.69])
 		arch_foliage.append([f3 + Vector3(0.0, 0.35, 0.0), crown * 0.74])
+
+
+func _blend_walkway_fork(g: Geo, centers: Array[Vector3], end_ring: PackedVector3Array,
+		end_colors: PackedColorArray, end: Vector3, exit_right: Vector3) -> void:
+	var begin: Vector3 = _spiral_frame(WALKWAY_TURN)[0]
+	var entry_right: Vector3 = -_spiral_frame(WALKWAY_TURN)[1]
+	var start := g.v.size() - end_ring.size()
+	var path := _bezier(begin, begin + Vector3(1.15, 0.65, -0.94), end + Vector3(0.42, 0.0, 1.10), end, 20)
+	for i in range(1, path.size() - 1):
+		var t := float(i) / (path.size() - 1)
+		var amount := smoothstep(0.0, 1.0, t)
+		var along: Vector3 = (path[i + 1] - path[i - 1]).normalized()
+		var right := along.cross(Vector3.UP).normalized()
+		right = entry_right.lerp(right, smoothstep(0.0, 0.26, t)).normalized()
+		right = right.lerp(exit_right, smoothstep(0.70, 1.0, t)).normalized()
+		for j in end_ring.size():
+			var from := g.v[start + j] - begin
+			var to := end_ring[j] - end
+			var width := lerpf(from.dot(entry_right), to.dot(exit_right), amount)
+			var height := lerpf(from.y, to.y, amount)
+			g.v.append(path[i] + right * width + Vector3.UP * height)
+			g.c.append(g.c[start + j].lerp(end_colors[j], amount))
+		centers.append(path[i] - Vector3.UP * 0.45)
 
 
 func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:

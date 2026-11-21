@@ -602,27 +602,6 @@ size = Vector3(2.75, 0.14, 0.76)
 [sub_resource type="BoxShape3D" id="Shape_ServiceHatchCounter"]
 size = Vector3(2.75, 0.14, 0.76)
 
-[sub_resource type="BoxMesh" id="Mesh_StewardPartitionWest"]
-material = SubResource("Mat_Stone")
-size = Vector3(5.15, 5.65, 0.41)
-
-[sub_resource type="BoxShape3D" id="Shape_StewardPartitionWest"]
-size = Vector3(5.15, 5.65, 0.41)
-
-[sub_resource type="BoxMesh" id="Mesh_StewardPartitionEast"]
-material = SubResource("Mat_Stone")
-size = Vector3(7.75, 5.65, 0.41)
-
-[sub_resource type="BoxShape3D" id="Shape_StewardPartitionEast"]
-size = Vector3(7.75, 5.65, 0.41)
-
-[sub_resource type="BoxMesh" id="Mesh_StewardPartitionLintel"]
-material = SubResource("Mat_Stone")
-size = Vector3(2.4, 2.9, 0.41)
-
-[sub_resource type="BoxShape3D" id="Shape_StewardPartitionLintel"]
-size = Vector3(2.4, 2.9, 0.41)
-
 [sub_resource type="BoxMesh" id="Mesh_ServiceStairTurn"]
 material = SubResource("Mat_Stone")
 size = Vector3(5.78, 3.05, 2.5)
@@ -1872,33 +1851,6 @@ mesh = SubResource("Mesh_RoyalOrderDraft")
 
 [node name="Col" type="CollisionShape3D" parent="UpperGuardLedger"]
 shape = SubResource("Shape_RoyalOrderDraft")
-
-[node name="StewardPartitionWest" type="StaticBody3D" parent="."]
-position = Vector3(18.875, 9.175, 3.05)
-
-[node name="Mesh" type="MeshInstance3D" parent="StewardPartitionWest"]
-mesh = SubResource("Mesh_StewardPartitionWest")
-
-[node name="Col" type="CollisionShape3D" parent="StewardPartitionWest"]
-shape = SubResource("Shape_StewardPartitionWest")
-
-[node name="StewardPartitionEast" type="StaticBody3D" parent="."]
-position = Vector3(27.725, 9.175, 3.05)
-
-[node name="Mesh" type="MeshInstance3D" parent="StewardPartitionEast"]
-mesh = SubResource("Mesh_StewardPartitionEast")
-
-[node name="Col" type="CollisionShape3D" parent="StewardPartitionEast"]
-shape = SubResource("Shape_StewardPartitionEast")
-
-[node name="StewardPartitionLintel" type="StaticBody3D" parent="."]
-position = Vector3(22.65, 10.55, 3.05)
-
-[node name="Mesh" type="MeshInstance3D" parent="StewardPartitionLintel"]
-mesh = SubResource("Mesh_StewardPartitionLintel")
-
-[node name="Col" type="CollisionShape3D" parent="StewardPartitionLintel"]
-shape = SubResource("Shape_StewardPartitionLintel")
 
 [node name="ServiceStairTurn" type="StaticBody3D" parent="."]
 position = Vector3(28.35, 1.775, -12.5)

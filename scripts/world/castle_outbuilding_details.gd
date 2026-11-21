@@ -166,9 +166,9 @@ func _barracks() -> void:
 	# A training rack sits on the side bay, clear of the entrance and armory route.
 	var center := Vector3(-9.0, 0, 7.15)
 	for z in [-1.54, 1.54]:
-		_box(center + Vector3(-0.85, 1.66, z), Vector3(0.20, 3.32, 0.20), oak)
-	_box(center + Vector3(-0.16, 3.77, 0), Vector3(2.09, 0.17, 3.76), trim, Vector3(0, 0, 0.24))
-	_box(center + Vector3(0.27, 1.36, 0), Vector3(0.24, 0.19, 2.70), oak)
+		_box(center + Vector3(-0.85, 1.66, z), Vector3(0.20, 3.32, 0.20), oak, Vector3.ZERO, true)
+	_box(center + Vector3(-0.16, 3.77, 0), Vector3(2.09, 0.17, 3.76), trim, Vector3(0, 0, 0.24), true)
+	_box(center + Vector3(0.27, 1.36, 0), Vector3(0.24, 0.19, 2.70), oak, Vector3.ZERO, true)
 	for z in [-0.91, 0.02, 0.9]:
 		_box(center + Vector3(0.36, 1.13, z), Vector3(0.08, 2.26, 0.08), trim, Vector3(0.14, 0, 0.08))
 		_box(center + Vector3(0.28, 2.35, z + 0.16), Vector3(0.09, 0.37, 0.18), iron,
@@ -192,11 +192,21 @@ func _shield(center: Vector3, size: float) -> void:
 	_box(center + Vector3(-0.092, 0.10, 0), Vector3(0.045, size * 0.85, size * 0.19), bronze)
 	_box(center + Vector3(-0.096, 0.15, 0), Vector3(0.045, size * 0.17, size * 0.81), bronze)
 
-func _box(at: Vector3, size: Vector3, material: Material, tilt := Vector3.ZERO) -> void:
+func _box(at: Vector3, size: Vector3, material: Material, tilt := Vector3.ZERO, solid := false) -> void:
 	var mesh := BoxMesh.new()
 	mesh.size = size
 	mesh.material = material
 	_add(mesh, at, tilt)
+	if solid:
+		var body := StaticBody3D.new()
+		body.position = at
+		body.rotation = tilt
+		var shape := BoxShape3D.new()
+		shape.size = size
+		var collision := CollisionShape3D.new()
+		collision.shape = shape
+		body.add_child(collision)
+		add_child(body)
 
 func _cylinder(at: Vector3, top: float, bottom: float, height: float, sides: int, material: Material, yaw := 0.0) -> void:
 	var mesh := CylinderMesh.new()

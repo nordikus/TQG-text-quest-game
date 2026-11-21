@@ -380,24 +380,24 @@ cast_shadow = 0
 mesh = SubResource("Mesh_AshStain")
 instance_shader_parameters/seed = 14.7
 
-[node name="WestCurtainSoot1" type="MeshInstance3D" parent="AshCastle"]
-position = Vector3(-30.891, 1.65, -6.25)
+[node name="WestStairSoot1" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-39.394, 1.82, -3.4)
 rotation = Vector3(0, 1.570796, -0.1)
 scale = Vector3(8.8, 4.2, 1)
 cast_shadow = 0
 mesh = SubResource("Mesh_AshStain")
 instance_shader_parameters/seed = 19.6
 
-[node name="WestCurtainSoot2" type="MeshInstance3D" parent="AshCastle"]
-position = Vector3(-30.891, 1.26, -14.0)
+[node name="WestStairSoot2" type="MeshInstance3D" parent="AshCastle"]
+position = Vector3(-39.394, 1.30, -12.05)
 rotation = Vector3(0, 1.570796, 0.09)
-scale = Vector3(7.2, 3.4, 1)
+scale = Vector3(7.2, 2.7, 1)
 cast_shadow = 0
 mesh = SubResource("Mesh_AshStain")
 instance_shader_parameters/seed = 24.5
 
 [node name="WestCurtainSoot3" type="MeshInstance3D" parent="AshCastle"]
-position = Vector3(-31.771, 1.75, -23.65)
+position = Vector3(-42.233, 1.88, -38.25)
 rotation = Vector3(0, 1.570796, -0.16)
 scale = Vector3(9.5, 4.5, 1)
 cast_shadow = 0
@@ -405,7 +405,7 @@ mesh = SubResource("Mesh_AshStain")
 instance_shader_parameters/seed = 29.4
 
 [node name="WestCurtainSoot4" type="MeshInstance3D" parent="AshCastle"]
-position = Vector3(-31.771, 2.5, -35.75)
+position = Vector3(-42.233, 2.42, -45.1)
 rotation = Vector3(0, 1.570796, -0.08)
 scale = Vector3(11.2, 6.3, 1)
 cast_shadow = 0
@@ -429,11 +429,18 @@ smoke_density = 0.54
 smoke_size = 0.68
 
 [node name="Embers3" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
-position = Vector3(-27.37, 0, -9.75)
-scale = Vector3(0.25, 0.25, 0.25)
+position = Vector3(-38.55, 0, -12.0)
+scale = Vector3(0.33, 0.33, 0.33)
 phase = 3.39
 smoke_density = 0.54
 smoke_size = 0.68
+
+[node name="WestYardEmbers" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-40.15, 0, -39.2)
+scale = Vector3(0.30, 0.30, 0.30)
+phase = 3.91
+smoke_density = 0.54
+smoke_size = 0.66
 
 [node name="Embers4" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
 position = Vector3(-24.3, 0, -28.3)
@@ -1044,6 +1051,25 @@ glow_color = Color(1, 0.77, 0.42, 1)
 [node name="WellGardenAndPracticeYard" type="Node3D" parent="."]
 script = ExtResource("26_furnishing")
 place = 1
+
+[node name="WagonShelter" type="Node3D" parent="LivingVerge"]
+position = Vector3(-34.5, 0, -12.4)
+rotation = Vector3(0, -0.04, 0)
+script = ExtResource("26_furnishing")
+place = 2
+
+[node name="WagonShelter" type="Node3D" parent="AshCastle"]
+position = Vector3(-34.5, 0, -12.4)
+rotation = Vector3(0, -0.04, 0)
+script = ExtResource("26_furnishing")
+place = 3
+
+[node name="WagonShelterEmbers" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-34.28, 0, -12.5)
+scale = Vector3(0.35, 0.35, 0.35)
+phase = 2.35
+smoke_density = 0.48
+smoke_size = 0.63
 
 [node name="SupplyShelter" type="Node3D" parent="LivingVerge"]
 position = Vector3(-15.60, 0, -28.7)

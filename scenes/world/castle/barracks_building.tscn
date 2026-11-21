@@ -136,10 +136,10 @@ points = PackedVector3Array(-8.4, -1.8, -11.4, 8.4, -1.8, -11.4, 0, 1.8, -11.4, 
 
 [sub_resource type="BoxMesh" id="Mesh_Chimney"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(1.6, 7.5, 1.6)
+size = Vector3(1.6, 6.2, 1.6)
 
 [sub_resource type="BoxShape3D" id="Shape_Chimney"]
-size = Vector3(1.6, 7.5, 1.6)
+size = Vector3(1.6, 6.2, 1.6)
 
 [sub_resource type="BoxMesh" id="Mesh_InteriorPartition"]
 material = SubResource("Mat_Wood")
@@ -147,13 +147,6 @@ size = Vector3(0.4, 5.0, 6.5)
 
 [sub_resource type="BoxShape3D" id="Shape_InteriorPartition"]
 size = Vector3(0.4, 5.0, 6.5)
-
-[sub_resource type="BoxMesh" id="Mesh_CaptainsDesk"]
-material = SubResource("Mat_Wood")
-size = Vector3(3.2, 0.9, 1.6)
-
-[sub_resource type="BoxShape3D" id="Shape_CaptainsDesk"]
-size = Vector3(3.2, 0.9, 1.6)
 
 [sub_resource type="BoxShape3D" id="Shape_KeyCol"]
 size = Vector3(0.5, 0.4, 0.5)
@@ -312,7 +305,7 @@ mesh = SubResource("Mesh_Roof")
 shape = SubResource("Shape_Roof")
 
 [node name="Chimney" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 6.5, -9.0)
+position = Vector3(5.7, 7.2, -9.93)
 
 [node name="Mesh" type="MeshInstance3D" parent="Chimney"]
 mesh = SubResource("Mesh_Chimney")
@@ -350,15 +343,6 @@ rotation = Vector3(0, -1.57079633, 0)
 script = ExtResource("12_door_leaf")
 panel_size = Vector3(2.8, 3.5, 0.18)
 style = 0
-
-[node name="CaptainsDesk" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.67, -7.0)
-
-[node name="Mesh" type="MeshInstance3D" parent="CaptainsDesk"]
-mesh = SubResource("Mesh_CaptainsDesk")
-
-[node name="Col" type="CollisionShape3D" parent="CaptainsDesk"]
-shape = SubResource("Shape_CaptainsDesk")
 
 [node name="ThroneHallKey" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1.18, -7.0)

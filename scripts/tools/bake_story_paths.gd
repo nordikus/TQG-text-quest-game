@@ -430,7 +430,7 @@ func _bake_nature_trail(spline: Spline3D) -> void:
 func _bake_burning_path(spline: Spline3D) -> void:
 	print("Baking Burning Path and Charred Zone...")
 	var b_charred := ToolMeshBuilder.new()
-	var b_lava := ToolMeshBuilder.new()
+	var b_embers := ToolMeshBuilder.new()
 	var b_timber := ToolMeshBuilder.new()
 
 	var col_faces: Array[Vector3] = []
@@ -476,33 +476,20 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 	_connect_tube_grid(b_charred, base_idx, steps + 1, trans_pts, false)
 
-	# Lava Fissures & Solid Ground Embers
-	var crack_count: int = 30
-	for cc in range(crack_count):
-		var t: float = 0.06 + 0.88 * (float(cc) / float(crack_count - 1))
+	# Scattered coals sit beside the passage, among the fallen wood.
+	const EMBER_PATCHES := 30
+	for patch in EMBER_PATCHES:
+		var t := 0.06 + 0.88 * (float(patch) / float(EMBER_PATCHES - 1))
 		var f: PathFrame = spline.sample(t)
 		if f.pos.z < -75.8:
 			continue
-		var side: float = -1.0 if (cc % 2 == 0) else 1.0
-		var crack_pos: Vector3 = f.pos + f.right * (side * 3.4) + f.up * 0.04
-		var crack_len: float = 2.4 + 0.6 * sin(float(cc) * 1.8)
-
-		var c_p0: Vector3 = crack_pos - f.tangent * (crack_len * 0.5)
-		var c_p1: Vector3 = crack_pos + f.tangent * (crack_len * 0.5)
-		var c_mid: Vector3 = crack_pos + f.right * (0.35 * sin(float(cc) * 3.1))
-
-		b_lava.set_color(Color(1.0, 0.65, 0.12))
-		b_lava.set_normal(f.up)
-		var vm: int = b_lava.add_vertex(c_mid + f.up * 0.02)
-		b_lava.set_color(Color(0.85, 0.25, 0.02))
-		var vp0: int = b_lava.add_vertex(c_p0 + f.up * 0.01)
-		var vp1: int = b_lava.add_vertex(c_p1 + f.up * 0.01)
-		b_lava.add_index(vm); b_lava.add_index(vp0); b_lava.add_index(vp1)
+		var side := -1.0 if patch % 2 == 0 else 1.0
+		var edge := f.pos + f.right * side * (3.5 + 0.45 * sin(float(patch) * 1.8)) + f.up * 0.025
 
 		for ember_i in range(3):
-			var a: float = float(ember_i) * 2.1 + float(cc)
-			var ep: Vector3 = crack_pos + Vector3(cos(a) * 0.35, 0.02, sin(a) * 0.35)
-			_add_ember_rock(b_lava, ep, 0.10)
+			var angle := float(ember_i) * 2.1 + float(patch)
+			var ember := edge + Vector3(cos(angle) * 0.52, 0.0, sin(angle) * 0.23)
+			_add_ember_rock(b_embers, ember, 0.055 + 0.035 * absf(sin(angle * 2.7)))
 
 	# Real ground-level fallen charred timber & jagged stumps (NO floating sticks!)
 	for ti in range(8):
@@ -518,7 +505,7 @@ func _bake_burning_path(spline: Spline3D) -> void:
 
 	# Commit Burning Path Mesh & Collisions
 	b_charred.generate_normals()
-	b_lava.generate_normals()
+	b_embers.generate_normals()
 	b_timber.generate_normals()
 
 	var m_charred := StandardMaterial3D.new()
@@ -528,12 +515,12 @@ func _bake_burning_path(spline: Spline3D) -> void:
 	m_charred.vertex_color_is_srgb = true
 	m_charred.roughness = 0.92
 
-	var m_lava := StandardMaterial3D.new()
-	m_lava.vertex_color_use_as_albedo = true
-	m_lava.vertex_color_is_srgb = true
-	m_lava.emission_enabled = true
-	m_lava.emission = Color(1.0, 0.38, 0.06)
-	m_lava.emission_energy_multiplier = 3.2
+	var m_embers := StandardMaterial3D.new()
+	m_embers.vertex_color_use_as_albedo = true
+	m_embers.vertex_color_is_srgb = true
+	m_embers.emission_enabled = true
+	m_embers.emission = Color(1.0, 0.24, 0.035)
+	m_embers.emission_energy_multiplier = 1.65
 
 	var m_timber := StandardMaterial3D.new()
 	m_timber.cull_mode = BaseMaterial3D.CULL_DISABLED
@@ -546,11 +533,11 @@ func _bake_burning_path(spline: Spline3D) -> void:
 	var charred_shape := mesh.create_trimesh_shape()
 	if charred_shape:
 		col_faces.append_array(charred_shape.get_faces())
-	b_lava.commit(mesh)
+	b_embers.commit(mesh)
 	b_timber.commit(mesh)
 
 	mesh.surface_set_material(0, m_charred)
-	mesh.surface_set_material(1, m_lava)
+	mesh.surface_set_material(1, m_embers)
 	mesh.surface_set_material(2, m_timber)
 
 	var col_shape := ConcavePolygonShape3D.new()
