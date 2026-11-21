@@ -11,6 +11,8 @@ const EAST_FACE := -31.80
 const WALL_X := -32.65
 const SOUTH := 8.5
 const NORTH := -77.6
+const KEEP_WEST_WALL := -31.78
+const KEEP_REAR_WALL := -75.68
 const APPROACH_X := -23.0
 const EXTERIOR_FACE := 10.25
 const COURTYARD_FACE := 6.75
@@ -39,7 +41,10 @@ func _front_wall() -> void:
 func _corner(tower_name: String, z: float, is_south: bool) -> void:
 	var tower := _body(tower_name)
 	var foot := Vector3(WALL_X, 0, z)
-	_cylinder(tower, foot + Vector3.UP * (WALK_Y * 0.5), 4.62, 4.80, WALK_Y, stone)
+	if is_south:
+		_cylinder(tower, foot + Vector3.UP * (WALK_Y * 0.5), 4.62, 4.80, WALK_Y, stone)
+	else:
+		_rear_tower_base(tower, foot)
 	_cylinder(tower, foot + Vector3.UP * 24.86, 0.1, 5.11, 4.92, roof_material)
 	var exits := Vector3.FORWARD if is_south else Vector3.BACK
 	for i in 24:
@@ -52,6 +57,20 @@ func _corner(tower_name: String, z: float, is_south: bool) -> void:
 			stone, Vector3(0, -angle, 0))
 	# The rear curtain meets its chamber at grade. The lower front curtain uses a ramp.
 	_span(tower, -29.28, -27.78, WALK_Y - 0.3, WALK_Y, z - 1.25, z + 1.25, trim)
+
+func _rear_tower_base(tower: StaticBody3D, foot: Vector3) -> void:
+	var base := CSGMesh3D.new()
+	base.name = "CornerTowerNWBase"
+	base.mesh = _cylinder_mesh(4.62, 4.8, WALK_Y, stone)
+	base.position = foot + Vector3.UP * (WALK_Y * 0.5)
+	base.use_collision = true
+	# The keep and curtain meet here. Cut the drum behind the keep's interior faces.
+	var cut := CSGBox3D.new()
+	cut.operation = CSGShape3D.OPERATION_SUBTRACTION
+	cut.size = Vector3(10, WALK_Y + 1, 10)
+	cut.position = Vector3(KEEP_WEST_WALL - foot.x + 5, 0, KEEP_REAR_WALL - foot.z + 5)
+	base.add_child(cut)
+	tower.add_child(base)
 
 func _stairs() -> void:
 	var stairs := _body("CourtyardWallStair")
@@ -128,13 +147,7 @@ func _box(body: StaticBody3D, size: Vector3, at: Vector3, material: Material, ti
 
 func _cylinder(body: StaticBody3D, at: Vector3, top: float, bottom: float, height: float,
 		material: Material) -> void:
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = top
-	mesh.bottom_radius = bottom
-	mesh.height = height
-	mesh.radial_segments = 16
-	mesh.rings = 0
-	mesh.material = material
+	var mesh := _cylinder_mesh(top, bottom, height, material)
 	_visual(body, mesh, at)
 	var shape := ConvexPolygonShape3D.new()
 	var points := PackedVector3Array()
@@ -145,6 +158,16 @@ func _cylinder(body: StaticBody3D, at: Vector3, top: float, bottom: float, heigh
 		points.append(radial * bottom - Vector3.UP * height * 0.5)
 	shape.points = points
 	_collision(body, shape, at)
+
+func _cylinder_mesh(top: float, bottom: float, height: float, material: Material) -> CylinderMesh:
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = top
+	mesh.bottom_radius = bottom
+	mesh.height = height
+	mesh.radial_segments = 16
+	mesh.rings = 0
+	mesh.material = material
+	return mesh
 
 func _visual(body: StaticBody3D, mesh: Mesh, at: Vector3, tilt := Vector3.ZERO) -> void:
 	var instance := MeshInstance3D.new()

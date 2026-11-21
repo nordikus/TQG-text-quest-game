@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/interaction/rune_chest.gd" id="1_chest"]
+[ext_resource type="Script" path="res://scripts/interaction/rune_container.gd" id="1_chest"]
 [ext_resource type="PackedScene" path="res://scenes/world/castle/rune_sigil.tscn" id="2_sigil"]
 
 [sub_resource type="StandardMaterial3D" id="Oak"]
@@ -48,6 +48,7 @@ size = Vector3(0.41, 0.34, 0.055)
 
 [node name="RuneChest" type="StaticBody3D"]
 script = ExtResource("1_chest")
+note_id = "captains_sealed_report"
 
 [node name="Body" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.08, 0)

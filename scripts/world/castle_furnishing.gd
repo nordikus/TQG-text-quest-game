@@ -127,23 +127,34 @@ func _barracks() -> void:
 	_lantern(Vector3(4.64, 3.28, -5.1), 3.86)
 
 func _keep() -> void:
-	# Furnish the wide bays while leaving the stair, portals and central aisle open.
-	for z in [-10.8, -6.25, -1.7, 6.7]:
-		_table(Vector3(-29.05, 0.25, z), Vector2(1.86, 2.72))
-		_bench(Vector3(-27.34, 0.25, z), PI / 2.0)
-		_box(Vector3(-29.31, 1.071, z + 0.28), Vector3(0.46, 0.026, 0.35), PAPER,
-			false, Vector3(0, 0.21, 0))
-		_round(Vector3(-29.55, 1.135, z - 0.78), 0.083, 0.15, BRASS)
-	for z in [-8.5, -2.2, 4.2]:
-		_lantern(Vector3(-27.95, 3.4, z), 6.05)
-	for z in [-12.75, -8.35, -3.95, 4.3]:
-		_ledger_shelf(Vector3(-31.58, 0.25, z))
+	_lower_library()
 	_dining_room()
 	_keep_kitchen()
 	_keep_cellar()
 	_keep_stair_guards()
 	_upper_service_room()
 	_steward_room()
+
+func _lower_library() -> void:
+	for z in [-12.95, -8.78, -4.6, -0.45, 8.8]:
+		_ledger_shelf(Vector3(-31.24, 0.25, z))
+	for z in [5.15, 11.25]:
+		_ledger_shelf(Vector3(-13.76, 0.25, z))
+	for at in [Vector3(-28.7, 0.25, -9.8), Vector3(-25.8, 0.25, 8.15), Vector3(-19.0, 0.25, 8.15)]:
+		_box(at + Vector3.UP * 0.012, Vector3(3.24, 0.019, 4.03), BLUE.darkened(0.38))
+		_table(at, Vector2(1.85, 2.65))
+		_bench(at + Vector3(1.31, 0, 0), PI / 2.0)
+		_box(at + Vector3(-0.27, 0.824, 0.32), Vector3(0.46, 0.027, 0.35), PAPER,
+			false, Vector3(0, 0.21, 0))
+		_round(at + Vector3(0.36, 0.916, -0.73), 0.096, 0.18, BRASS)
+	var catalog := Vector3(-22.75, 0.25, 13.53)
+	_table(catalog, Vector2(3.8, 0.92))
+	for x in [-1.2, -0.36, 0.26, 0.97]:
+		_box(catalog + Vector3(x, 0.85, -0.02), Vector3(0.56, 0.08, 0.53), BLUE.lerp(OAK, absf(x) * 0.6),
+			false, Vector3(0, -0.12 * x, 0))
+	for light_at in [Vector3(-28.4, 3.42, -11.0), Vector3(-28.4, 3.54, -3.35),
+			Vector3(-25.6, 3.5, 8.25), Vector3(-18.85, 3.5, 8.25)]:
+		_lantern(light_at, 6.05)
 
 
 func _dining_room() -> void:
@@ -263,7 +274,7 @@ func _hearth(at: Vector3) -> void:
 func _keep_cellar() -> void:
 	_provision_rack(Vector3(23.96, -3.55, -11.51), PI / 2.0, 0.88)
 	_provision_rack(Vector3(21.17, -3.55, -14.29), 0.0, 0.88)
-	for x in [19.20, 20.24, 21.26, 22.28]:
+	for x in [20.24, 21.26, 22.28]:
 		_provision_barrel(Vector3(x, -3.55, -9.05), 0.41)
 	_table(Vector3(20.96, -3.55, -11.3), Vector2(1.9, 0.9))
 	for x in [20.51, 21.24]:
@@ -279,15 +290,13 @@ func _upper_service_room() -> void:
 		_box(Vector3(19.42, 7.24, z), Vector3(0.62, 0.13, 0.72), LINEN)
 	for x in [18.32, 20.26, 22.32]:
 		_locker(Vector3(x, 6.35, -13.90))
-	for x in [22.26, 24.32]:
-		_bench(Vector3(x, 6.35, -4.32))
+	_bench(Vector3(23.74, 6.35, -11.1), PI / 2.0)
 	_lantern(Vector3(19.69, 9.71, -7.26), 12.0, 1.64, 8.1)
 	_lantern(Vector3(27.02, 9.41, -2.31), 12.0, 1.30, 6.5)
 
 
 func _keep_stair_guards() -> void:
-	for x in [25.40, 31.30]:
-		_stair_guard(Vector3(x, 6.35, -13.84), Vector3(x, 6.35, -4.85))
+	_stair_guard(Vector3(31.30, 6.35, -13.84), Vector3(31.30, 6.35, -4.85))
 	_stair_guard(Vector3(25.40, 6.35, -13.84), Vector3(31.30, 6.35, -13.84))
 	_stair_guard(Vector3(28.54, 6.35, -4.76), Vector3(31.30, 6.35, -4.76))
 

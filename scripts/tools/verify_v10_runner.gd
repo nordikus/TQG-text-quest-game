@@ -11,6 +11,8 @@ var _shard: PickupItem
 var _captain_seal: PickupItem
 var _chest: Interactable
 var _keep: InteractableDoor
+var _service_door: InteractableDoor
+var _barrel: Interactable
 var _book: BookPedestal
 var _barracks: InteractableDoor
 
@@ -27,6 +29,8 @@ func _verify() -> void:
 	_captain_seal = _world.keep_key
 	_chest = _world.rune_chest
 	_keep = _world.keep_door
+	_service_door = _world.service_room_door
+	_barrel = _world.rune_barrel
 	_book = _level.find_child("PedestalWithBook", true, false)
 	_barracks = _level.find_child("BarracksDoor", true, false)
 	await get_tree().physics_frame
@@ -55,6 +59,8 @@ func _verify() -> void:
 	_check(not _shard.visible and not _captain_seal.visible,
 		"Carried quest items do not respawn as duplicates.")
 	_check(InventoryManager.notes.has("captains_sealed_report"), "The chest report survives rewriting.")
+	_check(InventoryManager.notes.count("waterkeeper_note") == 1 and InventoryManager.notes.count("upper_guard_ledger") == 1,
+		"The service-room and cellar notes survive rewriting without duplicates.")
 	get_tree().quit(0 if _passed else 1)
 
 func _check_initial() -> void:
@@ -63,6 +69,9 @@ func _check_initial() -> void:
 	_check(_world.life_thicket.visible and _world.ash_thicket.visible and not _world.great_tree.visible,
 		"Both areas return to ordinary woodland and the Great Tree retracts.")
 	_check(_gate_blocks(), "Physical outer gate is closed.")
+	_check(_service_door.is_locked and not _service_door.is_open and _service_doorway().get("collider") == _service_door.left_wing
+		and _barrel.get_node("Seal").visible and is_zero_approx(_barrel.get_node("Lid").rotation.x),
+		"The service room and the rune barrel relock after a rewrite.")
 	_check(_front_panel_is_closed(),
 		"The front masonry is intact before the choice and after a rewrite.")
 	_check_courtyard_branch(false)
@@ -116,6 +125,11 @@ func _verify_life() -> void:
 	await get_tree().create_timer(0.6).timeout
 	_check(InventoryManager.has_item(ArcaneBarrier.SHARD_ID) and not _seal.visible and _seal.get_node("Col").disabled,
 		"The shard removes the bridge seal and stays in inventory.")
+	if not InventoryManager.has_item("throne_hall_key"):
+		_service_door.interact()
+		_check(_service_door.is_locked and not _service_door.is_open,
+			"The shard cannot open the service room's guard lock.")
+	await _verify_barrel(true)
 
 func _verify_ash(has_shard: bool) -> void:
 	QuestManager.complete_quest("burning_grove", "pass_by")
@@ -144,12 +158,34 @@ func _verify_ash(has_shard: bool) -> void:
 	_barracks.restore_door()
 	_captain_seal.interact()
 	_keep.interact()
+	_service_door.interact()
 	await get_tree().create_timer(0.82).timeout
 	_check(InventoryManager.has_item("throne_hall_key") and _keep.is_open and absf(_keep.left_wing.rotation.y) > 1.0,
 		"The reusable captain's seal opens the physical keep doors.")
+	_check(InventoryManager.has_item("throne_hall_key") and _service_door.is_open and _service_doorway().is_empty(),
+		"The captain's seal opens the swinging door above the kitchen.")
+	var ledger := _level.find_child("UpperGuardLedger", true, false) as PickupItem
+	if ledger:
+		ledger.interact()
+	_check(InventoryManager.notes.count("upper_guard_ledger") == 1, "The guard ledger can be taken once.")
 	_chest.interact()
 	_check(InventoryManager.notes.has("captains_sealed_report") == has_shard,
 		"The barracks chest gives its report only to the carried crystal shard.")
+	await _verify_barrel(has_shard)
+
+func _service_doorway() -> Dictionary:
+	return _ray(Vector3(21.75, 7.85, -153.8), Vector3(21.75, 7.85, -156.4))
+
+func _verify_barrel(has_shard: bool) -> void:
+	_barrel.interact()
+	if not has_shard:
+		_check(_barrel.get_node("Seal").visible and is_zero_approx(_barrel.get_node("Lid").rotation.x)
+			and not InventoryManager.notes.has("waterkeeper_note"), "The captain's seal cannot open the rune barrel.")
+		return
+	await get_tree().create_timer(0.62).timeout
+	_check(not _barrel.get_node("Seal").visible and _barrel.get_node("Lid").rotation.x < -1.0
+		and InventoryManager.notes.count("waterkeeper_note") == 1 and InventoryManager.has_item(ArcaneBarrier.SHARD_ID),
+		"The shard unseals the barrel and leaves one waterkeeper note in the journal.")
 
 func _take_quill_and_rewrite() -> void:
 	QuestManager.complete_quest("deal_at_the_throne", "accept_deal")

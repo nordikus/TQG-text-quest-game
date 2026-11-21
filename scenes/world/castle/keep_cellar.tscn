@@ -3,6 +3,7 @@
 [ext_resource type="Shader" path="res://scenes/world/castle/masonry.gdshader" id="1_masonry"]
 [ext_resource type="ArrayMesh" path="res://scenes/world/castle/cellar_stairs_mesh.res" id="2_steps"]
 [ext_resource type="ConcavePolygonShape3D" path="res://scenes/world/castle/cellar_stairs_collision.res" id="3_ramp"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/rune_barrel.tscn" id="4_rune_barrel"]
 
 [sub_resource type="ShaderMaterial" id="Stone"]
 shader = ExtResource("1_masonry")
@@ -167,3 +168,7 @@ mesh = ExtResource("2_steps")
 
 [node name="WalkingSurface" type="CollisionShape3D" parent="CellarStair"]
 shape = ExtResource("3_ramp")
+
+[node name="RuneBarrel" parent="." instance=ExtResource("4_rune_barrel")]
+position = Vector3(19.18, -3.55, -9.06)
+rotation = Vector3(0, 3.14159265, 0)

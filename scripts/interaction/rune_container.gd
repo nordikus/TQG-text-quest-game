@@ -1,6 +1,8 @@
+class_name RuneContainer
 extends Interactable
 
-const PAGE_ID := "captains_sealed_report"
+@export var note_id: String
+@export var closed_prompt := "[E] Открыть сундук"
 
 @onready var _lid: Node3D = $Lid
 @onready var _rune: Node3D = $Seal
@@ -22,8 +24,8 @@ func interact() -> void:
 	interaction_prompt = ""
 	_opening = create_tween()
 	_opening.tween_property(_lid, "rotation:x", -1.12, 0.58).set_trans(Tween.TRANS_CUBIC)
-	if not InventoryManager.add_item(PAGE_ID):
-		GameManager.notify("Копия донесения уже в журнале.")
+	if not InventoryManager.add_item(note_id):
+		GameManager.notify("Эта запись уже в журнале.")
 	GameManager.interaction_prompt_cleared.emit()
 
 func restore_seal() -> void:
@@ -32,4 +34,4 @@ func restore_seal() -> void:
 	_opened = false
 	_lid.rotation.x = 0.0
 	_rune.show()
-	interaction_prompt = "[E] Открыть сундук"
+	interaction_prompt = closed_prompt

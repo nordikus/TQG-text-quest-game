@@ -242,8 +242,9 @@ func _run_verification() -> void:
 		all_passed = false
 	for z in [-140.0, -155.0, -165.0]:
 		var library_wall := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-			Vector3(-29.6, 4.8, z), Vector3(-32.1, 4.8, z)))
-		if library_wall.is_empty() or library_wall.collider.name != "KeepWallWest":
+			Vector3(-26.0, 4.8, z), Vector3(-32.1, 4.8, z)))
+		if library_wall.is_empty() or library_wall.collider.name != "KeepWallWest" \
+				or absf(library_wall.position.x + 31.6) > 0.03:
 			push_error("FAIL: An exterior buttress or turret penetrates the lower library at z=%s." % z)
 			all_passed = false
 	for side in [Vector2(-33.15, -100), Vector2(15, -81.5), Vector2(36.0, -116), Vector2(0, -167.6)]:
@@ -421,6 +422,12 @@ func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
 		Vector3(22.53, 1.95, -153.6), Vector3(22.53, 1.95, -155.2)))
 	if not kitchen_door.is_empty() or kitchen_wall.is_empty() or not service_hatch.is_empty():
 		push_error("FAIL: The kitchen requires its own room and open access from dining.")
+		return false
+
+	var service_wall := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(26.5, 8.0, -160.0), Vector3(23.5, 8.0, -160.0)))
+	if service_wall.is_empty() or service_wall.collider.name != "ServiceRoomEastWall":
+		push_error("FAIL: The stairwell must not bypass the lock on the service-room doorway.")
 		return false
 
 	for flight in range(2):

@@ -728,9 +728,6 @@ size = Vector3(0.38, 5.8, 6.4)
 [sub_resource type="BoxShape3D" id="Shape_ServiceStairSpine"]
 size = Vector3(0.38, 5.8, 6.4)
 
-[sub_resource type="BoxShape3D" id="Shape_ServiceStairEdgeWest"]
-size = Vector3(0.18, 0.96, 9.01)
-
 [sub_resource type="BoxShape3D" id="Shape_ServiceStairEdgeEast"]
 size = Vector3(0.18, 0.96, 9.01)
 
@@ -819,7 +816,7 @@ size = Vector3(2.2, 0.44, 21.4)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor1West"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(47.2, 0.04, 30)
+size = Vector3(28.6, 0.04, 30)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor1East"]
 material = SubResource("Mat_StoneDark")
@@ -856,6 +853,46 @@ size = Vector3(14.19, 0.015, 10.82)
 [sub_resource type="BoxMesh" id="Mesh_KitchenFlagstonesSouth"]
 material = SubResource("Mat_Stone")
 size = Vector3(2.2, 0.015, 2.32)
+
+[sub_resource type="BoxMesh" id="Mesh_ServiceRoomEastWall"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.4, 5.65, 10.76)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceRoomEastWall"]
+size = Vector3(0.4, 5.65, 10.76)
+
+[sub_resource type="BoxMesh" id="Mesh_ServiceRoomWallWest"]
+material = SubResource("Mat_Stone")
+size = Vector3(7.25, 5.65, 0.42)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceRoomWallWest"]
+size = Vector3(7.25, 5.65, 0.42)
+
+[sub_resource type="BoxMesh" id="Mesh_ServiceRoomWallEast"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.14, 5.65, 0.42)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceRoomWallEast"]
+size = Vector3(2.14, 5.65, 0.42)
+
+[sub_resource type="BoxMesh" id="Mesh_ServiceRoomLintel"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.2, 2.93, 0.42)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceRoomLintel"]
+size = Vector3(2.2, 2.93, 0.42)
+
+[sub_resource type="CylinderMesh" id="Mesh_CaptainsDoorBadge"]
+material = SubResource("Mat_Gold")
+top_radius = 0.13
+bottom_radius = 0.14
+height = 0.035
+radial_segments = 8
+rings = 0
+
+[sub_resource type="BoxMesh" id="Mesh_LowerLibraryFlagstones"]
+material = SubResource("Mat_Stone")
+size = Vector3(18.6, 0.04, 30)
 
 [node name="MainKeep" type="Node3D"]
 
@@ -906,8 +943,12 @@ shape = SubResource("Shape_EntranceStairs")
 [node name="Floor1" type="StaticBody3D" parent="."]
 
 [node name="Mesh" type="MeshInstance3D" parent="Floor1"]
-position = Vector3(-8.4, 0.23, 0)
+position = Vector3(0.9, 0.23, 0)
 mesh = SubResource("Mesh_Floor1West")
+
+[node name="LowerLibraryFlagstones" type="MeshInstance3D" parent="Floor1"]
+position = Vector3(-22.7, 0.23, 0)
+mesh = SubResource("Mesh_LowerLibraryFlagstones")
 
 [node name="Col" type="CollisionShape3D" parent="Floor1"]
 position = Vector3(-8.4, 0.23, 0)
@@ -1797,6 +1838,74 @@ mesh = SubResource("Mesh_ServiceHatchCounter")
 [node name="Col" type="CollisionShape3D" parent="ServiceHatchCounter"]
 shape = SubResource("Shape_ServiceHatchCounter")
 
+[node name="ServiceRoomEastWall" type="StaticBody3D" parent="."]
+position = Vector3(25.19, 9.175, -9.12)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceRoomEastWall"]
+mesh = SubResource("Mesh_ServiceRoomEastWall")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceRoomEastWall"]
+shape = SubResource("Shape_ServiceRoomEastWall")
+
+[node name="ServiceRoomWallWest" type="StaticBody3D" parent="."]
+position = Vector3(17.025, 9.175, -3.95)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceRoomWallWest"]
+mesh = SubResource("Mesh_ServiceRoomWallWest")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceRoomWallWest"]
+shape = SubResource("Shape_ServiceRoomWallWest")
+
+[node name="ServiceRoomWallEast" type="StaticBody3D" parent="."]
+position = Vector3(23.92, 9.175, -3.95)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceRoomWallEast"]
+mesh = SubResource("Mesh_ServiceRoomWallEast")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceRoomWallEast"]
+shape = SubResource("Shape_ServiceRoomWallEast")
+
+[node name="ServiceRoomLintel" type="StaticBody3D" parent="."]
+position = Vector3(21.75, 10.535, -3.95)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceRoomLintel"]
+mesh = SubResource("Mesh_ServiceRoomLintel")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceRoomLintel"]
+shape = SubResource("Shape_ServiceRoomLintel")
+
+[node name="UpperServiceDoor" type="StaticBody3D" parent="." node_paths=PackedStringArray("left_wing")]
+position = Vector3(21.75, 7.71, -3.95)
+script = ExtResource("1_door")
+required_item_id = "throne_hall_key"
+locked_hint = "клеймо замкового караула"
+open_angle_deg = -92.0
+left_wing = NodePath("DoorWing")
+
+[node name="DoorWing" type="AnimatableBody3D" parent="UpperServiceDoor"]
+position = Vector3(-1.1, 0, 0)
+script = ExtResource("12_door_leaf")
+panel_size = Vector3(2.20, 2.72, 0.18)
+style = 3
+has_lock_plate = true
+
+[node name="CaptainBadge" type="MeshInstance3D" parent="UpperServiceDoor/DoorWing"]
+position = Vector3(1.1, 0.19, 0.111)
+rotation = Vector3(1.57079633, 0, 0)
+mesh = SubResource("Mesh_CaptainsDoorBadge")
+
+[node name="UpperGuardLedger" type="StaticBody3D" parent="."]
+position = Vector3(20.04, 7.19, -7.56)
+rotation = Vector3(0, -0.19, 0)
+script = ExtResource("2_pickup")
+item_id = "upper_guard_ledger"
+
+[node name="Ledger" type="MeshInstance3D" parent="UpperGuardLedger"]
+mesh = SubResource("Mesh_RoyalOrderDraft")
+
+[node name="Col" type="CollisionShape3D" parent="UpperGuardLedger"]
+shape = SubResource("Shape_RoyalOrderDraft")
+
 [node name="StewardPartitionWest" type="StaticBody3D" parent="."]
 position = Vector3(17.425, 9.175, 3.05)
 
@@ -1841,12 +1950,6 @@ mesh = SubResource("Mesh_ServiceStairSpine")
 
 [node name="Col" type="CollisionShape3D" parent="ServiceStairSpine"]
 shape = SubResource("Shape_ServiceStairSpine")
-
-[node name="ServiceStairEdgeWest" type="StaticBody3D" parent="."]
-position = Vector3(25.40, 6.83, -9.355)
-
-[node name="Col" type="CollisionShape3D" parent="ServiceStairEdgeWest"]
-shape = SubResource("Shape_ServiceStairEdgeWest")
 
 [node name="ServiceStairEdgeEast" type="StaticBody3D" parent="."]
 position = Vector3(31.30, 6.83, -9.355)

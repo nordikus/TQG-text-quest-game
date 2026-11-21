@@ -17,6 +17,7 @@ extends Node3D
 @export var bridge_seal: ArcaneBarrier
 @export var shard: PickupItem
 @export var rune_chest: Interactable
+@export var rune_barrel: Interactable
 @export var intact_bridge: Node3D
 @export var collapsed_bridge: Node3D
 @export var courtyard_roots: Node3D
@@ -30,6 +31,7 @@ extends Node3D
 @export var ash_thicket: Node3D
 @export var living_arches: Node3D
 @export var keep_door: InteractableDoor
+@export var service_room_door: InteractableDoor
 @export var keep_key: PickupItem
 
 var _transitions: Array[Tween] = []
@@ -118,12 +120,16 @@ func reset_world() -> void:
 		outer_gate.set_raised(false, false)
 	if keep_door:
 		keep_door.restore_door()
+	if service_room_door:
+		service_room_door.restore_door()
 	if keep_key:
 		keep_key.restore_pickup()
 	if shard:
 		shard.restore_pickup()
 	if rune_chest:
 		rune_chest.restore_seal()
+	if rune_barrel:
+		rune_barrel.restore_seal()
 
 func _reset_landmarks() -> void:
 	_set_enabled(life_thicket, true)
