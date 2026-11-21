@@ -18,6 +18,8 @@
 [ext_resource type="ArrayMesh" path="res://scenes/world/castle/service_stairs_mesh.res" id="27_service_steps"]
 [ext_resource type="ConcavePolygonShape3D" path="res://scenes/world/castle/service_stairs_collision.res" id="28_service_collision"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/castle/keep_cellar.tscn" id="30_cellar"]
+
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("10_masonry")
 
@@ -79,13 +81,6 @@ emission_enabled = true
 emission = Color(0.20, 0.60, 0.80, 1.0)
 emission_energy_multiplier = 1.6
 
-[sub_resource type="BoxMesh" id="Mesh_PlinthBase"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(64.8, 0.44, 30.8)
-
-[sub_resource type="BoxShape3D" id="Shape_PlinthBase"]
-size = Vector3(64.8, 0.44, 30.8)
-
 [sub_resource type="BoxMesh" id="Mesh_EntranceStairs"]
 material = SubResource("Mat_StoneDark")
 size = Vector3(8, 0.28, 3.8)
@@ -93,13 +88,6 @@ size = Vector3(8, 0.28, 3.8)
 [sub_resource type="ConcavePolygonShape3D" id="Shape_EntranceStairs"]
 backface_collision = true
 data = PackedVector3Array(-4, -0.04, 18.75, 4, -0.04, 18.75, -4, 0.25, 14.85, 4, -0.04, 18.75, 4, 0.25, 14.85, -4, 0.25, 14.85)
-
-[sub_resource type="BoxMesh" id="Mesh_Floor1"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(64.0, 0.04, 30.0)
-
-[sub_resource type="BoxShape3D" id="Shape_Floor1"]
-size = Vector3(64.0, 0.04, 30.0)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor2West_Outer"]
 material = SubResource("Mat_Stone")
@@ -131,10 +119,10 @@ size = Vector3(5.0, 0.3, 4.0)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor2Gallery"]
 material = SubResource("Mat_Stone")
-size = Vector3(26.0, 0.3, 4.0)
+size = Vector3(26.0, 0.3, 4.6)
 
 [sub_resource type="BoxShape3D" id="Shape_Floor2Gallery"]
-size = Vector3(26.0, 0.3, 4.0)
+size = Vector3(26.0, 0.3, 4.6)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor3"]
 material = SubResource("Mat_Stone")
@@ -652,47 +640,33 @@ size = Vector3(3.2, 0.13, 0.5)
 [sub_resource type="BoxShape3D" id="Shape_LibraryBridgeThreshold"]
 size = Vector3(3.2, 0.13, 0.5)
 
-[sub_resource type="BoxMesh" id="Mesh_DiningVestibuleNorth"]
-material = SubResource("Mat_Stone")
-size = Vector3(3.34, 5.8, 0.34)
-
-[sub_resource type="BoxShape3D" id="Shape_DiningVestibuleNorth"]
-size = Vector3(3.34, 5.8, 0.34)
-
-[sub_resource type="BoxMesh" id="Mesh_DiningVestibuleSouth"]
-material = SubResource("Mat_Stone")
-size = Vector3(3.34, 5.8, 0.34)
-
-[sub_resource type="BoxShape3D" id="Shape_DiningVestibuleSouth"]
-size = Vector3(3.34, 5.8, 0.34)
-
 [sub_resource type="BoxMesh" id="Mesh_Floor2EastMain"]
 material = SubResource("Mat_Stone")
-size = Vector3(12.65, 0.3, 30)
+size = Vector3(12.46, 0.3, 30)
 
 [sub_resource type="BoxShape3D" id="Shape_Floor2EastMain"]
-size = Vector3(12.65, 0.3, 30)
+size = Vector3(12.46, 0.3, 30)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor2EastOuter"]
 material = SubResource("Mat_Stone")
-size = Vector3(0.86, 0.3, 30)
+size = Vector3(0.76, 0.3, 30)
 
 [sub_resource type="BoxShape3D" id="Shape_Floor2EastOuter"]
-size = Vector3(0.86, 0.3, 30)
+size = Vector3(0.76, 0.3, 30)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor2EastStairNorth"]
 material = SubResource("Mat_Stone")
-size = Vector3(5.49, 0.3, 1.25)
+size = Vector3(5.78, 0.3, 1.25)
 
 [sub_resource type="BoxShape3D" id="Shape_Floor2EastStairNorth"]
-size = Vector3(5.49, 0.3, 1.25)
+size = Vector3(5.78, 0.3, 1.25)
 
 [sub_resource type="BoxMesh" id="Mesh_Floor2EastStairSouth"]
 material = SubResource("Mat_Stone")
-size = Vector3(5.49, 0.3, 19.85)
+size = Vector3(5.78, 0.3, 19.85)
 
 [sub_resource type="BoxShape3D" id="Shape_Floor2EastStairSouth"]
-size = Vector3(5.49, 0.3, 19.85)
+size = Vector3(5.78, 0.3, 19.85)
 
 [sub_resource type="BoxMesh" id="Mesh_KitchenPartitionWest"]
 material = SubResource("Mat_Stone")
@@ -703,10 +677,10 @@ size = Vector3(3.5, 5.8, 0.4)
 
 [sub_resource type="BoxMesh" id="Mesh_KitchenPartitionEast"]
 material = SubResource("Mat_Stone")
-size = Vector3(12.35, 5.8, 0.4)
+size = Vector3(7.70, 5.8, 0.4)
 
 [sub_resource type="BoxShape3D" id="Shape_KitchenPartitionEast"]
-size = Vector3(12.35, 5.8, 0.4)
+size = Vector3(7.70, 5.8, 0.4)
 
 [sub_resource type="BoxMesh" id="Mesh_KitchenPartitionLintel"]
 material = SubResource("Mat_Stone")
@@ -715,33 +689,61 @@ size = Vector3(2.35, 3.12, 0.4)
 [sub_resource type="BoxShape3D" id="Shape_KitchenPartitionLintel"]
 size = Vector3(2.35, 3.12, 0.4)
 
-[sub_resource type="BoxMesh" id="Mesh_StoresPartitionWest"]
+[sub_resource type="BoxMesh" id="Mesh_ServiceHatchJamb"]
+material = SubResource("Mat_Stone")
+size = Vector3(1.9, 5.8, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceHatchJamb"]
+size = Vector3(1.9, 5.8, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_ServiceHatchBase"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.75, 1, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceHatchBase"]
+size = Vector3(2.75, 1, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_ServiceHatchLintel"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.75, 3.51, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceHatchLintel"]
+size = Vector3(2.75, 3.51, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_ServiceHatchCounter"]
+material = SubResource("Mat_WoodDark")
+size = Vector3(2.75, 0.14, 0.76)
+
+[sub_resource type="BoxShape3D" id="Shape_ServiceHatchCounter"]
+size = Vector3(2.75, 0.14, 0.76)
+
+[sub_resource type="BoxMesh" id="Mesh_StewardPartitionWest"]
 material = SubResource("Mat_Stone")
 size = Vector3(8.05, 5.65, 0.41)
 
-[sub_resource type="BoxShape3D" id="Shape_StoresPartitionWest"]
+[sub_resource type="BoxShape3D" id="Shape_StewardPartitionWest"]
 size = Vector3(8.05, 5.65, 0.41)
 
-[sub_resource type="BoxMesh" id="Mesh_StoresPartitionEast"]
+[sub_resource type="BoxMesh" id="Mesh_StewardPartitionEast"]
 material = SubResource("Mat_Stone")
 size = Vector3(7.75, 5.65, 0.41)
 
-[sub_resource type="BoxShape3D" id="Shape_StoresPartitionEast"]
+[sub_resource type="BoxShape3D" id="Shape_StewardPartitionEast"]
 size = Vector3(7.75, 5.65, 0.41)
 
-[sub_resource type="BoxMesh" id="Mesh_StoresPartitionLintel"]
+[sub_resource type="BoxMesh" id="Mesh_StewardPartitionLintel"]
 material = SubResource("Mat_Stone")
 size = Vector3(2.4, 2.9, 0.41)
 
-[sub_resource type="BoxShape3D" id="Shape_StoresPartitionLintel"]
+[sub_resource type="BoxShape3D" id="Shape_StewardPartitionLintel"]
 size = Vector3(2.4, 2.9, 0.41)
 
 [sub_resource type="BoxMesh" id="Mesh_ServiceStairTurn"]
 material = SubResource("Mat_Stone")
-size = Vector3(5, 3.05, 2.5)
+size = Vector3(5.78, 3.05, 2.5)
 
 [sub_resource type="BoxShape3D" id="Shape_ServiceStairTurn"]
-size = Vector3(5, 3.05, 2.5)
+size = Vector3(5.78, 3.05, 2.5)
 
 [sub_resource type="BoxMesh" id="Mesh_ServiceStairSpine"]
 material = SubResource("Mat_Stone")
@@ -757,14 +759,10 @@ size = Vector3(0.18, 0.96, 9.01)
 size = Vector3(0.18, 0.96, 9.01)
 
 [sub_resource type="BoxShape3D" id="Shape_ServiceStairEdgeNorth"]
-size = Vector3(5.35, 0.96, 0.18)
+size = Vector3(5.68, 0.96, 0.18)
 
 [sub_resource type="BoxShape3D" id="Shape_ServiceStairEdgeSouth"]
-size = Vector3(2.88, 0.96, 0.18)
-
-[sub_resource type="BoxMesh" id="Mesh_KitchenFlagstones"]
-material = SubResource("Mat_Stone")
-size = Vector3(18.18, 0.015, 10.82)
+size = Vector3(2.7, 0.96, 0.18)
 
 [sub_resource type="BoxMesh" id="Mesh_RoyalOrderDraft"]
 material = SubResource("Mat_Paper")
@@ -780,16 +778,160 @@ radial_segments = 9
 [sub_resource type="BoxShape3D" id="Shape_RoyalOrderDraft"]
 size = Vector3(0.45, 0.12, 0.33)
 
+[sub_resource type="BoxMesh" id="Mesh_StairSupport"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.7, 2.89, 6.4)
+
+[sub_resource type="BoxShape3D" id="Shape_StairSupport"]
+size = Vector3(2.7, 2.89, 6.4)
+
+[sub_resource type="BoxMesh" id="Mesh_StairWestWall"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.26, 5.8, 8.9)
+
+[sub_resource type="BoxShape3D" id="Shape_StairWestWall"]
+size = Vector3(0.26, 5.8, 8.9)
+
+[sub_resource type="BoxMesh" id="Mesh_StairEastWall"]
+material = SubResource("Mat_Stone")
+size = Vector3(0.36, 5.8, 8.9)
+
+[sub_resource type="BoxShape3D" id="Shape_StairEastWall"]
+size = Vector3(0.36, 5.8, 8.9)
+
+[sub_resource type="BoxMesh" id="Mesh_StairBackWall"]
+material = SubResource("Mat_Stone")
+size = Vector3(6.4, 5.8, 0.4)
+
+[sub_resource type="BoxShape3D" id="Shape_StairBackWall"]
+size = Vector3(6.4, 5.8, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_StairDoorLintel"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.7, 3.05, 0.28)
+
+[sub_resource type="BoxShape3D" id="Shape_StairDoorLintel"]
+size = Vector3(2.7, 3.05, 0.28)
+
+[sub_resource type="BoxMesh" id="Mesh_LoggiaSill"]
+material = SubResource("Mat_Stone")
+size = Vector3(1.55, 0.3, 2.2)
+
+[sub_resource type="BoxShape3D" id="Shape_LoggiaSill"]
+size = Vector3(1.55, 0.3, 2.2)
+
+[sub_resource type="BoxMesh" id="Mesh_LoggiaBracketNorth"]
+material = SubResource("Mat_Stone")
+size = Vector3(1.1, 0.74, 0.38)
+
+[sub_resource type="BoxMesh" id="Mesh_LoggiaBracketSouth"]
+material = SubResource("Mat_Stone")
+size = Vector3(1.1, 0.74, 0.38)
+
+[sub_resource type="BoxMesh" id="Mesh_PlinthBaseWest"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(47.6, 0.44, 30.8)
+
+[sub_resource type="BoxMesh" id="Mesh_PlinthBaseEast"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(15, 0.44, 30.8)
+
+[sub_resource type="BoxMesh" id="Mesh_PlinthBaseNorth"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.2, 0.44, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_PlinthBaseSouth"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.2, 0.44, 21.4)
+
+[sub_resource type="BoxShape3D" id="Shape_PlinthBaseWest"]
+size = Vector3(47.6, 0.44, 30.8)
+
+[sub_resource type="BoxShape3D" id="Shape_PlinthBaseEast"]
+size = Vector3(15, 0.44, 30.8)
+
+[sub_resource type="BoxShape3D" id="Shape_PlinthBaseNorth"]
+size = Vector3(2.2, 0.44, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_PlinthBaseSouth"]
+size = Vector3(2.2, 0.44, 21.4)
+
+[sub_resource type="BoxMesh" id="Mesh_Floor1West"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(47.2, 0.04, 30)
+
+[sub_resource type="BoxMesh" id="Mesh_Floor1East"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(14.6, 0.04, 30)
+
+[sub_resource type="BoxMesh" id="Mesh_Floor1North"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.2, 0.04, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_Floor1South"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.2, 0.04, 21)
+
+[sub_resource type="BoxShape3D" id="Shape_Floor1West"]
+size = Vector3(47.2, 0.04, 30)
+
+[sub_resource type="BoxShape3D" id="Shape_Floor1East"]
+size = Vector3(14.6, 0.04, 30)
+
+[sub_resource type="BoxShape3D" id="Shape_Floor1North"]
+size = Vector3(2.2, 0.04, 0.3)
+
+[sub_resource type="BoxShape3D" id="Shape_Floor1South"]
+size = Vector3(2.2, 0.04, 21)
+
+[sub_resource type="BoxMesh" id="Mesh_KitchenFlagstonesWest"]
+material = SubResource("Mat_Stone")
+size = Vector3(1.79, 0.015, 10.82)
+
+[sub_resource type="BoxMesh" id="Mesh_KitchenFlagstonesEast"]
+material = SubResource("Mat_Stone")
+size = Vector3(14.19, 0.015, 10.82)
+
+[sub_resource type="BoxMesh" id="Mesh_KitchenFlagstonesSouth"]
+material = SubResource("Mat_Stone")
+size = Vector3(2.2, 0.015, 2.32)
+
 [node name="MainKeep" type="Node3D"]
 
 [node name="PlinthBase" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.0, 0.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="PlinthBase"]
-mesh = SubResource("Mesh_PlinthBase")
+position = Vector3(-8.6, 0, 0)
+mesh = SubResource("Mesh_PlinthBaseWest")
 
 [node name="Col" type="CollisionShape3D" parent="PlinthBase"]
-shape = SubResource("Shape_PlinthBase")
+position = Vector3(-8.6, 0, 0)
+shape = SubResource("Shape_PlinthBaseWest")
+
+[node name="MeshEast" type="MeshInstance3D" parent="PlinthBase"]
+position = Vector3(24.9, 0, 0)
+mesh = SubResource("Mesh_PlinthBaseEast")
+
+[node name="ColEast" type="CollisionShape3D" parent="PlinthBase"]
+position = Vector3(24.9, 0, 0)
+shape = SubResource("Shape_PlinthBaseEast")
+
+[node name="MeshNorth" type="MeshInstance3D" parent="PlinthBase"]
+position = Vector3(16.3, 0, -15.05)
+mesh = SubResource("Mesh_PlinthBaseNorth")
+
+[node name="ColNorth" type="CollisionShape3D" parent="PlinthBase"]
+position = Vector3(16.3, 0, -15.05)
+shape = SubResource("Shape_PlinthBaseNorth")
+
+[node name="MeshSouth" type="MeshInstance3D" parent="PlinthBase"]
+position = Vector3(16.3, 0, 4.7)
+mesh = SubResource("Mesh_PlinthBaseSouth")
+
+[node name="ColSouth" type="CollisionShape3D" parent="PlinthBase"]
+position = Vector3(16.3, 0, 4.7)
+shape = SubResource("Shape_PlinthBaseSouth")
 
 [node name="EntranceStairs" type="StaticBody3D" parent="."]
 
@@ -801,13 +943,38 @@ mesh = SubResource("Mesh_EntranceStairs")
 shape = SubResource("Shape_EntranceStairs")
 
 [node name="Floor1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.23, 0.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="Floor1"]
-mesh = SubResource("Mesh_Floor1")
+position = Vector3(-8.4, 0.23, 0)
+mesh = SubResource("Mesh_Floor1West")
 
 [node name="Col" type="CollisionShape3D" parent="Floor1"]
-shape = SubResource("Shape_Floor1")
+position = Vector3(-8.4, 0.23, 0)
+shape = SubResource("Shape_Floor1West")
+
+[node name="MeshEast" type="MeshInstance3D" parent="Floor1"]
+position = Vector3(24.7, 0.23, 0)
+mesh = SubResource("Mesh_Floor1East")
+
+[node name="ColEast" type="CollisionShape3D" parent="Floor1"]
+position = Vector3(24.7, 0.23, 0)
+shape = SubResource("Shape_Floor1East")
+
+[node name="MeshNorth" type="MeshInstance3D" parent="Floor1"]
+position = Vector3(16.3, 0.23, -14.85)
+mesh = SubResource("Mesh_Floor1North")
+
+[node name="ColNorth" type="CollisionShape3D" parent="Floor1"]
+position = Vector3(16.3, 0.23, -14.85)
+shape = SubResource("Shape_Floor1North")
+
+[node name="MeshSouth" type="MeshInstance3D" parent="Floor1"]
+position = Vector3(16.3, 0.23, 4.5)
+mesh = SubResource("Mesh_Floor1South")
+
+[node name="ColSouth" type="CollisionShape3D" parent="Floor1"]
+position = Vector3(16.3, 0.23, 4.5)
+shape = SubResource("Shape_Floor1South")
 
 [node name="Floor2West_Outer" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 6.2, 0.0)
@@ -846,13 +1013,30 @@ mesh = SubResource("Mesh_Floor2West_South")
 shape = SubResource("Shape_Floor2West_South")
 
 [node name="Floor2Gallery" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 6.2, 12.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 6.2, 12.3)
 
 [node name="Mesh" type="MeshInstance3D" parent="Floor2Gallery"]
 mesh = SubResource("Mesh_Floor2Gallery")
 
 [node name="Col" type="CollisionShape3D" parent="Floor2Gallery"]
 shape = SubResource("Shape_Floor2Gallery")
+
+[node name="LoggiaSill" type="StaticBody3D" parent="."]
+position = Vector3(-12.225, 6.2, 5.8)
+
+[node name="Mesh" type="MeshInstance3D" parent="LoggiaSill"]
+mesh = SubResource("Mesh_LoggiaSill")
+
+[node name="Col" type="CollisionShape3D" parent="LoggiaSill"]
+shape = SubResource("Shape_LoggiaSill")
+
+[node name="LoggiaBracketNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-12.44, 5.725, 5.13)
+mesh = SubResource("Mesh_LoggiaBracketNorth")
+
+[node name="LoggiaBracketSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-12.44, 5.725, 6.49)
+mesh = SubResource("Mesh_LoggiaBracketSouth")
 
 [node name="Floor3" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 12.2, 0.0)
@@ -1412,7 +1596,7 @@ mesh = SubResource("Mesh_AlcoveShelf_1")
 shape = SubResource("Shape_AlcoveShelf_1")
 
 [node name="AlcoveShelf_2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.55, 8.22, 6.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.7, 8.22, 13.9)
 
 [node name="Mesh" type="MeshInstance3D" parent="AlcoveShelf_2"]
 mesh = SubResource("Mesh_AlcoveShelf_2")
@@ -1461,7 +1645,7 @@ light_energy = 1.8
 omni_range = 5.0
 
 [node name="RoyalOrderDraft" type="StaticBody3D" parent="."]
-position = Vector3(-2.93, 3.45, -14.07)
+position = Vector3(-6.65, 6.38, 14.14)
 rotation = Vector3(0, 0.21, 0)
 script = ExtResource("2_pickup")
 item_id = "royal_order_draft"
@@ -1526,26 +1710,8 @@ mesh = ExtResource("13_stair_mesh")
 [node name="WalkingSurface" type="CollisionShape3D" parent="GrandStairsRamp"]
 shape = ExtResource("14_stair_collision")
 
-[node name="DiningVestibuleNorth" type="StaticBody3D" parent="."]
-position = Vector3(15.07, 3.15, -1.35)
-
-[node name="Mesh" type="MeshInstance3D" parent="DiningVestibuleNorth"]
-mesh = SubResource("Mesh_DiningVestibuleNorth")
-
-[node name="Col" type="CollisionShape3D" parent="DiningVestibuleNorth"]
-shape = SubResource("Shape_DiningVestibuleNorth")
-
-[node name="DiningVestibuleSouth" type="StaticBody3D" parent="."]
-position = Vector3(15.07, 3.15, 1.35)
-
-[node name="Mesh" type="MeshInstance3D" parent="DiningVestibuleSouth"]
-mesh = SubResource("Mesh_DiningVestibuleSouth")
-
-[node name="Col" type="CollisionShape3D" parent="DiningVestibuleSouth"]
-shape = SubResource("Shape_DiningVestibuleSouth")
-
 [node name="Floor2EastMain" type="StaticBody3D" parent="."]
-position = Vector3(19.325, 6.2, 0)
+position = Vector3(19.23, 6.2, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="Floor2EastMain"]
 mesh = SubResource("Mesh_Floor2EastMain")
@@ -1554,7 +1720,7 @@ mesh = SubResource("Mesh_Floor2EastMain")
 shape = SubResource("Shape_Floor2EastMain")
 
 [node name="Floor2EastOuter" type="StaticBody3D" parent="."]
-position = Vector3(31.57, 6.2, 0)
+position = Vector3(31.62, 6.2, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="Floor2EastOuter"]
 mesh = SubResource("Mesh_Floor2EastOuter")
@@ -1563,7 +1729,7 @@ mesh = SubResource("Mesh_Floor2EastOuter")
 shape = SubResource("Shape_Floor2EastOuter")
 
 [node name="Floor2EastStairNorth" type="StaticBody3D" parent="."]
-position = Vector3(28.395, 6.2, -14.375)
+position = Vector3(28.35, 6.2, -14.375)
 
 [node name="Mesh" type="MeshInstance3D" parent="Floor2EastStairNorth"]
 mesh = SubResource("Mesh_Floor2EastStairNorth")
@@ -1572,7 +1738,7 @@ mesh = SubResource("Mesh_Floor2EastStairNorth")
 shape = SubResource("Shape_Floor2EastStairNorth")
 
 [node name="Floor2EastStairSouth" type="StaticBody3D" parent="."]
-position = Vector3(28.395, 6.2, 5.075)
+position = Vector3(28.35, 6.2, 5.075)
 
 [node name="Mesh" type="MeshInstance3D" parent="Floor2EastStairSouth"]
 mesh = SubResource("Mesh_Floor2EastStairSouth")
@@ -1590,7 +1756,7 @@ mesh = SubResource("Mesh_KitchenPartitionWest")
 shape = SubResource("Shape_KitchenPartitionWest")
 
 [node name="KitchenPartitionEast" type="StaticBody3D" parent="."]
-position = Vector3(25.425, 3.15, -3.48)
+position = Vector3(27.75, 3.15, -3.48)
 
 [node name="Mesh" type="MeshInstance3D" parent="KitchenPartitionEast"]
 mesh = SubResource("Mesh_KitchenPartitionEast")
@@ -1607,32 +1773,68 @@ mesh = SubResource("Mesh_KitchenPartitionLintel")
 [node name="Col" type="CollisionShape3D" parent="KitchenPartitionLintel"]
 shape = SubResource("Shape_KitchenPartitionLintel")
 
-[node name="StoresPartitionWest" type="StaticBody3D" parent="."]
+[node name="ServiceHatchJamb" type="StaticBody3D" parent="."]
+position = Vector3(20.2, 3.15, -3.48)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceHatchJamb"]
+mesh = SubResource("Mesh_ServiceHatchJamb")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceHatchJamb"]
+shape = SubResource("Shape_ServiceHatchJamb")
+
+[node name="ServiceHatchBase" type="StaticBody3D" parent="."]
+position = Vector3(22.525, 0.75, -3.48)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceHatchBase"]
+mesh = SubResource("Mesh_ServiceHatchBase")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceHatchBase"]
+shape = SubResource("Shape_ServiceHatchBase")
+
+[node name="ServiceHatchLintel" type="StaticBody3D" parent="."]
+position = Vector3(22.525, 4.295, -3.48)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceHatchLintel"]
+mesh = SubResource("Mesh_ServiceHatchLintel")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceHatchLintel"]
+shape = SubResource("Shape_ServiceHatchLintel")
+
+[node name="ServiceHatchCounter" type="StaticBody3D" parent="."]
+position = Vector3(22.525, 1.32, -3.48)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceHatchCounter"]
+mesh = SubResource("Mesh_ServiceHatchCounter")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceHatchCounter"]
+shape = SubResource("Shape_ServiceHatchCounter")
+
+[node name="StewardPartitionWest" type="StaticBody3D" parent="."]
 position = Vector3(17.425, 9.175, 1.435)
 
-[node name="Mesh" type="MeshInstance3D" parent="StoresPartitionWest"]
-mesh = SubResource("Mesh_StoresPartitionWest")
+[node name="Mesh" type="MeshInstance3D" parent="StewardPartitionWest"]
+mesh = SubResource("Mesh_StewardPartitionWest")
 
-[node name="Col" type="CollisionShape3D" parent="StoresPartitionWest"]
-shape = SubResource("Shape_StoresPartitionWest")
+[node name="Col" type="CollisionShape3D" parent="StewardPartitionWest"]
+shape = SubResource("Shape_StewardPartitionWest")
 
-[node name="StoresPartitionEast" type="StaticBody3D" parent="."]
+[node name="StewardPartitionEast" type="StaticBody3D" parent="."]
 position = Vector3(27.725, 9.175, 1.435)
 
-[node name="Mesh" type="MeshInstance3D" parent="StoresPartitionEast"]
-mesh = SubResource("Mesh_StoresPartitionEast")
+[node name="Mesh" type="MeshInstance3D" parent="StewardPartitionEast"]
+mesh = SubResource("Mesh_StewardPartitionEast")
 
-[node name="Col" type="CollisionShape3D" parent="StoresPartitionEast"]
-shape = SubResource("Shape_StoresPartitionEast")
+[node name="Col" type="CollisionShape3D" parent="StewardPartitionEast"]
+shape = SubResource("Shape_StewardPartitionEast")
 
-[node name="StoresPartitionLintel" type="StaticBody3D" parent="."]
+[node name="StewardPartitionLintel" type="StaticBody3D" parent="."]
 position = Vector3(22.65, 10.55, 1.435)
 
-[node name="Mesh" type="MeshInstance3D" parent="StoresPartitionLintel"]
-mesh = SubResource("Mesh_StoresPartitionLintel")
+[node name="Mesh" type="MeshInstance3D" parent="StewardPartitionLintel"]
+mesh = SubResource("Mesh_StewardPartitionLintel")
 
-[node name="Col" type="CollisionShape3D" parent="StoresPartitionLintel"]
-shape = SubResource("Shape_StoresPartitionLintel")
+[node name="Col" type="CollisionShape3D" parent="StewardPartitionLintel"]
+shape = SubResource("Shape_StewardPartitionLintel")
 
 [node name="ServiceStairTurn" type="StaticBody3D" parent="."]
 position = Vector3(28.35, 1.775, -12.5)
@@ -1653,31 +1855,31 @@ mesh = SubResource("Mesh_ServiceStairSpine")
 shape = SubResource("Shape_ServiceStairSpine")
 
 [node name="ServiceStairEdgeWest" type="StaticBody3D" parent="."]
-position = Vector3(25.6, 6.83, -9.355)
+position = Vector3(25.40, 6.83, -9.355)
 
 [node name="Col" type="CollisionShape3D" parent="ServiceStairEdgeWest"]
 shape = SubResource("Shape_ServiceStairEdgeWest")
 
 [node name="ServiceStairEdgeEast" type="StaticBody3D" parent="."]
-position = Vector3(31.13, 6.83, -9.355)
+position = Vector3(31.30, 6.83, -9.355)
 
 [node name="Col" type="CollisionShape3D" parent="ServiceStairEdgeEast"]
 shape = SubResource("Shape_ServiceStairEdgeEast")
 
 [node name="ServiceStairEdgeNorth" type="StaticBody3D" parent="."]
-position = Vector3(28.365, 6.83, -13.84)
+position = Vector3(28.35, 6.83, -13.84)
 
 [node name="Col" type="CollisionShape3D" parent="ServiceStairEdgeNorth"]
 shape = SubResource("Shape_ServiceStairEdgeNorth")
 
 [node name="ServiceStairEdgeSouth" type="StaticBody3D" parent="."]
-position = Vector3(29.6, 6.83, -4.76)
+position = Vector3(29.89, 6.83, -4.76)
 
 [node name="Col" type="CollisionShape3D" parent="ServiceStairEdgeSouth"]
 shape = SubResource("Shape_ServiceStairEdgeSouth")
 
 [node name="ServiceStairLower" type="StaticBody3D" parent="."]
-position = Vector3(29.7, 0.25, -4.85)
+position = Vector3(29.89, 0.25, -4.85)
 
 [node name="Mesh" type="MeshInstance3D" parent="ServiceStairLower"]
 material_override = SubResource("Mat_Stone")
@@ -1687,7 +1889,7 @@ mesh = ExtResource("27_service_steps")
 shape = ExtResource("28_service_collision")
 
 [node name="ServiceStairUpper" type="StaticBody3D" parent="."]
-position = Vector3(27, 3.30, -11.25)
+position = Vector3(26.81, 3.30, -11.25)
 rotation = Vector3(0, 3.14159265, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ServiceStairUpper"]
@@ -1698,8 +1900,63 @@ mesh = ExtResource("27_service_steps")
 shape = ExtResource("28_service_collision")
 
 [node name="KitchenFlagstones" type="MeshInstance3D" parent="."]
-position = Vector3(22.5, 0.25, -9.09)
-mesh = SubResource("Mesh_KitchenFlagstones")
+position = Vector3(14.305, 0.25, -9.09)
+mesh = SubResource("Mesh_KitchenFlagstonesWest")
+
+[node name="KitchenFlagstonesEast" type="MeshInstance3D" parent="."]
+position = Vector3(24.495, 0.25, -9.09)
+mesh = SubResource("Mesh_KitchenFlagstonesEast")
+
+[node name="KitchenFlagstonesSouth" type="MeshInstance3D" parent="."]
+position = Vector3(16.3, 0.25, -4.84)
+mesh = SubResource("Mesh_KitchenFlagstonesSouth")
+
+[node name="StairSupport" type="StaticBody3D" parent="."]
+position = Vector3(26.81, 1.695, -8.05)
+
+[node name="Mesh" type="MeshInstance3D" parent="StairSupport"]
+mesh = SubResource("Mesh_StairSupport")
+
+[node name="Col" type="CollisionShape3D" parent="StairSupport"]
+shape = SubResource("Shape_StairSupport")
+
+[node name="StairWestWall" type="StaticBody3D" parent="."]
+position = Vector3(25.33, 3.15, -9.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="StairWestWall"]
+mesh = SubResource("Mesh_StairWestWall")
+
+[node name="Col" type="CollisionShape3D" parent="StairWestWall"]
+shape = SubResource("Shape_StairWestWall")
+
+[node name="StairEastWall" type="StaticBody3D" parent="."]
+position = Vector3(31.42, 3.15, -9.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="StairEastWall"]
+mesh = SubResource("Mesh_StairEastWall")
+
+[node name="Col" type="CollisionShape3D" parent="StairEastWall"]
+shape = SubResource("Shape_StairEastWall")
+
+[node name="StairBackWall" type="StaticBody3D" parent="."]
+position = Vector3(28.4, 3.15, -13.95)
+
+[node name="Mesh" type="MeshInstance3D" parent="StairBackWall"]
+mesh = SubResource("Mesh_StairBackWall")
+
+[node name="Col" type="CollisionShape3D" parent="StairBackWall"]
+shape = SubResource("Shape_StairBackWall")
+
+[node name="StairDoorLintel" type="StaticBody3D" parent="."]
+position = Vector3(29.89, 4.525, -4.71)
+
+[node name="Mesh" type="MeshInstance3D" parent="StairDoorLintel"]
+mesh = SubResource("Mesh_StairDoorLintel")
+
+[node name="Col" type="CollisionShape3D" parent="StairDoorLintel"]
+shape = SubResource("Shape_StairDoorLintel")
+
+[node name="KeepCellar" parent="." instance=ExtResource("30_cellar")]
 
 [node name="KeepFurniture" type="Node3D" parent="."]
 script = ExtResource("26_furnishing")

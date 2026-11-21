@@ -66,13 +66,6 @@ volumetric_fog_albedo = Color(0.85, 0.92, 0.9, 1)
 resource_local_to_scene = true
 shader = ExtResource("31_forest_floor")
 
-[sub_resource type="BoxMesh" id="BoxMesh_base_ground"]
-material = SubResource("StandardMaterial3D_grass")
-size = Vector3(500, 1, 500)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_base_ground"]
-size = Vector3(500, 1, 500)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mountain"]
 albedo_color = Color(0.24, 0.3, 0.36, 1)
 roughness = 0.95
@@ -104,6 +97,34 @@ bottom_radius = 0.98
 height = 0.075
 radial_segments = 7
 
+[sub_resource type="BoxMesh" id="BoxMesh_base_groundWest"]
+material = SubResource("StandardMaterial3D_grass")
+size = Vector3(265.12, 1, 500)
+
+[sub_resource type="BoxMesh" id="BoxMesh_base_groundEast"]
+material = SubResource("StandardMaterial3D_grass")
+size = Vector3(232.52, 1, 500)
+
+[sub_resource type="BoxMesh" id="BoxMesh_base_groundNorth"]
+material = SubResource("StandardMaterial3D_grass")
+size = Vector3(2.36, 1, 84.22)
+
+[sub_resource type="BoxMesh" id="BoxMesh_base_groundSouth"]
+material = SubResource("StandardMaterial3D_grass")
+size = Vector3(2.36, 1, 406.92)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_base_groundWest"]
+size = Vector3(265.12, 1, 500)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_base_groundEast"]
+size = Vector3(232.52, 1, 500)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_base_groundNorth"]
+size = Vector3(2.36, 1, 84.22)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_base_groundSouth"]
+size = Vector3(2.36, 1, 406.92)
+
 [node name="ForestClearing" type="Node3D" unique_id=433473340]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=758829041]
@@ -118,12 +139,36 @@ shadow_enabled = true
 [node name="Ground" type="StaticBody3D" parent="." unique_id=751541286]
 
 [node name="BaseMesh" type="MeshInstance3D" parent="Ground" unique_id=2054655064]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-mesh = SubResource("BoxMesh_base_ground")
+position = Vector3(-117.44, -0.5, 0)
+mesh = SubResource("BoxMesh_base_groundWest")
 
 [node name="BaseCollision" type="CollisionShape3D" parent="Ground" unique_id=1030494366]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_base_ground")
+position = Vector3(-117.44, -0.5, 0)
+shape = SubResource("BoxShape3D_base_groundWest")
+
+[node name="BaseMeshEast" type="MeshInstance3D" parent="Ground"]
+position = Vector3(133.74, -0.5, 0)
+mesh = SubResource("BoxMesh_base_groundEast")
+
+[node name="BaseCollisionEast" type="CollisionShape3D" parent="Ground"]
+position = Vector3(133.74, -0.5, 0)
+shape = SubResource("BoxShape3D_base_groundEast")
+
+[node name="BaseMeshNorth" type="MeshInstance3D" parent="Ground"]
+position = Vector3(16.3, -0.5, -207.89)
+mesh = SubResource("BoxMesh_base_groundNorth")
+
+[node name="BaseCollisionNorth" type="CollisionShape3D" parent="Ground"]
+position = Vector3(16.3, -0.5, -207.89)
+shape = SubResource("BoxShape3D_base_groundNorth")
+
+[node name="BaseMeshSouth" type="MeshInstance3D" parent="Ground"]
+position = Vector3(16.3, -0.5, 46.54)
+mesh = SubResource("BoxMesh_base_groundSouth")
+
+[node name="BaseCollisionSouth" type="CollisionShape3D" parent="Ground"]
+position = Vector3(16.3, -0.5, 46.54)
+shape = SubResource("BoxShape3D_base_groundSouth")
 
 [node name="ForestPines" type="MultiMeshInstance3D" parent="." unique_id=1701219874]
 multimesh = ExtResource("17_pines")

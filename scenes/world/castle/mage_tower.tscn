@@ -152,10 +152,10 @@ size = Vector3(2.45, 14.0, 1.0)
 
 [sub_resource type="BoxMesh" id="Mesh_TowerWall_11"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(2.45, 24.0, 1.0)
+size = Vector3(1.675, 3.78, 1.0)
 
 [sub_resource type="BoxShape3D" id="Shape_TowerWall_11"]
-size = Vector3(2.45, 24.0, 1.0)
+size = Vector3(1.675, 3.78, 1.0)
 
 [sub_resource type="TorusMesh" id="Mesh_CorniceTier2"]
 material = SubResource("Mat_Stone")
@@ -198,10 +198,10 @@ size = Vector3(1.4, 0.3, 3.065)
 
 [sub_resource type="BoxMesh" id="Mesh_TowerFloor2_West"]
 material = SubResource("Mat_Stone")
-size = Vector3(7.4, 0.3, 1.62)
+size = Vector3(4.55, 0.3, 1.62)
 
 [sub_resource type="BoxShape3D" id="Shape_TowerFloor2_West"]
-size = Vector3(7.4, 0.3, 1.62)
+size = Vector3(4.55, 0.3, 1.62)
 
 [sub_resource type="BoxMesh" id="Mesh_TowerFloor3_North"]
 material = SubResource("Mat_Stone")
@@ -305,13 +305,6 @@ size = Vector3(0.4, 3.6, 5.63)
 
 [sub_resource type="BoxShape3D" id="Shape_TowerBridgeWest"]
 size = Vector3(0.4, 3.6, 5.63)
-
-[sub_resource type="BoxMesh" id="Mesh_TowerBridgeEast"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(0.4, 3.6, 6.75)
-
-[sub_resource type="BoxShape3D" id="Shape_TowerBridgeEast"]
-size = Vector3(0.4, 3.6, 6.75)
 
 [sub_resource type="BoxMesh" id="Mesh_TowerBridgeRoof"]
 material = SubResource("Mat_Stone")
@@ -446,10 +439,10 @@ size = Vector3(1.0, 24.0, 2.45)
 
 [sub_resource type="BoxMesh" id="Mesh_SouthEntryLanding"]
 material = SubResource("Mat_Stone")
-size = Vector3(2.58, 0.30, 1.77)
+size = Vector3(2.58, 0.30, 1.63)
 
 [sub_resource type="BoxShape3D" id="Shape_SouthEntryLanding"]
-size = Vector3(2.58, 0.30, 1.77)
+size = Vector3(2.58, 0.30, 1.63)
 
 [sub_resource type="BoxMesh" id="Mesh_ObservatoryEntryLanding"]
 material = SubResource("Mat_Stone")
@@ -638,14 +631,35 @@ mesh = SubResource("Mesh_WallSoutheastUpper")
 [node name="Col" type="CollisionShape3D" parent="WallSoutheastUpper"]
 shape = SubResource("Shape_WallSoutheastUpper")
 
+[node name="TowerWall_11Lower" type="StaticBody3D" parent="."]
+position = Vector3(3.723909, 3.22, -2.15)
+rotation = Vector3(0, 2.0943951, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="TowerWall_11Lower"]
+mesh = SubResource("Mesh_WallSoutheastLower")
+
+[node name="Col" type="CollisionShape3D" parent="TowerWall_11Lower"]
+shape = SubResource("Shape_WallSoutheastLower")
+
 [node name="TowerWall_11" type="StaticBody3D" parent="."]
-transform = Transform3D(-0.5000000000000004, 0, 0.8660254037844385, 0, 1, 0, -0.8660254037844385, 0, -0.5000000000000004, 3.723909236273085, 12.22, -2.1500000000000017)
+position = Vector3(3.917659, 8.11, -1.814415)
+rotation = Vector3(0, 2.0943951, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="TowerWall_11"]
 mesh = SubResource("Mesh_TowerWall_11")
 
 [node name="Col" type="CollisionShape3D" parent="TowerWall_11"]
 shape = SubResource("Shape_TowerWall_11")
+
+[node name="TowerWall_11Upper" type="StaticBody3D" parent="."]
+position = Vector3(3.723909, 17.11, -2.15)
+rotation = Vector3(0, 2.0943951, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="TowerWall_11Upper"]
+mesh = SubResource("Mesh_WallSoutheastUpper")
+
+[node name="Col" type="CollisionShape3D" parent="TowerWall_11Upper"]
+shape = SubResource("Shape_WallSoutheastUpper")
 
 [node name="CorniceTier2" type="MeshInstance3D" parent="."]
 position = Vector3(0, 5.68, 0)
@@ -681,7 +695,7 @@ mesh = SubResource("Mesh_TowerFloor2_East")
 shape = SubResource("Shape_TowerFloor2_East")
 
 [node name="TowerFloor2_West" type="StaticBody3D" parent="."]
-position = Vector3(0, 6.2, -3.3)
+position = Vector3(-1.425, 6.2, -3.3)
 
 [node name="Mesh" type="MeshInstance3D" parent="TowerFloor2_West"]
 mesh = SubResource("Mesh_TowerFloor2_West")
@@ -877,14 +891,14 @@ mesh = SubResource("Mesh_TowerBridgeWest")
 shape = SubResource("Shape_TowerBridgeWest")
 
 [node name="TowerBridgeEast" type="StaticBody3D" parent="CoveredBridge"]
-position = Vector3(1.6, 7.8, -2.165)
+position = Vector3(1.6, 7.8, -2.725)
 
 
 [node name="Mesh" type="MeshInstance3D" parent="CoveredBridge/TowerBridgeEast"]
-mesh = SubResource("Mesh_TowerBridgeEast")
+mesh = SubResource("Mesh_TowerBridgeWest")
 
 [node name="Col" type="CollisionShape3D" parent="CoveredBridge/TowerBridgeEast"]
-shape = SubResource("Shape_TowerBridgeEast")
+shape = SubResource("Shape_TowerBridgeWest")
 
 [node name="TowerBridgeRoof" type="StaticBody3D" parent="CoveredBridge"]
 position = Vector3(0, 9.8, -2.725)
@@ -895,6 +909,30 @@ mesh = SubResource("Mesh_TowerBridgeRoof")
 
 [node name="Col" type="CollisionShape3D" parent="CoveredBridge/TowerBridgeRoof"]
 shape = SubResource("Shape_TowerBridgeRoof")
+
+[node name="BridgePortalFloor" type="CSGPolygon3D" parent="."]
+position = Vector3(0, 6.05, 0)
+rotation = Vector3(1.57079633, 0, 0)
+polygon = PackedVector2Array(0.85, -4.11, 4.45, -4.11, 3.96, -2.49, 0.85, -2.49)
+depth = 0.3
+material = SubResource("Mat_StoneDark")
+use_collision = true
+
+[node name="BridgePortalRoof" type="CSGPolygon3D" parent="."]
+position = Vector3(0, 9.6, 0)
+rotation = Vector3(1.57079633, 0, 0)
+polygon = PackedVector2Array(0.85, -4.11, 4.45, -4.11, 3.96, -2.49, 0.85, -2.49)
+depth = 0.4
+material = SubResource("Mat_Stone")
+use_collision = true
+
+[node name="BridgePortalReturn" type="CSGPolygon3D" parent="."]
+position = Vector3(0, 6.35, 0)
+rotation = Vector3(1.57079633, 0, 0)
+polygon = PackedVector2Array(4.05, -4.11, 4.45, -4.11, 3.96, -2.49, 3.49, -2.49)
+depth = 3.25
+material = SubResource("Mat_StoneDark")
+use_collision = true
 
 [node name="LibraryBridgeDeck" type="StaticBody3D" parent="CoveredBridge"]
 position = Vector3(0, 6.15, -19.28)
@@ -1099,7 +1137,7 @@ mesh = SubResource("Mesh_ObservatoryWestWall")
 shape = SubResource("Shape_ObservatoryWestWall")
 
 [node name="SouthEntryLanding" type="StaticBody3D" parent="."]
-position = Vector3(0, 13.13, 3.915)
+position = Vector3(0, 13.13, 3.845)
 
 [node name="Mesh" type="MeshInstance3D" parent="SouthEntryLanding"]
 mesh = SubResource("Mesh_SouthEntryLanding")
@@ -1118,10 +1156,10 @@ shape = SubResource("Shape_TowerEntryInfill")
 
 [node name="TowerEntryBreach" type="StaticBody3D" parent="."]
 visible = false
-position = Vector3(0, -6.85, -0.007)
-rotation = Vector3(0, 1.57079633, 0)
+position = Vector3(0, 13.1, 4.3)
 script = ExtResource("18_breach")
 opening_width = 2.45
+opening_height = 3.02
 
 [node name="ObservatoryEntryLanding" type="StaticBody3D" parent="."]
 position = Vector3(-3.1475, 20.0, 0.6225)

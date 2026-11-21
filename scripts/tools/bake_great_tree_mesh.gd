@@ -82,7 +82,6 @@ func _init() -> void:
 	_build_spiral_walkway(bark, spores)
 	_build_terrace_and_bridge(bark, spores, arch_foliage)
 	_build_canopy(leaves, tips, arch_foliage)
-	_build_front_wall_root(courtyard_branch)
 	_build_courtyard_branch(courtyard_branch, spores)
 
 	var mesh := ArrayMesh.new()
@@ -440,7 +439,7 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 
 
 const BOUGH_TERRACE := -7.55
-const BOUGH_END := -19.77
+const BOUGH_END := -19.75
 const BOUGH_X := -2.0
 
 func _bough_spine_z(z: float) -> Vector3:
@@ -531,8 +530,8 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 				ux = ux * (1.0 + 0.08 * flute) + width_meander
 				uy += flute * 0.55
 			# The split wood lies flat where the branch hits the balcony.
-			if is_east_parapet or is_west_parapet:
-				uy = lerpf(uy, 0.24, tip)
+			if is_moss or is_east_parapet or is_west_parapet:
+				uy = lerpf(uy, 0.21, tip)
 
 			var pt := c + right * ux + up * uy
 			g.v.append(pt)
@@ -614,33 +613,11 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		arch_foliage.append([p3 + side * 1.1 - Vector3.UP * 0.2 + forward * 0.8, crown * 0.69])
 		arch_foliage.append([f3 + Vector3(0.0, 0.35, 0.0), crown * 0.74])
 
-func _build_front_wall_root(bark: Geo) -> void:
-	const RINGS := 14
-	var profile := PackedVector2Array([
-		Vector2(-0.86, 0.012), Vector2(-0.48, 0.026), Vector2(0.51, 0.026), Vector2(0.84, 0.008),
-		Vector2(0.91, -0.09), Vector2(0.48, -0.20), Vector2(-0.49, -0.19), Vector2(-0.91, -0.08),
-	])
-	var start := bark.v.size()
-	var centers: Array[Vector3] = []
-	for i in RINGS:
-		var t := float(i) / (RINGS - 1)
-		var z := lerpf(-19.74, -22.78, t)
-		var center := Vector3(BOUGH_X, lerpf(11.826, 11.852, t), z)
-		centers.append(center - Vector3.UP * 0.08)
-		for j in profile.size():
-			var p := profile[j]
-			var grain := noise.get_noise_2d(z * 1.8, j * 0.37)
-			p.x *= 0.93 + 0.15 * grain
-			bark.v.append(center + Vector3(p.x, p.y, 0))
-			var moss := 0.48 if j in [1, 2] else 0.18
-			bark.c.append(BARK_WARM.lerp(MOSS, moss + 0.09 * grain))
-	_connect_tube_grid(bark, start, RINGS, profile.size(), centers, Vector3.ZERO, Vector3.ZERO)
-
 
 func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 	# The branch splits into a hollow trunk after breaking the front wall.
 	const RINGS := 46
-	const START_Z := -22.73
+	const START_Z := -23.25
 	const END_Z := -45.34
 	var section := PackedVector2Array([
 		Vector2(-0.96, 0.04), Vector2(-0.70, 0), Vector2(0.68, 0), Vector2(0.96, 0.08),
@@ -656,7 +633,7 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 		for i in RINGS:
 			var t := float(i) / (RINGS - 1)
 			var z := lerpf(START_Z, END_Z, t)
-			var floor_y := lerpf(11.853, 13.278, smoothstep(0.0, 1.0, t))
+			var floor_y := lerpf(11.83, 13.28, smoothstep(0.0, 1.0, t))
 			var reveal := smoothstep(0.0, 0.16, t) * (1.0 - smoothstep(0.83, 1.0, t))
 			var center := Vector3(BOUGH_X, floor_y, z)
 			if not outside:

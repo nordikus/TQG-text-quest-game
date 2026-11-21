@@ -140,8 +140,9 @@ func _keep() -> void:
 		_ledger_shelf(Vector3(-31.58, 0.25, z))
 	_dining_room()
 	_keep_kitchen()
-	_keep_pantry()
+	_keep_cellar()
 	_keep_stair_guards()
+	_upper_service_room()
 	_steward_room()
 
 
@@ -174,8 +175,11 @@ func _dining_room() -> void:
 	for z in [-1.22, 1.22]:
 		_box(Vector3(12.56, 1.61, z), Vector3(0.15, 2.72, 0.22), LIMESTONE)
 	_box(Vector3(12.54, 3.035, 0), Vector3(0.18, 0.24, 2.77), LIMESTONE)
-	_lantern(Vector3(15.65, 3.88, 0), 6.05, 1.45, 7.0)
+	_lantern(Vector3(17.10, 3.88, 0), 6.05, 1.45, 7.0)
 	_lantern(Vector3(18.06, 3.66, -2.03), 6.05, 1.2, 5.8)
+	for x in [21.75, 22.4, 23.22]:
+		_round(Vector3(x, 1.43, -3.40), 0.17, 0.08, LINEN)
+	_box(Vector3(22.53, 2.59, -3.18), Vector3(2.75, 0.15, 0.17), OAK)
 
 
 func _chandelier(at: Vector3) -> void:
@@ -220,8 +224,7 @@ func _keep_kitchen() -> void:
 		for i in 3:
 			_round(bench + Vector3(-0.31, 0.88, -0.69 + i * 0.25), 0.086, 0.145,
 				Color(0.42, 0.29, 0.14).lightened(0.09 * i))
-	for z in [-14.04, -13.1]:
-		_provision_barrel(Vector3(16.0, 0.25, z), 0.38)
+	_provision_barrel(Vector3(18.48, 0.25, -13.77), 0.38)
 	_box(Vector3(23.4, 2.52, -14.36), Vector3(2.29, 0.13, 0.16), OAK)
 	for i in 4:
 		var x := 22.62 + 0.46 * i
@@ -257,26 +260,36 @@ func _hearth(at: Vector3) -> void:
 	_light(at + Vector3(0, 1.15, 1.3), 1.8, 5.85)
 
 
-func _keep_pantry() -> void:
-	for z in [-11.75, -8.05, -4.42, -0.5]:
-		_provision_rack(Vector3(14.06, 6.35, z), PI / 2.0)
-	for x in [17.8, 20.7, 23.7]:
-		_provision_rack(Vector3(x, 6.35, -14.00), 0.0)
-	for z in [-10.35, -8.46, -6.8]:
-		_provision_barrel(Vector3(23.12, 6.35, z), 0.42)
-	_table(Vector3(18.83, 6.35, -7.03), Vector2(2.15, 4.45))
-	for i in 4:
-		_round(Vector3(18.49, 7.24, -8.58 + i * 0.98), 0.21, 0.17, LINEN)
-		_box(Vector3(19.22, 7.2, -8.41 + i * 0.95), Vector3(0.39, 0.083, 0.54), PAPER)
-	_lantern(Vector3(19.91, 9.60, -8.97), 12.0, 2.0, 8.8)
-	_lantern(Vector3(27.08, 9.41, -2.31), 12.0, 1.30, 6.5)
+func _keep_cellar() -> void:
+	_provision_rack(Vector3(23.96, -3.55, -11.51), PI / 2.0, 0.88)
+	_provision_rack(Vector3(21.17, -3.55, -14.29), 0.0, 0.88)
+	for x in [19.20, 20.24, 21.26, 22.28]:
+		_provision_barrel(Vector3(x, -3.55, -9.05), 0.41)
+	_table(Vector3(20.96, -3.55, -11.3), Vector2(1.9, 0.9))
+	for x in [20.51, 21.24]:
+		_round(Vector3(x, -2.66, -11.3), 0.184, 0.13, LINEN)
+	_lantern(Vector3(18.5, -1.45, -12.60), -1.0, 1.35, 6.35)
+	_lantern(Vector3(22.45, -1.45, -10.55), -1.0, 1.30, 6.1)
+	_lantern(Vector3(16.3, 1.95, -8.20), 6.05, 0.9, 5.35)
+
+
+func _upper_service_room() -> void:
+	_table(Vector3(19.46, 6.35, -7.28), Vector2(2.05, 3.7))
+	for z in [-8.05, -6.88]:
+		_box(Vector3(19.42, 7.24, z), Vector3(0.62, 0.13, 0.72), LINEN)
+	for x in [18.32, 20.26, 22.32]:
+		_locker(Vector3(x, 6.35, -13.90))
+	for x in [22.26, 24.32]:
+		_bench(Vector3(x, 6.35, -4.32))
+	_lantern(Vector3(19.69, 9.71, -7.26), 12.0, 1.64, 8.1)
+	_lantern(Vector3(27.02, 9.41, -2.31), 12.0, 1.30, 6.5)
 
 
 func _keep_stair_guards() -> void:
-	for x in [25.60, 31.13]:
+	for x in [25.40, 31.30]:
 		_stair_guard(Vector3(x, 6.35, -13.84), Vector3(x, 6.35, -4.85))
-	_stair_guard(Vector3(25.60, 6.35, -13.84), Vector3(31.13, 6.35, -13.84))
-	_stair_guard(Vector3(28.17, 6.35, -4.76), Vector3(31.13, 6.35, -4.76))
+	_stair_guard(Vector3(25.40, 6.35, -13.84), Vector3(31.30, 6.35, -13.84))
+	_stair_guard(Vector3(28.54, 6.35, -4.76), Vector3(31.30, 6.35, -4.76))
 
 
 func _stair_guard(from: Vector3, to: Vector3) -> void:
@@ -313,11 +326,11 @@ func _steward_room() -> void:
 	_lantern(Vector3(26.84, 9.71, 9.5), 12.0, 1.4, 6.8)
 
 
-func _provision_rack(at: Vector3, yaw: float) -> void:
-	var frame := Transform3D(Basis(Vector3.UP, yaw), at)
+func _provision_rack(at: Vector3, yaw: float, height_scale := 1.0) -> void:
+	var frame := Transform3D(Basis(Vector3.UP, yaw).scaled(Vector3(1, height_scale, 1)), at)
 	var tilt := Vector3(0, yaw, 0)
 	for x in [-1.43, 1.43]:
-		_box(frame * Vector3(x, 1.32, 0), Vector3(0.14, 2.64, 0.69), OAK, true, tilt)
+		_box(frame * Vector3(x, 1.32, 0), Vector3(0.14, 2.64 * height_scale, 0.69), OAK, true, tilt)
 	for height in [0.22, 1.0, 1.78, 2.53]:
 		_box(frame * (Vector3.UP * height), Vector3(2.83, 0.12, 0.65), WOOD_EDGE, true, tilt)
 	for i in 5:
