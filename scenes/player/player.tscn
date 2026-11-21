@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_pc"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_ray.gd" id="2_ir"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/quest_panel.tscn" id="4_qp"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_panel.tscn" id="5_inv"]
+[ext_resource type="PackedScene" path="res://scenes/ui/observer_epilogue.tscn" id="6_epilogue"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.4
@@ -34,3 +35,5 @@ script = ExtResource("2_ir")
 [node name="QuestPanel" parent="." instance=ExtResource("4_qp")]
 
 [node name="InventoryPanel" parent="." instance=ExtResource("5_inv")]
+
+[node name="ObserverEpilogue" parent="." instance=ExtResource("6_epilogue")]

@@ -7,6 +7,7 @@ signal notification_requested(message: String)
 var ui_open: bool = false
 var quest_panel: Node = null
 var inventory_panel: Node = null
+var observer_epilogue: Node = null
 
 func _ready():
 	_register_inputs()
@@ -18,6 +19,10 @@ func open_quest(quest_id: String):
 func confirm_rewrite(action: Callable) -> void:
 	if not ui_open and is_instance_valid(quest_panel):
 		quest_panel.open_rewrite_confirmation(action)
+
+func open_observer_epilogue(observer: Interactable, dialogue: String) -> void:
+	if not ui_open and is_instance_valid(observer_epilogue):
+		observer_epilogue.play(observer, dialogue)
 
 func toggle_inventory():
 	if inventory_panel and inventory_panel.has_method("toggle_inventory"):

@@ -1,0 +1,120 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/observer_epilogue.gd" id="1_epilogue"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_caption"]
+content_margin_left = 20.0
+content_margin_top = 13.0
+content_margin_right = 20.0
+content_margin_bottom = 15.0
+bg_color = Color(0.06, 0.075, 0.095, 0.95)
+border_width_top = 2
+border_width_bottom = 1
+border_color = Color(0.58, 0.49, 0.32, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+shadow_color = Color(0, 0, 0, 0.48)
+shadow_size = 9
+
+[node name="ObserverEpilogue" type="CanvasLayer"]
+layer = 12
+visible = false
+script = ExtResource("1_epilogue")
+
+[node name="CinematicCamera" type="Camera3D" parent="."]
+
+[node name="Letterbox" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Top" type="ColorRect" parent="Letterbox"]
+anchor_right = 1.0
+anchor_bottom = 0.085
+mouse_filter = 2
+color = Color(0.012, 0.015, 0.022, 1)
+
+[node name="Bottom" type="ColorRect" parent="Letterbox"]
+anchor_top = 0.915
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.012, 0.015, 0.022, 1)
+
+[node name="Caption" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchor_left = 0.2
+anchor_top = 0.915
+anchor_right = 0.8
+anchor_bottom = 0.915
+offset_top = -14.0
+offset_bottom = -14.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_caption")
+
+[node name="Content" type="VBoxContainer" parent="Caption"]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Speaker" type="Label" parent="Caption/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.89, 0.76, 0.51, 1)
+theme_override_font_sizes/font_size = 17
+text = "Наблюдатель"
+horizontal_alignment = 1
+
+[node name="Dialogue" type="Label" parent="Caption/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.93, 0.86, 1)
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Choices" type="HBoxContainer" parent="Caption/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Finish" type="Button" parent="Caption/Content/Choices"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 41)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Закончить"
+
+[node name="Walk" type="Button" parent="Caption/Content/Choices"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 41)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Прогуляться"
+
+[node name="EndCard" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.012, 0.015, 0.022, 1)
+
+[node name="Title" type="Label" parent="EndCard"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.92, 0.82, 0.62, 1)
+theme_override_font_sizes/font_size = 36
+text = "Конец"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -15,7 +15,7 @@ var _service_door: InteractableDoor
 var _barrel: Interactable
 var _book: BookPedestal
 var _barracks: InteractableDoor
-var _observer: Node3D
+var _observer: Interactable
 
 func _ready() -> void:
 	_verify.call_deferred()
@@ -37,14 +37,15 @@ func _verify() -> void:
 	_observer = _level.get_node("CastleFacade/MainKeep/Observer")
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	_check(not _observer.visible and _observer.get_node("Body/Shape").disabled,
+	_check(not _observer.visible and _observer.get_node("Shape").disabled and _observer.get_interaction_prompt().is_empty(),
 		"The Observer is absent until a qualifying choice.")
 	if OS.get_cmdline_user_args().has("reject-deal"):
 		await _choose_throne_ending(1)
 		_check(QuestManager.get_quest_ending("deal_at_the_throne") == "reject_deal"
-			and _observer.visible and not _observer.get_node("Body/Shape").disabled
+			and _observer.visible and not _observer.get_node("Shape").disabled
 			and not InventoryManager.has_item("great_quill") and InventoryManager.quill_uses_count == 0,
 			"Refusing the Quill brings the Observer to the throne room.")
+		await _verify_observer_epilogue("Ты меня удивил.")
 		get_tree().quit(0 if _passed else 1)
 		return
 	_check_initial()
@@ -57,6 +58,7 @@ func _verify() -> void:
 	else:
 		await _verify_life()
 	await _take_quill_and_rewrite()
+	await _verify_observer_epilogue("Но сможешь ли ты остановиться?")
 
 	if ash_first:
 		await _verify_life()
@@ -218,6 +220,46 @@ func _choose_throne_ending(choice: int) -> void:
 	(choices.get_child(0) as Button).pressed.emit()
 	await get_tree().process_frame
 
+func _verify_observer_epilogue(expected_line: String) -> void:
+	var player := _level.get_node("Player") as CharacterBody3D
+	var camera := player.get_node("Camera3D") as Camera3D
+	var ray := camera.get_node("InteractionRay") as RayCast3D
+	var position_before := player.global_transform
+	var camera_before := camera.transform
+	player.global_position = _observer.to_global(Vector3(0, 0.02, 2.65))
+	player.velocity = Vector3.ZERO
+	camera.look_at(_observer.global_position + Vector3.UP * 1.58)
+	for frame in 4:
+		await get_tree().physics_frame
+	_check(ray.current_target == _observer, "The normal interaction ray targets the Observer.")
+
+	var interact := InputEventKey.new()
+	interact.physical_keycode = KEY_E
+	interact.pressed = true
+	Input.parse_input_event(interact)
+	Input.flush_buffered_events()
+	var release := interact.duplicate() as InputEventKey
+	release.pressed = false
+	Input.parse_input_event(release)
+
+	var epilogue: CanvasLayer = GameManager.observer_epilogue
+	var choices := epilogue.get_node("%Choices") as HBoxContainer
+	var line := epilogue.get_node("%Dialogue") as Label
+	_check(epilogue.visible and GameManager.ui_open and not choices.is_visible_in_tree()
+		and get_viewport().get_camera_3d() == epilogue.get_node("CinematicCamera"),
+		"Interaction starts the cinematic before opening the ending choices.")
+	await get_tree().create_timer(4.2).timeout
+	_check(line.text.ends_with(expected_line) and is_equal_approx(line.visible_ratio, 1.0)
+		and choices.is_visible_in_tree(), "The Observer delivers the matching line before the choice.")
+
+	var uses := InventoryManager.quill_uses_count
+	(choices.get_node("Walk") as Button).pressed.emit()
+	await get_tree().create_timer(0.55).timeout
+	_check(not GameManager.ui_open and not epilogue.visible and get_viewport().get_camera_3d() == camera
+		and InventoryManager.quill_uses_count == uses, "Walking restores the player camera and preserves the run.")
+	player.global_transform = position_before
+	camera.transform = camera_before
+
 func _verify_life_blockers() -> void:
 	_barracks.interact()
 	await get_tree().create_timer(0.8).timeout
@@ -340,7 +382,7 @@ func _rewrite() -> void:
 	_check(not confirmation.is_visible_in_tree() and GameManager.quest_panel.panel_container.is_visible_in_tree()
 		and not QuestManager.is_quest_completed("burning_grove") and InventoryManager.quill_uses_count == times + 1,
 		"Confirming rewrites once and reopens the grove choices.")
-	_check(_observer.visible and not _observer.get_node("Body/Shape").disabled,
+	_check(_observer.visible and not _observer.get_node("Shape").disabled,
 		"Rewriting history brings the Observer to the throne room.")
 	GameManager.quest_panel.close_quest()
 

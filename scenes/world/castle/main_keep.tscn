@@ -1274,18 +1274,17 @@ mesh = SubResource("Mesh_DaisTier3")
 [node name="Col" type="CollisionShape3D" parent="DaisTier3"]
 shape = SubResource("Shape_DaisTier3")
 
-[node name="Observer" type="Node3D" parent="."]
+[node name="Observer" type="StaticBody3D" parent="."]
 visible = false
 position = Vector3(-7.52, 0.249, -10.4)
 rotation = Vector3(0, 0.48, 0)
 script = ExtResource("31_observer_presence")
+interaction_prompt = "[E] Поговорить с Наблюдателем"
 
 [node name="Model" type="MeshInstance3D" parent="Observer"]
 mesh = ExtResource("32_observer_mesh")
 
-[node name="Body" type="StaticBody3D" parent="Observer"]
-
-[node name="Shape" type="CollisionShape3D" parent="Observer/Body"]
+[node name="Shape" type="CollisionShape3D" parent="Observer"]
 position = Vector3(0, 1.17, 0)
 shape = SubResource("Shape_Observer")
 disabled = true
