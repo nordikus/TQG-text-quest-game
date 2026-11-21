@@ -199,16 +199,7 @@ func _run_verification() -> void:
 		push_error("FAIL: East partition wall is missing at Z=8.0!")
 		all_passed = false
 
-	# Portal through East Wall at local Z = 0.0 (world -151.0, Y = 2.5): MUST BE OPEN!
-	var portal_e_ray := PhysicsRayQueryParameters3D.create(
-		Vector3(10.0, 2.5, -151.0),
-		Vector3(16.0, 2.5, -151.0)
-	)
-	var pe_hit: Dictionary = space_state.intersect_ray(portal_e_ray)
-	if pe_hit.is_empty():
-		print("PASS: East Grand Portal to Royal Banquet Hall is wide open for traversal!")
-	else:
-		push_error("FAIL: East Grand Portal is blocked by: " + str(pe_hit.collider.name) + " at " + str(pe_hit.position))
+	if not _verify_east_wing(space_state):
 		all_passed = false
 
 	# The keep is approachable from outside, but the rear perimeter is closed.
@@ -335,3 +326,40 @@ func _run_verification() -> void:
 
 func _bounds(model: MeshInstance3D) -> AABB:
 	return model.global_transform * model.get_aabb()
+
+func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
+	var dining_open := true
+	for z in [-151.67, -151.0, -150.33]:
+		dining_open = dining_open and space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(11.5, 2.45, z), Vector3(17.0, 2.45, z))).is_empty()
+	var doorway_edge := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(11.5, 1.55, -149.65), Vector3(17.0, 1.55, -149.65)))
+	if not dining_open or doorway_edge.is_empty():
+		push_error("FAIL: The narrow dining passage needs a clear centre and a solid jamb.")
+		return false
+
+	var kitchen_door := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(18.07, 1.65, -153.6), Vector3(18.07, 1.65, -155.2)))
+	var kitchen_wall := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(22.0, 1.65, -153.6), Vector3(22.0, 1.65, -155.2)))
+	if not kitchen_door.is_empty() or kitchen_wall.is_empty():
+		push_error("FAIL: The kitchen requires its own room and open access from dining.")
+		return false
+
+	for flight in range(2):
+		for step in range(1, 16):
+			var progress := step / 16.0
+			var x := 29.7 if flight == 0 else 27.0
+			var z := lerpf(-155.85, -162.25, progress if flight == 0 else 1.0 - progress)
+			var grade := 0.25 + 3.05 * (flight + progress)
+			var foot := Vector3(x, grade, z)
+			var stair := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+				foot + Vector3.UP * 0.36, foot - Vector3.UP * 0.36))
+			var overhead := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+				foot + Vector3.UP * 0.12, foot + Vector3.UP * 2.1))
+			var body_name := "ServiceStairLower" if flight == 0 else "ServiceStairUpper"
+			if stair.is_empty() or stair.collider.name != body_name or not overhead.is_empty():
+				push_error("FAIL: The kitchen stair needs continuous footing and at least 2.1 m of headroom.")
+				return false
+	print("PASS: The narrow entry, separate kitchen and two service stair flights are clear.")
+	return true

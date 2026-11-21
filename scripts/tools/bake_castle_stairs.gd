@@ -6,7 +6,8 @@ const OUTPUT := "res://scenes/world/castle/"
 func _initialize() -> void:
 	var spiral_ok := _bake_flight("tower_stairs", _tower_section, 98, 6, false)
 	var grand_ok := _bake_flight("keep_stairs", _keep_section, 36, 1, true)
-	quit(0 if spiral_ok and grand_ok else 1)
+	var service_ok := _bake_flight("service_stairs", _service_section, 16, 1, true)
+	quit(0 if spiral_ok and grand_ok and service_ok else 1)
 
 # One section is left and right at the actual grade, followed by the two points
 # along the underside. The spiral starts at the court floor and joins the two landings.
@@ -31,6 +32,14 @@ func _keep_section(progress: float) -> PackedVector3Array:
 	return PackedVector3Array([
 		Vector3(-24.5, grade, z), Vector3(-20.5, grade, z),
 		Vector3(-24.5, 0.20, z), Vector3(-20.5, 0.20, z),
+	])
+
+func _service_section(progress: float) -> PackedVector3Array:
+	var z := -6.4 * progress
+	var height := 3.05 * progress
+	return PackedVector3Array([
+		Vector3(1.15, height, z), Vector3(-1.15, height, z),
+		Vector3(1.15, -0.16, z), Vector3(-1.15, -0.16, z),
 	])
 
 func _bake_flight(name: String, section: Callable, risers: int, subdivisions: int, solid_base: bool) -> bool:

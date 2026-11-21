@@ -138,20 +138,204 @@ func _keep() -> void:
 		_lantern(Vector3(-27.95, 3.4, z), 6.05)
 	for z in [-12.75, -8.35, -3.95, 4.3]:
 		_ledger_shelf(Vector3(-31.58, 0.25, z))
-	for z in [-10.8, 0.7, 10.1]:
-		_table(Vector3(27.5, 0.25, z), Vector2(3.2, 1.47))
-		_bench(Vector3(27.5, 0.25, z + 1.27))
-		_round(Vector3(26.56, 1.105, z), 0.14, 0.10, PAPER)
-		_round(Vector3(27.28, 1.192, z - 0.27), 0.16, 0.27, BLUE)
-	for z in [-12.0, -10.75, -9.5, 10.35, 11.6]:
-		_locker(Vector3(30.8, 0.25, z))
-	for z in [-10.65, 0.8, 10.2]:
-		_lantern(Vector3(26.0, 3.5, z), 6.05)
-	for z in [-10.65, 9.2]:
-		_table(Vector3(26.7, 6.35, z), Vector2(3.1, 1.25))
-		_box(Vector3(26.72, 7.175, z), Vector3(2.82, 0.031, 0.38), RED)
-		for x in [25.7, 26.7, 27.7]:
-			_round(Vector3(x, 7.21, z), 0.17, 0.045, PAPER)
+	_dining_room()
+	_keep_kitchen()
+	_keep_pantry()
+	_keep_stair_guards()
+	_steward_room()
+
+
+func _dining_room() -> void:
+	for x in [20.55, 27.15]:
+		var table := Vector3(x, 0.25, 6.25)
+		_box(table + Vector3.UP * 0.012, Vector3(4.22, 0.019, 9.25), RED.darkened(0.34))
+		_box(table + Vector3.UP * 0.026, Vector3(3.86, 0.011, 8.88), RED.darkened(0.20))
+		_table(table, Vector2(1.86, 7.80))
+		_box(table + Vector3.UP * 0.819, Vector3(0.51, 0.018, 7.37), RED)
+		for side in [-1.0, 1.0]:
+			for z in [3.55, 6.25, 8.95]:
+				_bench(Vector3(x + 1.29 * side, 0.25, z), PI / 2.0)
+			for i in 6:
+				var place_at := table + Vector3(side * 0.62, 0.832, -3.12 + 1.22 * i)
+				_round(place_at, 0.168, 0.034, LINEN)
+				_round(place_at + Vector3(0, 0.071, 0.37), 0.072, 0.14, BRASS if i % 2 == 0 else BLUE)
+		for z in [-2.15, 0.08, 2.2]:
+			var platter := table + Vector3(0, 0.845, z)
+			_round(platter, 0.21, 0.033, BRASS)
+			for x_shift in [-0.096, 0.105]:
+				_round(platter + Vector3(x_shift, 0.080, 0), 0.070, 0.13, WOOD_EDGE.lightened(0.18))
+		_chandelier(Vector3(x, 3.83, 6.25))
+	_table(Vector3(30.65, 0.25, -0.32), Vector2(0.90, 3.7))
+	for z in [-1.34, -0.38, 0.64]:
+		_round(Vector3(30.60, 1.22, z), 0.15, 0.33, BLUE)
+		_round(Vector3(30.60, 1.39, z), 0.094, 0.07, BLUE.lightened(0.14))
+	for x in [19.0, 28.8]:
+		_wall_hanging(Vector3(x, 3.35, 14.46), RED)
+	for z in [-1.22, 1.22]:
+		_box(Vector3(12.56, 1.61, z), Vector3(0.15, 2.72, 0.22), LIMESTONE)
+	_box(Vector3(12.54, 3.035, 0), Vector3(0.18, 0.24, 2.77), LIMESTONE)
+	_lantern(Vector3(15.65, 3.88, 0), 6.05, 1.45, 7.0)
+	_lantern(Vector3(18.06, 3.66, -2.03), 6.05, 1.2, 5.8)
+
+
+func _chandelier(at: Vector3) -> void:
+	var ring := TorusMesh.new()
+	ring.inner_radius = 0.65
+	ring.outer_radius = 0.77
+	ring.rings = 12
+	ring.ring_segments = 6
+	_place(ring, at, IRON, Vector3.ZERO, null)
+	var drop := 6.05 - at.y
+	_round(at + Vector3.UP * drop * 0.5, 0.038, drop, IRON)
+	for angle in [0.0, PI / 2.0]:
+		_box(at, Vector3(1.41, 0.055, 0.09), IRON, false, Vector3(0, angle, 0))
+	for i in 8:
+		var a := TAU * i / 8.0
+		var candle := at + Vector3(cos(a) * 0.702, 0.12, sin(a) * 0.702)
+		_round(candle, 0.050, 0.14, LINEN)
+		_round(candle + Vector3.UP * 0.098, 0.023, 0.054, Color(1.0, 0.70, 0.32))
+	_light(at - Vector3.UP * 0.17, 2.6, 9.0)
+
+
+func _wall_hanging(at: Vector3, color: Color) -> void:
+	_box(at, Vector3(1.53, 1.99, 0.053), color)
+	_box(at + Vector3(0, 1.01, -0.047), Vector3(1.88, 0.076, 0.10), OAK)
+	_box(at + Vector3(0, 0.09, -0.037), Vector3(0.44, 0.44, 0.028), BRASS,
+		false, Vector3(0, 0, PI / 4.0))
+	_box(at + Vector3(0, -0.88, -0.037), Vector3(1.45, 0.085, 0.027), BRASS)
+
+
+func _keep_kitchen() -> void:
+	for x in [17.0, 23.0]:
+		_lantern(Vector3(x, 3.97, -7.38), 6.05, 1.65, 7.3)
+	_hearth(Vector3(20.64, 0.25, -14.46))
+	_provision_rack(Vector3(14.08, 0.25, -8.9), PI / 2.0)
+	_provision_rack(Vector3(14.08, 0.25, -12.42), PI / 2.0)
+	for z in [-11.95, -7.78]:
+		var bench := Vector3(24.13, 0.25, z)
+		_table(bench, Vector2(1.48, 2.72))
+		_box(bench + Vector3(0.22, 0.829, 0.22), Vector3(0.75, 0.036, 0.91), WOOD_EDGE.darkened(0.19))
+		_box(bench + Vector3(0.31, 0.88, 0.19), Vector3(0.29, 0.025, 0.116), IRON)
+		_box(bench + Vector3(0.51, 0.89, 0.19), Vector3(0.13, 0.050, 0.081), OAK)
+		for i in 3:
+			_round(bench + Vector3(-0.31, 0.88, -0.69 + i * 0.25), 0.086, 0.145,
+				Color(0.42, 0.29, 0.14).lightened(0.09 * i))
+	for z in [-14.04, -13.1]:
+		_provision_barrel(Vector3(16.0, 0.25, z), 0.38)
+	_box(Vector3(23.4, 2.52, -14.36), Vector3(2.29, 0.13, 0.16), OAK)
+	for i in 4:
+		var x := 22.62 + 0.46 * i
+		_box(Vector3(x, 2.29, -14.27), Vector3(0.059, 0.46, 0.054), IRON)
+		_round(Vector3(x, 1.99, -14.25), 0.14 + 0.025 * i, 0.09, IRON,
+			false, Vector3(PI / 2.0, 0, 0))
+	_box(Vector3(28.68, 2.63, -5.76), Vector3(0.28, 0.07, 0.095), IRON)
+	_round(Vector3(28.83, 2.78, -5.76), 0.078, 0.235, Color(0.93, 0.65, 0.31))
+	_round(Vector3(28.83, 2.64, -5.76), 0.104, 0.055, IRON)
+	_light(Vector3(29.04, 2.80, -5.76), 1.40, 5.35)
+
+
+func _hearth(at: Vector3) -> void:
+	_box(at + Vector3(0, 0.13, 0.86), Vector3(3.38, 0.26, 1.57), LIMESTONE, true)
+	_box(at + Vector3(0, 1.02, 0.15), Vector3(2.41, 1.96, 0.29), CHAR, true)
+	for x in [-1.45, 1.45]:
+		_box(at + Vector3(x, 1.23, 0.80), Vector3(0.48, 2.19, 1.48), LIMESTONE, true)
+	_box(at + Vector3(0, 2.33, 0.80), Vector3(3.38, 0.38, 1.48), LIMESTONE, true)
+	for i in 4:
+		_box(at + Vector3(0, 2.66 + i * 0.285, 0.63 - i * 0.07),
+			Vector3(2.98 - i * 0.48, 0.285, 1.36 - i * 0.21), LIMESTONE, true)
+	_box(at + Vector3(0, 4.727, 0.42), Vector3(1.06, 2.146, 0.78), LIMESTONE, true)
+	_box(at + Vector3(0, 1.78, 0.85), Vector3(2.50, 0.087, 0.093), IRON)
+	_round(at + Vector3(0, 1.56, 0.92), 0.043, 0.42, IRON)
+	_round(at + Vector3(0, 1.13, 0.92), 0.43, 0.49, IRON)
+	_round(at + Vector3(0, 1.36, 0.92), 0.47, 0.06, IRON)
+	for i in 5:
+		var x := -0.53 + 0.26 * i
+		var z := 0.94 + 0.29 * sin(i * 2.2)
+		_box(at + Vector3(x, 0.38, z), Vector3(0.29, 0.15, 0.61), CHAR,
+			false, Vector3(0, sin(i * 2.6), 0))
+		_round(at + Vector3(x, 0.445, z), 0.103, 0.064, Color(0.92, 0.35, 0.10))
+	_light(at + Vector3(0, 1.15, 1.3), 1.8, 5.85)
+
+
+func _keep_pantry() -> void:
+	for z in [-11.75, -8.05, -4.42, -0.5]:
+		_provision_rack(Vector3(14.06, 6.35, z), PI / 2.0)
+	for x in [17.8, 20.7, 23.7]:
+		_provision_rack(Vector3(x, 6.35, -14.00), 0.0)
+	for z in [-10.35, -8.46, -6.8]:
+		_provision_barrel(Vector3(23.12, 6.35, z), 0.42)
+	_table(Vector3(18.83, 6.35, -7.03), Vector2(2.15, 4.45))
+	for i in 4:
+		_round(Vector3(18.49, 7.24, -8.58 + i * 0.98), 0.21, 0.17, LINEN)
+		_box(Vector3(19.22, 7.2, -8.41 + i * 0.95), Vector3(0.39, 0.083, 0.54), PAPER)
+	_lantern(Vector3(19.91, 9.60, -8.97), 12.0, 2.0, 8.8)
+	_lantern(Vector3(27.08, 9.41, -2.31), 12.0, 1.30, 6.5)
+
+
+func _keep_stair_guards() -> void:
+	for x in [25.60, 31.13]:
+		_stair_guard(Vector3(x, 6.35, -13.84), Vector3(x, 6.35, -4.85))
+	_stair_guard(Vector3(25.60, 6.35, -13.84), Vector3(31.13, 6.35, -13.84))
+	_stair_guard(Vector3(28.17, 6.35, -4.76), Vector3(31.13, 6.35, -4.76))
+
+
+func _stair_guard(from: Vector3, to: Vector3) -> void:
+	var delta := to - from
+	var length := delta.length()
+	var tilt := Vector3(0, atan2(-delta.z, delta.x), 0)
+	for y in [0.14, 0.905]:
+		_box(from.lerp(to, 0.5) + Vector3.UP * y, Vector3(length, 0.13, 0.18), WOOD_EDGE, false, tilt)
+	var bays := maxi(1, ceili(length / 0.64))
+	for i in bays + 1:
+		var post := from.lerp(to, i / float(bays))
+		var width := 0.17 if i in [0, bays] else 0.095
+		_box(post + Vector3.UP * 0.47, Vector3(width, 0.94, width), OAK)
+
+
+func _steward_room() -> void:
+	var desk := Vector3(19.20, 6.35, 9.61)
+	_box(desk + Vector3.UP * 0.013, Vector3(5.34, 0.022, 6.12), BLUE.darkened(0.26))
+	_table(desk, Vector2(3.5, 1.45))
+	_bench(desk + Vector3(0, 0, 1.43))
+	for x in [-0.99, -0.31, 0.61]:
+		_box(desk + Vector3(x, 0.833, 0.04), Vector3(0.48, 0.046, 0.41), PAPER,
+			false, Vector3(0, 0.31 * x, 0))
+	_round(desk + Vector3(1.20, 0.94, 0.08), 0.085, 0.24, BRASS)
+	for z in [5.65, 8.0, 10.33]:
+		_ledger_shelf(Vector3(14.02, 6.35, z))
+	_wall_hanging(Vector3(19.20, 9.72, 14.46), BLUE.darkened(0.12))
+	for z in [6.44, 9.38, 12.3]:
+		_locker(Vector3(30.45, 6.35, z))
+	_table(Vector3(27.33, 6.35, 11.66), Vector2(2.58, 1.42))
+	_round(Vector3(27.21, 7.42, 11.47), 0.25, 0.47, BLUE)
+	_round(Vector3(27.21, 7.69, 11.47), 0.11, 0.15, BLUE.lightened(0.16))
+	_lantern(Vector3(19.44, 9.80, 8.3), 12.0, 1.95, 8.4)
+	_lantern(Vector3(26.84, 9.71, 9.5), 12.0, 1.4, 6.8)
+
+
+func _provision_rack(at: Vector3, yaw: float) -> void:
+	var frame := Transform3D(Basis(Vector3.UP, yaw), at)
+	var tilt := Vector3(0, yaw, 0)
+	for x in [-1.43, 1.43]:
+		_box(frame * Vector3(x, 1.32, 0), Vector3(0.14, 2.64, 0.69), OAK, true, tilt)
+	for height in [0.22, 1.0, 1.78, 2.53]:
+		_box(frame * (Vector3.UP * height), Vector3(2.83, 0.12, 0.65), WOOD_EDGE, true, tilt)
+	for i in 5:
+		var x := -1.11 + i * 0.55
+		var color := BLUE.lerp(LINEN, (i % 3) / 3.0)
+		_round(frame * Vector3(x, 1.31, 0.04), 0.16, 0.49, color)
+		_round(frame * Vector3(x, 1.57, 0.04), 0.12, 0.064, color.lightened(0.19))
+	for x in [-0.81, 0.07, 0.97]:
+		_box(frame * Vector3(x, 0.50, 0.04), Vector3(0.63, 0.43, 0.49), OAK, false, tilt)
+	for x in [-1.01, -0.45, 0.15, 0.74]:
+		_round(frame * Vector3(x, 1.96, 0.01), 0.18, 0.24, LINEN.darkened(x * 0.08 + 0.12))
+
+
+func _provision_barrel(at: Vector3, radius: float) -> void:
+	_round(at + Vector3.UP * 0.44, radius, 0.88, OAK, true)
+	for y in [0.18, 0.71]:
+		_round(at + Vector3.UP * y, radius + 0.018, 0.075, IRON)
+
 
 func _bed(at: Vector3, yaw: float, quilt: Color, bed_name: String) -> void:
 	var frame := Transform3D(Basis(Vector3.UP, yaw), at)
