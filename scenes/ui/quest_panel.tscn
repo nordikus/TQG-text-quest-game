@@ -84,3 +84,50 @@ layout_mode = 2
 [node name="ChoicesContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
+
+[node name="RewriteConfirmation" type="CenterContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="RewriteConfirmation"]
+custom_minimum_size = Vector2(456, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="RewriteConfirmation/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 27
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="RewriteConfirmation/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Question" type="Label" parent="RewriteConfirmation/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.83, 0.59, 1)
+theme_override_font_sizes/font_size = 21
+text = "Вы уверены, что хотите\nпереписать историю?"
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="RewriteConfirmation/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Cancel" type="Button" parent="RewriteConfirmation/Panel/Margin/Content/Buttons"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Отмена"
+
+[node name="Confirm" type="Button" parent="RewriteConfirmation/Panel/Margin/Content/Buttons"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Переписать"

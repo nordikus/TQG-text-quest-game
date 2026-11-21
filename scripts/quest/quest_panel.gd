@@ -5,14 +5,20 @@ extends CanvasLayer
 @onready var text_label: RichTextLabel = $PanelContainer/VBoxContainer/ContentScroll/TextLabel
 @onready var choices_container: VBoxContainer = $PanelContainer/VBoxContainer/ChoicesContainer
 @onready var close_button: Button = $PanelContainer/VBoxContainer/Header/CloseButton
+@onready var rewrite_panel: CenterContainer = $RewriteConfirmation
+@onready var rewrite_buttons: HBoxContainer = $RewriteConfirmation/Panel/Margin/Content/Buttons
+@onready var cancel_rewrite: Button = rewrite_buttons.get_node("Cancel")
 
 var current_quest: Dictionary = {}
 var current_node_id: String = ""
+var _rewrite_action: Callable
 
 func _ready():
 	GameManager.quest_panel = self
 	hide_panel()
 	close_button.pressed.connect(close_quest)
+	cancel_rewrite.pressed.connect(close_quest)
+	rewrite_buttons.get_node("Confirm").pressed.connect(_confirm_rewrite)
 
 func _unhandled_input(event: InputEvent):
 	if visible and event.is_action_pressed("ui_cancel"):
@@ -26,13 +32,33 @@ func open_quest(quest_id: String):
 
 	title_label.text = current_quest.get("title", "Квест")
 	current_node_id = current_quest.get("start_node", "start")
+	_rewrite_action = Callable()
+	rewrite_panel.hide()
+	panel_container.show()
 	_display_node(current_node_id)
-	
+	_show_panel()
+
+func open_rewrite_confirmation(action: Callable) -> void:
+	_rewrite_action = action
+	panel_container.hide()
+	rewrite_panel.show()
+	_show_panel()
+	cancel_rewrite.grab_focus()
+
+func _confirm_rewrite() -> void:
+	var action := _rewrite_action
+	close_quest()
+	if action.is_valid():
+		action.call()
+
+func _show_panel() -> void:
 	visible = true
 	GameManager.ui_open = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func close_quest():
+	_rewrite_action = Callable()
+	rewrite_panel.hide()
 	hide_panel()
 	GameManager.ui_open = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

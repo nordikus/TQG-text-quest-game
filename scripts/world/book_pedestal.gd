@@ -33,10 +33,11 @@ func interact():
 	if not QuestManager.is_quest_completed(quest_id):
 		GameManager.open_quest(quest_id)
 	elif InventoryManager.has_item("great_quill"):
-		_rewrite_reality()
+		GameManager.confirm_rewrite(_rewrite_reality)
 
 func _rewrite_reality():
-	InventoryManager.use_item("great_quill")
+	if not QuestManager.is_quest_completed(quest_id) or not InventoryManager.use_item("great_quill"):
+		return
 	QuestManager.reset_quest(quest_id)
 	var wc := _find_world_changer()
 	if wc and wc.has_method("reset_world"):

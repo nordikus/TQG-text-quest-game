@@ -10,6 +10,7 @@
 
 [ext_resource type="Script" path="res://scripts/world/western_ramparts.gd" id="14_west"]
 [ext_resource type="Script" path="res://scripts/world/tower_breach.gd" id="15_breach"]
+[ext_resource type="PackedScene" path="res://scenes/world/castle/rampart_watchtower.tscn" id="16_watchtower"]
 
 [sub_resource type="ShaderMaterial" id="Mat_Stone"]
 shader = ExtResource("10_masonry")
@@ -617,6 +618,7 @@ width = 2.60
 outer_edge = -0.91
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
+gaps = PackedVector2Array(2.25, 8.85)
 
 [node name="EastParapet" type="StaticBody3D" parent="."]
 position = Vector3(36, 14.8, -34.75)
@@ -626,6 +628,7 @@ length = 79.7
 outer_edge = 1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
+gaps = PackedVector2Array(2.45, 9.05)
 
 [node name="RearParapet" type="StaticBody3D" parent="."]
 position = Vector3(1.35, 14.8, -77.6)
@@ -644,6 +647,7 @@ length = 23.25
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
+gaps = PackedVector2Array(2.325, 8.925)
 
 [node name="FrontEastParapet" type="StaticBody3D" parent="."]
 position = Vector3(20.175, 14.8, 8.5)
@@ -653,7 +657,25 @@ length = 30.35
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
+gaps = PackedVector2Array(-12.475, -5.875, 12.525, 15.175)
 
+[node name="GateWestWatchtower" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(-11, 0, 8.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="GateEastWatchtower" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(11, 0, 8.5)
+rotation = Vector3(0, 1.5707963, 0)
+
+[node name="WestWatchtower" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(-33.1, 0, -29)
+
+[node name="EastWatchtower" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(36, 0, -29)
+
+[node name="CornerTowerSE" parent="." instance=ExtResource("16_watchtower")]
+position = Vector3(36, 0, 8.5)
+corner = true
 
 [node name="WesternRamparts" type="Node3D" parent="."]
 script = ExtResource("14_west")

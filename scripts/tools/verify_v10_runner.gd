@@ -15,6 +15,7 @@ var _service_door: InteractableDoor
 var _barrel: Interactable
 var _book: BookPedestal
 var _barracks: InteractableDoor
+var _observer: Node3D
 
 func _ready() -> void:
 	_verify.call_deferred()
@@ -33,10 +34,22 @@ func _verify() -> void:
 	_barrel = _world.rune_barrel
 	_book = _level.find_child("PedestalWithBook", true, false)
 	_barracks = _level.find_child("BarracksDoor", true, false)
+	_observer = _level.get_node("CastleFacade/MainKeep/Observer")
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+	_check(not _observer.visible and _observer.get_node("Body/Shape").disabled,
+		"The Observer is absent until a qualifying choice.")
+	if OS.get_cmdline_user_args().has("reject-deal"):
+		await _choose_throne_ending(1)
+		_check(QuestManager.get_quest_ending("deal_at_the_throne") == "reject_deal"
+			and _observer.visible and not _observer.get_node("Body/Shape").disabled
+			and not InventoryManager.has_item("great_quill") and InventoryManager.quill_uses_count == 0,
+			"Refusing the Quill brings the Observer to the throne room.")
+		get_tree().quit(0 if _passed else 1)
+		return
 	_check_initial()
 	_check_rooms()
+	_check_watchtower_passages()
 
 	var ash_first := OS.get_cmdline_user_args().has("ash-first")
 	if ash_first:
@@ -188,12 +201,22 @@ func _verify_barrel(has_shard: bool) -> void:
 		"The shard unseals the barrel and leaves one waterkeeper note in the journal.")
 
 func _take_quill_and_rewrite() -> void:
-	QuestManager.complete_quest("deal_at_the_throne", "accept_deal")
+	await _choose_throne_ending(0)
 	var quill := _level.find_child("GreatQuillPickup", true, false) as PickupItem
 	quill.interact()
 	_check(InventoryManager.has_item("great_quill"), "The throne quest gives the Great Quill.")
+	_check(not _observer.visible, "Accepting and taking the Quill do not summon the Observer.")
 	_check(_book.get_interaction_prompt() == _book.rewrite_prompt, "The Quill restores the grove book prompt.")
 	await _rewrite()
+
+func _choose_throne_ending(choice: int) -> void:
+	var pedestal := _level.get_node("CastleFacade/MainKeep/ThroneBookPedestal") as ThronePedestal
+	pedestal.interact()
+	var choices: VBoxContainer = GameManager.quest_panel.choices_container
+	(choices.get_child(choice) as Button).pressed.emit()
+	await get_tree().process_frame
+	(choices.get_child(0) as Button).pressed.emit()
+	await get_tree().process_frame
 
 func _verify_life_blockers() -> void:
 	_barracks.interact()
@@ -248,6 +271,28 @@ func _check_rooms() -> void:
 	_check(bedroom != null and not (bedroom.get_child(0) as CollisionShape3D).disabled,
 		"The astromancer has a bed with collision beside the workshop.")
 
+func _check_watchtower_passages() -> void:
+	var walls := _level.get_node("CastleFacade/CourtyardWalls")
+	for tower_name in ["GateWestWatchtower", "GateEastWatchtower", "WestWatchtower", "EastWatchtower"]:
+		var tower := walls.get_node(tower_name) as StaticBody3D
+		var clear := true
+		for x in [-0.46, 0.0, 0.46]:
+			for y in [15.05, 15.8, 16.9]:
+				clear = clear and _ray(tower.to_global(Vector3(x, y, -4.1)),
+					tower.to_global(Vector3(x, y, 4.1))).is_empty()
+		for z in range(-4, 5):
+			var floor_sample := tower.to_global(Vector3(0, 15.1, z))
+			clear = clear and not _ray(floor_sample, floor_sample - Vector3.UP * 0.5).is_empty()
+		var outer_wall := _ray(tower.to_global(Vector3(0, 16.1, 0)), tower.to_global(Vector3(4, 16.1, 0)))
+		_check(clear and outer_wall.get("collider") == tower, "%s has a continuous passage and physical walls." % tower_name)
+	var corner := walls.get_node("CornerTowerSE") as StaticBody3D
+	var turn := corner.to_global(Vector3(0, 16.9, 0))
+	var west_entry := turn + Vector3.LEFT * 4.1
+	var north_entry := turn + Vector3.FORWARD * 4.1
+	_check(_ray(west_entry, turn).is_empty() and _ray(north_entry, turn).is_empty()
+		and not _ray(turn + Vector3.DOWN * 1.85, turn + Vector3.DOWN * 2.2).is_empty(),
+		"The southeastern corner tower connects the front and east wall walks.")
+
 func _check_courtyard_fire(burned: bool) -> void:
 	var surfaces_match: bool = _world.courtyard_surfaces.size() == 3
 	for surface: MeshInstance3D in _world.courtyard_surfaces:
@@ -267,10 +312,37 @@ func _check_courtyard_fire(burned: bool) -> void:
 
 func _rewrite() -> void:
 	var times: int = InventoryManager.quill_uses_count
-	_level.find_child("PedestalWithBook", true, false).interact()
+	var confirmation: CenterContainer = GameManager.quest_panel.rewrite_panel
+	_book.interact()
+	_check(confirmation.is_visible_in_tree() and GameManager.ui_open
+		and QuestManager.is_quest_completed("burning_grove") and InventoryManager.quill_uses_count == times,
+		"The book requests confirmation before rewriting.")
+	var buttons: HBoxContainer = GameManager.quest_panel.rewrite_buttons
+	if times == 0:
+		(buttons.get_node("Cancel") as Button).pressed.emit()
+		_check(not confirmation.is_visible_in_tree() and not GameManager.ui_open
+			and QuestManager.is_quest_completed("burning_grove") and InventoryManager.quill_uses_count == 0
+			and InventoryManager.has_item("great_quill") and not _observer.visible,
+			"Cancelling leaves the world, Quill and Observer unchanged.")
+		_book.interact()
+		var escape := InputEventAction.new()
+		escape.action = "ui_cancel"
+		escape.pressed = true
+		Input.parse_input_event(escape)
+		await get_tree().process_frame
+		_check(not confirmation.is_visible_in_tree() and not GameManager.ui_open
+			and InventoryManager.quill_uses_count == 0, "Escape also dismisses the confirmation.")
+		escape.pressed = false
+		Input.parse_input_event(escape)
+		_book.interact()
+	(buttons.get_node("Confirm") as Button).pressed.emit()
 	await get_tree().create_timer(2.15).timeout
-	_check(not QuestManager.is_quest_completed("burning_grove") and InventoryManager.quill_uses_count == times + 1,
-		"The starting altar rewrites the grove.")
+	_check(not confirmation.is_visible_in_tree() and GameManager.quest_panel.panel_container.is_visible_in_tree()
+		and not QuestManager.is_quest_completed("burning_grove") and InventoryManager.quill_uses_count == times + 1,
+		"Confirming rewrites once and reopens the grove choices.")
+	_check(_observer.visible and not _observer.get_node("Body/Shape").disabled,
+		"Rewriting history brings the Observer to the throne room.")
+	GameManager.quest_panel.close_quest()
 
 func _gate_blocks() -> bool:
 	var center := Vector3(_gate.global_position.x, 1.3, _gate.global_position.z)

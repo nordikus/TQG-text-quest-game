@@ -15,6 +15,10 @@ func open_quest(quest_id: String):
 	if quest_panel and quest_panel.has_method("open_quest"):
 		quest_panel.open_quest(quest_id)
 
+func confirm_rewrite(action: Callable) -> void:
+	if not ui_open and is_instance_valid(quest_panel):
+		quest_panel.open_rewrite_confirmation(action)
+
 func toggle_inventory():
 	if inventory_panel and inventory_panel.has_method("toggle_inventory"):
 		inventory_panel.toggle_inventory()
