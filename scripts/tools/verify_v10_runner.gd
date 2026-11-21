@@ -297,6 +297,12 @@ func _check_burned_placements(burned: bool) -> void:
 			and living.is_visible_in_tree() != burned and charred.is_visible_in_tree() == burned
 			and living.global_transform.is_equal_approx(charred.global_transform))
 	_check(variants_match, "Hand-planted trees exchange living and charred variants at the same positions.")
+	var gate_apron_is_clear := true
+	for obstacle: Node3D in _world.charred_forest_zone.get_children():
+		if obstacle.name.begins_with("Tree"):
+			var at := obstacle.global_position
+			gate_apron_is_clear = gate_apron_is_clear and (absf(at.x) > 9.0 or at.z > -73.5)
+	_check(gate_apron_is_clear, "The charred woods leave an open approach directly in front of the gate.")
 	for rock_name in ["Rock_MidEast", "BorderRock4", "BorderRock6"]:
 		var rock := _level.find_child(rock_name, true, false) as Node3D
 		var ground := Vector2(rock.global_position.x, rock.global_position.z)
@@ -320,6 +326,9 @@ func _check_rooms() -> void:
 	var partition := _ray(Vector3(24.8, 1.75, -112), Vector3(24.8, 1.75, -108.9))
 	_check(beds == 6 and entry.is_empty() and partition.get("collider") == castle.get_node("BarracksBuilding/DormitoryWallEast"),
 		"The six-bed guard dormitory has a separate walkable doorway.")
+	var chest_front := _ray(_chest.to_global(Vector3(0, 1.42, 2.0)), _chest.to_global(Vector3(0, 0.49, 0.39)))
+	_check(chest_front.get("collider") == _chest,
+		"The chest's seal can be reached from the open armory aisle.")
 	var rack := _ray(Vector3(29.25, 1.68, -116.25), Vector3(30.8, 1.68, -116.25))
 	var rack_post := _ray(Vector3(13.8, 1.43, -106.99), Vector3(14.6, 1.43, -106.99))
 	_check(not rack.is_empty() and (rack.get("collider") as Node).get_parent() == quarters
@@ -418,7 +427,7 @@ func _check_watchtower_passages() -> void:
 	_check(trees_clear, "Forest trees stay outside the expanded curtain and the service yard.")
 
 func _check_courtyard_fire(burned: bool) -> void:
-	var surfaces_match: bool = _world.courtyard_surfaces.size() == 3
+	var surfaces_match: bool = _world.courtyard_surfaces.size() == 4
 	for surface: MeshInstance3D in _world.courtyard_surfaces:
 		var material := surface.get_active_material(0) as ShaderMaterial
 		surfaces_match = surfaces_match and material != null and material.get_shader_parameter("courtyard_burned") == burned

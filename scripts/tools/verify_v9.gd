@@ -301,6 +301,9 @@ func _run_verification() -> void:
 			break
 	if not _verify_branch_floor_at_fork(space_state):
 		all_passed = false
+	var tree_model := clearing.get_node("GreatTree/TrunkBody/TreeMesh") as MeshInstance3D
+	if not _verify_branch_shell(tree_model.mesh):
+		all_passed = false
 	var tower := clearing.find_child("MageTower", true, false) as Node3D
 	var sill := tower.get_node("SouthEntryLanding/Mesh") as MeshInstance3D
 	var bridge_floor := tower.get_node("CoveredBridge/TowerBridgeDeck/Mesh") as MeshInstance3D
@@ -344,6 +347,22 @@ func _run_verification() -> void:
 
 func _bounds(model: MeshInstance3D) -> AABB:
 	return model.global_transform * model.get_aabb()
+
+func _verify_branch_shell(model: ArrayMesh) -> bool:
+	var indices: PackedInt32Array = model.surface_get_arrays(2)[Mesh.ARRAY_INDEX]
+	var edges: Dictionary[Vector2i, int] = {}
+	for triangle in range(0, indices.size(), 3):
+		for side in 3:
+			var from := indices[triangle + side]
+			var to := indices[triangle + (side + 1) % 3]
+			var edge := Vector2i(mini(from, to), maxi(from, to))
+			edges[edge] = edges.get(edge, 0) + 1
+	for incidence in edges.values():
+		if incidence != 2:
+			push_error("FAIL: The outer forks and tunnel must share a closed bark surface.")
+			return false
+	print("PASS: The courtyard branch has closed bark through both exterior forks.")
+	return true
 
 func _verify_branch_floor_at_fork(space: PhysicsDirectSpaceState3D) -> bool:
 	# The outer fork joins the shell underneath this stretch of the tunnel.

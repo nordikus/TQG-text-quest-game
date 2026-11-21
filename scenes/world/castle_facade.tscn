@@ -26,6 +26,7 @@
 [ext_resource type="Script" path="res://scripts/world/courtyard_well_model.gd" id="27_well"]
 [ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="28_slates"]
 [ext_resource type="Script" path="res://scripts/world/rear_bailey.gd" id="29_rear_bailey"]
+[ext_resource type="Script" path="res://scripts/world/front_bailey_paving.gd" id="30_front_paving"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_StoneDark"]
 albedo_color = Color(0.24, 0.25, 0.27, 1.0)
@@ -132,6 +133,10 @@ size = Vector3(0.19, 0.67, 0.06)
 [node name="MainAvenue" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.02, -19.2)
 mesh = SubResource("Mesh_MainAvenue")
+
+[node name="FrontBaileyPaving" type="MeshInstance3D" parent="."]
+material_override = SubResource("Mat_Flagstones")
+script = ExtResource("30_front_paving")
 
 [node name="BarracksPath" type="MeshInstance3D" parent="."]
 position = Vector3(9.375, 0.02, -22.6)

@@ -125,7 +125,7 @@ func _detect_winding() -> void:
 # Connects a closed tubular grid (n_rings x seg) with 100% uniform manifold topology
 # so individual triangles never flip or tear along curved/noisy sections.
 func _connect_tube_grid(g: Geo, start: int, n_rings: int, seg: int, centers: Array,
-		cap_start_dir: Vector3, cap_end_dir: Vector3, inward := false) -> void:
+		cap_start_dir: Vector3, cap_end_dir: Vector3, inward := false, openings: Array[Rect2i] = []) -> void:
 	var acc := 0.0
 	for k in n_rings - 1:
 		var mid: Vector3 = (centers[k] + centers[k + 1]) * 0.5
@@ -139,14 +139,13 @@ func _connect_tube_grid(g: Geo, start: int, n_rings: int, seg: int, centers: Arr
 	var flip := (acc < 0.0) != inward
 	for k in n_rings - 1:
 		for j in seg:
+			if _inside_opening(j, k, openings):
+				continue
 			var a := start + k * seg + j
 			var b := start + k * seg + (j + 1) % seg
 			var c := start + (k + 1) * seg + (j + 1) % seg
 			var d := start + (k + 1) * seg + j
-			if flip:
-				g.i.append_array([a, c, b, a, d, c])
-			else:
-				g.i.append_array([a, b, c, a, c, d])
+			_tube_quad(g, a, b, c, d, flip)
 
 	if cap_start_dir.length_squared() > 0.001:
 		var cap0 := g.v.size()
@@ -172,6 +171,20 @@ func _connect_tube_grid(g: Geo, start: int, n_rings: int, seg: int, centers: Arr
 				g.i.append_array([a, cap1, b])
 			else:
 				g.i.append_array([a, b, cap1])
+
+
+func _inside_opening(column: int, row: int, openings: Array[Rect2i]) -> bool:
+	for opening in openings:
+		if opening.has_point(Vector2i(column, row)):
+			return true
+	return false
+
+
+func _tube_quad(g: Geo, a: int, b: int, c: int, d: int, flip: bool) -> void:
+	if flip:
+		g.i.append_array([a, c, b, a, d, c])
+	else:
+		g.i.append_array([a, b, c, a, c, d])
 
 
 func _profile(y: float) -> float:
@@ -669,6 +682,8 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 	var count := section.size()
 	var centers: Array[Vector3] = []
 	var starts: Array[int] = []
+	# Openings in the outer grid, measured in profile columns and longitudinal rings.
+	var forks: Array[Rect2i] = [Rect2i(2, 7, 3, 4), Rect2i(12, 25, 3, 4)]
 	for outside in [false, true]:
 		starts.append(bark.v.size())
 		for i in RINGS:
@@ -707,20 +722,67 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 					color = color.lerp(MOSS, 0.06 + 0.10 * absf(grain))
 				bark.v.append(center + Vector3(xy.x, xy.y, -setback))
 				bark.c.append(color)
-		_connect_tube_grid(bark, starts.back(), RINGS, count, centers, Vector3.ZERO, Vector3.ZERO, not outside)
+		var openings: Array[Rect2i] = []
+		if outside:
+			openings = forks
+		_connect_tube_grid(bark, starts.back(), RINGS, count, centers, Vector3.ZERO, Vector3.ZERO, not outside, openings)
 	_courtyard_branch_rim(bark, starts[0], starts[1], count, Vector3.BACK)
 	var last := (RINGS - 1) * count
 	_courtyard_branch_rim(bark, starts[0] + last, starts[1] + last, count, Vector3.FORWARD)
-	var spur := _bezier(Vector3(-0.7, 14.2, -28.2), Vector3(0.20, 13.7, -29.3),
-		Vector3(1.34, 12.3, -32.4), Vector3(1.48, 10.1, -33.8), 13)
-	_tube(bark, spur, 0.47, 0.09, 8, 0.26, 0.12)
-	# Seat the wide end below the inner floor so its bark joins the outer shell.
-	const FORK_Z := -37.0
-	var fork_t := inverse_lerp(COURTYARD_BRANCH_START, COURTYARD_BRANCH_END, FORK_Z)
-	var lower_base := Vector3(-2.7, _courtyard_branch_floor(fork_t) - 0.72, FORK_Z)
-	var lower_fork := _bezier(lower_base, Vector3(-3.9, 12.55, -38.6),
-		Vector3(-5.2, 10.5, -41.2), Vector3(-5.75, 9.95, -43.2), 12)
-	_tube(bark, lower_fork, 0.53, 0.075, 9, 0.29, 0.12)
+	_grow_courtyard_fork(bark, starts[1], count, forks[0], Vector3(1.34, 12.3, -31.85), Vector3(1.48, 10.10, -33.8))
+	_grow_courtyard_fork(bark, starts[1], count, forks[1], Vector3(-5.06, 11.0, -40.9), Vector3(-5.75, 9.95, -43.2))
+
+
+func _grow_courtyard_fork(bark: Geo, shell: int, stride: int, opening: Rect2i, bend: Vector3, tip: Vector3) -> void:
+	var border := PackedInt32Array()
+	for column in range(opening.position.x, opening.end.x):
+		border.append(shell + opening.position.y * stride + column)
+	for row in range(opening.position.y, opening.end.y):
+		border.append(shell + row * stride + opening.end.x % stride)
+	for column in range(opening.end.x, opening.position.x, -1):
+		border.append(shell + opening.end.y * stride + column % stride)
+	for row in range(opening.end.y, opening.position.y, -1):
+		border.append(shell + row * stride + opening.position.x)
+
+	var base := Vector3.ZERO
+	for vertex in border:
+		base += bark.v[vertex]
+	base /= border.size()
+	var boundary_normal := Vector3.ZERO
+	for j in border.size():
+		boundary_normal += (bark.v[border[j]] - base).cross(bark.v[border[(j + 1) % border.size()]] - base)
+	var floor_y := _courtyard_branch_floor(inverse_lerp(COURTYARD_BRANCH_START, COURTYARD_BRANCH_END, base.z))
+	var outward := boundary_normal.normalized()
+	if outward.dot(Vector3(base.x - BOUGH_X, base.y - floor_y - 1.24, 0)) < 0.0:
+		outward = -outward
+	var flip := boundary_normal.dot(outward) * wind_sign < 0.0
+	var path := _bezier(base, base + outward * 1.24 + Vector3.FORWARD * 0.36, bend, tip, 16)
+	var previous := border
+	for i in range(1, path.size()):
+		var t := float(i) / float(path.size() - 1)
+		var center: Vector3 = path[i]
+		var axis: Vector3 = (path[mini(i + 1, path.size() - 1)] - path[i - 1]).normalized()
+		var twist := Basis(Quaternion(outward, axis))
+		var ring := PackedInt32Array()
+		for j in border.size():
+			var offset := bark.v[border[j]] - base
+			var radial := offset - outward * offset.dot(outward)
+			var radius := lerpf(radial.length(), 0.063, pow(t, 0.72))
+			var flare := radial.normalized() * radius + outward * offset.dot(outward) * (1.0 - smoothstep(0.0, 0.29, t))
+			ring.append(bark.v.size())
+			bark.v.append(center + twist * flare)
+			bark.c.append(bark.c[border[j]].lerp(BARK_WARM, t * 0.48))
+		for j in ring.size():
+			var next := (j + 1) % ring.size()
+			_tube_quad(bark, previous[j], previous[next], ring[next], ring[j], flip)
+		previous = ring
+	var cap := bark.v.size()
+	var last := previous.size()
+	bark.v.append(tip + (tip - bend).normalized() * 0.055)
+	bark.c.append(BARK)
+	for j in last:
+		var next := (j + 1) % last
+		bark.i.append_array([previous[j], cap, previous[next]] if flip else [previous[j], previous[next], cap])
 
 func _courtyard_branch_floor(t: float) -> float:
 	return lerpf(RAMPART_FLOOR - 0.025, 13.28, smoothstep(0.0, 1.0, t))

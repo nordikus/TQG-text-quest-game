@@ -6,7 +6,6 @@ const FOOT_X := -6.70
 const LANDING_X := -30.26
 const INNER_Z := 2.86
 const OUTER_Z := 5.70
-const PAVING := preload("res://scenes/world/castle/flagstones.gdshader")
 const MASONRY := preload("res://scenes/world/castle/masonry.gdshader")
 
 @export var stone: Material
@@ -61,13 +60,6 @@ func _ready() -> void:
 	_visual(stair_mesh, Vector3.ZERO)
 
 func _approach() -> void:
-	var paving := BoxMesh.new()
-	paving.size = Vector3(3.10, 0.048, 8.12)
-	var flags := ShaderMaterial.new()
-	flags.shader = PAVING
-	paving.material = flags
-	_visual(paving, Vector3(FOOT_X + 1.0, 0.008, 7.93))
-
 	var post := Vector3(FOOT_X + 0.12, 0, OUTER_Z + 0.38)
 	_box(Vector3(0.65, 0.30, 0.60), post + Vector3.UP * 0.15, trim)
 	_box(Vector3(0.41, 1.94, 0.39), post + Vector3.UP * 1.27, stone)

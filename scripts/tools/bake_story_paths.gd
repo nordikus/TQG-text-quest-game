@@ -215,213 +215,179 @@ func _connect_tube_grid(b: ToolMeshBuilder, base_idx: int, rings: int, ring_pts:
 # -----------------------------------------------------------------------------
 # BAKE NATURE TRAIL
 # -----------------------------------------------------------------------------
+func _life_trail_width(t: float) -> float:
+	return 2.13 + 0.20 * sin(t * 19.0) + 2.40 * smoothstep(0.80, 1.0, t)
+
+
 func _bake_nature_trail(spline: Spline3D) -> void:
 	print("Baking Nature Trail...")
-	var b_ground := ToolMeshBuilder.new()
-	var b_foliage := ToolMeshBuilder.new()
-	var b_biolum := ToolMeshBuilder.new()
+	var ground := ToolMeshBuilder.new()
+	var stones := ToolMeshBuilder.new()
+	var plants := ToolMeshBuilder.new()
+	var glow := ToolMeshBuilder.new()
+	var water := ToolMeshBuilder.new()
+	var detail := FastNoiseLite.new()
+	detail.seed = 2318
+	detail.frequency = 0.68
+	const ROWS := 135
+	const COLUMNS := 17
+	for i in ROWS + 1:
+		var t := float(i) / ROWS
+		var frame := spline.sample(t)
+		var width := _life_trail_width(t)
+		for j in COLUMNS:
+			var u := float(j) * 2.0 / (COLUMNS - 1) - 1.0
+			var at := frame.pos + frame.right * (width * u + 0.10 * sin(t * 53.0) * u * u)
+			var wet := detail.get_noise_2d(at.x, at.z)
+			var worn := 1.0 - smoothstep(0.16, 0.72, absf(u + wet * 0.20))
+			at.y = lerpf(0.027, 0.051, worn) + 0.009 * wet
+			var moss := Color(0.22, 0.33, 0.13).lerp(Color(0.35, 0.46, 0.20), wet + 0.45)
+			var earth := Color(0.34, 0.235, 0.132).lerp(Color(0.56, 0.432, 0.275), 0.51 + wet * 0.68)
+			var tint := moss.lerp(earth, worn)
+			var ragged := absf(u) + wet * 0.12 * absf(u)
+			tint.a = (1.0 - smoothstep(0.66, 1.0, ragged)) * smoothstep(0.0, 0.040, t)
+			ground.set_color(tint)
+			ground.add_vertex(at)
+	_connect_tube_grid(ground, 0, ROWS + 1, COLUMNS)
 
-	var col_faces: Array[Vector3] = []
+	# Weathered stones show where water and foot traffic have stripped the moss.
+	for i in 31:
+		var t := 0.045 + 0.934 * float(i) / 30.0
+		var frame := spline.sample(t)
+		var at := frame.pos + frame.right * (0.59 * sin(i * 2.51))
+		var width := 0.45 + 0.17 * cos(i * 1.61)
+		var length := 0.36 + 0.12 * sin(i * 2.17)
+		_trail_stone(stones, at, Vector2(width, length), 0.076 + 0.026 * sin(i * 2.71), i * 2.0)
 
-	var steps: int = 90
-	var trans_pts: int = 11
-	var base_idx: int = 0
+	for i in 58:
+		var t := 0.035 + 0.945 * float(i) / 57.0
+		var frame := spline.sample(t)
+		var side := -1.0 if i % 2 == 0 else 1.0
+		var edge := frame.pos + frame.right * side * (_life_trail_width(t) + 0.14 * sin(i * 3.79))
+		var size := 0.60 + 0.22 * sin(i * 2.93)
+		_trail_fern(plants, edge + Vector3.UP * 0.022, side * 0.7 + i * 0.91, size)
+		if i % 4 == 0:
+			_trail_fern(plants, edge + frame.right * (side * 0.62) + frame.tangent * 0.52, i * 0.38, size * 1.17)
+		if i % 3 != 1:
+			for mushroom in 2 + i % 2:
+				var at := edge - frame.right * side * (0.20 + 0.12 * mushroom) + frame.tangent * (mushroom * 0.21)
+				var height := 0.14 + 0.07 * sin(i * 4.17 + mushroom * 2.7)
+				_build_3d_mushroom(plants, glow, at + Vector3.UP * 0.035, height, height * 0.77, Color(0.30, 0.95, 0.75))
 
-	# 1. Main Road Surface
-	for i in range(steps + 1):
-		var t: float = float(i) / float(steps)
-		var f: PathFrame = spline.sample(t)
+	_build_life_spring(stones, plants, glow, water)
+	# Stone shoulders frame the last few steps into the roots.
+	for i in 7:
+		var angle := -0.75 + i * 0.41
+		var at := Vector3(-17.75 + 4.18 * cos(angle), 0, -56.8 + 3.97 * sin(angle))
+		_trail_stone(stones, at, Vector2(0.5 + 0.12 * sin(i * 1.72), 0.49), 0.15 + 0.09 * cos(i), i * 1.25)
 
-		var half_w: float = 2.2
-		if t > 0.68:
-			var pt: float = (t - 0.68) / 0.32
-			half_w = lerpf(2.2, 5.4, pt * pt)
-
-		var pos: Vector3 = f.pos
-		var right: Vector3 = f.right
-		var up: Vector3 = f.up
-
-		for j in range(trans_pts):
-			var u: float = -1.0 + 2.0 * float(j) / float(trans_pts - 1)
-			var abs_u: float = absf(u)
-
-			var h: float = lerpf(0.08, 0.01, pow(abs_u, 1.8))
-			if t < 0.06:
-				h = lerpf(0.02, h, t / 0.06)
-
-			var vpos: Vector3 = pos + right * (u * half_w) + up * h
-
-			var col: Color = Color(0.25, 0.17, 0.12)
-			if abs_u < 0.60:
-				var m_mix: float = 1.0 - (abs_u / 0.60)
-				col = col.lerp(Color(0.24, 0.54, 0.22), m_mix).lerp(Color(0.32, 0.68, 0.28), m_mix * 0.4)
-			elif abs_u > 0.85:
-				col = Color(0.18, 0.13, 0.09)
-
-			if t < 0.05:
-				col = Color(0.24, 0.44, 0.18).lerp(col, t / 0.05)
-
-			b_ground.set_color(col)
-			b_ground.set_uv(Vector2(u * 0.5 + 0.5, t * 24.0))
-			b_ground.set_normal(up)
-			b_ground.add_vertex(vpos)
-
-	_connect_tube_grid(b_ground, base_idx, steps + 1, trans_pts, false)
-
-	# Stepping Stones
-	var stone_count: int = 24
-	for s in range(stone_count):
-		var st_t: float = 0.05 + 0.86 * (float(s) / float(stone_count - 1))
-		var f: PathFrame = spline.sample(st_t)
-		var jitter_u: float = sin(float(s) * 4.31) * 0.75
-		var center: Vector3 = f.pos + f.right * jitter_u
-		var top_y: float = 0.13 + 0.02 * cos(float(s) * 1.7)
-		var stone_rad: float = 0.58 + 0.12 * cos(float(s) * 2.3)
-		var stone_segs: int = 9
-
-		var top_pts: Array[Vector3] = []
-		var bot_pts: Array[Vector3] = []
-
-		for si in range(stone_segs):
-			var ang: float = float(si) * TAU / float(stone_segs)
-			var r_j: float = stone_rad * (0.88 + 0.12 * sin(ang * 3.0 + float(s)))
-			var off_v := f.right * (cos(ang) * r_j) + f.tangent * (sin(ang) * r_j)
-			top_pts.append(center + off_v + f.up * top_y)
-			bot_pts.append(center + off_v + f.up * 0.01)
-
-		var top_center_v := center + f.up * (top_y + 0.01)
-		var stone_col: Color = Color(0.40, 0.42, 0.39).lerp(Color(0.28, 0.45, 0.25), 0.25)
-		var side_col: Color = Color(0.26, 0.27, 0.25)
-
-		for si in range(stone_segs):
-			var s_next: int = (si + 1) % stone_segs
-
-			b_ground.set_color(stone_col)
-			b_ground.set_normal(f.up)
-			var c_idx: int = b_ground.add_vertex(top_center_v)
-			var t0_idx: int = b_ground.add_vertex(top_pts[si])
-			var t1_idx: int = b_ground.add_vertex(top_pts[s_next])
-			b_ground.add_index(c_idx); b_ground.add_index(t0_idx); b_ground.add_index(t1_idx)
-
-			b_ground.set_color(side_col)
-			var side_norm: Vector3 = ((top_pts[si] + top_pts[s_next]) * 0.5 - center).normalized()
-			b_ground.set_normal(side_norm)
-			var st0: int = b_ground.add_vertex(top_pts[si])
-			var sb0: int = b_ground.add_vertex(bot_pts[si])
-			var st1: int = b_ground.add_vertex(top_pts[s_next])
-			var sb1: int = b_ground.add_vertex(bot_pts[s_next])
-			b_ground.add_index(st0); b_ground.add_index(sb0); b_ground.add_index(st1)
-			b_ground.add_index(st1); b_ground.add_index(sb0); b_ground.add_index(sb1)
-
-	# Approach Plaza round stone pavement cap at end (center (-17.3, 0.0, -56.8))
-	var plaza_center: Vector3 = Vector3(-17.3, 0.06, -56.8)
-	var plaza_segs: int = 24
-	var plaza_rad: float = 5.2
-	for ring in range(3):
-		var r_in: float = float(ring) * (plaza_rad / 3.0)
-		var r_out: float = float(ring + 1) * (plaza_rad / 3.0)
-		for si in range(plaza_segs):
-			var a0: float = float(si) * TAU / float(plaza_segs)
-			var a1: float = float(si + 1) * TAU / float(plaza_segs)
-
-			var p0: Vector3 = plaza_center + Vector3(cos(a0), 0, sin(a0)) * r_in
-			var p1: Vector3 = plaza_center + Vector3(cos(a1), 0, sin(a1)) * r_in
-			var p2: Vector3 = plaza_center + Vector3(cos(a0), 0, sin(a0)) * r_out
-			var p3: Vector3 = plaza_center + Vector3(cos(a1), 0, sin(a1)) * r_out
-
-			var c: Color = Color(0.30, 0.48, 0.26) if ring < 2 else Color(0.24, 0.32, 0.20)
-			b_ground.set_color(c)
-			b_ground.set_normal(Vector3.UP)
-			var i0: int = b_ground.add_vertex(p0)
-			var i1: int = b_ground.add_vertex(p1)
-			var i2: int = b_ground.add_vertex(p2)
-			var i3: int = b_ground.add_vertex(p3)
-
-			b_ground.add_index(i0); b_ground.add_index(i2); b_ground.add_index(i1)
-			b_ground.add_index(i1); b_ground.add_index(i2); b_ground.add_index(i3)
-
-	# Fern Clusters
-	var fern_count: int = 40
-	for fc in range(fern_count):
-		var t: float = 0.05 + 0.88 * (float(fc) / float(fern_count - 1))
-		var f: PathFrame = spline.sample(t)
-		var side: float = -1.0 if (fc % 2 == 0) else 1.0
-		var half_w: float = 2.2 if t <= 0.68 else lerpf(2.2, 5.4, pow((t - 0.68) / 0.32, 2.0))
-		var base_p: Vector3 = f.pos + f.right * (side * (half_w + 0.40)) + f.up * 0.04
-
-		for frond in range(5):
-			var a: float = float(frond) * 0.6 + (0.3 if side < 0 else -0.3)
-			var frond_dir: Vector3 = (f.right * side * cos(a) + f.tangent * sin(a)).normalized()
-			var tip: Vector3 = base_p + frond_dir * 0.95 + f.up * 0.45
-			var mid_l: Vector3 = base_p + frond_dir * 0.50 + f.right * 0.22 + f.up * 0.26
-			var mid_r: Vector3 = base_p + frond_dir * 0.50 - f.right * 0.22 + f.up * 0.26
-
-			b_foliage.set_color(Color(0.24, 0.43, 0.18))
-			b_foliage.set_normal(f.up)
-			var v0: int = b_foliage.add_vertex(base_p)
-			var v1: int = b_foliage.add_vertex(mid_l)
-			var v2: int = b_foliage.add_vertex(mid_r)
-			var v3: int = b_foliage.add_vertex(tip)
-
-			b_foliage.add_index(v0); b_foliage.add_index(v1); b_foliage.add_index(v2)
-			b_foliage.add_index(v1); b_foliage.add_index(v3); b_foliage.add_index(v2)
-
-	# Bioluminescent 3D Spore Mushrooms firmly rooted in ground/roots
-	var shroom_count: int = 50
-	for sc in range(shroom_count):
-		var t: float = 0.07 + 0.84 * (float(sc) / float(shroom_count - 1))
-		var f: PathFrame = spline.sample(t)
-		var side: float = -1.0 if (sc % 2 == 0) else 1.0
-		var half_w: float = 2.2 if t <= 0.68 else lerpf(2.2, 5.4, pow((t - 0.68) / 0.32, 2.0))
-		var sh_base: Vector3 = f.pos + f.right * (side * (half_w + 0.25)) + f.up * 0.04
-		var sh_h: float = 0.15 + 0.06 * sin(float(sc) * 2.8)
-		var sh_rad: float = 0.12 + 0.04 * cos(float(sc) * 3.4)
-
-		_build_3d_mushroom(b_ground, b_biolum, sh_base, sh_h, sh_rad, Color(0.30, 0.95, 0.75))
-
-	# Commit Nature Trail Mesh & Collisions
-	b_ground.generate_normals()
-	b_foliage.generate_normals()
-	b_biolum.generate_normals()
-
-	var m_ground := StandardMaterial3D.new()
-	m_ground.cull_mode = BaseMaterial3D.CULL_DISABLED
-	m_ground.vertex_color_use_as_albedo = true
-	m_ground.vertex_color_is_srgb = true
-	m_ground.roughness = 0.88
-
-	var m_foliage := StandardMaterial3D.new()
-	m_foliage.cull_mode = BaseMaterial3D.CULL_DISABLED
-	m_foliage.vertex_color_use_as_albedo = true
-	m_foliage.vertex_color_is_srgb = true
-	m_foliage.roughness = 0.75
-
-	var m_biolum := StandardMaterial3D.new()
-	m_biolum.vertex_color_use_as_albedo = true
-	m_biolum.vertex_color_is_srgb = true
-	m_biolum.emission_enabled = true
-	m_biolum.emission = Color(0.30, 0.95, 0.75)
-	m_biolum.emission_energy_multiplier = 2.4
+	var soil := StandardMaterial3D.new()
+	soil.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	soil.cull_mode = BaseMaterial3D.CULL_DISABLED
+	soil.vertex_color_use_as_albedo = true
+	soil.vertex_color_is_srgb = true
+	soil.roughness = 0.94
+	var rock := StandardMaterial3D.new()
+	rock.vertex_color_use_as_albedo = true
+	rock.vertex_color_is_srgb = true
+	rock.cull_mode = BaseMaterial3D.CULL_DISABLED
+	rock.roughness = 0.87
+	var leaf := rock.duplicate() as StandardMaterial3D
+	leaf.roughness = 0.76
+	var light := rock.duplicate() as StandardMaterial3D
+	light.emission_enabled = true
+	light.emission = Color(0.25, 0.86, 0.68)
+	light.emission_energy_multiplier = 1.85
+	var spring := rock.duplicate() as StandardMaterial3D
+	spring.metallic = 0.34
+	spring.roughness = 0.24
 
 	var mesh := ArrayMesh.new()
-	b_ground.commit(mesh)
-	var ground_shape := mesh.create_trimesh_shape()
-	if ground_shape:
-		col_faces.append_array(ground_shape.get_faces())
-	b_foliage.commit(mesh)
-	b_biolum.commit(mesh)
+	for surface: ToolMeshBuilder in [ground, stones, plants, glow, water]:
+		surface.generate_normals()
+		surface.commit(mesh)
+	for i in 5:
+		mesh.surface_set_material(i, [soil, rock, leaf, light, spring][i])
 
-	mesh.surface_set_material(0, m_ground)
-	mesh.surface_set_material(1, m_foliage)
-	mesh.surface_set_material(2, m_biolum)
-
-	var col_shape := ConcavePolygonShape3D.new()
-	col_shape.backface_collision = true
-	col_shape.set_faces(PackedVector3Array(col_faces))
-
+	var physical := ArrayMesh.new()
+	ground.commit(physical)
+	stones.commit(physical)
+	var collision := physical.create_trimesh_shape()
+	collision.backface_collision = true
 	ResourceSaver.save(mesh, "res://scenes/world/nature_trail_mesh.res")
-	ResourceSaver.save(col_shape, "res://scenes/world/nature_trail_col.res")
+	ResourceSaver.save(collision, "res://scenes/world/nature_trail_col.res")
 	print("Saved nature_trail_mesh.res and nature_trail_col.res")
+
+
+func _trail_stone(stones: ToolMeshBuilder, at: Vector3, radius: Vector2, height: float, seed: float) -> void:
+	const SIDES := 8
+	var top := PackedVector3Array()
+	var edge := PackedVector3Array()
+	for i in SIDES:
+		var angle := float(i) * TAU / SIDES
+		var r := 0.91 + 0.13 * sin(seed + i * 3.1)
+		var flat := Vector3(cos(angle + seed) * radius.x, 0, sin(angle + seed) * radius.y) * r
+		top.append(at + flat * 0.80 + Vector3.UP * (height + 0.012 * sin(i * 2.6 + seed)))
+		edge.append(at + flat + Vector3.UP * 0.022)
+	var shade := Color(0.38, 0.39, 0.34).lerp(Color(0.48, 0.49, 0.41), 0.5 + 0.5 * sin(seed))
+	for i in SIDES:
+		var next := (i + 1) % SIDES
+		_trail_triangle(stones, at + Vector3.UP * (height + 0.012), top[i], top[next], shade)
+		var tint := shade.lerp(Color(0.26, 0.37, 0.15), 0.35 + 0.22 * sin(i * 4.7 + seed))
+		_trail_triangle(stones, top[i], edge[i], top[next], tint)
+		_trail_triangle(stones, top[next], edge[i], edge[next], tint)
+
+
+func _trail_fern(plants: ToolMeshBuilder, at: Vector3, yaw: float, size: float) -> void:
+	for frond in 6:
+		var angle := yaw + frond * TAU / 6.0
+		var along := Vector3(cos(angle), 0, sin(angle))
+		var cross := along.cross(Vector3.UP)
+		var tip := at + along * size + Vector3.UP * size * (0.42 + 0.12 * sin(frond * 2.7))
+		var bend := at.lerp(tip, 0.51) + Vector3.UP * size * 0.39
+		var green := Color(0.19, 0.35, 0.105).lerp(Color(0.37, 0.51, 0.17), 0.5 + 0.5 * sin(angle * 2.3))
+		_trail_triangle(plants, at, bend - cross * 0.025, bend + cross * 0.025, green)
+		_trail_triangle(plants, bend - cross * 0.025, tip, bend + cross * 0.025, green)
+		for row in 4:
+			var t := 0.23 + row * 0.19
+			var rib := at.lerp(bend, t).lerp(bend.lerp(tip, t), t)
+			for side: float in [-1.0, 1.0]:
+				var blade := rib + cross * side * size * (0.29 - row * 0.048) + along * size * 0.13
+				_trail_triangle(plants, rib, blade, rib + along * size * 0.15, green.lightened(row * 0.035))
+
+
+func _build_life_spring(stones: ToolMeshBuilder, plants: ToolMeshBuilder, glow: ToolMeshBuilder, water: ToolMeshBuilder) -> void:
+	var center := Vector3(-4.95, 0.024, -35.85)
+	var shore := PackedVector3Array()
+	for i in 22:
+		var theta := float(i) * TAU / 22.0
+		var radius := 1.0 + 0.078 * sin(i * 2.1)
+		var at := center + Vector3(1.58 * cos(theta), 0, 2.11 * sin(theta)) * radius
+		shore.append(at)
+		_trail_stone(stones, at - Vector3.UP * 0.014, Vector2(0.29 + 0.10 * absf(sin(i)), 0.42),
+			0.12 + 0.07 * absf(cos(i * 2.7)), theta * 0.88)
+		if i % 3 == 1:
+			_trail_fern(plants, at.lerp(center, -0.19), theta - 0.37, 0.76)
+			_build_3d_mushroom(plants, glow, at.lerp(center, -0.17) + Vector3.UP * 0.031,
+				0.18, 0.13, Color(0.32, 0.88, 0.78))
+	for i in shore.size():
+		water.set_color(Color(0.12, 0.27, 0.23))
+		var middle := water.add_vertex(center)
+		water.set_color(Color(0.20, 0.38, 0.30))
+		var a := water.add_vertex(shore[i])
+		var b := water.add_vertex(shore[(i + 1) % shore.size()])
+		water.add_index(middle)
+		water.add_index(a)
+		water.add_index(b)
+	for i in 3:
+		_trail_stone(stones, Vector3(-7.68 + 0.50 * i, 0.01, -36.02 - 0.10 * i),
+			Vector2(0.35, 0.29), 0.082, i * 2.12)
+
+
+func _trail_triangle(builder: ToolMeshBuilder, a: Vector3, b: Vector3, c: Vector3, tint: Color) -> void:
+	builder.set_color(tint)
+	for point in [a, b, c]:
+		builder.add_index(builder.add_vertex(point))
 
 
 # -----------------------------------------------------------------------------
@@ -562,7 +528,6 @@ func _build_3d_mushroom(b_ground: ToolMeshBuilder, b_bio: ToolMeshBuilder, base:
 			var a: float = float(s) * TAU / float(stalk_segs)
 			var v: Vector3 = base + Vector3(cos(a) * stalk_r, y_off, sin(a) * stalk_r)
 			b_ground.set_color(Color(0.48, 0.62, 0.44))
-			b_ground.set_normal(Vector3(cos(a), 0, sin(a)))
 			b_ground.add_vertex(v)
 	_connect_tube_grid(b_ground, s_base, 2, stalk_segs, true)
 
@@ -577,7 +542,6 @@ func _build_3d_mushroom(b_ground: ToolMeshBuilder, b_bio: ToolMeshBuilder, base:
 	for s in range(cap_segs):
 		var s_next: int = (s + 1) % cap_segs
 		b_bio.set_color(glow_col)
-		b_bio.set_normal(Vector3.UP)
 		var va: int = b_bio.add_vertex(cap_apex)
 		var v0: int = b_bio.add_vertex(cap_pts[s])
 		var v1: int = b_bio.add_vertex(cap_pts[s_next])

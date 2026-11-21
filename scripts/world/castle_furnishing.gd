@@ -735,6 +735,70 @@ func _courtyard() -> void:
 	_practice_yard()
 	_wagon_bay()
 	_firewood_store()
+	_gate_muster()
+	_wash_court()
+	_courtyard_garden()
+
+func _gate_muster() -> void:
+	var shelter := Vector3(-11.6, 0.047, -0.80)
+	for x in [-2.48, 2.48]:
+		for z in [-1.45, 1.45]:
+			var height: float = 2.65 + z * 0.25
+			_box(shelter + Vector3(x, 0.16, z), Vector3(0.47, 0.32, 0.47), LIMESTONE, true)
+			_box(shelter + Vector3(x, 0.31 + height * 0.5, z), Vector3(0.21, height, 0.21), OAK, true)
+			_box(shelter + Vector3(x * 0.93, height + 0.01, z * 0.93), Vector3(0.18, 0.74, 0.19),
+				OAK, false, Vector3(z * 0.30, 0, x * 0.12))
+	for z in [-1.45, 1.45]:
+		_box(shelter + Vector3(0, 2.89 + z * 0.25, z), Vector3(5.45, 0.18, 0.19), WOOD_EDGE)
+	for board in 13:
+		var tint := OAK.lightened(0.08 + 0.043 * sin(board * 2.6))
+		_box(shelter + Vector3(-2.58 + board * 0.43, 3.04, 0), Vector3(0.43, 0.12, 3.47),
+			tint, false, Vector3(-0.245, 0, 0))
+	_table(shelter + Vector3(-0.15, 0, 0.15), Vector2(2.34, 1.22))
+	_bench(shelter + Vector3(-0.05, 0, -0.91))
+	for x in [-0.85, -0.34, 0.18]:
+		_box(shelter + Vector3(x, 0.827, 0.15), Vector3(0.31, 0.026, 0.37), PAPER,
+			false, Vector3(0, x * 0.46, 0))
+	_earthenware(shelter + Vector3(0.67, 0.81, -0.17), 1.35, BLUE.darkened(0.16))
+	for z in [-0.9, 0.20]:
+		_provision_barrel(shelter + Vector3(-1.94, 0, z), 0.32)
+	_wall_hanging(shelter + Vector3(0.43, 1.82, 1.52), RED.darkened(0.16))
+	_lantern(shelter + Vector3(1.58, 2.35, 0.78), 3.20, 1.25, 6.5)
+
+func _wash_court() -> void:
+	for z in [-29.8, -33.65]:
+		var at := Vector3(14.08, 0.047, z)
+		_box(at + Vector3.UP * 0.25, Vector3(1.36, 0.50, 2.5), LIMESTONE, true)
+		_box(at + Vector3.UP * 0.508, Vector3(1.08, 0.015, 2.21), BLUE.darkened(0.49))
+		for side: float in [-1.0, 1.0]:
+			_box(at + Vector3(side * 0.62, 0.55, 0), Vector3(0.16, 0.21, 2.50), LIMESTONE, true)
+			_box(at + Vector3(0, 0.55, side * 1.19), Vector3(1.11, 0.21, 0.16), LIMESTONE)
+		_box(at + Vector3(0.33, 0.66, -1.19), Vector3(0.32, 0.10, 0.29), OAK)
+		_earthenware(at + Vector3(0.51, 0.66, 0.55), 0.78, WOOD_EDGE)
+	for z in [-29.05, -34.42]:
+		_box(Vector3(10.61, 1.17, z), Vector3(0.15, 2.24, 0.15), OAK, true)
+	_box(Vector3(10.61, 2.16, -31.74), Vector3(0.072, 0.074, 5.41), WOOD_EDGE)
+	for i in 5:
+		var cloth := LINEN.lerp(BLUE.lightened(0.18), float(i % 3) * 0.32)
+		_box(Vector3(10.621, 1.70 + 0.08 * sin(i * 2.8), -33.94 + i * 1.11),
+			Vector3(0.038, 0.87 + 0.10 * sin(i * 1.74), 0.72), cloth, false,
+			Vector3(0.045 * sin(i * 2.4), 0, 0.08 * cos(i * 1.2)))
+
+func _courtyard_garden() -> void:
+	for at in [Vector3(-8.75, 0, -18.86), Vector3(-8.75, 0, -24.18)]:
+		for side in [-1.0, 1.0]:
+			_herbs(at + Vector3(side * 1.15, 0, 0))
+			_box(at + Vector3(side * 2.37, 0.16, 0), Vector3(0.28, 0.32, 1.41), LIMESTONE, true)
+		for x in [-1.88, 0, 1.88]:
+			_box(at + Vector3(x, 0.92, 0.51), Vector3(0.09, 1.70, 0.11), OAK, true)
+		for y in [0.75, 1.14, 1.55]:
+			_box(at + Vector3(0, y, 0.51), Vector3(3.80, 0.061, 0.065), OAK)
+		for i in 9:
+			var y := 0.76 + 0.067 * i + 0.17 * sin(i * 1.58)
+			_round(at + Vector3(-1.72 + i * 0.42, y, 0.52), 0.23 + 0.044 * cos(i * 1.8),
+				0.37, Color(0.29, 0.42, 0.18).lightened(0.045 * sin(i * 2.2)))
+	_bench(Vector3(-11.45, 0, -24.20), PI / 2.0)
+	_bench(Vector3(-5.03, 0, -24.12), PI / 2.0)
 
 func _practice_yard() -> void:
 	# The targets face west toward the shooting line with a timber backstop to the east.

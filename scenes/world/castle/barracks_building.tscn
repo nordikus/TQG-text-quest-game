@@ -389,8 +389,8 @@ position = Vector3(-8.07, 3.90, 0)
 mesh = SubResource("PortalLintel")
 
 [node name="RuneChest" parent="." instance=ExtResource("15_rune_chest")]
-position = Vector3(4.6, 0.25, -7.65)
-rotation = Vector3(0, -0.16, 0)
+position = Vector3(0.74, 0.25, -5.42)
+rotation = Vector3(0, 1.5707963, 0)
 
 [node name="ArchitecturalDetails" type="Node3D" parent="."]
 script = ExtResource("13_details")
