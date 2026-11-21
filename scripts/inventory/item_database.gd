@@ -58,6 +58,14 @@ const ITEMS: Dictionary = {
 		"max_uses": -1,
 		"icon_color": Color(0.62, 0.81, 0.87, 1.0)
 	},
+	"royal_order_draft": {
+		"id": "royal_order_draft",
+		"title": "Черновик королевского приказа",
+		"description": "«Старый водовод засыпать сегодня, пока роща ещё спит. Если капитан спросит, откуда взялись корни, велите ему взглянуть на печать. Приказ мой. Я знал, куда шла вода».",
+		"category": "note",
+		"max_uses": -1,
+		"icon_color": Color(0.86, 0.69, 0.49, 1.0)
+	},
 	"chronicle_of_the_fire": {
 		"id": "chronicle_of_the_fire",
 		"title": "Хроника Великого Пламени",

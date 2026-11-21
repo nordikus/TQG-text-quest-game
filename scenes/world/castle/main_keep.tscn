@@ -766,6 +766,20 @@ size = Vector3(2.88, 0.96, 0.18)
 material = SubResource("Mat_Stone")
 size = Vector3(18.18, 0.015, 10.82)
 
+[sub_resource type="BoxMesh" id="Mesh_RoyalOrderDraft"]
+material = SubResource("Mat_Paper")
+size = Vector3(0.43, 0.049, 0.30)
+
+[sub_resource type="CylinderMesh" id="Mesh_RoyalOrderSeal"]
+material = SubResource("Mat_Carpet")
+top_radius = 0.054
+bottom_radius = 0.060
+height = 0.018
+radial_segments = 9
+
+[sub_resource type="BoxShape3D" id="Shape_RoyalOrderDraft"]
+size = Vector3(0.45, 0.12, 0.33)
+
 [node name="MainKeep" type="Node3D"]
 
 [node name="PlinthBase" type="StaticBody3D" parent="."]
@@ -1445,6 +1459,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 7.5, 0.0)
 light_color = Color(1.0, 0.82, 0.45, 1.0)
 light_energy = 1.8
 omni_range = 5.0
+
+[node name="RoyalOrderDraft" type="StaticBody3D" parent="."]
+position = Vector3(-2.93, 3.45, -14.07)
+rotation = Vector3(0, 0.21, 0)
+script = ExtResource("2_pickup")
+item_id = "royal_order_draft"
+
+[node name="Parchment" type="MeshInstance3D" parent="RoyalOrderDraft"]
+mesh = SubResource("Mesh_RoyalOrderDraft")
+
+[node name="WaxSeal" type="MeshInstance3D" parent="RoyalOrderDraft"]
+position = Vector3(0.082, 0.032, 0.051)
+mesh = SubResource("Mesh_RoyalOrderSeal")
+
+[node name="Col" type="CollisionShape3D" parent="RoyalOrderDraft"]
+shape = SubResource("Shape_RoyalOrderDraft")
 
 [node name="ThroneBookPedestal" type="StaticBody3D" parent="." node_paths=PackedStringArray("book_node", "quill_pickup", "pedestal_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.25, -6.8)

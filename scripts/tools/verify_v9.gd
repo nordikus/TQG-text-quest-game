@@ -201,6 +201,8 @@ func _run_verification() -> void:
 
 	if not _verify_east_wing(space_state):
 		all_passed = false
+	if not _verify_throne_cache(space_state):
+		all_passed = false
 
 	# The keep is approachable from outside, but the rear perimeter is closed.
 	for x in [-33.2, 0.0, 33.2]:
@@ -326,6 +328,32 @@ func _run_verification() -> void:
 
 func _bounds(model: MeshInstance3D) -> AABB:
 	return model.global_transform * model.get_aabb()
+
+func _verify_throne_cache(space: PhysicsDirectSpaceState3D) -> bool:
+	var landings := {
+		"ApsePlinth": Vector3(-3.23, 1.88, -162.46),
+		"ApseCorbel": Vector3(-5.075, 2.65, -164.47),
+		"ApseLowerBand": Vector3(-3.60, 3.42, -164.04),
+	}
+	for platform in landings:
+		var feet: Vector3 = landings[platform]
+		var surface := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			feet + Vector3.UP * 0.35, feet - Vector3.UP * 0.35))
+		if surface.is_empty() or surface.collider.name != platform or absf(surface.position.y - feet.y) > 0.03:
+			push_error("FAIL: The throne cache jump route is missing its landing on %s." % platform)
+			return false
+
+	var draft := Vector3(-2.93, 3.45, -165.07)
+	var corbel_view := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-5.075, 4.25, -164.47), draft))
+	var shelf_view := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-3.05, 5.02, -164.36), draft))
+	if corbel_view.is_empty() or corbel_view.collider.name == "RoyalOrderDraft" \
+			or shelf_view.is_empty() or shelf_view.collider.name != "RoyalOrderDraft":
+		push_error("FAIL: The royal draft must be hidden from the corbel and reachable from the cornice.")
+		return false
+	print("PASS: The throne cache has three solid landings and can be read from the cornice.")
+	return true
 
 func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
 	var dining_open := true
