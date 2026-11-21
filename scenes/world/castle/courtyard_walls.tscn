@@ -206,10 +206,10 @@ size = Vector3(0.23, 0.4, 0.17)
 
 [sub_resource type="BoxMesh" id="FrontWallPanelMesh"]
 material = SubResource("Mat_Stone")
-size = Vector3(2.76, 2.84, 3.5)
+size = Vector3(3.5, 2.05, 3.5)
 
 [sub_resource type="BoxShape3D" id="FrontWallPanelShape"]
-size = Vector3(2.76, 2.84, 3.5)
+size = Vector3(3.5, 2.05, 3.5)
 
 [node name="CourtyardWalls" type="Node3D"]
 
@@ -609,7 +609,7 @@ length = 36.1
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
-gaps = PackedVector2Array(8.75, 15.35)
+gaps = PackedVector2Array(-1.70, 1.80, 8.75, 15.35)
 
 [node name="FrontEastParapet" type="StaticBody3D" parent="."]
 position = Vector3(23.05, 14.8, 8.5)
@@ -681,7 +681,7 @@ script = ExtResource("14_west")
 stone = SubResource("Mat_Stone")
 
 [node name="IntactPanel" type="StaticBody3D" parent="WesternRamparts"]
-position = Vector3(-23, 13.25, 8.5)
+position = Vector3(-23, 13.775, 8.5)
 
 [node name="Mesh" type="MeshInstance3D" parent="WesternRamparts/IntactPanel"]
 mesh = SubResource("FrontWallPanelMesh")
@@ -689,8 +689,20 @@ mesh = SubResource("FrontWallPanelMesh")
 [node name="Col" type="CollisionShape3D" parent="WesternRamparts/IntactPanel"]
 shape = SubResource("FrontWallPanelShape")
 
+[node name="Parapet" type="StaticBody3D" parent="WesternRamparts/IntactPanel"]
+position = Vector3(0, 1.025, 0)
+rotation = Vector3(0, 1.570796, 0)
+script = ExtResource("13_trim")
+length = 3.5
+outer_edge = -1.33
+stone = SubResource("Mat_Stone")
+cap_stone = SubResource("Mat_StoneDark")
+
 [node name="BreachedPanel" type="StaticBody3D" parent="WesternRamparts"]
 visible = false
-position = Vector3(-23, 11.83, 8.5)
+position = Vector3(-23, 12.75, 8.5)
 script = ExtResource("15_breach")
+opening_width = 3.5
+opening_height = 2.05
 wall_depth = 3.5
+open_crest = true

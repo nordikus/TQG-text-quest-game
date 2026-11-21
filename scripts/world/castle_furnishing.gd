@@ -298,10 +298,12 @@ func _observatory() -> void:
 	ring.ring_segments = 6
 	_place(ring, Vector3(0, 21.70, 0), BRASS, Vector3(-0.21, 0.3, 0.24), null)
 
-	_table(Vector3(1.66, 20.14, 2.42), Vector2(1.17, 0.75))
-	_box(Vector3(1.68, 20.97, 2.39), Vector3(0.66, 0.024, 0.45), PAPER, false, Vector3(0, -0.23, 0))
-	_round(Vector3(1.76, 20.997, 2.53), 0.175, 0.027, BRASS)
-	_candle(Vector3(1.24, 20.96, 2.65), 0.14)
+	var chart_table := Vector3(0.65, 20.15, -2.90)
+	_table(chart_table, Vector2(1.17, 0.75))
+	_box(chart_table + Vector3(0.02, 0.822, -0.03), Vector3(0.66, 0.024, 0.45), PAPER,
+		false, Vector3(0, -0.23, 0))
+	_round(chart_table + Vector3(0.10, 0.847, 0.11), 0.175, 0.027, BRASS)
+	_candle(chart_table + Vector3(-0.42, 0.81, 0.23), 0.14)
 
 func _bridge() -> void:
 	for z in [-10.6, -13.1, -15.6, -18.1, -20.6]:
@@ -446,14 +448,14 @@ func _keep_kitchen() -> void:
 	_kitchen_stair_sign()
 
 func _kitchen_stair_sign() -> void:
-	var plaque := Vector3(25.16, 2.16, -5.30)
-	_box(plaque, Vector3(0.08, 0.35, 0.86), OAK)
-	for offset in [-0.38, 0.38]:
+	var plaque := Vector3(25.16, 2.16, -5.41)
+	_box(plaque, Vector3(0.08, 0.35, 1.25), OAK)
+	for offset in [-0.57, 0.57]:
 		_box(plaque + Vector3(-0.05, 0, offset), Vector3(0.018, 0.036, 0.036), BRASS)
 	var lettering := Label3D.new()
 	lettering.position = plaque + Vector3.LEFT * 0.045
 	lettering.rotation.y = -PI / 2.0
-	lettering.text = "Лестница  →"
+	lettering.text = "К караульной  →"
 	lettering.font_size = 48
 	lettering.pixel_size = 0.002
 	lettering.outline_size = 0
@@ -545,8 +547,6 @@ func _steward_room() -> void:
 		_box(desk + Vector3(x, 0.833, 0.04), Vector3(0.48, 0.046, 0.41), PAPER,
 			false, Vector3(0, 0.31 * x, 0))
 	_round(desk + Vector3(1.20, 0.94, 0.08), 0.085, 0.24, BRASS)
-	for z in [5.65, 8.0, 10.33]:
-		_ledger_shelf(Vector3(14.02, 6.35, z))
 	_wall_hanging(Vector3(19.20, 9.72, 14.46), BLUE.darkened(0.12))
 	for z in [6.44, 9.38, 12.3]:
 		_locker(Vector3(30.45, 6.35, z))

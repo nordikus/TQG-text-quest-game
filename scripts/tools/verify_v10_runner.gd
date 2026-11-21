@@ -109,7 +109,7 @@ func _verify_life() -> void:
 	_check_courtyard_fire(false)
 	_check(_world.living_arches.get_child(3).position.y >= -0.02, "The last living arch rose.")
 	_check(_crossing_is_open() and _world.wall_breach.is_visible_in_tree(),
-		"The Great Tree breaks the front masonry and opens the living passage.")
+		"The Great Tree breaks the crest and joins the perimeter walk.")
 	_check_courtyard_branch(true)
 	if not InventoryManager.has_item("great_quill"):
 		_check(_book.get_interaction_prompt().is_empty(), "The completed grove book stays quiet without the Quill.")
@@ -458,15 +458,19 @@ func _tower_has_solid_base() -> bool:
 
 func _front_panel_is_closed() -> bool:
 	var hit := _ray(Vector3(-23, 13.12, -79.0), Vector3(-23, 13.12, -80.9))
-	return hit.get("collider") == _world.wall_infill
+	var merlon := _ray(Vector3(-23, 15.3, -79.0), Vector3(-23, 15.3, -81.1))
+	return hit.get("collider") == _world.wall_infill and merlon.get("collider") == _world.wall_infill.get_node("Parapet")
 
 func _crossing_is_open() -> bool:
-	return _ray(Vector3(-23, 13.05, -79.0), Vector3(-23, 14.5, -105.3)).is_empty()
+	var approach := _ray(Vector3(-23, 16.3, -78.0), Vector3(-23, 16.3, -83.65))
+	var wall_walk := _ray(Vector3(-25.7, 16.3, -81.5), Vector3(-20.3, 16.3, -81.5))
+	var footing := _ray(Vector3(-23, 16.3, -81.5), Vector3(-23, 14.8, -81.5))
+	return approach.is_empty() and wall_walk.is_empty() and footing.get("collider") == _world.great_tree.get_node("TrunkBody")
 
 func _check_courtyard_branch(grown: bool) -> void:
 	var tower_face := _ray(Vector3(-23, 14.55, -104.8), Vector3(-23, 14.55, -106.1))
 	if grown:
-		var footing := _ray(Vector3(-23, 14.12, -94.2), Vector3(-23, 11.0, -94.2))
+		var footing := _ray(Vector3(-23, 15.18, -94.2), Vector3(-23, 13.0, -94.2))
 		var trunk: Node = footing.get("collider")
 		_check(tower_face.is_empty() and _world.tower_breach.is_visible_in_tree()
 			and trunk != null and _world.great_tree.is_ancestor_of(trunk),

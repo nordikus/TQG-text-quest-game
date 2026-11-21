@@ -439,15 +439,16 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 
 
 const BOUGH_TERRACE := -7.55
-const BOUGH_END := -19.75
+const BOUGH_END := -24.14
 const BOUGH_X := -2.0
+const RAMPART_FLOOR := 14.89
 
 func _bough_spine_z(z: float) -> Vector3:
 	if z >= BOUGH_TERRACE:
 		var x := lerpf(BOUGH_X, -0.44, smoothstep(BOUGH_TERRACE, -3.02, z))
 		return Vector3(x, 17.0 - 1.62 * smoothstep(-5.25, -3.02, z), z)
-	var descent := smoothstep(BOUGH_TERRACE, -17.85, z)
-	return Vector3(BOUGH_X, lerpf(17.00, 11.62, descent), z)
+	var descent := smoothstep(BOUGH_TERRACE, -19.75, z)
+	return Vector3(BOUGH_X, lerpf(17.00, RAMPART_FLOOR - 0.21, descent), z)
 
 
 func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void:
@@ -496,10 +497,10 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		var taper := smoothstep(BOUGH_END, -8.0, z)
 		var knots := (0.16 * sin(z * 0.42) + 0.12 * cos(z * 0.89)) * (1.0 - terrace_w)
 		var branch_width := 1.13 + 0.63 * taper + knots
-		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare
+		var crest := smoothstep(-17.5, -20.05, z)
+		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare + 0.66 * crest
 		var belly_depth := lerpf(0.78, 1.31, taper) + 0.65 * terrace_w + 1.45 * trunk_flare
 		var width_meander := 0.08 * sin(z * 0.28) * (1.0 - terrace_w * 0.7)
-		var tip := 1.0 - smoothstep(BOUGH_END, -17.5, z)
 
 		for j in m_b:
 			var uv := prof_b[j]
@@ -529,9 +530,9 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 				var flute := 0.18 * sin(float(j) * 1.8 + z * 0.22) + 0.16 * noise.get_noise_3d(ux * 0.6, uy * 0.6, z * 0.22)
 				ux = ux * (1.0 + 0.08 * flute) + width_meander
 				uy += flute * 0.55
-			# The split wood lies flat where the branch hits the balcony.
+			# The crown of the branch lies level with the rampart where they cross.
 			if is_moss or is_east_parapet or is_west_parapet:
-				uy = lerpf(uy, 0.21, tip)
+				uy = lerpf(uy, 0.21, crest)
 
 			var pt := c + right * ux + up * uy
 			g.v.append(pt)
@@ -564,7 +565,7 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		near_support[8], Vector3(-2.2, 11.8, -9.3), Vector3(-1.9, 10.5, -14.6),
 		_bough_spine_z(-18.0) - Vector3.UP * 0.74, 18)
 	_tube(g, far_support, 0.94, 0.47, 10, 0.28, 0.16)
-	for z_sp in [-6.8, -9.2, -12.6, -16.05, -18.75]:
+	for z_sp in [-6.8, -9.2, -12.6, -16.05, -18.75, -23.75]:
 		var ring := roundi(inverse_lerp(z_start, z_end, z_sp) * (n_stations - 1))
 		var offset := start + ring * m_b
 		_add_spore_cluster(spores, g.v[offset + 4], Vector3.UP)
@@ -615,9 +616,9 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 
 
 func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
-	# The branch splits into a hollow trunk after breaking the front wall.
+	# Beyond the rampart junction, the hollow branch descends into the tower.
 	const RINGS := 46
-	const START_Z := -23.25
+	const START_Z := BOUGH_END + 0.07
 	const END_Z := -45.34
 	var section := PackedVector2Array([
 		Vector2(-0.96, 0.04), Vector2(-0.70, 0), Vector2(0.68, 0), Vector2(0.96, 0.08),
@@ -633,8 +634,9 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 		for i in RINGS:
 			var t := float(i) / (RINGS - 1)
 			var z := lerpf(START_Z, END_Z, t)
-			var floor_y := lerpf(11.83, 13.28, smoothstep(0.0, 1.0, t))
+			var floor_y := lerpf(RAMPART_FLOOR - 0.025, 13.28, smoothstep(0.0, 1.0, t))
 			var reveal := smoothstep(0.0, 0.16, t) * (1.0 - smoothstep(0.83, 1.0, t))
+			var split := 1.0 - smoothstep(0.0, 0.19, t)
 			var center := Vector3(BOUGH_X, floor_y, z)
 			if not outside:
 				centers.append(center + Vector3.UP * 1.24)
@@ -644,6 +646,7 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 			for j in count:
 				var xy := section[j]
 				var grain := noise.get_noise_2d(z * 0.47, float(j) * 0.69)
+				var setback := split * smoothstep(0.21, 2.53, xy.y) * (1.18 + 0.33 * sin(j * 1.64) + 0.11 * grain)
 				var color := BARK_WARM.lerp(BARK_DARK, clampf(0.21 + 0.42 * grain, 0.0, 1.0))
 				if outside:
 					# Uneven growth rings flare into the stones at each end.
@@ -662,16 +665,16 @@ func _build_courtyard_branch(bark: Geo, spores: Geo) -> void:
 					xy.x += reveal * (0.078 * grain + 0.065 * sin(t * TAU * 2.0 + j * 0.62))
 					xy.y += 0.12 * grain * reveal
 					color = color.lerp(MOSS, 0.06 + 0.10 * absf(grain))
-				bark.v.append(center + Vector3(xy.x, xy.y, 0))
+				bark.v.append(center + Vector3(xy.x, xy.y, -setback))
 				bark.c.append(color)
 		_connect_tube_grid(bark, starts.back(), RINGS, count, centers, Vector3.ZERO, Vector3.ZERO, not outside)
 	_courtyard_branch_rim(bark, starts[0], starts[1], count, Vector3.BACK)
 	var last := (RINGS - 1) * count
 	_courtyard_branch_rim(bark, starts[0] + last, starts[1] + last, count, Vector3.FORWARD)
-	var spur := _bezier(Vector3(-0.7, 12.8, -28.2), Vector3(0.20, 12.7, -29.3),
-		Vector3(1.34, 11.8, -32.4), Vector3(1.48, 10.1, -33.8), 13)
+	var spur := _bezier(Vector3(-0.7, 14.2, -28.2), Vector3(0.20, 13.7, -29.3),
+		Vector3(1.34, 12.3, -32.4), Vector3(1.48, 10.1, -33.8), 13)
 	_tube(bark, spur, 0.47, 0.09, 8, 0.26, 0.12)
-	var lower_fork := _bezier(Vector3(-2.7, 12.1, -37.0), Vector3(-3.9, 11.75, -38.6),
+	var lower_fork := _bezier(Vector3(-2.7, 13.75, -37.0), Vector3(-3.9, 12.55, -38.6),
 		Vector3(-5.2, 10.5, -41.2), Vector3(-5.75, 9.95, -43.2), 12)
 	_tube(bark, lower_fork, 0.53, 0.075, 9, 0.29, 0.12)
 

@@ -284,30 +284,11 @@ func _run_verification() -> void:
 			push_error("FAIL: The living bridge needs continuous footing on one axis toward the front curtain.")
 			all_passed = false
 			break
-	var footholds_clear := true
-	for row in 11:
-		var z := -75.12 - row * 0.44
-		for column in 27:
-			var x := -28.2 + column * 0.4
-			var hit := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-				Vector3(x, 19.0, z), Vector3(x, 13.56, z)))
-			if not hit.is_empty() and hit.collider.name == "TrunkBody" and hit.normal.y > 0.64:
-				footholds_clear = false
-	if not footholds_clear:
-		push_error("FAIL: A branch close to the front curtain is tall enough to jump onto the guard walk.")
-		all_passed = false
-	var portal := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-23, 13.05, -79.0), Vector3(-23, 14.50, -105.3)))
-	var lintel := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-23, 14.99, -81.55), Vector3(-23, 14.57, -81.55)))
-	if not portal.is_empty() or lintel.is_empty() or lintel.collider.name != "WallFrontLeft":
-		push_error("FAIL: The living passage must enter through the front curtain below the guard walk.")
-		all_passed = false
 	if not _verify_front_breach(space_state):
 		all_passed = false
 	for step in 29:
-		var z := lerpf(-83.45, -105.03, step / 28.0)
-		var inside := Vector3(-23.0, 14.04, z)
+		var z := lerpf(-86.20, -105.03, step / 28.0)
+		var inside := Vector3(-23.0, 15.6, z)
 		var shell := true
 		for direction in [Vector3.LEFT, Vector3.RIGHT, Vector3.DOWN, Vector3.UP]:
 			var hit := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
@@ -363,14 +344,21 @@ func _bounds(model: MeshInstance3D) -> AABB:
 	return model.global_transform * model.get_aabb()
 
 func _verify_front_breach(space: PhysicsDirectSpaceState3D) -> bool:
-	for z in [-79.80, -80.55, -81.30, -82.05, -82.80, -83.20]:
-		var center := Vector3(-23.0, 13.18, z)
-		for direction in [Vector3.LEFT, Vector3.RIGHT, Vector3.UP]:
-			var stone := space.intersect_ray(PhysicsRayQueryParameters3D.create(center, center + direction * 1.36))
-			if stone.is_empty() or stone.collider.name != "BreachedPanel":
-				push_error("FAIL: The jagged front breach must line the full depth of the curtain.")
+	var approach := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-23, 16.3, -78.0), Vector3(-23, 16.3, -83.65)))
+	var crossing := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-26.0, 16.3, -81.5), Vector3(-20.0, 16.3, -81.5)))
+	if not approach.is_empty() or not crossing.is_empty():
+		push_error("FAIL: The crest breach blocks the living approach or the wall walk.")
+		return false
+	for z in [-81.96, -81.5, -81.04]:
+		for step in 25:
+			var at := Vector3(lerpf(-26.0, -20.0, step / 24.0), 16.3, z)
+			var floor_hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(at, at - Vector3.UP * 1.69))
+			if floor_hit.is_empty() or absf(floor_hit.position.y - 14.8) > 0.18:
+				push_error("FAIL: The crest needs continuous footing clear of the broken masonry at %s." % at)
 				return false
-	print("PASS: The broken masonry surrounds the living threshold throughout the front curtain.")
+	print("PASS: The open breach and living branch join both halves of the front wall walk.")
 	return true
 
 func _verify_bridge_portal(space: PhysicsDirectSpaceState3D) -> bool:

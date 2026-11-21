@@ -11,9 +11,8 @@ const NORTH := -89.5
 const APPROACH_X := -23.0
 const EXTERIOR_FACE := 10.25
 const COURTYARD_FACE := 6.75
-const BREACH_FLOOR := 11.83
-const PASSAGE_HEIGHT := 2.84
-const PASSAGE_HALF_WIDTH := 1.38
+const BREAK_BASE := 12.75
+const BREAK_HALF_WIDTH := 1.75
 
 func _ready() -> void:
 	var wall := _body("WallWest")
@@ -22,13 +21,11 @@ func _ready() -> void:
 
 func _front_wall() -> void:
 	var front := _body("WallFrontLeft")
-	var left := APPROACH_X - PASSAGE_HALF_WIDTH
-	var right := APPROACH_X + PASSAGE_HALF_WIDTH
-	var lintel := BREACH_FLOOR + PASSAGE_HEIGHT
+	var left := APPROACH_X - BREAK_HALF_WIDTH
+	var right := APPROACH_X + BREAK_HALF_WIDTH
 	_span(front, -42.0, left, 0.0, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE)
 	_span(front, right, -5.0, 0.0, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE)
-	_span(front, left, right, 0.0, BREACH_FLOOR, COURTYARD_FACE, EXTERIOR_FACE)
-	_span(front, left, right, lintel, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE)
+	_span(front, left, right, 0.0, BREAK_BASE, COURTYARD_FACE, EXTERIOR_FACE)
 
 func _span(body: StaticBody3D, left: float, right: float, low: float, high: float,
 		start: float, finish: float) -> void:
