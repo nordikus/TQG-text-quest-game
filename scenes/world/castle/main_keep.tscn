@@ -433,20 +433,6 @@ size = Vector3(0.8, 6.0, 13.85)
 [sub_resource type="BoxShape3D" id="Shape_WallEast_F1_North"]
 size = Vector3(0.8, 6.0, 13.85)
 
-[sub_resource type="BoxMesh" id="Mesh_WallEast_F2_South"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.8, 6.0, 12.5)
-
-[sub_resource type="BoxShape3D" id="Shape_WallEast_F2_South"]
-size = Vector3(0.8, 6.0, 12.5)
-
-[sub_resource type="BoxMesh" id="Mesh_WallEast_F2_North"]
-material = SubResource("Mat_Stone")
-size = Vector3(0.8, 6.0, 12.5)
-
-[sub_resource type="BoxShape3D" id="Shape_WallEast_F2_North"]
-size = Vector3(0.8, 6.0, 12.5)
-
 [sub_resource type="BoxMesh" id="Mesh_StairwellBalustradeWest"]
 material = SubResource("Mat_WoodDark")
 size = Vector3(0.25, 0.9, 14.0)
@@ -695,10 +681,10 @@ size = Vector3(2.75, 0.14, 0.76)
 
 [sub_resource type="BoxMesh" id="Mesh_StewardPartitionWest"]
 material = SubResource("Mat_Stone")
-size = Vector3(8.05, 5.65, 0.41)
+size = Vector3(5.15, 5.65, 0.41)
 
 [sub_resource type="BoxShape3D" id="Shape_StewardPartitionWest"]
-size = Vector3(8.05, 5.65, 0.41)
+size = Vector3(5.15, 5.65, 0.41)
 
 [sub_resource type="BoxMesh" id="Mesh_StewardPartitionEast"]
 material = SubResource("Mat_Stone")
@@ -863,10 +849,10 @@ size = Vector3(0.4, 5.65, 10.76)
 
 [sub_resource type="BoxMesh" id="Mesh_ServiceRoomWallWest"]
 material = SubResource("Mat_Stone")
-size = Vector3(7.25, 5.65, 0.42)
+size = Vector3(4.35, 5.65, 0.42)
 
 [sub_resource type="BoxShape3D" id="Shape_ServiceRoomWallWest"]
-size = Vector3(7.25, 5.65, 0.42)
+size = Vector3(4.35, 5.65, 0.42)
 
 [sub_resource type="BoxMesh" id="Mesh_ServiceRoomWallEast"]
 material = SubResource("Mat_Stone")
@@ -1468,44 +1454,67 @@ mesh = SubResource("Mesh_WallEast_F1_North")
 shape = SubResource("Shape_WallEast_F1_North")
 
 [node name="WallEast_F2_South" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 9.22, -8.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 9.22, -11.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="WallEast_F2_South"]
-mesh = SubResource("Mesh_WallEast_F2_South")
+mesh = SubResource("Mesh_WallWest_F2_South")
 
 [node name="Col" type="CollisionShape3D" parent="WallEast_F2_South"]
-shape = SubResource("Shape_WallEast_F2_South")
+shape = SubResource("Shape_WallWest_F2_South")
 
 [node name="WallEast_F2_North" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 9.22, 8.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 9.22, 11.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="WallEast_F2_North"]
-mesh = SubResource("Mesh_WallEast_F2_North")
+mesh = SubResource("Mesh_WallWest_F2_South")
 
 [node name="Col" type="CollisionShape3D" parent="WallEast_F2_North"]
-shape = SubResource("Shape_WallEast_F2_North")
+shape = SubResource("Shape_WallWest_F2_South")
 
-[node name="EastUpperLoggia" type="CSGBox3D" parent="."]
-position = Vector3(13, 9.22, 0)
-size = Vector3(0.8, 6, 5)
-material = SubResource("Mat_Stone")
-use_collision = true
+[node name="WallEast_F2_Mid" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 9.22, 0.0)
 
-[node name="NorthArch" type="CSGPolygon3D" parent="EastUpperLoggia"]
-position = Vector3(-0.58, 0, 0)
-rotation = Vector3(0, -1.57079633, 0)
-polygon = PackedVector2Array(-2.25, -2.03, -0.27, -2.03, -0.27, 0.19, -0.3037, 0.4462, -0.4026, 0.685, -0.56, 0.89, -0.765, 1.0474, -1.0038, 1.1463, -1.26, 1.18, -1.5162, 1.1463, -1.755, 1.0474, -1.96, 0.89, -2.1174, 0.685, -2.2163, 0.4462, -2.25, 0.19)
-depth = 1.16
-material = SubResource("Mat_DressedStone")
-operation = 2
+[node name="Mesh" type="MeshInstance3D" parent="WallEast_F2_Mid"]
+mesh = SubResource("Mesh_WallWest_F2_Mid")
 
-[node name="SouthArch" type="CSGPolygon3D" parent="EastUpperLoggia"]
-position = Vector3(-0.58, 0, 0)
-rotation = Vector3(0, -1.57079633, 0)
-polygon = PackedVector2Array(0.27, -2.03, 2.25, -2.03, 2.25, 0.19, 2.2163, 0.4462, 2.1174, 0.685, 1.96, 0.89, 1.755, 1.0474, 1.5162, 1.1463, 1.26, 1.18, 1.0038, 1.1463, 0.765, 1.0474, 0.56, 0.89, 0.4026, 0.685, 0.3037, 0.4462, 0.27, 0.19)
-depth = 1.16
-material = SubResource("Mat_DressedStone")
-operation = 2
+[node name="Col" type="CollisionShape3D" parent="WallEast_F2_Mid"]
+shape = SubResource("Shape_WallWest_F2_Mid")
+
+[node name="WallEast_F2_Lintel1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 11.36, -4.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WallEast_F2_Lintel1"]
+mesh = SubResource("Mesh_WallWest_F2_Lintel1")
+
+[node name="Col" type="CollisionShape3D" parent="WallEast_F2_Lintel1"]
+shape = SubResource("Shape_WallWest_F2_Lintel1")
+
+[node name="WallEast_F2_Lintel2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 11.36, 4.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WallEast_F2_Lintel2"]
+mesh = SubResource("Mesh_WallWest_F2_Lintel2")
+
+[node name="Col" type="CollisionShape3D" parent="WallEast_F2_Lintel2"]
+shape = SubResource("Shape_WallWest_F2_Lintel2")
+
+[node name="BalustradeEast_Loggia1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 6.75, -4.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BalustradeEast_Loggia1"]
+mesh = SubResource("Mesh_BalustradeWest_Loggia1")
+
+[node name="Col" type="CollisionShape3D" parent="BalustradeEast_Loggia1"]
+shape = SubResource("Shape_BalustradeWest_Loggia1")
+
+[node name="BalustradeEast_Loggia2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 6.75, 4.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="BalustradeEast_Loggia2"]
+mesh = SubResource("Mesh_BalustradeWest_Loggia2")
+
+[node name="Col" type="CollisionShape3D" parent="BalustradeEast_Loggia2"]
+shape = SubResource("Shape_BalustradeWest_Loggia2")
 
 [node name="StairwellBalustradeWest" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.0, 6.75, -4.0)
@@ -1847,8 +1856,17 @@ mesh = SubResource("Mesh_ServiceRoomEastWall")
 [node name="Col" type="CollisionShape3D" parent="ServiceRoomEastWall"]
 shape = SubResource("Shape_ServiceRoomEastWall")
 
+[node name="ServiceRoomWestWall" type="StaticBody3D" parent="."]
+position = Vector3(16.1, 9.175, -9.12)
+
+[node name="Mesh" type="MeshInstance3D" parent="ServiceRoomWestWall"]
+mesh = SubResource("Mesh_ServiceRoomEastWall")
+
+[node name="Col" type="CollisionShape3D" parent="ServiceRoomWestWall"]
+shape = SubResource("Shape_ServiceRoomEastWall")
+
 [node name="ServiceRoomWallWest" type="StaticBody3D" parent="."]
-position = Vector3(17.025, 9.175, -3.95)
+position = Vector3(18.475, 9.175, -3.95)
 
 [node name="Mesh" type="MeshInstance3D" parent="ServiceRoomWallWest"]
 mesh = SubResource("Mesh_ServiceRoomWallWest")
@@ -1906,7 +1924,7 @@ mesh = SubResource("Mesh_RoyalOrderDraft")
 shape = SubResource("Shape_RoyalOrderDraft")
 
 [node name="StewardPartitionWest" type="StaticBody3D" parent="."]
-position = Vector3(17.425, 9.175, 3.05)
+position = Vector3(18.875, 9.175, 3.05)
 
 [node name="Mesh" type="MeshInstance3D" parent="StewardPartitionWest"]
 mesh = SubResource("Mesh_StewardPartitionWest")

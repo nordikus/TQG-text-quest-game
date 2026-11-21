@@ -299,11 +299,9 @@ func _run_verification() -> void:
 	var tower := clearing.find_child("MageTower", true, false) as Node3D
 	var sill := tower.get_node("SouthEntryLanding/Mesh") as MeshInstance3D
 	var bridge_floor := tower.get_node("CoveredBridge/TowerBridgeDeck/Mesh") as MeshInstance3D
-	var stair_floor := tower.get_node("TowerFloor2_West/Mesh") as MeshInstance3D
 	var landing := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
 		Vector3(-23, 13.55, -105.50), Vector3(-23, 13.0, -105.50)))
-	var bridge_join := is_equal_approx(_bounds(bridge_floor).end.z, _bounds(stair_floor).position.z)
-	if landing.is_empty() or landing.collider != sill.get_parent() or not bridge_join or not _verify_bridge_portal(space_state):
+	if landing.is_empty() or landing.collider != sill.get_parent() or not _verify_bridge_portal(space_state):
 		push_error("FAIL: The entry and library bridge must meet the tower's landings.")
 		all_passed = false
 	var bridge_cornice := tower.get_node("CorniceTier2") as MeshInstance3D
@@ -348,6 +346,11 @@ func _verify_front_breach(space: PhysicsDirectSpaceState3D) -> bool:
 	return true
 
 func _verify_bridge_portal(space: PhysicsDirectSpaceState3D) -> bool:
+	for z in [-114.16, -114.06, -113.45, -112.55, -111.6, -110.14, -109.52]:
+		var threshold := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(-20.35, 6.56, z), Vector3(-20.35, 6.12, z)))
+		if threshold.is_empty() or absf(threshold.position.y - 6.35) > 0.03:
+			return false
 	for z in [-114.2, -113.95, -113.70, -113.45, -113.2, -112.95, -112.68]:
 		var center := Vector3(-20.35, 8.0, z)
 		for direction in [Vector3.DOWN, Vector3.UP, Vector3.RIGHT]:
@@ -407,11 +410,13 @@ func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
 		push_error("FAIL: The narrow dining passage needs a clear centre and a solid jamb.")
 		return false
 
-	for z in [-152.26, -149.74]:
-		var arch := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+	for z in [-155.0, -147.0]:
+		var above_rail := space.intersect_ray(PhysicsRayQueryParameters3D.create(
 			Vector3(11.7, 8.35, z), Vector3(15.0, 8.35, z)))
-		if not arch.is_empty():
-			push_error("FAIL: The arches above dining must be clear of the steward partition.")
+		var rail := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(11.7, 6.89, z), Vector3(15.0, 6.89, z)))
+		if not above_rail.is_empty() or rail.is_empty() or not str(rail.collider.name).begins_with("BalustradeEast_Loggia"):
+			push_error("FAIL: Both dining gallery bays need an open view above a solid balustrade.")
 			return false
 
 	var kitchen_door := space.intersect_ray(PhysicsRayQueryParameters3D.create(
@@ -428,6 +433,11 @@ func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
 		Vector3(26.5, 8.0, -160.0), Vector3(23.5, 8.0, -160.0)))
 	if service_wall.is_empty() or service_wall.collider.name != "ServiceRoomEastWall":
 		push_error("FAIL: The stairwell must not bypass the lock on the service-room doorway.")
+		return false
+	var gallery_wall := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(14.5, 8.0, -156.5), Vector3(17.0, 8.0, -156.5)))
+	if gallery_wall.is_empty() or gallery_wall.collider.name != "ServiceRoomWestWall":
+		push_error("FAIL: The dining gallery must not bypass the lock on the service-room doorway.")
 		return false
 
 	for flight in range(2):

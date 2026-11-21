@@ -246,6 +246,29 @@ func _keep_kitchen() -> void:
 	_round(Vector3(28.83, 2.78, -5.76), 0.078, 0.235, Color(0.93, 0.65, 0.31))
 	_round(Vector3(28.83, 2.64, -5.76), 0.104, 0.055, IRON)
 	_light(Vector3(29.04, 2.80, -5.76), 1.40, 5.35)
+	_kitchen_stair_sign()
+
+func _kitchen_stair_sign() -> void:
+	var plaque := Vector3(25.16, 2.16, -5.30)
+	_box(plaque, Vector3(0.08, 0.35, 0.86), OAK)
+	for offset in [-0.38, 0.38]:
+		_box(plaque + Vector3(-0.05, 0, offset), Vector3(0.018, 0.036, 0.036), BRASS)
+	var lettering := Label3D.new()
+	lettering.position = plaque + Vector3.LEFT * 0.045
+	lettering.rotation.y = -PI / 2.0
+	lettering.text = "Лестница  →"
+	lettering.font_size = 48
+	lettering.pixel_size = 0.002
+	lettering.outline_size = 0
+	lettering.modulate = LINEN.lightened(0.18)
+	add_child(lettering)
+
+	var sconce := Vector3(31.38, 2.42, -4.23)
+	_box(sconce + Vector3(0.16, 0.03, 0), Vector3(0.10, 0.37, 0.24), IRON)
+	_box(sconce + Vector3(0.02, -0.11, 0), Vector3(0.33, 0.055, 0.26), IRON)
+	_round(sconce + Vector3(-0.07, 0.03, 0), 0.075, 0.23, Color(0.93, 0.65, 0.31))
+	_round(sconce + Vector3(-0.07, 0.16, 0), 0.102, 0.045, IRON)
+	_light(sconce + Vector3.LEFT * 0.25, 1.28, 4.65)
 
 
 func _hearth(at: Vector3) -> void:
