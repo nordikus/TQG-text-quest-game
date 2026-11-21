@@ -322,16 +322,16 @@ mesh = SubResource("Mesh_Roof")
 shape = SubResource("Shape_Roof")
 
 [node name="ChapelDoor" type="StaticBody3D" parent="." node_paths=PackedStringArray("left_wing")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 2.17, -1.4)
+position = Vector3(6.92, 2.17, -1.37)
 script = ExtResource("1_door")
 left_wing = NodePath("DoorWing")
-open_angle_deg = 92.0
+open_angle_deg = -87.0
 
 [node name="DoorWing" type="AnimatableBody3D" parent="ChapelDoor"]
 position = Vector3(0, 0, 0)
 rotation = Vector3(0, -1.57079633, 0)
 script = ExtResource("12_door_leaf")
-panel_size = Vector3(2.8, 3.9, 0.18)
+panel_size = Vector3(2.74, 3.9, 0.18)
 style = 1
 
 [node name="WatcherPedestal" type="StaticBody3D" parent="."]
