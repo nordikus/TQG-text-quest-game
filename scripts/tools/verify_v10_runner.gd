@@ -63,8 +63,8 @@ func _check_initial() -> void:
 	_check(_world.life_thicket.visible and _world.ash_thicket.visible and not _world.great_tree.visible,
 		"Both areas return to ordinary woodland and the Great Tree retracts.")
 	_check(_gate_blocks(), "Physical outer gate is closed.")
-	_check(_west_panel_is_closed(),
-		"The western masonry is intact before the choice and after a rewrite.")
+	_check(_front_panel_is_closed(),
+		"The front masonry is intact before the choice and after a rewrite.")
 	_check(_world.intact_bridge.visible and not _world.collapsed_bridge.visible and not _world.courtyard_roots.visible,
 		"The castle returns to its initial geometry.")
 	_check(_world.intact_bridge.get_node("Shoring").is_visible_in_tree() and not _remnant_smoke().emitting,
@@ -82,7 +82,7 @@ func _verify_life() -> void:
 	_check_courtyard_fire(false)
 	_check(_world.living_arches.get_child(3).position.y >= -0.02, "The last living arch rose.")
 	_check(_crossing_is_open() and _world.wall_breach.is_visible_in_tree(),
-		"The Great Tree breaks the western masonry and opens the crossing to the observatory.")
+		"The Great Tree breaks the front masonry and opens the crossing to the observatory.")
 	if not InventoryManager.has_item("great_quill"):
 		_check(_book.get_interaction_prompt().is_empty(), "The completed grove book stays quiet without the Quill.")
 	await _verify_life_blockers()
@@ -133,7 +133,7 @@ func _verify_ash(has_shard: bool) -> void:
 		and not _world.intact_bridge.get_node("Shoring").is_visible_in_tree() and _remnant_smoke().emitting,
 		"The bridge ruins expose burned shoring, a burned shed and smoldering debris.")
 	_check(_tower_has_solid_base(), "Direct entry into the tower from the courtyard is unavailable.")
-	_check(_west_panel_is_closed(), "Ash keeps the western masonry intact.")
+	_check(_front_panel_is_closed(), "Ash keeps the front masonry intact.")
 	_barracks.interact()
 	await get_tree().create_timer(0.8).timeout
 	var ash_entry := _ray(Vector3(14.0, 1.6, -112.6), Vector3(17.4, 1.6, -112.6))
@@ -243,14 +243,14 @@ func _bridge_is_intact() -> bool:
 
 func _tower_has_solid_base() -> bool:
 	var hit := _ray(Vector3(-23, 1.3, -104), Vector3(-23, 1.3, -107))
-	return not hit.is_empty() and hit.collider.name == "TowerWall_3_Top"
+	return not hit.is_empty() and hit.collider.name == "TowerWallSouthBase"
 
-func _west_panel_is_closed() -> bool:
-	var hit := _ray(Vector3(-35.1, 21.2, -110.12), Vector3(-33.8, 21.2, -110.12))
+func _front_panel_is_closed() -> bool:
+	var hit := _ray(Vector3(-23, 13.12, -79.0), Vector3(-23, 13.12, -80.9))
 	return hit.get("collider") == _world.wall_infill
 
 func _crossing_is_open() -> bool:
-	return _ray(Vector3(-35.1, 21.2, -110.12), Vector3(-26.72, 21.2, -110.12)).is_empty()
+	return _ray(Vector3(-23, 13.05, -79.0), Vector3(-23, 14.5, -105.3)).is_empty()
 
 func _ray(from: Vector3, to: Vector3) -> Dictionary:
 	return _level.get_world_3d().direct_space_state.intersect_ray(

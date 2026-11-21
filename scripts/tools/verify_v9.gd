@@ -249,26 +249,49 @@ func _run_verification() -> void:
 		if library_wall.is_empty() or library_wall.collider.name != "KeepWallWest":
 			push_error("FAIL: An exterior buttress or turret penetrates the lower library at z=%s." % z)
 			all_passed = false
+	for side in [Vector2(-33.15, -100), Vector2(15, -81.5), Vector2(36.0, -116), Vector2(0, -167.6)]:
+		var foot := Vector3(side.x, 14.8, side.y)
+		var crest := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			foot + Vector3.UP * 0.22, foot - Vector3.UP * 0.22))
+		if crest.is_empty() or not is_equal_approx(crest.position.y, 14.8):
+			push_error("FAIL: All curtain walks should meet the 14.8 m height.")
+			all_passed = false
+	for step in 25:
+		var z := lerpf(-67.7, -79.63, float(step) / 24)
+		var hit := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(-23.0, 19.0, z), Vector3(-23.0, 10.5, z)))
+		if hit.is_empty() or hit.collider.name != "TrunkBody" or hit.normal.y < 0.75:
+			push_error("FAIL: The living bridge needs continuous footing on one axis toward the front curtain.")
+			all_passed = false
+			break
+	var footholds_clear := true
+	for row in 11:
+		var z := -75.12 - row * 0.44
+		for column in 27:
+			var x := -28.2 + column * 0.4
+			var hit := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+				Vector3(x, 19.0, z), Vector3(x, 13.56, z)))
+			if not hit.is_empty() and hit.collider.name == "TrunkBody" and hit.normal.y > 0.64:
+				footholds_clear = false
+	if not footholds_clear:
+		push_error("FAIL: A branch close to the front curtain is tall enough to jump onto the guard walk.")
+		all_passed = false
 	var portal := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-35.0, 21.1, -110.12), Vector3(-26.72, 21.1, -110.12)))
-	var sill_base := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-36.0, 15.0, -110.12), Vector3(-33.6, 15.0, -110.12)))
-	var outside_jamb := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-35, 22.45, -108.55), Vector3(-33.75, 22.45, -108.55)))
-	var covered_walk := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-33.21, 16.38, -110.12), Vector3(-33.21, 20.4, -110.12)))
-	if not portal.is_empty() or sill_base.is_empty() or outside_jamb.is_empty() or covered_walk.is_empty():
-		push_error("FAIL: The upper breach must lead to the observatory while the guard walk stays covered below.")
+		Vector3(-23, 13.05, -79.0), Vector3(-23, 14.50, -105.3)))
+	var lintel := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-23, 14.1, -81.55), Vector3(-23, 14.87, -81.55)))
+	if not portal.is_empty() or lintel.is_empty() or lintel.collider.name != "WallFrontLeft":
+		push_error("FAIL: The broken front curtain must lead into a gallery below the guard walk.")
 		all_passed = false
 	var tower := clearing.find_child("MageTower", true, false) as Node3D
-	var sill := tower.get_node("ForestPortalSill/Mesh") as MeshInstance3D
-	var hall_floor := tower.get_node("TowerFloor3_North/Mesh") as MeshInstance3D
+	var sill := tower.get_node("SouthEntryLanding/Mesh") as MeshInstance3D
 	var bridge_floor := tower.get_node("CoveredBridge/TowerBridgeDeck/Mesh") as MeshInstance3D
 	var stair_floor := tower.get_node("TowerFloor2_West/Mesh") as MeshInstance3D
-	var crossing_join := is_equal_approx(_bounds(sill).end.x, _bounds(hall_floor).position.x)
+	var landing := space_state.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-23, 13.55, -105.26), Vector3(-23, 13.0, -105.26)))
 	var bridge_join := is_equal_approx(_bounds(bridge_floor).end.z, _bounds(stair_floor).position.z)
-	if not crossing_join or not bridge_join:
-		push_error("FAIL: The observatory and bridge thresholds must meet their landings edge to edge.")
+	if landing.is_empty() or landing.collider != sill.get_parent() or not bridge_join:
+		push_error("FAIL: The entry and library bridge must meet the tower's landings.")
 		all_passed = false
 	var bridge_cornice := tower.get_node("CorniceTier2") as MeshInstance3D
 	if _bounds(bridge_cornice).end.y >= _bounds(bridge_floor).end.y:

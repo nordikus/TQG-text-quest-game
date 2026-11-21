@@ -100,12 +100,12 @@ size = Vector3(2.45, 24.0, 1.0)
 [sub_resource type="BoxShape3D" id="Shape_TowerWall_2"]
 size = Vector3(2.45, 24.0, 1.0)
 
-[sub_resource type="BoxMesh" id="Mesh_TowerWall_3_Top"]
+[sub_resource type="BoxMesh" id="Mesh_TowerWallSouthBase"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(2.45, 24, 1.0)
+size = Vector3(2.45, 12.88, 1)
 
-[sub_resource type="BoxShape3D" id="Shape_TowerWall_3_Top"]
-size = Vector3(2.45, 24, 1.0)
+[sub_resource type="BoxShape3D" id="Shape_TowerWallSouthBase"]
+size = Vector3(2.45, 12.88, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_TowerWall_4"]
 material = SubResource("Mat_StoneDark")
@@ -436,26 +436,19 @@ size = Vector3(0.34, 0.075, 0.067)
 material = SubResource("Mat_Iron")
 size = Vector3(0.34, 0.075, 0.067)
 
-[sub_resource type="BoxMesh" id="Mesh_ObservatoryWestBase"]
+[sub_resource type="BoxMesh" id="Mesh_ObservatoryWestWall"]
 material = SubResource("Mat_StoneDark")
-size = Vector3(1.0, 20.15, 2.45)
+size = Vector3(1.0, 24.0, 2.45)
 
-[sub_resource type="BoxShape3D" id="Shape_ObservatoryWestBase"]
-size = Vector3(1.0, 20.15, 2.45)
+[sub_resource type="BoxShape3D" id="Shape_ObservatoryWestWall"]
+size = Vector3(1.0, 24.0, 2.45)
 
-[sub_resource type="BoxMesh" id="Mesh_ObservatoryWestLintel"]
-material = SubResource("Mat_StoneDark")
-size = Vector3(1.0, 1.29, 2.45)
-
-[sub_resource type="BoxShape3D" id="Shape_ObservatoryWestLintel"]
-size = Vector3(1.0, 1.29, 2.45)
-
-[sub_resource type="BoxMesh" id="Mesh_ForestPortalSill"]
+[sub_resource type="BoxMesh" id="Mesh_SouthEntryLanding"]
 material = SubResource("Mat_Stone")
-size = Vector3(1.10, 0.44, 2.8)
+size = Vector3(2.58, 0.30, 1.77)
 
-[sub_resource type="BoxShape3D" id="Shape_ForestPortalSill"]
-size = Vector3(1.10, 0.44, 2.8)
+[sub_resource type="BoxShape3D" id="Shape_SouthEntryLanding"]
+size = Vector3(2.58, 0.30, 1.77)
 
 [sub_resource type="BoxMesh" id="Mesh_ObservatoryEntryLanding"]
 material = SubResource("Mat_Stone")
@@ -489,6 +482,13 @@ size = Vector3(2.45, 14.22, 1)
 
 [sub_resource type="BoxShape3D" id="Shape_WallSoutheastUpper"]
 size = Vector3(2.45, 14.22, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_TowerWallSouthHead"]
+material = SubResource("Mat_StoneDark")
+size = Vector3(2.45, 8.1, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_TowerWallSouthHead"]
+size = Vector3(2.45, 8.1, 1)
 
 [node name="MageTower" type="Node3D"]
 
@@ -528,14 +528,23 @@ mesh = SubResource("Mesh_TowerWall_2")
 [node name="Col" type="CollisionShape3D" parent="TowerWall_2"]
 shape = SubResource("Shape_TowerWall_2")
 
-[node name="TowerWall_3_Top" type="StaticBody3D" parent="."]
-position = Vector3(0, 12.22, 4.3)
+[node name="TowerWallSouthBase" type="StaticBody3D" parent="."]
+position = Vector3(0, 6.66, 4.3)
 
-[node name="Mesh" type="MeshInstance3D" parent="TowerWall_3_Top"]
-mesh = SubResource("Mesh_TowerWall_3_Top")
+[node name="Mesh" type="MeshInstance3D" parent="TowerWallSouthBase"]
+mesh = SubResource("Mesh_TowerWallSouthBase")
 
-[node name="Col" type="CollisionShape3D" parent="TowerWall_3_Top"]
-shape = SubResource("Shape_TowerWall_3_Top")
+[node name="Col" type="CollisionShape3D" parent="TowerWallSouthBase"]
+shape = SubResource("Shape_TowerWallSouthBase")
+
+[node name="TowerWallSouthHead" type="StaticBody3D" parent="."]
+position = Vector3(0, 20.17, 4.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="TowerWallSouthHead"]
+mesh = SubResource("Mesh_TowerWallSouthHead")
+
+[node name="Col" type="CollisionShape3D" parent="TowerWallSouthHead"]
+shape = SubResource("Shape_TowerWallSouthHead")
 
 [node name="TowerWall_4" type="StaticBody3D" parent="."]
 transform = Transform3D(0.8660254037844387, 0, -0.49999999999999983, 0, 1, 0, 0.49999999999999983, 0, 0.8660254037844387, -2.149999999999999, 12.22, 3.7239092362730863)
@@ -1072,32 +1081,23 @@ light_color = Color(0.88, 0.65, 0.36, 1)
 light_energy = 1.21
 omni_range = 4.1
 
-[node name="ObservatoryWestBase" type="StaticBody3D" parent="."]
-position = Vector3(-4.3, 10.075, 0)
+[node name="ObservatoryWestWall" type="StaticBody3D" parent="."]
+position = Vector3(-4.3, 12.22, 0)
 
-[node name="Mesh" type="MeshInstance3D" parent="ObservatoryWestBase"]
-mesh = SubResource("Mesh_ObservatoryWestBase")
+[node name="Mesh" type="MeshInstance3D" parent="ObservatoryWestWall"]
+mesh = SubResource("Mesh_ObservatoryWestWall")
 
-[node name="Col" type="CollisionShape3D" parent="ObservatoryWestBase"]
-shape = SubResource("Shape_ObservatoryWestBase")
+[node name="Col" type="CollisionShape3D" parent="ObservatoryWestWall"]
+shape = SubResource("Shape_ObservatoryWestWall")
 
-[node name="ObservatoryWestLintel" type="StaticBody3D" parent="."]
-position = Vector3(-4.3, 23.575, 0)
+[node name="SouthEntryLanding" type="StaticBody3D" parent="."]
+position = Vector3(0, 13.13, 3.915)
 
-[node name="Mesh" type="MeshInstance3D" parent="ObservatoryWestLintel"]
-mesh = SubResource("Mesh_ObservatoryWestLintel")
+[node name="Mesh" type="MeshInstance3D" parent="SouthEntryLanding"]
+mesh = SubResource("Mesh_SouthEntryLanding")
 
-[node name="Col" type="CollisionShape3D" parent="ObservatoryWestLintel"]
-shape = SubResource("Shape_ObservatoryWestLintel")
-
-[node name="ForestPortalSill" type="StaticBody3D" parent="."]
-position = Vector3(-4.25, 19.93, -0.12)
-
-[node name="Mesh" type="MeshInstance3D" parent="ForestPortalSill"]
-mesh = SubResource("Mesh_ForestPortalSill")
-
-[node name="Col" type="CollisionShape3D" parent="ForestPortalSill"]
-shape = SubResource("Shape_ForestPortalSill")
+[node name="Col" type="CollisionShape3D" parent="SouthEntryLanding"]
+shape = SubResource("Shape_SouthEntryLanding")
 
 [node name="ObservatoryEntryLanding" type="StaticBody3D" parent="."]
 position = Vector3(-3.1475, 20.0, 0.6225)

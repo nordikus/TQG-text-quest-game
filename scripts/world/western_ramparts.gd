@@ -6,79 +6,85 @@ extends Node3D
 @export var roof_material: Material
 
 const WALK_Y := 14.80
-const TOP_Y := 22.97
 const WEST_FACE := -34.40
 const EAST_FACE := -31.80
 const WALL_X := -32.65
 const SOUTH := 8.5
 const NORTH := -77.6
-const BREACH_Z := -20.12
-const WALK_START := -74.25
-const WALK_END := 5.15
-const UPPER_Y := 20.15
+const APPROACH_X := -23.0
+const EXTERIOR_FACE := 10.25
+const COURTYARD_FACE := 6.75
+const TOWER_FACE := -15.2
+const BREACH_FLOOR := 11.83
+const LANDING_FLOOR := 13.28
+const PASSAGE_HEIGHT := 2.84
+const PASSAGE_HALF_WIDTH := 1.38
 
 func _ready() -> void:
 	var wall := _body("WallWest")
 	_span(wall, WEST_FACE, EAST_FACE, 0.0, WALK_Y, NORTH, SOUTH, stone)
-	_outside_gallery(wall)
-	_span(wall, WEST_FACE, -33.39, UPPER_Y, TOP_Y, WALK_START, BREACH_Z - 1.38, stone)
-	_span(wall, WEST_FACE, -33.39, UPPER_Y, TOP_Y, BREACH_Z + 1.38, WALK_END, stone)
-	_span(wall, WEST_FACE, EAST_FACE, 19.70, UPPER_Y, WALK_START, WALK_END, stone)
-
-	_inside_gallery(wall)
-	_crest(wall, WALK_START, BREACH_Z - 1.56)
-	_crest(wall, BREACH_Z + 1.56, WALK_END)
-	_upper_crossing()
+	_front_wall()
+	_approach_gallery()
 	_corner("CornerTowerSW", SOUTH, true)
 	_corner("CornerTowerNW", NORTH, false)
 	_stairs()
 
-func _outside_gallery(wall: StaticBody3D) -> void:
-	const OUTER_INNER_FACE := -34.00
-	_span(wall, WEST_FACE, OUTER_INNER_FACE, WALK_Y, 16.00, WALK_START, WALK_END, stone)
-	_span(wall, WEST_FACE, OUTER_INNER_FACE, 17.64, UPPER_Y, WALK_START, WALK_END, stone)
-	for i in 14:
-		var a := lerpf(WALK_START, WALK_END, float(i) / 14)
-		var b := lerpf(WALK_START, WALK_END, float(i + 1) / 14)
-		_span(wall, WEST_FACE, OUTER_INNER_FACE, 16.00, 17.64, a, b - 0.43, stone)
+func _front_wall() -> void:
+	var front := _body("WallFrontLeft")
+	var left := APPROACH_X - PASSAGE_HALF_WIDTH
+	var right := APPROACH_X + PASSAGE_HALF_WIDTH
+	var lintel := BREACH_FLOOR + PASSAGE_HEIGHT
+	_span(front, -33.0, left, 0.0, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE, stone)
+	_span(front, right, -5.0, 0.0, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE, stone)
+	_span(front, left, right, 0.0, BREACH_FLOOR, COURTYARD_FACE, EXTERIOR_FACE, stone)
+	_span(front, left, right, lintel, WALK_Y, COURTYARD_FACE, EXTERIOR_FACE, stone)
 
-func _inside_gallery(wall: StaticBody3D) -> void:
-	const STAIR_OPENING := 2.80
-	const KEEP_EDGE := -45.5
-	const INNER_FACE := -32.43
-	_span(wall, INNER_FACE, EAST_FACE, WALK_Y, 19.70, WALK_START, KEEP_EDGE, stone)
-	_span(wall, INNER_FACE, EAST_FACE, WALK_Y, 15.98, KEEP_EDGE, STAIR_OPENING, stone)
-	_span(wall, INNER_FACE, EAST_FACE, 18.25, 19.70, KEEP_EDGE, WALK_END, stone)
-	for i in 9:
-		var a := lerpf(KEEP_EDGE, STAIR_OPENING, float(i) / 9)
-		var b := lerpf(KEEP_EDGE, STAIR_OPENING, float(i + 1) / 9)
-		_span(wall, INNER_FACE, EAST_FACE, 15.98, 18.25, a, b - 1.47, stone)
-	for z in [-70.0, -62.0, -53.5, -44.0, -35.4, -26.5, -17.4, -7.4, 1.9]:
-		var light := OmniLight3D.new()
-		light.position = Vector3(-33.31, 17.74, z)
-		light.light_color = Color(0.91, 0.75, 0.55)
-		light.light_energy = 0.62
-		light.omni_range = 6.2
-		wall.add_child(light)
+func _approach_gallery() -> void:
+	var gallery := _body("ObservatoryCrossing")
+	var left := APPROACH_X - PASSAGE_HALF_WIDTH
+	var right := APPROACH_X + PASSAGE_HALF_WIDTH
+	_grade_piece(gallery, left, right, -0.38, 0.0, TOWER_FACE, COURTYARD_FACE, stone)
+	_grade_piece(gallery, left - 0.43, right + 0.43, PASSAGE_HEIGHT, PASSAGE_HEIGHT + 0.28,
+		TOWER_FACE, COURTYARD_FACE, trim)
+	for edge: float in [left - 0.35, right]:
+		_grade_piece(gallery, edge, edge + 0.35, -0.28, 1.12, TOWER_FACE, COURTYARD_FACE, stone)
+		_grade_piece(gallery, edge, edge + 0.35, 2.41, PASSAGE_HEIGHT, TOWER_FACE, COURTYARD_FACE, stone)
+		for i in 6:
+			var near := lerpf(TOWER_FACE, COURTYARD_FACE, float(i) / 6)
+			var far := lerpf(TOWER_FACE, COURTYARD_FACE, float(i + 1) / 6)
+			_grade_piece(gallery, edge, edge + 0.35, 1.12, 2.41, near, far - 0.43, stone)
+		_grade_piece(gallery, edge, edge + 0.35, 1.12, 2.41,
+			COURTYARD_FACE - 0.43, COURTYARD_FACE, stone)
+	for z in [-7.5, 0.5]:
+		var crown := _crossing_height(z) - 0.38
+		_span(gallery, APPROACH_X - 0.66, APPROACH_X + 0.66, 0.0, crown - 0.36, z - 0.60, z + 0.60, stone)
+		_span(gallery, APPROACH_X - 0.85, APPROACH_X + 0.85, 0.0, 0.38, z - 0.75, z + 0.75, trim)
+		_span(gallery, APPROACH_X - 1.24, APPROACH_X + 1.24, crown - 0.36, crown, z - 0.78, z + 0.78, trim)
 
-func _crest(wall: StaticBody3D, start: float, finish: float) -> void:
-	_span(wall, WEST_FACE - 0.08, -33.31, TOP_Y - 0.15, TOP_Y, start, finish, trim)
-	var count := roundi((finish - start) / 2.7)
-	for i in count:
-		var z := lerpf(start, finish, (i + 0.5) / count)
-		_span(wall, WEST_FACE, -33.52, TOP_Y, TOP_Y + 0.74, z - 0.80, z + 0.80, stone)
-		_span(wall, WEST_FACE - 0.06, -33.45, TOP_Y + 0.74, TOP_Y + 0.86, z - 0.86, z + 0.86, trim)
+func _crossing_height(z: float) -> float:
+	return lerpf(LANDING_FLOOR, BREACH_FLOOR, inverse_lerp(TOWER_FACE, COURTYARD_FACE, z))
 
-func _upper_crossing() -> void:
-	var crossing := _body("ObservatoryCrossing")
-	const TOWER_EDGE := -27.8
-	_span(crossing, EAST_FACE, TOWER_EDGE, UPPER_Y - 0.43, UPPER_Y, BREACH_Z - 1.38, BREACH_Z + 1.38, stone)
-	for side in [-1, 1]:
-		var z: float = BREACH_Z + 1.50 * side
-		_span(crossing, -33.39, TOWER_EDGE, UPPER_Y, 23.0, z - 0.18, z + 0.18, stone)
-		_span(crossing, EAST_FACE, EAST_FACE + 0.9, 18.58, UPPER_Y - 0.43, z - 0.24, z + 0.24, stone)
-	# The gallery begins behind the outer face and occupies the space above the guard walk.
-	_span(crossing, -33.39, TOWER_EDGE, 23.0, 23.29, BREACH_Z - 1.68, BREACH_Z + 1.68, trim)
+func _grade_piece(body: StaticBody3D, left: float, right: float, low: float, high: float,
+	start: float, finish: float, material: Material) -> void:
+	var near_y := _crossing_height(start)
+	var far_y := _crossing_height(finish)
+	var points := PackedVector3Array([
+		Vector3(left, near_y + low, start), Vector3(right, near_y + low, start),
+		Vector3(right, far_y + low, finish), Vector3(left, far_y + low, finish),
+		Vector3(left, near_y + high, start), Vector3(right, near_y + high, start),
+		Vector3(right, far_y + high, finish), Vector3(left, far_y + high, finish),
+	])
+	var shape := ConvexPolygonShape3D.new()
+	shape.points = points
+	_collision(body, shape, Vector3.ZERO)
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.set_smooth_group(-1)
+	for indices in [[4, 7, 6, 5], [0, 1, 2, 3], [0, 4, 5, 1], [3, 2, 6, 7], [0, 3, 7, 4], [1, 5, 6, 2]]:
+		_face(surface, [points[indices[0]], points[indices[1]], points[indices[2]], points[indices[3]]])
+	surface.generate_normals()
+	surface.set_material(material)
+	_visual(body, surface.commit(), Vector3.ZERO)
 
 func _corner(tower_name: String, z: float, is_south: bool) -> void:
 	var tower := _body(tower_name)
@@ -96,20 +102,22 @@ func _corner(tower_name: String, z: float, is_south: bool) -> void:
 			stone, Vector3(0, -angle, 0))
 	# The rear curtain meets its chamber at grade. The lower front curtain uses a ramp.
 	_span(tower, -29.28, -27.78, WALK_Y - 0.3, WALK_Y, z - 1.25, z + 1.25, trim)
-	if is_south:
-		_ramp(tower, -27.78, -24.35, WALK_Y, 13.80, z - 1.25, z + 1.25)
 
 func _stairs() -> void:
 	var stairs := _body("CourtyardWallStair")
 	const LOW_X := -6.70
 	const HIGH_X := -30.26
 	const MIN_Z := 2.86
-	const MAX_Z := 6.75
-	_ramp(stairs, HIGH_X, LOW_X, WALK_Y, 0.0, MIN_Z, MAX_Z, false)
+	const MAX_Z := 5.70
+	stairs.position = Vector3(-34.66, 0, -26.36)
+	stairs.rotation.y = PI * 0.5
+	_ramp_collision(stairs, HIGH_X, LOW_X, WALK_Y, 0.0, MIN_Z, MAX_Z)
 	_span(stairs, EAST_FACE, HIGH_X, WALK_Y - 0.34, WALK_Y, MIN_Z, MAX_Z, trim)
 	var incline := atan2(WALK_Y, LOW_X - HIGH_X)
-	var handrail := Vector3((LOW_X + HIGH_X) * 0.5, WALK_Y * 0.5 + 0.47, MIN_Z + 0.15)
-	_box(stairs, Vector3(Vector2(LOW_X - HIGH_X, WALK_Y).length(), 0.94, 0.30), handrail,
+	const RAIL_END := HIGH_X + 1.55
+	var rail_height := WALK_Y * inverse_lerp(LOW_X, HIGH_X, RAIL_END)
+	var handrail := Vector3((LOW_X + RAIL_END) * 0.5, rail_height * 0.5 + 0.47, MIN_Z + 0.15)
+	_box(stairs, Vector3(Vector2(LOW_X - RAIL_END, rail_height).length(), 0.94, 0.30), handrail,
 		stone, Vector3(0, 0, -incline))
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -131,8 +139,8 @@ func _stairs() -> void:
 	surface.set_material(stone)
 	_visual(stairs, surface.commit(), Vector3.ZERO)
 
-func _ramp(body: StaticBody3D, west: float, east: float, west_y: float, east_y: float,
-		start: float, finish: float, visible_ramp := true) -> void:
+func _ramp_collision(body: StaticBody3D, west: float, east: float, west_y: float, east_y: float,
+		start: float, finish: float) -> void:
 	var floor_y := maxf(0.0, minf(west_y, east_y) - 0.33)
 	var points := PackedVector3Array([
 		Vector3(west, floor_y, start), Vector3(east, floor_y, start),
@@ -143,14 +151,6 @@ func _ramp(body: StaticBody3D, west: float, east: float, west_y: float, east_y: 
 	var shape := ConvexPolygonShape3D.new()
 	shape.points = points
 	_collision(body, shape, Vector3.ZERO)
-	if visible_ramp:
-		var surface := SurfaceTool.new()
-		surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-		for indices in [[4, 7, 6, 5], [0, 4, 5, 1], [3, 2, 6, 7]]:
-			_face(surface, [points[indices[0]], points[indices[1]], points[indices[2]], points[indices[3]]])
-		surface.generate_normals()
-		surface.set_material(trim)
-		_visual(body, surface.commit(), Vector3.ZERO)
 
 func _face(surface: SurfaceTool, corners: Array) -> void:
 	for index in [0, 2, 1, 0, 3, 2]:

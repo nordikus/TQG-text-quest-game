@@ -431,21 +431,15 @@ func _build_spiral_walkway(g: Geo, spores: Geo) -> void:
 
 
 const BOUGH_TERRACE := -7.55
-const BOUGH_TURN := -19.6
-const BOUGH_END := -49.0
-const WEST_FORK := Vector3(-21.85, 17.80, -9.80)
-const OUTLOOK := Vector3(-16.38, 19.86, -50.26)
+const BOUGH_END := -19.77
+const BOUGH_X := -2.0
 
 func _bough_spine_z(z: float) -> Vector3:
 	if z >= BOUGH_TERRACE:
-		var terrace := exp(-pow((z + 5.2) / 2.2, 2.0))
-		return Vector3(lerpf(0.13, -0.55, terrace),
-			17.0 - 1.62 * smoothstep(-5.25, -3.02, z), z)
-	if z >= BOUGH_TURN:
-		var t := inverse_lerp(BOUGH_TERRACE, BOUGH_TURN, z)
-		return Vector3(-0.10, 17.0, BOUGH_TERRACE).bezier_interpolate(
-			Vector3(-7.9, 17.18, -8.02), WEST_FORK - Vector3(0.89, 0.34, -6.6), WEST_FORK, t)
-	return WEST_FORK.lerp(OUTLOOK, inverse_lerp(BOUGH_TURN, BOUGH_END, z))
+		var x := lerpf(BOUGH_X, -0.44, smoothstep(BOUGH_TERRACE, -3.02, z))
+		return Vector3(x, 17.0 - 1.62 * smoothstep(-5.25, -3.02, z), z)
+	var descent := smoothstep(BOUGH_TERRACE, -17.85, z)
+	return Vector3(BOUGH_X, lerpf(17.00, 11.62, descent), z)
 
 
 func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void:
@@ -490,15 +484,14 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		centers.append(c - up * 0.45)
 
 		var terrace_w := exp(-pow((z - (-5.35)) / 2.45, 2.0))
-		var fork_flare := 0.97 * exp(-pow((z - BOUGH_TURN) / 2.55, 2.0))
 		var trunk_flare := exp(-pow((z - (-1.2)) / 2.8, 2.0))
 		var taper := smoothstep(BOUGH_END, -8.0, z)
 		var knots := (0.16 * sin(z * 0.42) + 0.12 * cos(z * 0.89)) * (1.0 - terrace_w)
 		var branch_width := 1.13 + 0.63 * taper + knots
-		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare + fork_flare
+		var half_width := lerpf(branch_width, 3.15, terrace_w) + 0.45 * trunk_flare
 		var belly_depth := lerpf(0.78, 1.31, taper) + 0.65 * terrace_w + 1.45 * trunk_flare
 		var width_meander := 0.08 * sin(z * 0.28) * (1.0 - terrace_w * 0.7)
-		var tip := 1.0 - smoothstep(BOUGH_END, -45.2, z)
+		var tip := 1.0 - smoothstep(BOUGH_END, -17.5, z)
 
 		for j in m_b:
 			var uv := prof_b[j]
@@ -554,32 +547,16 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 
 	_connect_tube_grid(g, start, n_stations, m_b, centers, Vector3(0.0, -0.3, 1.0), Vector3(1.0, -0.2, 0.0))
 
-	# Two massive parabolic arch-boughs growing out of the lower North trunk (y = 9.2..12.8)
-	# and sweeping smoothly into the underside of the Bough Bridge (z = -12.5 and z = -21.5)
-	var arch_buttress_1 := _bezier(
-		Vector3(0.0, 9.2, -1.2),
-		Vector3(-0.6, 12.8, -4.5),
-		Vector3(-3.8, 15.6, -6.8),
-		_bough_spine_z(-13.5) - Vector3.UP * 0.95,
-		16
-	)
-	var arch_buttress_2 := _bezier(
-		Vector3(-0.2, 11.5, -1.5),
-		Vector3(-3.1, 13.6, -5.9),
-		Vector3(-11.5, 14.9, -7.3),
-		_bough_spine_z(-21.5) - Vector3.UP * 1.35,
-		18
-	)
-	_tube(g, arch_buttress_1, 1.45, 0.72, 11, 0.25, 0.16)
-	_tube(g, arch_buttress_2, 1.15, 0.58, 10, 0.28, 0.16)
-
-	var trailing_fork := _bezier(_bough_spine_z(-43.0) - Vector3.UP,
-		Vector3(-17.7, 18.25, -49.1), Vector3(-15.7, 17.7, -50.5),
-		Vector3(-14.04, 17.1, -51.00), 12)
-	_tube(g, trailing_fork, 0.62, 0.17, 9, 0.30, 0.16)
-	_build_breach_shoot(g, spores)
-
-	for z_sp in [-6.8, -12.0, -18.5, -25.0, -31.5, -38.0, -43.5, -47.5]:
+	# Forks below the bridge carry the weight back into the main trunk.
+	var near_support := _bezier(
+		Vector3(-0.7, 11.0, -0.7), Vector3(-1.2, 12.2, -4.6), Vector3(-1.7, 12.6, -8.9),
+		_bough_spine_z(-12.8) - Vector3.UP * 1.16, 16)
+	_tube(g, near_support, 1.44, 0.68, 11, 0.25, 0.16)
+	var far_support := _bezier(
+		near_support[8], Vector3(-2.2, 11.8, -9.3), Vector3(-1.9, 10.5, -14.6),
+		_bough_spine_z(-18.0) - Vector3.UP * 0.74, 18)
+	_tube(g, far_support, 0.94, 0.47, 10, 0.28, 0.16)
+	for z_sp in [-6.8, -9.2, -12.6, -16.05, -18.75]:
 		var ring := roundi(inverse_lerp(z_start, z_end, z_sp) * (n_stations - 1))
 		var offset := start + ring * m_b
 		_add_spore_cluster(spores, g.v[offset + 4], Vector3.UP)
@@ -596,11 +573,9 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 
 	# Natural forked lateral branches growing outward and upward from the giant bough flanks
 	var branch_specs := [
-		[-15.5, -1.0, 5.6, 3.4, -3.2, 0.53],
-		[-20.5, -1.0, 4.6, 2.6, -3.9, 0.43],
-		[-26.0, -1.0, 5.1, 2.4, 0.8, 0.33],
-		[-33.8, -1.0, 3.8, 3.7, -2.8, 0.40],
-		[-41.0, -1.0, 3.3, 2.4, -1.8, 0.33],
+		[-8.8, -1.0, 4.35, 2.1, 1.3, 0.44],
+		[-11.2, 1.0, 3.45, 0.8, 1.1, 0.33],
+		[-15.0, -1.0, 2.8, -1.0, 0.6, 0.37],
 	]
 	for bs in branch_specs:
 		var bz: float = bs[0]
@@ -629,28 +604,6 @@ func _build_terrace_and_bridge(g: Geo, spores: Geo, arch_foliage: Array) -> void
 		arch_foliage.append([p3 + Vector3(0.0, 0.4, 0.0), crown])
 		arch_foliage.append([p3 + side * 1.1 - Vector3.UP * 0.2 + forward * 0.8, crown * 0.69])
 		arch_foliage.append([f3 + Vector3(0.0, 0.35, 0.0), crown * 0.74])
-
-func _build_breach_shoot(g: Geo, spores: Geo) -> void:
-	var start := g.v.size()
-	var profile := PackedVector2Array([
-		Vector2(-1, 0), Vector2(-0.72, 0.03), Vector2(0, 0.03), Vector2(0.72, 0.03),
-		Vector2(1, 0), Vector2(1.08, -0.27), Vector2(0.71, -0.56), Vector2(0, -0.78),
-		Vector2(-0.71, -0.56), Vector2(-1.08, -0.27),
-	])
-	var centers: Array = []
-	for i in 13:
-		var t := i / 12.0
-		var center := Vector3(-17.0, 19.98, -49.43).lerp(Vector3(-13.385, 20.12, -50.12), t)
-		var half_width := lerpf(1.42, 1.16, t) + 0.075 * sin(t * TAU)
-		centers.append(center - Vector3.UP * 0.24)
-		for j in profile.size():
-			var offset := profile[j]
-			g.v.append(center + Vector3(0, offset.y, offset.x * half_width))
-			g.c.append(BARK_WARM.lerp(MOSS, 0.57) if j in [1, 2, 3] else BARK_WARM)
-	_connect_tube_grid(g, start, 13, profile.size(), centers, Vector3.LEFT, Vector3.RIGHT)
-	_add_spore_cluster(spores, g.v[start + 7 * profile.size()], Vector3.UP, 2)
-	_add_spore_cluster(spores, g.v[start + 7 * profile.size() + 4], Vector3.UP, 2)
-
 
 func _build_canopy(leaves: Geo, tips: Array, arch_foliage: Array) -> void:
 	var sphere := SphereMesh.new()
