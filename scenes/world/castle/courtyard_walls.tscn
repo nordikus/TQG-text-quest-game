@@ -146,17 +146,6 @@ size = Vector3(1.5, 9.0, 1.8)
 [sub_resource type="BoxShape3D" id="Shape_ButtressE_4"]
 size = Vector3(1.5, 9.0, 1.8)
 
-[sub_resource type="CylinderMesh" id="Mesh_GateTower"]
-material = SubResource("Mat_Stone")
-top_radius = 3.4
-bottom_radius = 3.8
-height = 14.72
-radial_segments = 16
-
-[sub_resource type="CylinderShape3D" id="Shape_GateTower"]
-radius = 3.8
-height = 14.72
-
 [sub_resource type="BoxMesh" id="Mesh_GateLiftCeiling"]
 material = SubResource("Mat_Stone")
 size = Vector3(10, 1.35, 0.6)
@@ -351,23 +340,21 @@ mesh = SubResource("Mesh_ButtressE_4")
 [node name="Col" type="CollisionShape3D" parent="ButtressE_4"]
 shape = SubResource("Shape_ButtressE_4")
 
-[node name="GateTowerLeft" type="StaticBody3D" parent="."]
-position = Vector3(-6.5, 7.36, 8.5)
+[node name="GateButtressWest" type="CSGPolygon3D" parent="."]
+position = Vector3(-4.41, 0, 0)
+rotation = Vector3(0, -1.57079633, 0)
+polygon = PackedVector2Array(10.17, 0, 11.7, 0, 11.7, 0.61, 11.45, 0.83, 11.45, 4.38, 11.16, 4.74, 11.16, 7.63, 10.42, 9.65, 10.17, 9.65)
+depth = 1.18
+material = SubResource("Mat_Stone")
+use_collision = true
 
-[node name="Mesh" type="MeshInstance3D" parent="GateTowerLeft"]
-mesh = SubResource("Mesh_GateTower")
-
-[node name="Col" type="CollisionShape3D" parent="GateTowerLeft"]
-shape = SubResource("Shape_GateTower")
-
-[node name="GateTowerRight" type="StaticBody3D" parent="."]
-position = Vector3(6.5, 7.36, 8.5)
-
-[node name="Mesh" type="MeshInstance3D" parent="GateTowerRight"]
-mesh = SubResource("Mesh_GateTower")
-
-[node name="Col" type="CollisionShape3D" parent="GateTowerRight"]
-shape = SubResource("Shape_GateTower")
+[node name="GateButtressEast" type="CSGPolygon3D" parent="."]
+position = Vector3(3.23, 0, 0)
+rotation = Vector3(0, -1.57079633, 0)
+polygon = PackedVector2Array(10.17, 0, 11.7, 0, 11.7, 0.61, 11.45, 0.83, 11.45, 4.38, 11.16, 4.74, 11.16, 7.63, 10.42, 9.65, 10.17, 9.65)
+depth = 1.18
+material = SubResource("Mat_Stone")
+use_collision = true
 
 [node name="GateLiftCeiling" type="StaticBody3D" parent="."]
 position = Vector3(0, 14.125, 8.5)
@@ -558,31 +545,31 @@ mesh = SubResource("Guide")
 shape = SubResource("GuideShape")
 
 [node name="OuterGateArch" type="CSGPolygon3D" parent="."]
-position = Vector3(0, 0, 10.48)
+position = Vector3(0, 0, 10.25)
 polygon = PackedVector2Array(-5, 14.8, 5, 14.8, 5, 0, 2.56, 0, 2.56, 4.03, 2.5108, 4.5411, 2.3651, 5.0326, 2.1286, 5.4856, 1.8102, 5.8826, 1.4223, 6.2085, 0.9797, 6.4506, 0.4994, 6.5997, 0, 6.65, -0.4994, 6.5997, -0.9797, 6.4506, -1.4223, 6.2085, -1.8102, 5.8826, -2.1286, 5.4856, -2.3651, 5.0326, -2.5108, 4.5411, -2.56, 4.03, -2.56, 0, -5, 0)
-depth = 1.68
+depth = 1.45
 material = SubResource("Mat_Stone")
 use_collision = true
 
 [node name="InnerGateArch" type="CSGPolygon3D" parent="."]
 position = Vector3(0, 0, 8.2)
 polygon = PackedVector2Array(-5, 14.8, 5, 14.8, 5, 0, 2.56, 0, 2.56, 4.03, 2.5108, 4.5411, 2.3651, 5.0326, 2.1286, 5.4856, 1.8102, 5.8826, 1.4223, 6.2085, 0.9797, 6.4506, 0.4994, 6.5997, 0, 6.65, -0.4994, 6.5997, -0.9797, 6.4506, -1.4223, 6.2085, -1.8102, 5.8826, -2.1286, 5.4856, -2.3651, 5.0326, -2.5108, 4.5411, -2.56, 4.03, -2.56, 0, -5, 0)
-depth = 1.68
+depth = 1.45
 material = SubResource("Mat_Stone")
 use_collision = true
 
 [node name="GateArchTrim" type="CSGPolygon3D" parent="."]
-position = Vector3(0, 0, 10.78)
+position = Vector3(0, 0, 10.55)
 polygon = PackedVector2Array(3.06, 0, 3.06, 4.03, 3.0012, 4.6387, 2.8271, 5.224, 2.5443, 5.7634, 2.1637, 6.2362, 1.7, 6.6242, 1.171, 6.9125, 0.597, 7.0901, 0, 7.15, -0.597, 7.0901, -1.171, 6.9125, -1.7, 6.6242, -2.1637, 6.2362, -2.5443, 5.7634, -2.8271, 5.224, -3.0012, 4.6387, -3.06, 4.03, -3.06, 0, -2.56, 0, -2.56, 4.03, -2.5108, 4.5411, -2.3651, 5.0326, -2.1286, 5.4856, -1.8102, 5.8826, -1.4223, 6.2085, -0.9797, 6.4506, -0.4994, 6.5997, 0, 6.65, 0.4994, 6.5997, 0.9797, 6.4506, 1.4223, 6.2085, 1.8102, 5.8826, 2.1286, 5.4856, 2.3651, 5.0326, 2.5108, 4.5411, 2.56, 4.03, 2.56, 0)
-depth = 0.3
+depth = 0.34
 material = SubResource("Mat_GateArchTrim")
 use_collision = true
 
 [node name="GateArchTrimInside" type="CSGPolygon3D" parent="."]
-position = Vector3(0, 0, 6.22)
+position = Vector3(0, 0, 6.45)
 rotation = Vector3(0, 3.14159265, 0)
 polygon = PackedVector2Array(3.06, 0, 3.06, 4.03, 3.0012, 4.6387, 2.8271, 5.224, 2.5443, 5.7634, 2.1637, 6.2362, 1.7, 6.6242, 1.171, 6.9125, 0.597, 7.0901, 0, 7.15, -0.597, 7.0901, -1.171, 6.9125, -1.7, 6.6242, -2.1637, 6.2362, -2.5443, 5.7634, -2.8271, 5.224, -3.0012, 4.6387, -3.06, 4.03, -3.06, 0, -2.56, 0, -2.56, 4.03, -2.5108, 4.5411, -2.3651, 5.0326, -2.1286, 5.4856, -1.8102, 5.8826, -1.4223, 6.2085, -0.9797, 6.4506, -0.4994, 6.5997, 0, 6.65, 0.4994, 6.5997, 0.9797, 6.4506, 1.4223, 6.2085, 1.8102, 5.8826, 2.1286, 5.4856, 2.3651, 5.0326, 2.5108, 4.5411, 2.56, 4.03, 2.56, 0)
-depth = 0.3
+depth = 0.34
 material = SubResource("Mat_GateArchTrim")
 use_collision = true
 
@@ -591,8 +578,7 @@ position = Vector3(0, 14.8, 8.5)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
 length = 10.0
-width = 3.76
-outer_edge = -1.46
+outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
 
@@ -651,19 +637,19 @@ stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
 
 [node name="FrontWestParapet" type="StaticBody3D" parent="."]
-position = Vector3(-17.0, 14.8, 8.5)
+position = Vector3(-16.625, 14.8, 8.5)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
-length = 22.5
+length = 23.25
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")
 
 [node name="FrontEastParapet" type="StaticBody3D" parent="."]
-position = Vector3(20.5, 14.8, 8.5)
+position = Vector3(20.175, 14.8, 8.5)
 rotation = Vector3(0, 1.570796, 0)
 script = ExtResource("13_trim")
-length = 29.7
+length = 30.35
 outer_edge = -1.33
 stone = SubResource("Mat_Stone")
 cap_stone = SubResource("Mat_StoneDark")

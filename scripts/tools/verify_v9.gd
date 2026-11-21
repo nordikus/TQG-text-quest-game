@@ -201,7 +201,11 @@ func _run_verification() -> void:
 
 	if not _verify_east_wing(space_state):
 		all_passed = false
+	if not _verify_cellar_landing(space_state):
+		all_passed = false
 	if not _verify_throne_cache(space_state):
+		all_passed = false
+	if not _verify_gate_wall_walk(space_state):
 		all_passed = false
 
 	# The keep is approachable from outside, but the rear perimeter is closed.
@@ -353,25 +357,42 @@ func _verify_bridge_portal(space: PhysicsDirectSpaceState3D) -> bool:
 	return path.is_empty()
 
 func _verify_throne_cache(space: PhysicsDirectSpaceState3D) -> bool:
-	var landings := {
-		"LoggiaSill": Vector3(-11.68, 6.35, -144.51),
-		"Floor2Gallery": Vector3(-11.69, 6.35, -140.42),
-	}
-	for platform in landings:
-		var feet: Vector3 = landings[platform]
-		var surface := space.intersect_ray(PhysicsRayQueryParameters3D.create(
-			feet + Vector3.UP * 0.35, feet - Vector3.UP * 0.35))
-		if surface.is_empty() or surface.collider.name != platform or absf(surface.position.y - feet.y) > 0.03:
-			push_error("FAIL: The throne cache jump route is missing its landing on %s." % platform)
-			return false
+	var sill := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-13.0, 7.46, -137.42), Vector3(-13.0, 6.39, -137.42)))
+	var window := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-14.5, 8.20, -137.42), Vector3(-12.0, 8.20, -137.42)))
+	var landing := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-11.7, 6.68, -137.42), Vector3(-11.7, 6.1, -137.42)))
+	if sill.is_empty() or absf(sill.position.y - 7.08) > 0.03 or not window.is_empty() \
+			or landing.is_empty() or landing.collider.name != "EntranceCornice":
+		push_error("FAIL: The throne cache needs a jump over the window sill and a solid landing.")
+		return false
 
 	var draft := Vector3(-6.65, 6.38, -136.86)
 	var shelf_view := space.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-7.93, 7.95, -138.85), draft))
+		Vector3(-7.64, 7.95, -137.56), draft))
 	if shelf_view.is_empty() or shelf_view.collider.name != "RoyalOrderDraft":
 		push_error("FAIL: The royal draft must be reachable from the gallery above the entrance.")
 		return false
-	print("PASS: The entrance cornice has a solid landing, and the royal draft can be read from it.")
+	print("PASS: The window sill leads to a solid cornice and a reachable royal draft.")
+	return true
+
+func _verify_gate_wall_walk(space: PhysicsDirectSpaceState3D) -> bool:
+	for x in range(-8, 9):
+		var crest := Vector3(x, 14.8, -82.45)
+		var floor := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			crest + Vector3.UP * 0.2, crest - Vector3.UP * 0.2))
+		if floor.is_empty() or absf(floor.position.y - crest.y) > 0.03:
+			push_error("FAIL: The wall walk above the gate must stay level across its full width.")
+			return false
+
+	for x in [-5.15, -4.85, 4.85, 5.15]:
+		var facade := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(x, 12.0, -77.5), Vector3(x, 12.0, -82.0)))
+		if facade.is_empty() or absf(facade.position.z + 79.75) > 0.03:
+			push_error("FAIL: The gate masonry must meet both sides of the front curtain in one plane.")
+			return false
+	print("PASS: The gatehouse meets the curtain and has a continuous wall walk.")
 	return true
 
 func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
@@ -384,6 +405,13 @@ func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
 	if not dining_open or doorway_edge.is_empty():
 		push_error("FAIL: The narrow dining passage needs a clear centre and a solid jamb.")
 		return false
+
+	for z in [-152.26, -149.74]:
+		var arch := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(11.7, 8.35, z), Vector3(15.0, 8.35, z)))
+		if not arch.is_empty():
+			push_error("FAIL: The arches above dining must be clear of the steward partition.")
+			return false
 
 	var kitchen_door := space.intersect_ray(PhysicsRayQueryParameters3D.create(
 		Vector3(18.07, 1.65, -153.6), Vector3(18.07, 1.65, -155.2)))
@@ -421,4 +449,19 @@ func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
 			push_error("FAIL: The cellar stair must stay open through the floor and foundation.")
 			return false
 	print("PASS: The dining entry, service hatch, kitchen stairs and cellar stairs are clear.")
+	return true
+
+func _verify_cellar_landing(space: PhysicsDirectSpaceState3D) -> bool:
+	var landing := Vector3(16.3, -0.5, -164.4)
+	var walls := {
+		Vector3.LEFT: "StairWestWall",
+		Vector3.RIGHT: "CellarDoorHead",
+		Vector3.FORWARD: "StairEndWall",
+	}
+	for direction: Vector3 in walls:
+		var lining := space.intersect_ray(PhysicsRayQueryParameters3D.create(landing, landing + direction * 2.5))
+		if lining.is_empty() or lining.collider.name != walls[direction]:
+			push_error("FAIL: Stone must cover the foundation at the cellar stair landing.")
+			return false
+	print("PASS: The cellar landing is enclosed by stone above the doorway.")
 	return true

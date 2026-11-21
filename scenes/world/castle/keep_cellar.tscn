@@ -23,17 +23,17 @@ size = Vector3(10.05, 2.55, 0.3)
 
 [sub_resource type="BoxMesh" id="Mesh_StairWestWall"]
 material = SubResource("Stone")
-size = Vector3(0.32, 3.8, 8.7)
+size = Vector3(0.36, 4.68, 8.7)
 
 [sub_resource type="BoxShape3D" id="Shape_StairWestWall"]
-size = Vector3(0.32, 3.8, 8.7)
+size = Vector3(0.36, 4.68, 8.7)
 
 [sub_resource type="BoxMesh" id="Mesh_StairEastWall"]
 material = SubResource("Stone")
-size = Vector3(0.27, 3.8, 6.15)
+size = Vector3(0.34, 2.42, 6.15)
 
 [sub_resource type="BoxShape3D" id="Shape_StairEastWall"]
-size = Vector3(0.27, 3.8, 6.15)
+size = Vector3(0.34, 2.42, 6.15)
 
 [sub_resource type="BoxMesh" id="Mesh_CellarEndWall"]
 material = SubResource("Stone")
@@ -56,33 +56,23 @@ size = Vector3(7.25, 0.18, 6.3)
 [sub_resource type="BoxShape3D" id="Shape_CellarCeiling"]
 size = Vector3(7.25, 0.18, 6.3)
 
-[sub_resource type="BoxMesh" id="Mesh_LandingHead"]
+[sub_resource type="StandardMaterial3D" id="WornTreads"]
+albedo_color = Color(0.405, 0.385, 0.36, 1)
+roughness = 0.97
+
+[sub_resource type="BoxMesh" id="Mesh_CellarDoorHead"]
 material = SubResource("Stone")
-size = Vector3(2.2, 1.34, 0.32)
+size = Vector3(0.34, 2.26, 8.7)
 
-[sub_resource type="BoxShape3D" id="Shape_LandingHead"]
-size = Vector3(2.2, 1.34, 0.32)
+[sub_resource type="BoxShape3D" id="Shape_CellarDoorHead"]
+size = Vector3(0.34, 2.26, 8.7)
 
-[sub_resource type="BoxMesh" id="Mesh_StairCopingWest"]
+[sub_resource type="BoxMesh" id="Mesh_StairEndWall"]
 material = SubResource("Stone")
-size = Vector3(0.3, 0.88, 8.7)
+size = Vector3(2.12, 4.68, 0.28)
 
-[sub_resource type="BoxShape3D" id="Shape_StairCopingWest"]
-size = Vector3(0.3, 0.88, 8.7)
-
-[sub_resource type="BoxMesh" id="Mesh_StairCopingEast"]
-material = SubResource("Stone")
-size = Vector3(0.28, 0.88, 8.7)
-
-[sub_resource type="BoxShape3D" id="Shape_StairCopingEast"]
-size = Vector3(0.28, 0.88, 8.7)
-
-[sub_resource type="BoxMesh" id="Mesh_StairCopingEnd"]
-material = SubResource("Stone")
-size = Vector3(2.2, 0.88, 0.26)
-
-[sub_resource type="BoxShape3D" id="Shape_StairCopingEnd"]
-size = Vector3(2.2, 0.88, 0.26)
+[sub_resource type="BoxShape3D" id="Shape_StairEndWall"]
+size = Vector3(2.12, 4.68, 0.28)
 
 [node name="KeepCellar" type="Node3D"]
 
@@ -105,7 +95,7 @@ mesh = SubResource("Mesh_BackWall")
 shape = SubResource("Shape_BackWall")
 
 [node name="StairWestWall" type="StaticBody3D" parent="."]
-position = Vector3(15.04, -1.65, -10.35)
+position = Vector3(15.06, -1.21, -10.35)
 
 [node name="Mesh" type="MeshInstance3D" parent="StairWestWall"]
 mesh = SubResource("Mesh_StairWestWall")
@@ -114,7 +104,7 @@ mesh = SubResource("Mesh_StairWestWall")
 shape = SubResource("Shape_StairWestWall")
 
 [node name="StairEastWall" type="StaticBody3D" parent="."]
-position = Vector3(17.535, -1.65, -9.075)
+position = Vector3(17.53, -2.34, -9.075)
 
 [node name="Mesh" type="MeshInstance3D" parent="StairEastWall"]
 mesh = SubResource("Mesh_StairEastWall")
@@ -149,48 +139,30 @@ mesh = SubResource("Mesh_CellarCeiling")
 [node name="Col" type="CollisionShape3D" parent="CellarCeiling"]
 shape = SubResource("Shape_CellarCeiling")
 
-[node name="LandingHead" type="StaticBody3D" parent="."]
-position = Vector3(16.3, -0.42, -14.55)
+[node name="CellarDoorHead" type="StaticBody3D" parent="."]
+position = Vector3(17.53, 0, -10.35)
 
-[node name="Mesh" type="MeshInstance3D" parent="LandingHead"]
-mesh = SubResource("Mesh_LandingHead")
+[node name="Mesh" type="MeshInstance3D" parent="CellarDoorHead"]
+mesh = SubResource("Mesh_CellarDoorHead")
 
-[node name="Col" type="CollisionShape3D" parent="LandingHead"]
-shape = SubResource("Shape_LandingHead")
+[node name="Col" type="CollisionShape3D" parent="CellarDoorHead"]
+shape = SubResource("Shape_CellarDoorHead")
 
-[node name="StairCopingWest" type="StaticBody3D" parent="."]
-position = Vector3(15.05, 0.69, -10.35)
+[node name="StairEndWall" type="StaticBody3D" parent="."]
+position = Vector3(16.3, -1.21, -14.5)
 
-[node name="Mesh" type="MeshInstance3D" parent="StairCopingWest"]
-mesh = SubResource("Mesh_StairCopingWest")
+[node name="Mesh" type="MeshInstance3D" parent="StairEndWall"]
+mesh = SubResource("Mesh_StairEndWall")
 
-[node name="Col" type="CollisionShape3D" parent="StairCopingWest"]
-shape = SubResource("Shape_StairCopingWest")
-
-[node name="StairCopingEast" type="StaticBody3D" parent="."]
-position = Vector3(17.54, 0.69, -10.35)
-
-[node name="Mesh" type="MeshInstance3D" parent="StairCopingEast"]
-mesh = SubResource("Mesh_StairCopingEast")
-
-[node name="Col" type="CollisionShape3D" parent="StairCopingEast"]
-shape = SubResource("Shape_StairCopingEast")
-
-[node name="StairCopingEnd" type="StaticBody3D" parent="."]
-position = Vector3(16.3, 0.69, -14.57)
-
-[node name="Mesh" type="MeshInstance3D" parent="StairCopingEnd"]
-mesh = SubResource("Mesh_StairCopingEnd")
-
-[node name="Col" type="CollisionShape3D" parent="StairCopingEnd"]
-shape = SubResource("Shape_StairCopingEnd")
+[node name="Col" type="CollisionShape3D" parent="StairEndWall"]
+shape = SubResource("Shape_StairEndWall")
 
 [node name="CellarStair" type="StaticBody3D" parent="."]
 position = Vector3(16.3, -3.55, -13.2)
 rotation = Vector3(0, 3.14159265, 0)
 
 [node name="Treads" type="MeshInstance3D" parent="CellarStair"]
-material_override = SubResource("Stone")
+material_override = SubResource("WornTreads")
 mesh = ExtResource("2_steps")
 
 [node name="WalkingSurface" type="CollisionShape3D" parent="CellarStair"]
