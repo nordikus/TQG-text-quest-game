@@ -420,19 +420,21 @@ func _verify_throne_cache(space: PhysicsDirectSpaceState3D) -> bool:
 	var window := space.intersect_ray(PhysicsRayQueryParameters3D.create(
 		Vector3(-14.5, 8.20, -137.42), Vector3(-12.0, 8.20, -137.42)))
 	var landing := space.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-11.7, 6.68, -137.42), Vector3(-11.7, 6.1, -137.42)))
+		Vector3(-9.5, 6.68, -137.42), Vector3(-9.5, 6.1, -137.42)))
+	var jump_clearance := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-12.5, 7.62, -137.42), Vector3(-9.42, 7.62, -137.42)))
 	if sill.is_empty() or absf(sill.position.y - 7.08) > 0.03 or not window.is_empty() \
-			or landing.is_empty() or landing.collider.name != "EntranceCornice":
-		push_error("FAIL: The throne cache needs a jump over the window sill and a solid landing.")
+			or not jump_clearance.is_empty() or landing.is_empty() or landing.collider.name != "EntranceGallery":
+		push_error("FAIL: The throne gallery needs an unobstructed jump from the window and a solid landing.")
 		return false
 
-	var draft := Vector3(-6.65, 6.38, -136.86)
+	var draft := Vector3(6.65, 7.183, -136.7)
 	var shelf_view := space.intersect_ray(PhysicsRayQueryParameters3D.create(
-		Vector3(-7.64, 7.95, -137.56), draft))
+		Vector3(5.63, 7.95, -137.43), draft))
 	if shelf_view.is_empty() or shelf_view.collider.name != "RoyalOrderDraft":
 		push_error("FAIL: The royal draft must be reachable from the gallery above the entrance.")
 		return false
-	print("PASS: The window sill leads to a solid cornice and a reachable royal draft.")
+	print("PASS: The window sill leads to a supported gallery and a reachable royal draft.")
 	return true
 
 func _verify_gate_wall_walk(space: PhysicsDirectSpaceState3D) -> bool:

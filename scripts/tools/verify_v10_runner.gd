@@ -51,6 +51,7 @@ func _verify() -> void:
 		get_tree().quit(0 if _passed else 1)
 		return
 	_check_initial()
+	_check_starting_book_seating()
 	_check_rooms()
 	_check_watchtower_passages()
 	_check_forest_batches()
@@ -289,6 +290,13 @@ func _check_burned_placements(burned: bool) -> void:
 	var burned_floor := _world.charred_forest_zone.get_node("CharcoalAndBark") as MultiMeshInstance3D
 	_check(green_floor.is_visible_in_tree() == not burned and burned_floor.is_visible_in_tree() == burned,
 		"The forest floor swaps green undergrowth and charcoal with the fire state.")
+	for fern_name in [&"GateFernWest", &"GateFernNorth"]:
+		var green := _world.corridor_forest.get_node(NodePath(fern_name)) as MeshInstance3D
+		var scorched := _world.charred_forest_zone.get_node(NodePath(fern_name)) as MeshInstance3D
+		_check(green.is_visible_in_tree() != burned and scorched.is_visible_in_tree() == burned
+			and green.global_position.is_equal_approx(scorched.global_position)
+			and scorched.get_aabb().size.y < green.get_aabb().size.y,
+			"%s swaps its fronds for a low scorched plant on the Ash route." % fern_name)
 	var clear := true
 	var variants_match := true
 	for living: Node3D in _world.corridor_forest.get_node("HandPlanted").get_children():
@@ -310,6 +318,18 @@ func _check_burned_placements(burned: bool) -> void:
 		var ground := Vector2(rock.global_position.x, rock.global_position.z)
 		clear = clear and ForestLayout.distance_to_path(ground, ForestLayout.ASH_PATH) - rock.scale.x > ForestLayout.ASH_CORE
 	_check(clear, "Rocks and tree trunks clear the central lane of the fire route.")
+
+func _check_starting_book_seating() -> void:
+	var top := _book.get_node("TopMesh") as MeshInstance3D
+	var manuscript := _book.get_node("BookGroup") as Node3D
+	var base := INF
+	for piece: MeshInstance3D in manuscript.get_children():
+		for i in range(8):
+			base = minf(base, _book.to_local(piece.to_global(piece.get_aabb().get_endpoint(i))).y)
+	var surface := top.position.y + top.get_aabb().end.y
+	_check(manuscript.rotation.is_zero_approx() and is_zero_approx(manuscript.position.x - top.position.x)
+		and is_zero_approx(manuscript.position.z - top.position.z) and absf(base - surface) < 0.003,
+		"The starting book is level, centered and rests on the pedestal slab.")
 
 func _check_rooms() -> void:
 	var castle := _level.get_node("CastleFacade")

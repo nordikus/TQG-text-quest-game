@@ -27,6 +27,7 @@
 [ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="40_slates"]
 
 [ext_resource type="Script" path="res://scripts/world/bookcase_model.gd" id="41_bookcase"]
+[ext_resource type="Script" path="res://scripts/world/throne_entrance_gallery.gd" id="42_entrance_gallery"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_Observer"]
 radius = 0.56
@@ -902,49 +903,11 @@ mesh = SubResource("Mesh_Floor2West_South")
 [node name="Col" type="CollisionShape3D" parent="Floor2West_South"]
 shape = SubResource("Shape_Floor2West_South")
 
-[node name="EntranceCornice" type="CSGPolygon3D" parent="."]
-position = Vector3(-13, 0, 0)
-rotation = Vector3(0, -1.57079633, 0)
-polygon = PackedVector2Array(14.54, 5.78, 13.5, 5.78, 13.13, 6.04, 12.88, 6.04, 12.75, 6.16, 12.75, 6.35, 14.54, 6.35)
-depth = 26
-material = SubResource("Mat_Stone")
-use_collision = true
-
-[node name="CorniceCorbel1" type="CSGPolygon3D" parent="EntranceCornice"]
-position = Vector3(0, 0, -2.54)
-polygon = PackedVector2Array(14.54, 5.04, 14.1, 5.04, 14.1, 5.28, 13.41, 5.92, 14.54, 5.92)
-depth = 0.6
-material = SubResource("Mat_Stone")
-
-[node name="CorniceCorbel2" type="CSGPolygon3D" parent="EntranceCornice"]
-position = Vector3(0, 0, -5.84)
-polygon = PackedVector2Array(14.54, 5.04, 14.1, 5.04, 14.1, 5.28, 13.41, 5.92, 14.54, 5.92)
-depth = 0.6
-material = SubResource("Mat_Stone")
-
-[node name="CorniceCorbel3" type="CSGPolygon3D" parent="EntranceCornice"]
-position = Vector3(0, 0, -9.33)
-polygon = PackedVector2Array(14.54, 5.04, 14.1, 5.04, 14.1, 5.28, 13.41, 5.92, 14.54, 5.92)
-depth = 0.6
-material = SubResource("Mat_Stone")
-
-[node name="CorniceCorbel4" type="CSGPolygon3D" parent="EntranceCornice"]
-position = Vector3(0, 0, -16.07)
-polygon = PackedVector2Array(14.54, 5.04, 14.1, 5.04, 14.1, 5.28, 13.41, 5.92, 14.54, 5.92)
-depth = 0.6
-material = SubResource("Mat_Stone")
-
-[node name="CorniceCorbel5" type="CSGPolygon3D" parent="EntranceCornice"]
-position = Vector3(0, 0, -19.56)
-polygon = PackedVector2Array(14.54, 5.04, 14.1, 5.04, 14.1, 5.28, 13.41, 5.92, 14.54, 5.92)
-depth = 0.6
-material = SubResource("Mat_Stone")
-
-[node name="CorniceCorbel6" type="CSGPolygon3D" parent="EntranceCornice"]
-position = Vector3(0, 0, -22.86)
-polygon = PackedVector2Array(14.54, 5.04, 14.1, 5.04, 14.1, 5.28, 13.41, 5.92, 14.54, 5.92)
-depth = 0.6
-material = SubResource("Mat_Stone")
+[node name="EntranceGallery" type="StaticBody3D" parent="."]
+script = ExtResource("42_entrance_gallery")
+stone = SubResource("Mat_Stone")
+dressed_stone = SubResource("Mat_DressedStone")
+oak = SubResource("Mat_WoodDark")
 
 [node name="Floor3" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 12.2, 0.0)
@@ -1608,7 +1571,7 @@ light_energy = 1.8
 omni_range = 5.0
 
 [node name="RoyalOrderDraft" type="StaticBody3D" parent="."]
-position = Vector3(-6.65, 6.38, 14.14)
+position = Vector3(6.65, 7.183, 14.30)
 rotation = Vector3(0, 0.21, 0)
 script = ExtResource("2_pickup")
 item_id = "royal_order_draft"

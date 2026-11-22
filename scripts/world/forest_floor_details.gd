@@ -2,8 +2,7 @@
 extends Node3D
 
 const Layout := preload("res://scripts/world/forest_layout.gd")
-const FERN := Color(0.12, 0.23, 0.045)
-const GRASS := Color(0.095, 0.17, 0.034)
+const Plant := preload("res://scripts/world/forest_plant.gd")
 const LITTER := Color(0.18, 0.123, 0.045)
 const CHAR := Color(0.055, 0.042, 0.032)
 
@@ -54,8 +53,8 @@ func _ready() -> void:
 				else:
 					ferns.append(at)
 
-	var grass := _plant(false)
-	var fern := _plant(true)
+	var grass := Plant.plant_mesh(false)
+	var fern := Plant.plant_mesh(true)
 	_batch("MeadowTufts", self, grass, grasses, rng)
 	_batch("FernColonies", self, fern, ferns, rng)
 	_batch("LeafLitter", self, _debris(LITTER, false), litter, rng)
@@ -63,31 +62,8 @@ func _ready() -> void:
 	_batch("FlammableFerns", living_strip, fern, ash_ferns, rng)
 	_batch("CharcoalAndBark", burned_strip, _debris(CHAR, true), scorch, rng)
 
-func _plant(fern: bool) -> ArrayMesh:
-	var surface := _surface()
-	for i in (6 if fern else 9):
-		var angle := TAU * i * 0.382
-		var along := Vector3(sin(angle), 0, cos(angle))
-		var width := along.cross(Vector3.UP)
-		var height := (0.26 if fern else 0.22) + 0.089 * sin(i * 2.37)
-		var spread := (0.38 if fern else 0.21) + 0.09 * cos(i * 3.4)
-		var center := along * 0.065
-		var bend := along * spread * 0.53 + Vector3.UP * height
-		var tip := along * spread + Vector3.UP * (height * (0.77 if fern else 1.19))
-		var color := (FERN if fern else GRASS).lerp(Color(0.26, 0.30, 0.051), (sin(i * 3.2) + 1.0) * 0.18)
-		_leaf(surface, center, bend, tip, width * (0.042 if fern else 0.025), color)
-		if fern:
-			for j in [0.35, 0.58, 0.79]:
-				var stem := center.lerp(bend, j)
-				var reach: float = spread * (0.36 - j * 0.21)
-				for side: float in [-1.0, 1.0]:
-					var branch := stem + side * width * reach
-					_leaf(surface, stem, branch + along * 0.047, branch + along * 0.084,
-						along * 0.026, color.lightened(0.027))
-	return _finish(surface)
-
 func _debris(color: Color, burned: bool) -> ArrayMesh:
-	var surface := _surface()
+	var surface := Plant.begin_surface()
 	for i in 9:
 		var angle := i * 2.39
 		var along := Vector3(sin(angle), 0, cos(angle))
@@ -95,33 +71,9 @@ func _debris(color: Color, burned: bool) -> ArrayMesh:
 		at.y = 0.005 + (0.04 if burned and i % 3 == 2 else 0.0)
 		var tip := at + along * (0.13 if burned else 0.095) + Vector3.UP * (0.11 if burned and i % 3 == 2 else 0.017)
 		var bend := at.lerp(tip, 0.50) + Vector3.UP * 0.014
-		_leaf(surface, at, bend, tip, along.cross(Vector3.UP) * (0.041 if burned else 0.022),
+		Plant.append_leaf(surface, at, bend, tip, along.cross(Vector3.UP) * (0.041 if burned else 0.022),
 			color.lightened(0.026 + 0.026 * sin(i * 1.72)))
-	return _finish(surface)
-
-func _leaf(surface: SurfaceTool, from: Vector3, bend: Vector3, tip: Vector3, width: Vector3, color: Color) -> void:
-	_face(surface, [from, bend - width, tip], color)
-	_face(surface, [from, tip, bend + width], color.darkened(0.12))
-
-func _face(surface: SurfaceTool, points: Array, color: Color) -> void:
-	surface.set_color(color)
-	for point in points:
-		surface.add_vertex(point)
-
-func _surface() -> SurfaceTool:
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	surface.set_smooth_group(-1)
-	return surface
-
-func _finish(surface: SurfaceTool) -> ArrayMesh:
-	var material := StandardMaterial3D.new()
-	material.vertex_color_use_as_albedo = true
-	material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	material.roughness = 1.0
-	surface.set_material(material)
-	surface.generate_normals()
-	return surface.commit()
+	return Plant.finish_surface(surface)
 
 func _batch(batch_name: String, parent_node: Node3D, mesh: Mesh, points: Array[Vector3], rng: RandomNumberGenerator) -> void:
 	var batch := MultiMesh.new()

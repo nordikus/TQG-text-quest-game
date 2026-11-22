@@ -40,8 +40,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
 mesh = SubResource("BoxMesh_top")
 
 [node name="BookGroup" type="Node3D" parent="."]
-position = Vector3(0, 1.148, -0.018)
-rotation = Vector3(-0.12, 0.16, 0)
+position = Vector3(0, 1.156, 0)
 script = ExtResource("2_book")
 
 [node name="GlowLight" type="OmniLight3D" parent="."]
