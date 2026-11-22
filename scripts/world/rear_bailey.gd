@@ -13,7 +13,6 @@ const CANVAS := Color(0.55, 0.47, 0.33)
 var _materials: Dictionary[Color, StandardMaterial3D]
 
 func _ready() -> void:
-	_paving()
 	_keep_elevations()
 	_stoneyard()
 	_orchard()
@@ -22,32 +21,6 @@ func _ready() -> void:
 			Vector3(-31.9, 0.34, -84.82), Vector3(32.7, 0.34, -84.82),
 			Vector3(-6.5, 0.34, -84.72), Vector3(6.5, 0.34, -84.72)]:
 		_lantern(point)
-
-func _paving() -> void:
-	var points := PackedVector2Array([
-		Vector2(-33.7, -37.0), Vector2(-36.8, -47.0), Vector2(-36.8, -78.7),
-		Vector2(-33.2, -82.85), Vector2(33.2, -82.85), Vector2(36.8, -78.7),
-		Vector2(36.8, -46.6), Vector2(35.9, -37.2),
-	])
-	var edge := PackedVector3Array()
-	for i in points.size():
-		var incoming := (points[i] - points[maxi(0, i - 1)]).normalized()
-		var outgoing := (points[mini(i + 1, points.size() - 1)] - points[i]).normalized()
-		var tangent := (incoming + outgoing).normalized()
-		var normal := Vector2(tangent.y, -tangent.x)
-		for side: float in [-1.0, 1.0]:
-			var end := points[i] + normal * (1.46 * side)
-			edge.append(Vector3(end.x, 0.036, end.y))
-	var paving := SurfaceTool.new()
-	paving.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i in range(0, edge.size() - 2, 2):
-		for j in [i, i + 1, i + 2, i + 1, i + 3, i + 2]:
-			paving.add_vertex(edge[j])
-	paving.generate_normals()
-	var stone := ShaderMaterial.new()
-	stone.shader = preload("res://scenes/world/castle/flagstones.gdshader")
-	paving.set_material(stone)
-	_visual("PavedRing", paving.commit(), Vector3.ZERO)
 
 func _keep_elevations() -> void:
 	var dressed := STONE.lightened(0.13)

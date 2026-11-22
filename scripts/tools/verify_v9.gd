@@ -207,6 +207,9 @@ func _run_verification() -> void:
 		all_passed = false
 	if not _verify_gate_wall_walk(space_state):
 		all_passed = false
+	var courtyard_paving := clearing.get_node("CastleFacade/FrontBaileyPaving") as MeshInstance3D
+	if not _verify_courtyard_paving(courtyard_paving, space_state):
+		all_passed = false
 
 	# Test the new corner joins and the center of the rear curtain.
 	for x in [-45.1, -42.1, -32.6, -16.0, 0.0, 16.0, 32.6, 42.1, 45.1]:
@@ -453,6 +456,41 @@ func _verify_gate_wall_walk(space: PhysicsDirectSpaceState3D) -> bool:
 			push_error("FAIL: The gate masonry must meet both sides of the front curtain in one plane.")
 			return false
 	print("PASS: The gatehouse meets the curtain and has a continuous wall walk.")
+	return true
+
+func _verify_courtyard_paving(paving: MeshInstance3D, space: PhysicsDirectSpaceState3D) -> bool:
+	var faces := paving.mesh.get_faces()
+	var joins := [
+		[Vector2(-40.0, -20.65), Vector2(-37.1, -20.65), Vector2(-36.8, -24.1), Vector2(-36.8, -47.0)],
+		[Vector2(36.8, -62.0), Vector2(36.8, -55.0), Vector2(37.05, -49.2), Vector2(40.0, -49.2)],
+	]
+	for route: Array in joins:
+		for i in range(route.size() - 1):
+			var start: Vector2 = route[i]
+			var finish: Vector2 = route[i + 1]
+			var steps := ceili(start.distance_to(finish) * 4.0)
+			var side := (finish - start).normalized().orthogonal()
+			for step in range(steps + 1):
+				for offset in [-0.65, 0.0, 0.65]:
+					var point := start.lerp(finish, float(step) / steps) + side * float(offset)
+					var above := Vector3(point.x, 0.10, point.y)
+					var paved := false
+					for face in range(0, faces.size(), 3):
+						if Geometry3D.segment_intersects_triangle(above, above - Vector3.UP * 0.1,
+								faces[face], faces[face + 1], faces[face + 2]) != null:
+							paved = true
+							break
+					if not paved:
+						push_error("FAIL: The stair routes and rear passage must share continuous paving at %s." % point)
+						return false
+	var old_post := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-35.5, 2.5, -125.0), Vector3(-30.8, 2.5, -125.0)))
+	var outer_buttress := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+		Vector3(-49.0, 2.5, -125.0), Vector3(-44.0, 2.5, -125.0)))
+	if not old_post.is_empty() or outer_buttress.is_empty() or outer_buttress.collider.name != "ButtressW_2":
+		push_error("FAIL: The west buttress belongs against the outer curtain, clear of the courtyard.")
+		return false
+	print("PASS: Both stair roads join the rear paving and the west buttress stands against the curtain.")
 	return true
 
 func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:

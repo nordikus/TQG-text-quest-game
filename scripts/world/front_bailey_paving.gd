@@ -1,6 +1,7 @@
 @tool
 extends MeshInstance3D
 
+const ROAD_HEIGHT := 0.042
 const WEST_STAIR_WAY := [
 	Vector2(-2.24, -8.1), Vector2(-9.0, -8.1), Vector2(-17.6, -8.5),
 	Vector2(-25.5, -8.5), Vector2(-28.4, -10.8), Vector2(-29.4, -16.1),
@@ -11,12 +12,20 @@ const EAST_STAIR_WAY := [
 	Vector2(28.5, -40.15), Vector2(35.5, -44.0), Vector2(36.65, -49.2),
 	Vector2(41.05, -49.2),
 ]
+const PERIMETER_WAY := [
+	Vector2(-37.1, -20.65), Vector2(-36.8, -24.1), Vector2(-36.8, -78.7),
+	Vector2(-33.2, -82.85), Vector2(33.2, -82.85), Vector2(36.8, -78.7),
+	Vector2(36.8, -55.0), Vector2(37.05, -49.2),
+]
 
 func _ready() -> void:
 	var paving := SurfaceTool.new()
 	paving.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_road(paving, WEST_STAIR_WAY, 1.38)
-	_road(paving, EAST_STAIR_WAY, 1.43)
+	# The three paved routes have one shared surface at both stair junctions.
+	var west_and_perimeter := Geometry2D.merge_polygons(_road_outline(WEST_STAIR_WAY, 1.38),
+		_road_outline(PERIMETER_WAY, 1.46))
+	for outline in Geometry2D.merge_polygons(west_and_perimeter[0], _road_outline(EAST_STAIR_WAY, 1.43)):
+		_polygon(paving, outline, ROAD_HEIGHT)
 	_road(paving, [Vector2(-9.9, -4.75), Vector2(-9.9, -8.15)], 1.1)
 	_road(paving, [Vector2(-2.24, -21.55), Vector2(-3.7, -21.55), Vector2(-11.95, -21.65)], 1.32)
 	_road(paving, [Vector2(4.25, -4.45), Vector2(4.20, -6.8), Vector2(5.23, -8.84)], 0.88)
@@ -36,6 +45,9 @@ func _ready() -> void:
 	mesh = paving.commit()
 
 func _road(paving: SurfaceTool, points: Array, half_width: float) -> void:
+	_polygon(paving, _road_outline(points, half_width), ROAD_HEIGHT)
+
+func _road_outline(points: Array, half_width: float) -> PackedVector2Array:
 	var left := PackedVector2Array()
 	var right := PackedVector2Array()
 	for i in points.size():
@@ -50,7 +62,7 @@ func _road(paving: SurfaceTool, points: Array, half_width: float) -> void:
 		right.append(point - offset)
 	right.reverse()
 	left.append_array(right)
-	_polygon(paving, left, 0.042)
+	return left
 
 func _polygon(paving: SurfaceTool, points: PackedVector2Array, height: float) -> void:
 	for i in Geometry2D.triangulate_polygon(points):

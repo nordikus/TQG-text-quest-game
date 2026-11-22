@@ -268,7 +268,7 @@ mesh = SubResource("Mesh_ButtressE_1")
 shape = SubResource("Shape_ButtressE_1")
 
 [node name="ButtressW_2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.35, 4.5, -35.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.94, 4.5, -35.0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ButtressW_2"]
 mesh = SubResource("Mesh_ButtressW_2")
