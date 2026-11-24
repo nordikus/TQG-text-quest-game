@@ -17,7 +17,7 @@ func _ready():
 	GameManager.notification_requested.connect(_on_notification_requested)
 
 func _on_prompt_changed(text: String):
-	prompt_label.text = text
+	prompt_label.text = tr(text)
 	prompt_label.visible = true
 
 func _on_prompt_cleared():

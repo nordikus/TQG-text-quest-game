@@ -6,6 +6,9 @@ var is_raised := false
 var _motion: Tween
 @onready var _closed_y := position.y
 
+func is_moving() -> bool:
+	return _motion != null and _motion.is_running()
+
 func set_raised(raised: bool, animate := true) -> void:
 	if _motion:
 		_motion.kill()

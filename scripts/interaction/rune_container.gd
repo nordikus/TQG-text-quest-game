@@ -35,3 +35,13 @@ func restore_seal() -> void:
 	_lid.rotation.x = 0.0
 	_rune.show()
 	interaction_prompt = closed_prompt
+
+func get_save_state() -> Dictionary:
+	return {"opened": _opened}
+
+func apply_save_state(state: Dictionary) -> void:
+	if state.get("opened", false):
+		_opened = true
+		_lid.rotation.x = -1.12
+		_rune.hide()
+		interaction_prompt = ""

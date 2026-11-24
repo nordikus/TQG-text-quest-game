@@ -20,7 +20,7 @@ func add_item(item_id: String) -> bool:
 			notes.append(item_id)
 			item_added.emit(def)
 			inventory_changed.emit()
-			GameManager.notify("Получена записка: " + def.get("title", ""))
+			GameManager.notify(tr("Получена записка: %s") % tr(def.get("title", "")))
 			return true
 		return false
 
@@ -31,7 +31,7 @@ func add_item(item_id: String) -> bool:
 	})
 	item_added.emit(def)
 	inventory_changed.emit()
-	GameManager.notify("Получен предмет: " + def.get("title", ""))
+	GameManager.notify(tr("Получен предмет: %s") % tr(def.get("title", "")))
 	return true
 
 func has_item(item_id: String) -> bool:
@@ -55,10 +55,10 @@ func use_item(item_id: String) -> bool:
 					items.remove_at(i)
 					item_consumed.emit(def)
 					inventory_changed.emit()
-					GameManager.notify("Использовано: " + def.get("title", ""))
+					GameManager.notify(tr("Использовано: %s") % tr(def.get("title", "")))
 					return true
 			inventory_changed.emit()
-			GameManager.notify("Использовано: " + def.get("title", ""))
+			GameManager.notify(tr("Использовано: %s") % tr(def.get("title", "")))
 			return true
 	return false
 

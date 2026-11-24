@@ -28,6 +28,7 @@
 
 [ext_resource type="Script" path="res://scripts/world/bookcase_model.gd" id="41_bookcase"]
 [ext_resource type="Script" path="res://scripts/world/throne_entrance_gallery.gd" id="42_entrance_gallery"]
+[ext_resource type="Script" path="res://scripts/world/keep_roof_details.gd" id="43_roof_details"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_Observer"]
 radius = 0.56
@@ -953,6 +954,9 @@ mesh = SubResource("Mesh_Roof")
 
 [node name="Col" type="CollisionShape3D" parent="Roof"]
 shape = SubResource("Shape_Roof")
+
+[node name="RoofDetails" type="Node3D" parent="."]
+script = ExtResource("43_roof_details")
 
 [node name="KeepFrontWest_Outer" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.975, 9.22, 15.0)

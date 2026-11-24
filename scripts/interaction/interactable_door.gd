@@ -84,14 +84,20 @@ func _toggle_door():
 	_swing.finished.connect(func(): _animating = false)
 
 func restore_door() -> void:
+	apply_save_state({"open": false, "locked": _initial_lock})
+
+func get_save_state() -> Dictionary:
+	return {"open": is_open, "locked": is_locked}
+
+func apply_save_state(state: Dictionary) -> void:
 	if _swing:
 		_swing.kill()
 	_animating = false
-	is_open = false
-	is_locked = _initial_lock
+	is_open = state.get("open", false)
+	is_locked = state.get("locked", _initial_lock)
 	if left_wing:
-		left_wing.rotation.y = _initial_left_rot
-	if right_wing:
-		right_wing.rotation.y = _initial_right_rot
+		left_wing.rotation.y = _initial_left_rot - (deg_to_rad(open_angle_deg) if is_open else 0.0)
+	if is_double_door and right_wing:
+		right_wing.rotation.y = _initial_right_rot + (deg_to_rad(open_angle_deg) if is_open else 0.0)
 	_update_blockers()
 	_update_prompt()

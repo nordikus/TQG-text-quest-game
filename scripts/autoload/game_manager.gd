@@ -1,5 +1,8 @@
 extends Node
 
+const EnglishText := preload("res://scripts/autoload/english_text.gd")
+const SETTINGS_PATH := "user://settings.cfg"
+
 signal interaction_prompt_changed(prompt: String)
 signal interaction_prompt_cleared
 signal notification_requested(message: String)
@@ -10,7 +13,23 @@ var inventory_panel: Node = null
 var observer_epilogue: Node = null
 
 func _ready():
+	var english := Translation.new()
+	english.locale = "en"
+	for source: String in EnglishText.MESSAGES:
+		english.add_message(source, EnglishText.MESSAGES[source])
+	TranslationServer.add_translation(english)
+	var settings := ConfigFile.new()
+	settings.load(SETTINGS_PATH)
+	var locale: String = settings.get_value("display", "language", "ru")
+	TranslationServer.set_locale("en" if locale == "en" else "ru")
 	_register_inputs()
+
+func set_language(locale: String) -> void:
+	TranslationServer.set_locale(locale)
+	var settings := ConfigFile.new()
+	settings.load(SETTINGS_PATH)
+	settings.set_value("display", "language", locale)
+	settings.save(SETTINGS_PATH)
 
 func open_quest(quest_id: String):
 	if quest_panel and quest_panel.has_method("open_quest"):
@@ -29,7 +48,7 @@ func toggle_inventory():
 		inventory_panel.toggle_inventory()
 
 func notify(message: String):
-	notification_requested.emit(message)
+	notification_requested.emit(tr(message))
 
 func _register_inputs():
 	_add_action("move_forward", KEY_W)

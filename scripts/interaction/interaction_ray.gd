@@ -23,7 +23,7 @@ func _physics_process(_delta: float):
 			current_target = collider
 			if current_target.has_method("set_highlighted"):
 				current_target.set_highlighted(true)
-			GameManager.interaction_prompt_changed.emit(current_target.get_interaction_prompt())
+			GameManager.interaction_prompt_changed.emit(tr(current_target.get_interaction_prompt()))
 	elif current_target:
 		if current_target.has_method("set_highlighted"):
 			current_target.set_highlighted(false)

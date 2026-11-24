@@ -36,6 +36,7 @@
 [ext_resource type="Script" path="res://scripts/world/living_arch.gd" id="32_arch"]
 [ext_resource type="Script" path="res://scripts/world/distant_ridges.gd" id="33_ridges"]
 [ext_resource type="Script" path="res://scripts/world/forest_floor_details.gd" id="34_floor"]
+[ext_resource type="Script" path="res://scripts/world/play_session.gd" id="35_session"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.19, 0.37, 0.61, 1)
@@ -108,6 +109,7 @@ size = Vector3(2.36, 1, 84.22)
 size = Vector3(2.36, 1, 406.92)
 
 [node name="ForestClearing" type="Node3D" unique_id=433473340]
+script = ExtResource("35_session")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=758829041]
 environment = SubResource("Environment_clearing")

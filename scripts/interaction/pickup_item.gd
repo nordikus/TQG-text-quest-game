@@ -18,7 +18,11 @@ func _update_prompt_from_item():
 	var def := ItemDb.get_item(item_id)
 	if not def.is_empty():
 		var action_word: String = "Прочесть" if def.get("category") == "note" else "Взять"
-		interaction_prompt = "[E] %s: %s" % [action_word, def.get("title", "")]
+		interaction_prompt = tr("[E] %s: %s") % [tr(action_word), tr(def.get("title", ""))]
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_update_prompt_from_item()
 
 func interact():
 	if item_id.is_empty() or not is_visible_in_tree() or is_queued_for_deletion():
@@ -40,3 +44,12 @@ func restore_pickup() -> void:
 	visible = not in_inventory
 	if _pickup_shape:
 		_pickup_shape.disabled = in_inventory
+
+func restore_loaded_pickup() -> void:
+	if restore_on_rewrite:
+		restore_pickup()
+	elif InventoryManager.notes.has(item_id) or InventoryManager.has_item(item_id):
+		hide()
+		if _pickup_shape:
+			_pickup_shape.disabled = true
+		queue_free()

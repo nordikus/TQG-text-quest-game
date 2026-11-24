@@ -69,27 +69,48 @@ func _on_quest_completed(quest_id: String, ending_id: String) -> void:
 		"pass_by":
 			_apply_burn_outcome()
 
-func _apply_extinguish_outcome() -> void:
+func restore_outcome(ending_id: String) -> void:
+	_active_ending = ending_id
+	match ending_id:
+		"extinguish_fire": _apply_extinguish_outcome(false)
+		"pass_by": _apply_burn_outcome(false)
+
+func is_settled() -> bool:
+	if outer_gate and outer_gate.is_moving():
+		return false
+	for tween in _transitions:
+		if tween.is_running():
+			return false
+	return true
+
+func _apply_extinguish_outcome(animate := true) -> void:
 	_cancel_transitions()
 	_set_enabled(nature_trail, true)
 	_set_enabled(life_thicket, false)
 	if great_tree:
 		great_tree.show()
-		_move_vertical(great_tree, 0.0, 3.5).finished.connect(
-			func():
-				_set_collision_recursive(great_tree, true)
-				_set_wall_breach(true)
-		)
+		if animate:
+			_move_vertical(great_tree, 0.0, 3.5).finished.connect(_open_tree_route)
+		else:
+			_open_tree_route()
 	if living_arches:
 		for i in living_arches.get_child_count():
 			var arch := living_arches.get_child(i) as Node3D
-			_track_tween().tween_property(arch, "position:y", 0.0, 0.92) \
-				.set_delay(0.24 + i * 0.44).set_trans(Tween.TRANS_SINE)
+			if animate:
+				_track_tween().tween_property(arch, "position:y", 0.0, 0.92) \
+					.set_delay(0.24 + i * 0.44).set_trans(Tween.TRANS_SINE)
+			else:
+				arch.position.y = 0.0
 	_set_burned_forest(false)
 	_set_castle_state(true, false)
-	_set_atmosphere(false)
+	_set_atmosphere(false, animate)
 
-func _apply_burn_outcome() -> void:
+func _open_tree_route() -> void:
+	great_tree.position.y = 0.0
+	_set_collision_recursive(great_tree, true)
+	_set_wall_breach(true)
+
+func _apply_burn_outcome(animate := true) -> void:
 	_cancel_transitions()
 	if great_tree:
 		great_tree.position.y = -35.0
@@ -99,13 +120,18 @@ func _apply_burn_outcome() -> void:
 	if fire_particles_group:
 		for i in fire_particles_group.get_child_count():
 			var fire: Node3D = fire_particles_group.get_child(i)
-			fire.hide()
-			fire.set_active(false)
-			_track_tween().tween_callback(_ignite.bind(fire)).set_delay(i * 0.13)
+			if animate:
+				fire.hide()
+				_track_tween().tween_callback(_ignite.bind(fire)).set_delay(i * 0.13)
+			else:
+				_ignite(fire)
 	_set_castle_state(false, true)
-	_set_atmosphere(true)
+	_set_atmosphere(true, animate)
 	if outer_gate:
-		_track_tween().tween_callback(outer_gate.set_raised.bind(true)).set_delay(0.65)
+		if animate:
+			_track_tween().tween_callback(outer_gate.set_raised.bind(true)).set_delay(0.65)
+		else:
+			outer_gate.set_raised(true, false)
 
 func reset_world() -> void:
 	_active_ending = ""
@@ -192,17 +218,24 @@ func _set_burned_forest(burned: bool) -> void:
 		for fire in fire_particles_group.get_children():
 			fire.set_active(false)
 
-func _set_atmosphere(burned: bool) -> void:
-	var tween := _track_tween().set_parallel(true)
+func _set_atmosphere(burned: bool, animate := true) -> void:
+	var tween := _track_tween().set_parallel(true) if animate else null
 	if ambient_light:
 		var sunlight := Color(1.0, 0.67, 0.42) if burned else _initial_light_color
-		tween.tween_property(ambient_light, "light_color", sunlight, 1.7)
+		if animate:
+			tween.tween_property(ambient_light, "light_color", sunlight, 1.7)
+		else:
+			ambient_light.light_color = sunlight
 	if world_environment and world_environment.environment:
 		var environment := world_environment.environment
 		var fog_color := Color(0.58, 0.36, 0.27) if burned else _initial_fog_color
 		var fog_density := 0.0065 if burned else _initial_fog_density
-		tween.tween_property(environment, "fog_light_color", fog_color, 1.7)
-		tween.tween_property(environment, "fog_density", fog_density, 1.7)
+		if animate:
+			tween.tween_property(environment, "fog_light_color", fog_color, 1.7)
+			tween.tween_property(environment, "fog_density", fog_density, 1.7)
+		else:
+			environment.fog_light_color = fog_color
+			environment.fog_density = fog_density
 
 func _track_tween() -> Tween:
 	var tween := create_tween()

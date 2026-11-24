@@ -32,6 +32,7 @@ func _update_state() -> void:
 				_set_collision(quill_pickup, true)
 			if pedestal_light:
 				pedestal_light.light_color = Color(0.85, 0.45, 1.0, 1.0)
+				pedestal_light.light_energy = 3.5
 		else:
 			if book_node:
 				book_node.visible = true

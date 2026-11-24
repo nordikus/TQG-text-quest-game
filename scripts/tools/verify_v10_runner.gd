@@ -47,7 +47,7 @@ func _verify() -> void:
 			and _observer.visible and not _observer.get_node("Shape").disabled
 			and not InventoryManager.has_item("great_quill") and InventoryManager.quill_uses_count == 0,
 			"Refusing the Quill brings the Observer to the throne room.")
-		await _verify_observer_epilogue("Ты меня удивил.")
+		await _verify_observer_epilogue("Ты меня удивил.", "You surprised me.")
 		get_tree().quit(0 if _passed else 1)
 		return
 	_check_initial()
@@ -63,7 +63,7 @@ func _verify() -> void:
 	else:
 		await _verify_life()
 	await _take_quill_and_rewrite()
-	await _verify_observer_epilogue("Но сможешь ли ты остановиться?")
+	await _verify_observer_epilogue("Но сможешь ли ты остановиться?", "But will you be able to stop?")
 
 	if ash_first:
 		await _verify_life()
@@ -229,7 +229,7 @@ func _choose_throne_ending(choice: int) -> void:
 	(choices.get_child(0) as Button).pressed.emit()
 	await get_tree().process_frame
 
-func _verify_observer_epilogue(expected_line: String) -> void:
+func _verify_observer_epilogue(expected_line: String, english_line: String) -> void:
 	_check_sanctuaries()
 	var player := _level.get_node("Player") as CharacterBody3D
 	var camera := player.get_node("Camera3D") as Camera3D
@@ -258,9 +258,10 @@ func _verify_observer_epilogue(expected_line: String) -> void:
 	_check(epilogue.visible and GameManager.ui_open and not choices.is_visible_in_tree()
 		and get_viewport().get_camera_3d() == epilogue.get_node("CinematicCamera"),
 		"Interaction starts the cinematic before opening the ending choices.")
-	await get_tree().create_timer(4.2).timeout
-	_check(line.text.ends_with(expected_line) and is_equal_approx(line.visible_ratio, 1.0)
-		and choices.is_visible_in_tree(), "The Observer delivers the matching line before the choice.")
+	await get_tree().create_timer(1.45 + line.text.length() / 33.0).timeout
+	var suffix := english_line if TranslationServer.get_locale() == "en" else expected_line
+	_check(line.text.ends_with(suffix) and is_equal_approx(line.visible_ratio, 1.0)
+		and choices.is_visible_in_tree(), "The Observer delivers the matching line before the choice (%s)." % line.text)
 
 	var uses := InventoryManager.quill_uses_count
 	(choices.get_node("Walk") as Button).pressed.emit()

@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Shader" path="res://scenes/world/castle/slate_roof.gdshader" id="40_slates"]
+[ext_resource type="Shader" path="res://scenes/world/castle/masonry.gdshader" id="41_masonry"]
 
 [sub_resource type="StandardMaterial3D" id="DressStone"]
 albedo_color = Color(0.43, 0.42, 0.38, 1)
@@ -9,6 +10,10 @@ roughness = 0.87
 [sub_resource type="StandardMaterial3D" id="EdgeStone"]
 albedo_color = Color(0.55, 0.53, 0.46, 1)
 roughness = 0.87
+
+[sub_resource type="ShaderMaterial" id="CrownMasonry"]
+shader = ExtResource("41_masonry")
+shader_parameter/block_size = Vector2(1.85, 0.66)
 
 [sub_resource type="ShaderMaterial" id="RoofSlate"]
 shader = ExtResource("40_slates")
@@ -71,11 +76,11 @@ material = SubResource("EdgeStone")
 size = Vector3(64.8, 0.4, 1.35)
 
 [sub_resource type="BoxMesh" id="Crenel"]
-material = SubResource("DressStone")
+material = SubResource("CrownMasonry")
 size = Vector3(1.75, 1.85, 1.6)
 
 [sub_resource type="BoxMesh" id="CentralCrown"]
-material = SubResource("DressStone")
+material = SubResource("CrownMasonry")
 size = Vector3(15.8, 5.05, 13.7)
 
 [sub_resource type="BoxMesh" id="CrownGuard"]

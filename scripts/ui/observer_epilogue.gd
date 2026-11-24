@@ -28,7 +28,8 @@ func play(observer: Interactable, dialogue: String) -> void:
 		return
 
 	_leaving = false
-	_line.text = dialogue
+	var translated := tr(dialogue)
+	_line.text = translated
 	_line.visible_ratio = 0.0
 	_caption.hide()
 	_choices.hide()
@@ -54,7 +55,7 @@ func play(observer: Interactable, dialogue: String) -> void:
 	_sequence.parallel().tween_property(observer, "rotation:y", observer.rotation.y + turn, CAMERA_MOVE_TIME)
 	_sequence.parallel().tween_property(_bars, "modulate:a", 1.0, CAMERA_MOVE_TIME)
 	_sequence.tween_callback(_caption.show)
-	_sequence.tween_property(_line, "visible_ratio", 1.0, dialogue.length() / CHARACTERS_PER_SECOND).set_trans(Tween.TRANS_LINEAR)
+	_sequence.tween_property(_line, "visible_ratio", 1.0, translated.length() / CHARACTERS_PER_SECOND).set_trans(Tween.TRANS_LINEAR)
 	_sequence.tween_interval(0.6)
 	_sequence.tween_callback(_show_choices)
 

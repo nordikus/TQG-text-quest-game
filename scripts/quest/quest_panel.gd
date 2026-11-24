@@ -30,7 +30,7 @@ func open_quest(quest_id: String):
 	if current_quest.is_empty():
 		return
 
-	title_label.text = current_quest.get("title", "Квест")
+	title_label.text = tr(current_quest.get("title", "Квест"))
 	current_node_id = current_quest.get("start_node", "start")
 	_rewrite_action = Callable()
 	rewrite_panel.hide()
@@ -74,7 +74,7 @@ func _display_node(node_id: String):
 		return
 
 	var node_data: Dictionary = nodes[node_id]
-	text_label.text = node_data.get("text", "")
+	text_label.text = tr(node_data.get("text", ""))
 
 	for child in choices_container.get_children():
 		child.queue_free()
@@ -82,7 +82,7 @@ func _display_node(node_id: String):
 	var choices: Array = node_data.get("choices", [])
 	for choice in choices:
 		var btn := Button.new()
-		btn.text = choice.get("text", "Выбрать")
+		btn.text = tr(choice.get("text", "Выбрать"))
 		btn.custom_minimum_size = Vector2(0, 44)
 		var next_node: String = choice.get("next_node", "")
 		btn.pressed.connect(_on_choice_selected.bind(next_node, node_data))

@@ -36,3 +36,12 @@ func restore_seal(available: bool = true) -> void:
 	_mesh.scale = _original_scale
 	_collider.disabled = not available
 	visible = available
+
+func get_save_state() -> Dictionary:
+	return {"sealed": _sealed}
+
+func apply_save_state(state: Dictionary) -> void:
+	if _available and state.get("sealed", true) == false:
+		_sealed = false
+		_collider.disabled = true
+		hide()

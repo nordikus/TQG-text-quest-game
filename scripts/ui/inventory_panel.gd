@@ -83,7 +83,7 @@ func _refresh_ui():
 	var max_page: int = maxi(1, int(ceil(float(total_items) / float(ITEMS_PER_PAGE))))
 	current_page = clampi(current_page, 0, max_page - 1)
 
-	page_label.text = "Стр. %d / %d" % [current_page + 1, max_page]
+	page_label.text = tr("Стр. %d / %d") % [current_page + 1, max_page]
 	prev_page_btn.disabled = (current_page == 0)
 	next_page_btn.disabled = (current_page >= max_page - 1)
 
@@ -120,6 +120,7 @@ func _refresh_ui():
 		items_grid.add_child(btn)
 
 		if selected_item_data.get("id") == it.get("id"):
+			_select_item(it)
 			selected_still_valid = true
 
 	if not selected_still_valid:
@@ -131,7 +132,7 @@ func _refresh_ui():
 
 func _select_item(item_data: Dictionary):
 	selected_item_data = item_data
-	detail_title.text = item_data.get("title", "")
-	var category_str: String = "Предмет" if item_data.get("category") == "item" else "Записка"
-	var text_content: String = "[color=#bba87c][b]%s[/b][/color]\n\n%s" % [category_str, item_data.get("description", "")]
+	detail_title.text = tr(item_data.get("title", ""))
+	var category_str := tr("Предмет") if item_data.get("category") == "item" else tr("Записка")
+	var text_content: String = "[color=#bba87c][b]%s[/b][/color]\n\n%s" % [category_str, tr(item_data.get("description", ""))]
 	detail_desc.text = text_content
