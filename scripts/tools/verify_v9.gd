@@ -503,8 +503,13 @@ func _verify_rampart_stair_landings(walls: Node, space: PhysicsDirectSpaceState3
 		[Vector3(-29.7, 13.8, 6.1), Vector3(-29.7, 13.8, 5.5)],
 		[Vector3(-31.1, 15.2, 4.2), Vector3(-31.1, 14.3, 4.2)],
 	]
-	for stair_name in ["CourtyardWallStair", "EastRampartStair"]:
+	var wall_paths := {
+		"CourtyardWallStair": "WesternRamparts/WallWest",
+		"EastRampartStair": "WallEast",
+	}
+	for stair_name in wall_paths:
 		var stair := walls.get_node(stair_name) as StaticBody3D
+		var curtain := walls.get_node(wall_paths[stair_name]) as StaticBody3D
 		var masonry := stair.get_node_or_null("StairMasonry") as MeshInstance3D
 		if not masonry:
 			push_error("FAIL: %s has no continuous masonry." % stair_name)
@@ -513,17 +518,32 @@ func _verify_rampart_stair_landings(walls: Node, space: PhysicsDirectSpaceState3
 		for section in sections:
 			var from: Vector3 = section[0]
 			var to: Vector3 = section[1]
-			var visible_masonry := false
-			for i in range(0, faces.size(), 3):
-				if Geometry3D.segment_intersects_triangle(from, to, faces[i], faces[i + 1], faces[i + 2]) != null:
-					visible_masonry = true
-					break
 			var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(stair.to_global(from), stair.to_global(to)))
-			if not visible_masonry or hit.get("collider") != stair:
+			if not _stair_mesh_intersects(faces, from, to) or hit.get("collider") != stair:
 				push_error("FAIL: %s needs solid masonry at %s." % [stair_name, from])
 				return false
-	print("PASS: Both rampart stair landings have masonry and collision on top, behind and along the courtyard edge.")
+		for x in [-9.0, -17.0, -25.0, -31.1]:
+			var height := 14.8 * clampf(inverse_lerp(-6.70, -30.26, x), 0.0, 1.0)
+			var above := Vector3(x, height + 0.33, 2.77)
+			var below := Vector3(x, height - 0.33, 2.77)
+			var ray := PhysicsRayQueryParameters3D.create(stair.to_global(above), stair.to_global(below))
+			ray.exclude = [curtain.get_rid()]
+			var stair_hit := space.intersect_ray(ray)
+			ray.from = stair.to_global(Vector3(x, height - 0.4, 3.1))
+			ray.to = stair.to_global(Vector3(x, height - 0.4, 2.6))
+			ray.exclude = [stair.get_rid()]
+			if not _stair_mesh_intersects(faces, above, below) or stair_hit.get("collider") != stair \
+					or space.intersect_ray(ray).get("collider") != curtain:
+				push_error("FAIL: %s needs to overlap its curtain at x=%s." % [stair_name, x])
+				return false
+	print("PASS: Both rampart stairs have solid landings and overlap their curtain walls along the flight.")
 	return true
+
+func _stair_mesh_intersects(faces: PackedVector3Array, from: Vector3, to: Vector3) -> bool:
+	for i in range(0, faces.size(), 3):
+		if Geometry3D.segment_intersects_triangle(from, to, faces[i], faces[i + 1], faces[i + 2]) != null:
+			return true
+	return false
 
 func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
 	var dining_open := true

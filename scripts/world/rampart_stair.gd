@@ -6,7 +6,9 @@ const FOOT_X := -6.70
 const LANDING_X := -30.26
 const LANDING_LENGTH := 1.54
 const LANDING_BACK := LANDING_X - LANDING_LENGTH
-const INNER_Z := 2.86
+const WALL_FACE_Z := 2.86
+# Both stair bodies extend into the curtain so the stepped joint cannot open up.
+const INNER_Z := WALL_FACE_Z - 0.18
 const OUTER_Z := 5.70
 const STEP_COUNT := 62
 const MASONRY := preload("res://scenes/world/castle/masonry.gdshader")
@@ -17,19 +19,8 @@ const MASONRY := preload("res://scenes/world/castle/masonry.gdshader")
 func _ready() -> void:
 	_ramp_collision()
 	_approach()
-	var incline := atan2(WALK_Y, FOOT_X - LANDING_X)
-	const RAIL_END := LANDING_X + 1.55
-	var rail_height := WALK_Y * inverse_lerp(FOOT_X, LANDING_X, RAIL_END)
-	var rail_length := Vector2(FOOT_X - RAIL_END, rail_height).length()
-	for side in [INNER_Z + 0.15, OUTER_Z - 0.15]:
-		var guard := Vector3((FOOT_X + RAIL_END) * 0.5, rail_height * 0.5 + 0.47, side)
-		var tilt := Vector3(0, 0, -incline)
-		_box(Vector3(rail_length, 0.94, 0.30), guard, stone, tilt)
-		var coping := BoxMesh.new()
-		coping.size = Vector3(rail_length, 0.11, 0.36)
-		coping.material = trim
-		_visual(coping, guard + Vector3(sin(incline), cos(incline), 0) * 0.49, tilt)
 	_build_masonry()
+	_build_parapet()
 
 func _build_masonry() -> void:
 	var surface := SurfaceTool.new()
@@ -43,12 +34,17 @@ func _build_masonry() -> void:
 		var next_y := WALK_Y * float(i + 1) / STEP_COUNT
 		profile.append(Vector2(x, next_y))
 		profile.append(Vector2(next_x, next_y))
-		_face(surface, [Vector3(next_x, next_y, INNER_Z), Vector3(next_x, next_y, OUTER_Z),
-			Vector3(x, next_y, OUTER_Z), Vector3(x, next_y, INNER_Z)])
+		# At wall-walk level the curtain covers the buried edge of the last tread.
+		if i == STEP_COUNT - 1:
+			_face(surface, [Vector3(LANDING_BACK, WALK_Y, WALL_FACE_Z), Vector3(LANDING_BACK, WALK_Y, OUTER_Z),
+				Vector3(x, WALK_Y, OUTER_Z), Vector3(x, WALK_Y, WALL_FACE_Z)])
+			_face(surface, [Vector3(LANDING_BACK, WALK_Y - 0.06, INNER_Z), Vector3(LANDING_BACK, WALK_Y, WALL_FACE_Z),
+				Vector3(x, WALK_Y, WALL_FACE_Z), Vector3(x, WALK_Y - 0.06, INNER_Z)])
+		else:
+			_face(surface, [Vector3(next_x, next_y, INNER_Z), Vector3(next_x, next_y, OUTER_Z),
+				Vector3(x, next_y, OUTER_Z), Vector3(x, next_y, INNER_Z)])
 		_face(surface, [Vector3(x, y, INNER_Z), Vector3(x, next_y, INNER_Z),
 			Vector3(x, next_y, OUTER_Z), Vector3(x, y, OUTER_Z)])
-	_face(surface, [Vector3(LANDING_BACK, WALK_Y, INNER_Z), Vector3(LANDING_BACK, WALK_Y, OUTER_Z),
-		Vector3(LANDING_X, WALK_Y, OUTER_Z), Vector3(LANDING_X, WALK_Y, INNER_Z)])
 	surface.generate_normals()
 	surface.set_material(stone)
 	var stair_mesh := surface.commit()
@@ -79,6 +75,44 @@ func _build_masonry() -> void:
 	sides.set_material(side_stone)
 	sides.commit(stair_mesh)
 	_visual(stair_mesh, Vector3.ZERO).name = "StairMasonry"
+
+func _build_parapet() -> void:
+	# The curtain protects the wall side. The courtyard parapet follows the whole stair.
+	var crest := PackedVector2Array([
+		Vector2(FOOT_X, 0.0), Vector2(LANDING_X, WALK_Y), Vector2(LANDING_BACK, WALK_Y),
+	])
+	var base := OUTER_Z - 0.30
+	var edge := OUTER_Z + 0.03
+	_parapet_band(crest, base, edge, -0.12, 0.88, stone)
+	_parapet_band(crest, base - 0.035, edge + 0.035, 0.88, 1.0, trim)
+
+func _parapet_band(crest: PackedVector2Array, inner: float, outer: float,
+		low: float, high: float, material: Material) -> void:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.set_smooth_group(-1)
+	for i in range(crest.size() - 1):
+		var start := crest[i]
+		var end := crest[i + 1]
+		var a := Vector3(start.x, start.y + low, inner)
+		var b := Vector3(end.x, end.y + low, inner)
+		var c := Vector3(start.x, start.y + high, inner)
+		var d := Vector3(end.x, end.y + high, inner)
+		var span := Vector3(0.0, 0.0, outer - inner)
+		_face(surface, [a, b, d, c])
+		_face(surface, [a + span, c + span, d + span, b + span])
+		_face(surface, [d, d + span, c + span, c])
+		_face(surface, [b, a, a + span, b + span])
+		if i == 0:
+			_face(surface, [a, c, c + span, a + span])
+		if i == crest.size() - 2:
+			_face(surface, [b, b + span, d + span, d])
+		var shape := ConvexPolygonShape3D.new()
+		shape.points = PackedVector3Array([a, b, c, d, a + span, b + span, c + span, d + span])
+		_collision(shape, Vector3.ZERO)
+	surface.generate_normals()
+	surface.set_material(material)
+	_visual(surface.commit(), Vector3.ZERO)
 
 func _approach() -> void:
 	var post := Vector3(FOOT_X + 0.12, 0, OUTER_Z + 0.38)
