@@ -84,6 +84,10 @@ points = PackedVector3Array(0, -0.6, 1.6, 1.13137, -0.6, 1.13137, 1.6, -0.6, 0, 
 [sub_resource type="BoxShape3D" id="WellPostShape"]
 size = Vector3(0.16, 2, 0.16)
 
+[sub_resource type="CylinderShape3D" id="WellWinchShape"]
+radius = 0.09
+height = 2.07
+
 [sub_resource type="BoxMesh" id="PlanterBase"]
 material = SubResource("Mat_StoneDark")
 size = Vector3(2.5, 0.52, 5.4)
@@ -93,6 +97,9 @@ size = Vector3(2.5, 0.52, 5.4)
 
 [sub_resource type="BoxMesh" id="PlanterEdge"]
 material = SubResource("Mat_StoneDark")
+size = Vector3(2.72, 0.16, 5.64)
+
+[sub_resource type="BoxShape3D" id="PlanterRimShape"]
 size = Vector3(2.72, 0.16, 5.64)
 
 [sub_resource type="BoxMesh" id="PlanterEarth"]
@@ -179,6 +186,11 @@ shape = SubResource("WellPostShape")
 position = Vector3(0.94, 0.75, 0)
 shape = SubResource("WellPostShape")
 
+[node name="WinchCol" type="CollisionShape3D" parent="CourtyardWell"]
+position = Vector3(0, 1.35, 0)
+rotation = Vector3(0, 0, 1.5707963)
+shape = SubResource("WellWinchShape")
+
 [node name="CourtyardWalls" parent="." instance=ExtResource("1_walls")]
 
 [node name="BarracksBuilding" parent="." instance=ExtResource("2_barracks")]
@@ -200,18 +212,22 @@ script = ExtResource("29_rear_bailey")
 [node name="BarracksTurnBeacon" parent="." instance=ExtResource("6_beacon")]
 position = Vector3(3.6, 0, -20.5)
 glow_color = Color(1, 0.68, 0.36, 1)
+solid_base = true
 
 [node name="BarracksDoorBeacon" parent="." instance=ExtResource("6_beacon")]
 position = Vector3(15, 0, -20.5)
 glow_color = Color(1, 0.68, 0.36, 1)
+solid_base = true
 
 [node name="ChapelDoorBeacon" parent="." instance=ExtResource("6_beacon")]
 position = Vector3(12.4, 0, -1.1)
 glow_color = Color(0.62, 0.77, 1, 1)
+solid_base = true
 
 [node name="KeepApproachLeftBeacon" parent="." instance=ExtResource("6_beacon")]
 position = Vector3(-3.8, 0, -41.5)
 glow_color = Color(1, 0.77, 0.42, 1)
+solid_base = true
 
 [node name="WestGardenBed" type="StaticBody3D" parent="."]
 position = Vector3(-6.7, 0.26, -31.5)
@@ -223,43 +239,12 @@ mesh = SubResource("PlanterBase")
 position = Vector3(0, 0.22, 0)
 mesh = SubResource("PlanterEdge")
 
-[node name="Earth" type="MeshInstance3D" parent="WestGardenBed"]
-position = Vector3(0, 0.304, 0)
-mesh = SubResource("PlanterEarth")
-
 [node name="Collision" type="CollisionShape3D" parent="WestGardenBed"]
 shape = SubResource("PlanterCollision")
 
-[node name="Shrub1" parent="WestGardenBed" instance=ExtResource("8_shrubs")]
-position = Vector3(-0.34, 0.31, -1.66)
-rotation = Vector3(0, 0.72, 0)
-scale = Vector3(0.7, 0.7, 0.7)
-
-[node name="Shrub2" parent="WestGardenBed" instance=ExtResource("8_shrubs")]
-position = Vector3(0.26, 0.31, 0.09)
-rotation = Vector3(0, 1.44, 0)
-scale = Vector3(0.63, 0.63, 0.63)
-
-[node name="Shrub3" parent="WestGardenBed" instance=ExtResource("8_shrubs")]
-position = Vector3(-0.16, 0.31, 1.58)
-rotation = Vector3(0, 2.16, 0)
-scale = Vector3(0.67, 0.67, 0.67)
-
-[node name="Flowers1" parent="WestGardenBed" instance=ExtResource("9_flowers")]
-position = Vector3(0.72, 0.31, -1.36)
-rotation = Vector3(0, 0.72, 0)
-
-[node name="Flowers2" parent="WestGardenBed" instance=ExtResource("9_flowers")]
-position = Vector3(-0.64, 0.31, -0.62)
-rotation = Vector3(0, 1.44, 0)
-
-[node name="Flowers3" parent="WestGardenBed" instance=ExtResource("9_flowers")]
-position = Vector3(0.6, 0.31, 1.29)
-rotation = Vector3(0, 2.16, 0)
-
-[node name="Flowers4" parent="WestGardenBed" instance=ExtResource("9_flowers")]
-position = Vector3(-0.54, 0.31, 2.07)
-rotation = Vector3(0, 2.88, 0)
+[node name="RimCollision" type="CollisionShape3D" parent="WestGardenBed"]
+position = Vector3(0, 0.22, 0)
+shape = SubResource("PlanterRimShape")
 
 [node name="EastGardenBed" type="StaticBody3D" parent="."]
 position = Vector3(6.7, 0.26, -31.5)
@@ -277,6 +262,10 @@ mesh = SubResource("PlanterEarth")
 
 [node name="Collision" type="CollisionShape3D" parent="EastGardenBed"]
 shape = SubResource("PlanterCollision")
+
+[node name="RimCollision" type="CollisionShape3D" parent="EastGardenBed"]
+position = Vector3(0, 0.22, 0)
+shape = SubResource("PlanterRimShape")
 
 [node name="Shrub1" parent="EastGardenBed" instance=ExtResource("8_shrubs")]
 position = Vector3(-0.34, 0.31, -1.66)
@@ -469,6 +458,48 @@ smoke_density = 0.54
 smoke_size = 0.68
 
 [node name="LivingVerge" type="Node3D" parent="."]
+
+[node name="FireExposedFurnishings" type="Node3D" parent="LivingVerge"]
+script = ExtResource("26_furnishing")
+place = 10
+
+[node name="WestPlanterPlants" type="Node3D" parent="LivingVerge"]
+position = Vector3(-6.7, 0.26, -31.5)
+
+[node name="Earth" type="MeshInstance3D" parent="LivingVerge/WestPlanterPlants"]
+position = Vector3(0, 0.304, 0)
+mesh = SubResource("PlanterEarth")
+
+[node name="Shrub1" parent="LivingVerge/WestPlanterPlants" instance=ExtResource("8_shrubs")]
+position = Vector3(-0.34, 0.31, -1.66)
+rotation = Vector3(0, 0.72, 0)
+scale = Vector3(0.7, 0.7, 0.7)
+
+[node name="Shrub2" parent="LivingVerge/WestPlanterPlants" instance=ExtResource("8_shrubs")]
+position = Vector3(0.26, 0.31, 0.09)
+rotation = Vector3(0, 1.44, 0)
+scale = Vector3(0.63, 0.63, 0.63)
+
+[node name="Shrub3" parent="LivingVerge/WestPlanterPlants" instance=ExtResource("8_shrubs")]
+position = Vector3(-0.16, 0.31, 1.58)
+rotation = Vector3(0, 2.16, 0)
+scale = Vector3(0.67, 0.67, 0.67)
+
+[node name="Flowers1" parent="LivingVerge/WestPlanterPlants" instance=ExtResource("9_flowers")]
+position = Vector3(0.72, 0.31, -1.36)
+rotation = Vector3(0, 0.72, 0)
+
+[node name="Flowers2" parent="LivingVerge/WestPlanterPlants" instance=ExtResource("9_flowers")]
+position = Vector3(-0.64, 0.31, -0.62)
+rotation = Vector3(0, 1.44, 0)
+
+[node name="Flowers3" parent="LivingVerge/WestPlanterPlants" instance=ExtResource("9_flowers")]
+position = Vector3(0.6, 0.31, 1.29)
+rotation = Vector3(0, 2.16, 0)
+
+[node name="Flowers4" parent="LivingVerge/WestPlanterPlants" instance=ExtResource("9_flowers")]
+position = Vector3(-0.54, 0.31, 2.07)
+rotation = Vector3(0, 2.88, 0)
 
 [node name="Clump1" type="Node3D" parent="LivingVerge"]
 position = Vector3(-4.15, 0, 13.22)
@@ -1015,9 +1046,14 @@ position = Vector3(-24.7, 0, 3.69)
 rotation = Vector3(0, 1.09, 0)
 script = ExtResource("24_cargo")
 
-[node name="AvenueAsh" type="Node3D" parent="AshCastle"]
+[node name="FireExposedFurnishings" type="Node3D" parent="AshCastle"]
 script = ExtResource("26_furnishing")
 place = 9
+
+[node name="WestPlanterPlants" type="Node3D" parent="AshCastle"]
+position = Vector3(-6.7, 0.26, -31.5)
+script = ExtResource("26_furnishing")
+place = 11
 
 [node name="GateCargo" type="Node3D" parent="AshCastle"]
 position = Vector3(-6.12, 0, 4.7)
@@ -1048,10 +1084,24 @@ smoke_size = 0.54
 [node name="ChapelTurnBeacon" parent="CourtLanterns" instance=ExtResource("6_beacon")]
 position = Vector3(3.5, 0, -1.1)
 glow_color = Color(0.62, 0.77, 1, 1)
+solid_base = true
 
 [node name="KeepApproachRightBeacon" parent="CourtLanterns" instance=ExtResource("6_beacon")]
 position = Vector3(3.8, 0, -41.5)
 glow_color = Color(1, 0.77, 0.42, 1)
+solid_base = true
+
+[node name="ChapelTurnBeacon" parent="AshCastle" instance=ExtResource("6_beacon")]
+position = Vector3(3.5, 0, -1.1)
+glow_color = Color(0.62, 0.77, 1, 1)
+solid_base = true
+lit = false
+
+[node name="KeepApproachRightBeacon" parent="AshCastle" instance=ExtResource("6_beacon")]
+position = Vector3(3.8, 0, -41.5)
+glow_color = Color(1, 0.77, 0.42, 1)
+solid_base = true
+lit = false
 
 [node name="WellGardenAndPracticeYard" type="Node3D" parent="."]
 script = ExtResource("26_furnishing")
@@ -1094,3 +1144,17 @@ scale = Vector3(0.27, 0.27, 0.27)
 phase = 1.35
 smoke_density = 0.56
 smoke_size = 0.64
+
+[node name="GateMusterEmbers" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-12.63, 0, -0.26)
+scale = Vector3(0.23, 0.23, 0.23)
+phase = 2.64
+smoke_density = 0.49
+smoke_size = 0.56
+
+[node name="FarrierEmbers" parent="AshCastle/RemnantFires" instance=ExtResource("23_fire")]
+position = Vector3(-10.63, 0, -13.16)
+scale = Vector3(0.29, 0.29, 0.29)
+phase = 4.17
+smoke_density = 0.55
+smoke_size = 0.61

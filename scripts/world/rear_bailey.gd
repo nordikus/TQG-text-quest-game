@@ -75,10 +75,11 @@ func _stoneyard() -> void:
 		var panel := center + Vector3(-5.74 + i * 0.756, 3.22, 0)
 		_box("RoofPlank", panel, Vector3(0.755, 0.14, 3.42), OAK.lightened(0.10 + 0.07 * sin(i * 1.8)),
 			false, Vector3(0.291, 0, 0))
+	_box_collider(center + Vector3(-0.448, 3.22, 0), Vector3(11.339, 0.14, 3.42), Vector3(0.291, 0, 0))
 	_box("WorkBench", center + Vector3(-3.37, 0.89, -0.61), Vector3(2.67, 0.14, 0.86), CUT_WOOD, true)
 	for x in [-4.49, -2.25]:
 		for z in [-0.95, -0.30]:
-			_box("BenchLeg", center + Vector3(x, 0.40, z), Vector3(0.15, 0.81, 0.15), OAK)
+			_box("BenchLeg", center + Vector3(x, 0.40, z), Vector3(0.15, 0.81, 0.15), OAK, true)
 	_box("StoneBlank", center + Vector3(-3.77, 1.05, -0.62), Vector3(0.74, 0.19, 0.48), STONE,
 		false, Vector3(0, 0.14, 0))
 	_box("MalletHead", center + Vector3(-2.87, 1.04, -0.85), Vector3(0.21, 0.16, 0.12), IRON)
@@ -99,8 +100,8 @@ func _stoneyard() -> void:
 func _cart(at: Vector3) -> void:
 	_box("CartTray", at + Vector3.UP * 0.48, Vector3(1.2, 0.13, 1.06), CUT_WOOD, true)
 	for x in [-0.57, 0.57]:
-		_box("CartSide", at + Vector3(x, 0.68, -0.09), Vector3(0.082, 0.31, 1.04), OAK)
-		_box("CartHandle", at + Vector3(x * 0.80, 0.36, 0.66), Vector3(0.082, 0.088, 1.51), CUT_WOOD)
+		_box("CartSide", at + Vector3(x, 0.68, -0.09), Vector3(0.082, 0.31, 1.04), OAK, true)
+		_box("CartHandle", at + Vector3(x * 0.80, 0.36, 0.66), Vector3(0.082, 0.088, 1.51), CUT_WOOD, true)
 		_cylinder("WheelHub", at + Vector3(x * 1.26, 0.36, -0.04), 0.11, 0.11, 0.17, IRON,
 			Vector3(0, 0, PI * 0.5))
 		var rim := TorusMesh.new()
@@ -111,6 +112,10 @@ func _cart(at: Vector3) -> void:
 		rim.material = _material(OAK)
 		var axle := at + Vector3(x * 1.26, 0.39, -0.04)
 		_visual("WheelRim", rim, axle, Vector3(0, 0, PI * 0.5))
+		var wheel := CylinderShape3D.new()
+		wheel.radius = 0.39
+		wheel.height = 0.13
+		_collider(wheel, axle, Vector3(0, 0, PI * 0.5))
 		for angle in [0.0, PI / 3.0, TAU / 3.0]:
 			_box("Spoke", axle, Vector3(0.057, 0.68, 0.046), CUT_WOOD, false, Vector3(angle, 0, 0))
 
@@ -227,13 +232,21 @@ func _box(part: String, at: Vector3, size: Vector3, color: Color, solid := false
 	mesh.material = _material(color)
 	var model := _visual(part, mesh, at, rotation)
 	if solid:
-		var body := StaticBody3D.new()
-		var shape := BoxShape3D.new()
-		shape.size = size
-		var collider := CollisionShape3D.new()
-		collider.shape = shape
-		body.add_child(collider)
-		model.add_child(body)
+		_box_collider(Vector3.ZERO, size, Vector3.ZERO, model)
+
+func _box_collider(at: Vector3, size: Vector3, rotation: Vector3, holder: Node3D = null) -> void:
+	var shape := BoxShape3D.new()
+	shape.size = size
+	_collider(shape, at, rotation, holder)
+
+func _collider(shape: Shape3D, at: Vector3, rotation: Vector3, holder: Node3D = null) -> void:
+	var body := StaticBody3D.new()
+	body.position = at
+	body.rotation = rotation
+	var collider := CollisionShape3D.new()
+	collider.shape = shape
+	body.add_child(collider)
+	(holder if holder else self).add_child(body)
 
 func _visual(part: String, mesh: Mesh, at: Vector3, rotation := Vector3.ZERO) -> MeshInstance3D:
 	var model := MeshInstance3D.new()

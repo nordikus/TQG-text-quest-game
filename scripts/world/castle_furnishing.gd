@@ -1,7 +1,10 @@
 @tool
 extends Node3D
 
-enum Place { WORKSHOP, COURTYARD, SUPPLY_SHELTER, BURNED_SHELTER, BARRACKS, KEEP, CHAPEL, OBSERVATORY, BRIDGE, BURNED_YARD }
+enum Place {
+	WORKSHOP, COURTYARD, SUPPLY_SHELTER, BURNED_SHELTER, BARRACKS, KEEP, CHAPEL, OBSERVATORY,
+	BRIDGE, BURNED_YARD, INTACT_FIRE_ZONE, BURNED_PLANTER,
+}
 
 @export var place: Place = Place.WORKSHOP
 
@@ -44,7 +47,12 @@ func _ready() -> void:
 		Place.BRIDGE:
 			_bridge()
 		Place.BURNED_YARD:
+			_fire_exposed_courtyard(true)
 			_burned_yard()
+		Place.INTACT_FIRE_ZONE:
+			_fire_exposed_courtyard(false)
+		Place.BURNED_PLANTER:
+			_burned_planter()
 	for meshes: Dictionary in _batches.values():
 		for mesh: Mesh in meshes:
 			var placements: Array[Transform3D] = meshes[mesh]
@@ -362,15 +370,6 @@ func _bridge() -> void:
 		_light(Vector3(side * 1.25, 8.75, z), 0.54, 4.3)
 
 func _burned_yard() -> void:
-	# Ash collects on the avenue edge. The burned cart stays outside the passage.
-	var cart := Vector3(-10.6, 0, -32.7)
-	for i in 6:
-		_box(cart + Vector3(i * 0.34 - 0.85, 0.16 + 0.05 * sin(i * 1.8), 0.12 * cos(i)),
-			Vector3(0.25, 0.12, 1.62 - 0.07 * i), CHAR.lightened(0.07 * sin(i)), false,
-			Vector3(0.11 * sin(i), 0.38 + 0.21 * i, 0.10 * cos(i)))
-	_round(cart + Vector3(-1.05, 0.32, -0.51), 0.40, 0.12, CHAR, false, Vector3(0, 0, 1.17))
-	_round(cart + Vector3(-1.11, 0.36, -0.49), 0.128, 0.13, IRON, false, Vector3(0, 0, 1.17))
-	_box(cart + Vector3(1.14, 0.17, 0.62), Vector3(0.14, 0.12, 1.67), CHAR, false, Vector3(0.18, -0.52, 0))
 	for i in 13:
 		var board := Vector3(-3.55 - absf(sin(i * 13.8)) * 4.9, 0.045, -8.2 - i * 1.67)
 		_box(board, Vector3(0.12 + 0.035 * sin(i * 3.2), 0.075, 0.35 + 0.30 * absf(cos(i))),
@@ -714,35 +713,11 @@ func _courtyard() -> void:
 	_box(trough + Vector3.UP * 0.22, Vector3(1.15, 0.44, 1.95), LIMESTONE, true)
 	_box(trough + Vector3.UP * 0.447, Vector3(0.84, 0.018, 1.63), BLUE.darkened(0.37))
 	for x in [-0.54, 0.54]:
-		_box(trough + Vector3(x, 0.51, 0), Vector3(0.11, 0.18, 1.95), LIMESTONE)
+		_box(trough + Vector3(x, 0.51, 0), Vector3(0.11, 0.18, 1.95), LIMESTONE, true)
 	for z in [-0.93, 0.93]:
-		_box(trough + Vector3(0, 0.51, z), Vector3(0.98, 0.18, 0.11), LIMESTONE)
+		_box(trough + Vector3(0, 0.51, z), Vector3(0.98, 0.18, 0.11), LIMESTONE, true)
 	for z in [1.7, 4.4]:
 		_herbs(Vector3(10.55, 0, z))
-	# The farrier works under a lean-to off the main thoroughfare.
-	var workyard := Vector3(-11.20, 0, -13.81)
-	_round(workyard + Vector3.UP * 0.018, 2.88, 0.031, LIMESTONE.darkened(0.31))
-	for x in [-2.02, 2.02]:
-		for z in [-1.52, 1.24]:
-			var height: float = 2.81 + z * 0.20
-			_box(workyard + Vector3(x, 0.18, z), Vector3(0.36, 0.36, 0.36), LIMESTONE, true)
-			_box(workyard + Vector3(x, 0.36 + height * 0.5, z),
-				Vector3(0.16, height, 0.16), OAK, true)
-	for z in [-1.52, 1.24]:
-		_box(workyard + Vector3(0, 3.14 + z * 0.20, z),
-			Vector3(4.4, 0.16, 0.16), OAK)
-	for i in 10:
-		_box(workyard + Vector3(-2.13 + i * 0.474, 3.27, 0), Vector3(0.474, 0.10, 3.40),
-			WOOD_EDGE.darkened(0.14 + 0.11 * sin(i * 2.37)), false, Vector3(-0.198, 0, 0))
-	_table(Vector3(-10.5, 0, -13.43), Vector2(2.75, 1.18))
-	_bench(Vector3(-10.5, 0, -11.60))
-	_locker(Vector3(-12.69, 0, -13.24))
-	_box(Vector3(-10.18, 0.868, -13.47), Vector3(0.46, 0.124, 0.32), IRON)
-	_box(Vector3(-10.23, 0.998, -13.47), Vector3(0.69, 0.136, 0.26), IRON)
-	_box(Vector3(-11.05, 0.29, -15.03), Vector3(1.15, 0.58, 0.79), LIMESTONE, true)
-	_box(Vector3(-11.05, 0.595, -15.03), Vector3(0.89, 0.04, 0.58), IRON)
-	for x in [-11.54, -10.56]:
-		_box(Vector3(x, 0.668, -15.03), Vector3(0.16, 0.18, 0.76), LIMESTONE)
 	for z in [-29.3, -31.6, -33.9]:
 		_round(Vector3(9.3, 0.37, z), 0.35, 0.74, OAK, true)
 		for y in [0.14, 0.60]:
@@ -751,25 +726,42 @@ func _courtyard() -> void:
 	_practice_yard()
 	_wagon_bay()
 	_firewood_store()
-	_gate_muster()
 	_wash_court()
-	_courtyard_garden()
 
-func _gate_muster() -> void:
+func _fire_exposed_courtyard(burned: bool) -> void:
+	_gate_muster(burned)
+	_farrier(burned)
+	_courtyard_garden(burned)
+	_wagon_hitch(burned)
+	_avenue_handcart(burned)
+
+func _gate_muster(burned: bool) -> void:
 	var shelter := Vector3(-11.6, 0.047, -0.80)
 	for x in [-2.48, 2.48]:
 		for z in [-1.45, 1.45]:
-			var height: float = 2.65 + z * 0.25
+			var height: float = (0.72 if x < 0 else 2.08) + z * 0.22 if burned else 2.65 + z * 0.25
 			_box(shelter + Vector3(x, 0.16, z), Vector3(0.47, 0.32, 0.47), LIMESTONE, true)
-			_box(shelter + Vector3(x, 0.31 + height * 0.5, z), Vector3(0.21, height, 0.21), OAK, true)
-			_box(shelter + Vector3(x * 0.93, height + 0.01, z * 0.93), Vector3(0.18, 0.74, 0.19),
-				OAK, false, Vector3(z * 0.30, 0, x * 0.12))
+			_box(shelter + Vector3(x, 0.31 + height * 0.5, z), Vector3(0.21, height, 0.21),
+				CHAR if burned else OAK, true)
+	if burned:
+		# The rafter fell with one end caught by a surviving post.
+		_charred_beam(shelter + Vector3(-0.68, 0.13, 0.64), shelter + Vector3(2.52, 2.02, -1.43), 0.21)
+		_burnt_planks(shelter + Vector3(-0.72, 0, 0.47), 6)
+		_round(shelter + Vector3(-1.88, 0.29, -0.67), 0.30, 0.55, CHAR, true, Vector3(0, 0, 0.98))
+		_box(shelter + Vector3(0.58, 0.16, 0.99), Vector3(0.81, 0.095, 0.68), RED.darkened(0.73),
+			false, Vector3(0.15, -0.68, 0.19))
+		return
+	for x in [-2.48, 2.48]:
+		for z in [-1.45, 1.45]:
+			_box(shelter + Vector3(x * 0.93, 2.66 + z * 0.25, z * 0.93), Vector3(0.18, 0.74, 0.19),
+				OAK, true, Vector3(z * 0.30, 0, x * 0.12))
 	for z in [-1.45, 1.45]:
 		_box(shelter + Vector3(0, 2.89 + z * 0.25, z), Vector3(5.45, 0.18, 0.19), WOOD_EDGE)
 	for board in 13:
 		var tint := OAK.lightened(0.08 + 0.043 * sin(board * 2.6))
 		_box(shelter + Vector3(-2.58 + board * 0.43, 3.04, 0), Vector3(0.43, 0.12, 3.47),
 			tint, false, Vector3(-0.245, 0, 0))
+	_box_collision(shelter + Vector3(0, 3.04, 0), Vector3(5.59, 0.12, 3.47), Vector3(-0.245, 0, 0))
 	_table(shelter + Vector3(-0.15, 0, 0.15), Vector2(2.34, 1.22))
 	_bench(shelter + Vector3(-0.05, 0, -0.91))
 	for x in [-0.85, -0.34, 0.18]:
@@ -781,6 +773,51 @@ func _gate_muster() -> void:
 	_wall_hanging(shelter + Vector3(0.43, 1.82, 1.52), RED.darkened(0.16))
 	_lantern(shelter + Vector3(1.58, 2.35, 0.78), 3.20, 1.25, 6.5)
 
+func _farrier(burned: bool) -> void:
+	var workyard := Vector3(-11.20, 0, -13.81)
+	var floor_tint := LIMESTONE.darkened(0.63 if burned else 0.31)
+	_round(workyard + Vector3.UP * 0.018, 2.88, 0.031, floor_tint)
+	for x in [-2.02, 2.02]:
+		for z in [-1.52, 1.24]:
+			var height: float = 0.52 + 0.23 * sin(x + z) if burned else 2.81 + z * 0.20
+			_box(workyard + Vector3(x, 0.18, z), Vector3(0.36, 0.36, 0.36), LIMESTONE, true)
+			_box(workyard + Vector3(x, 0.36 + height * 0.5, z), Vector3(0.16, height, 0.16),
+				CHAR if burned else OAK, true)
+	var forge := Vector3(-11.05, 0, -15.03)
+	var masonry := LIMESTONE.darkened(0.41) if burned else LIMESTONE
+	_box(forge + Vector3.UP * 0.29, Vector3(1.15, 0.58, 0.79), masonry, true)
+	_box(forge + Vector3.UP * 0.595, Vector3(0.89, 0.04, 0.58), IRON)
+	for x in [-0.49, 0.49]:
+		_box(forge + Vector3(x, 0.668, 0), Vector3(0.16, 0.18, 0.76), masonry, true)
+	if burned:
+		_burnt_planks(workyard + Vector3(0.15, 0, 0.65), 8)
+		_charred_beam(workyard + Vector3(-1.58, 0.14, 0.61), workyard + Vector3(1.22, 0.29, -0.38), 0.21)
+		_box(Vector3(-10.57, 0.127, -13.38), Vector3(0.69, 0.21, 0.32), IRON.darkened(0.34), true,
+			Vector3(0, -0.16, 0.17))
+		return
+	for z in [-1.52, 1.24]:
+		_box(workyard + Vector3(0, 3.14 + z * 0.20, z), Vector3(4.4, 0.16, 0.16), OAK)
+	for i in 10:
+		_box(workyard + Vector3(-2.13 + i * 0.474, 3.27, 0), Vector3(0.474, 0.10, 3.40),
+			WOOD_EDGE.darkened(0.14 + 0.11 * sin(i * 2.37)), false, Vector3(-0.198, 0, 0))
+	_box_collision(workyard + Vector3.UP * 3.27, Vector3(4.74, 0.10, 3.40), Vector3(-0.198, 0, 0))
+	_table(Vector3(-10.5, 0, -13.43), Vector2(2.75, 1.18))
+	_bench(Vector3(-10.5, 0, -11.60))
+	_locker(Vector3(-12.69, 0, -13.24))
+	_box(Vector3(-10.18, 0.868, -13.47), Vector3(0.46, 0.124, 0.32), IRON, true)
+	_box(Vector3(-10.23, 0.998, -13.47), Vector3(0.69, 0.136, 0.26), IRON, true)
+
+func _charred_beam(from: Vector3, to: Vector3, width: float) -> void:
+	var beam := to - from
+	var rotation := Basis(Quaternion(Vector3.UP, beam.normalized())).get_euler()
+	_box(from.lerp(to, 0.5), Vector3(width, beam.length(), width), CHAR, true, rotation)
+
+func _burnt_planks(at: Vector3, count: int) -> void:
+	for i in count:
+		var board := at + Vector3((i - (count - 1) * 0.5) * 0.35, 0.11 + 0.06 * (i % 3), 0.30 * cos(i * 1.9))
+		_box(board, Vector3(0.25, 0.13, 1.33 - 0.11 * (i % 4)), CHAR.lightened(0.045 * sin(i * 2.1)),
+			i % 3 == 2, Vector3(0.12 * sin(i), 0.37 * cos(i * 0.8), 0.14 * cos(i * 1.7)))
+
 func _wash_court() -> void:
 	for z in [-29.8, -33.65]:
 		var at := Vector3(14.08, 0.047, z)
@@ -788,33 +825,63 @@ func _wash_court() -> void:
 		_box(at + Vector3.UP * 0.508, Vector3(1.08, 0.015, 2.21), BLUE.darkened(0.49))
 		for side: float in [-1.0, 1.0]:
 			_box(at + Vector3(side * 0.62, 0.55, 0), Vector3(0.16, 0.21, 2.50), LIMESTONE, true)
-			_box(at + Vector3(0, 0.55, side * 1.19), Vector3(1.11, 0.21, 0.16), LIMESTONE)
+			_box(at + Vector3(0, 0.55, side * 1.19), Vector3(1.11, 0.21, 0.16), LIMESTONE, true)
 		_box(at + Vector3(0.33, 0.66, -1.19), Vector3(0.32, 0.10, 0.29), OAK)
 		_earthenware(at + Vector3(0.51, 0.66, 0.55), 0.78, WOOD_EDGE)
 	for z in [-29.05, -34.42]:
 		_box(Vector3(10.61, 1.17, z), Vector3(0.15, 2.24, 0.15), OAK, true)
-	_box(Vector3(10.61, 2.16, -31.74), Vector3(0.072, 0.074, 5.41), WOOD_EDGE)
+	_box(Vector3(10.61, 2.16, -31.74), Vector3(0.072, 0.074, 5.41), WOOD_EDGE, true)
 	for i in 5:
 		var cloth := LINEN.lerp(BLUE.lightened(0.18), float(i % 3) * 0.32)
 		_box(Vector3(10.621, 1.70 + 0.08 * sin(i * 2.8), -33.94 + i * 1.11),
 			Vector3(0.038, 0.87 + 0.10 * sin(i * 1.74), 0.72), cloth, false,
 			Vector3(0.045 * sin(i * 2.4), 0, 0.08 * cos(i * 1.2)))
 
-func _courtyard_garden() -> void:
+func _courtyard_garden(burned: bool) -> void:
 	for at in [Vector3(-8.75, 0, -18.86), Vector3(-8.75, 0, -24.18)]:
 		for side in [-1.0, 1.0]:
-			_herbs(at + Vector3(side * 1.15, 0, 0))
+			_herbs(at + Vector3(side * 1.15, 0, 0), burned)
 			_box(at + Vector3(side * 2.37, 0.16, 0), Vector3(0.28, 0.32, 1.41), LIMESTONE, true)
 		for x in [-1.88, 0, 1.88]:
-			_box(at + Vector3(x, 0.92, 0.51), Vector3(0.09, 1.70, 0.11), OAK, true)
+			var height: float = 0.64 + 0.26 * cos(x) if burned else 1.70
+			var wood := CHAR if burned else OAK
+			_box(at + Vector3(x, 0.07 + height * 0.5, 0.51), Vector3(0.09, height, 0.11), wood, true)
+		if burned:
+			_box(at + Vector3(0.1, 0.55, 0.7), Vector3(2.88, 0.065, 0.073), CHAR, true,
+				Vector3(0, -0.12, -0.29))
+			continue
 		for y in [0.75, 1.14, 1.55]:
-			_box(at + Vector3(0, y, 0.51), Vector3(3.80, 0.061, 0.065), OAK)
+			_box(at + Vector3(0, y, 0.51), Vector3(3.80, 0.061, 0.065), OAK, true)
 		for i in 9:
 			var y := 0.76 + 0.067 * i + 0.17 * sin(i * 1.58)
 			_round(at + Vector3(-1.72 + i * 0.42, y, 0.52), 0.23 + 0.044 * cos(i * 1.8),
 				0.37, Color(0.29, 0.42, 0.18).lightened(0.045 * sin(i * 2.2)))
-	_bench(Vector3(-11.45, 0, -24.20), PI / 2.0)
-	_bench(Vector3(-5.03, 0, -24.12), PI / 2.0)
+	for at in [Vector3(-11.45, 0, -24.20), Vector3(-5.03, 0, -24.12)]:
+		if burned:
+			for z in [-0.65, 0.65]:
+				_box(at + Vector3(0, 0.24, z), Vector3(0.37, 0.48, 0.20), LIMESTONE, true)
+			_box(at + Vector3(0.09, 0.37, -0.09), Vector3(0.26, 0.105, 1.44), CHAR, true,
+				Vector3(0.19, -0.16, -0.24))
+		else:
+			_bench(at, PI / 2.0)
+
+func _burned_planter() -> void:
+	_box(Vector3.UP * 0.304, Vector3(2.28, 0.045, 5.22), CHAR.darkened(0.34))
+	for z in [-1.66, 0.09, 1.58]:
+		_burned_shrub(Vector3(0.17 * sin(z * 4.7), 0.33, z), 1.25)
+	for i in 17:
+		var at := Vector3(0.91 * sin(i * 2.6), 0.332, -2.46 + i * 0.303)
+		_box(at, Vector3(0.09, 0.025, 0.15), CHAR.lightened(0.08 * cos(i)), false,
+			Vector3(0, i * 0.61, 0))
+
+func _burned_shrub(at: Vector3, size: float) -> void:
+	for i in 5:
+		var angle := i * TAU / 5.0
+		var lean := Vector3(sin(angle), 0, cos(angle))
+		var tip := at + lean * size * 0.24 + Vector3.UP * size * (0.23 + 0.055 * (i % 3))
+		var branch := tip - at
+		_box(at.lerp(tip, 0.5), Vector3(0.045 * size, branch.length(), 0.042 * size),
+			CHAR.lightened(0.055 * cos(i)), false, Basis(Quaternion(Vector3.UP, branch.normalized())).get_euler())
 
 func _practice_yard() -> void:
 	# The targets face west toward the shooting line with a timber backstop to the east.
@@ -846,16 +913,45 @@ func _wagon_bay() -> void:
 		for column in 7:
 			var at := bay + Vector3(-3.12 + column * 1.02, 0.028, -2.55 + row * 0.92)
 			_box(at, Vector3(1.01, 0.056, 0.91), LIMESTONE.darkened(0.12 + 0.09 * sin(column * 1.8 + row)))
-	var hitch := bay + Vector3(-2.95, 0, -2.86)
-	for x in [0.0, 2.55, 5.10]:
-		_box(hitch + Vector3(x, 0.17, 0), Vector3(0.38, 0.34, 0.41), LIMESTONE, true)
-		_box(hitch + Vector3(x, 0.68, 0), Vector3(0.16, 1.10, 0.16), OAK, true)
-	_box(hitch + Vector3(2.55, 1.03, 0), Vector3(5.48, 0.16, 0.15), WOOD_EDGE, true)
 	var trough := bay + Vector3(2.51, 0, 2.41)
 	_box(trough + Vector3.UP * 0.25, Vector3(2.02, 0.50, 0.74), LIMESTONE, true)
 	_box(trough + Vector3.UP * 0.507, Vector3(1.74, 0.018, 0.52), BLUE.darkened(0.42))
 	for z in [-0.33, 0.33]:
-		_box(trough + Vector3(0, 0.53, z), Vector3(2.06, 0.15, 0.13), LIMESTONE)
+		_box(trough + Vector3(0, 0.53, z), Vector3(2.06, 0.15, 0.13), LIMESTONE, true)
+
+func _wagon_hitch(burned: bool) -> void:
+	var at := Vector3(-37.45, 0, -15.26)
+	for x in [0.0, 2.55, 5.10]:
+		_box(at + Vector3(x, 0.17, 0), Vector3(0.38, 0.34, 0.41), LIMESTONE, true)
+		var height: float = 0.34 + 0.17 * cos(x) if burned else 1.10
+		_box(at + Vector3(x, 0.34 + height * 0.5, 0), Vector3(0.16, height, 0.16),
+			CHAR if burned else OAK, true)
+	if burned:
+		_box(at + Vector3(1.30, 0.22, -0.33), Vector3(2.65, 0.16, 0.15), CHAR, true,
+			Vector3(0, 0.19, -0.1))
+		_box(at + Vector3(3.98, 0.22, 0.22), Vector3(2.3, 0.16, 0.15), CHAR.darkened(0.24), true,
+			Vector3(0, -0.35, 0.12))
+	else:
+		_box(at + Vector3(2.55, 1.27, 0), Vector3(5.48, 0.16, 0.15), WOOD_EDGE, true)
+
+func _avenue_handcart(burned: bool) -> void:
+	_handcart(Vector3(-10.6, 0, -32.7), burned)
+
+func _handcart(at: Vector3, burned: bool) -> void:
+	if burned:
+		_burnt_planks(at, 5)
+		_round(at + Vector3(-0.85, 0.28, -0.30), 0.34, 0.13, CHAR, true, Vector3(0, 0, 1.17))
+		_round(at + Vector3(-0.92, 0.31, -0.30), 0.083, 0.10, IRON, false, Vector3(0, 0, 1.17))
+		_box(at + Vector3(0.82, 0.14, 0.54), Vector3(0.11, 0.12, 1.25), CHAR, true,
+			Vector3(0.14, -0.47, 0))
+		return
+	_box(at + Vector3.UP * 0.57, Vector3(1.49, 0.20, 1.12), WOOD_EDGE, true)
+	for x in [-0.78, 0.78]:
+		_round(at + Vector3(x, 0.34, 0), 0.34, 0.13, OAK, true, Vector3(0, 0, PI / 2))
+		_round(at + Vector3(x * 1.08, 0.34, 0), 0.083, 0.10, IRON, false, Vector3(0, 0, PI / 2))
+		_box(at + Vector3(x * 0.69, 0.53, 1.0), Vector3(0.11, 0.11, 1.66), OAK, true,
+			Vector3(0.13, 0, 0))
+		_box(at + Vector3(x * 0.87, 0.76, -0.04), Vector3(0.12, 0.23, 1.03), OAK, true)
 
 func _firewood_store() -> void:
 	var shed := Vector3(38.25, 0, -18.35)
@@ -870,6 +966,7 @@ func _firewood_store() -> void:
 	for i in 14:
 		_box(shed + Vector3(0, 2.70, -2.79 + i * 0.43), Vector3(3.70, 0.13, 0.43),
 			WOOD_EDGE.darkened(0.11 + 0.075 * cos(i * 1.74)), false, Vector3(0, 0, 0.236))
+	_box_collision(shed + Vector3.UP * 2.70, Vector3(3.70, 0.13, 6.02), Vector3(0, 0, 0.236))
 	for bay in [-1.27, 1.27]:
 		for row in 4:
 			for index in 5 - absi(row - 1):
@@ -887,26 +984,22 @@ func _shelter(burned: bool) -> void:
 			_box(Vector3(x, 0.14, z), Vector3(0.45, 0.28, 0.47), LIMESTONE, true)
 			var height: float = 0.44 + 0.24 * sin(2.0 * x + z) if burned else 2.96 + z * 0.23
 			_box(Vector3(x, 0.28 + height * 0.5, z), Vector3(0.20, height, 0.20),
-				CHAR if burned else OAK, not burned)
+				CHAR if burned else OAK, true)
+	_handcart(Vector3(0.58, 0, 0.15), burned)
 	if burned:
 		for i in 8:
-			_box(Vector3(-1.73 + i * 0.45, 0.20 + 0.05 * sin(i), 0.49 * cos(i)),
+			_box(Vector3(-1.73 + i * 0.45, 0.13 + 0.04 * sin(i), -0.62 + 0.23 * cos(i)),
 				Vector3(0.26, 0.13, 1.14 + sin(i) * 0.39), CHAR.lightened(0.09 * sin(i)), false,
 				Vector3(0.34 * sin(i), 1.13 * i, 0.15 * cos(i)))
-		_round(Vector3(1.15, 0.28, 0.61), 0.32, 0.57, CHAR, false, Vector3(0.15, 0.11, 0.9))
+		_round(Vector3(-1.27, 0.29, 0.11), 0.32, 0.57, CHAR, true, Vector3(0.15, 0.11, 0.9))
 		return
 	for i in 11:
 		var x := -2.22 + i * 0.443
 		_box(Vector3(x, 3.32, 0), Vector3(0.443, 0.14, 3.38),
 			OAK.lightened(0.06 * sin(i * 1.7)), false, Vector3(-0.222, 0, 0))
+	_box_collision(Vector3(0, 3.32, 0), Vector3(4.873, 0.14, 3.38), Vector3(-0.222, 0, 0))
 	for z in [-1.35, 1.35]:
 		_box(Vector3(0, 3.22 + z * 0.23, z), Vector3(4.59, 0.16, 0.17), WOOD_EDGE)
-	var cart := Vector3(0.58, 0, 0.15)
-	_box(cart + Vector3.UP * 0.57, Vector3(1.49, 0.20, 1.12), WOOD_EDGE, true)
-	for x in [-0.78, 0.78]:
-		_round(cart + Vector3(x, 0.33, 0), 0.34, 0.13, OAK, false, Vector3(0, 0, PI / 2))
-		_round(cart + Vector3(x * 1.08, 0.33, 0), 0.083, 0.10, IRON, false, Vector3(0, 0, PI / 2))
-		_box(cart + Vector3(x * 0.69, 0.53, 1.0), Vector3(0.11, 0.11, 1.66), OAK, false, Vector3(0.13, 0, 0))
 	for z in [-0.72, 0.11]:
 		_round(Vector3(-1.27, 0.42, z), 0.32, 0.84, OAK, true)
 		for y in [0.20, 0.65]:
@@ -919,13 +1012,17 @@ func _bench(center: Vector3, yaw := 0.0) -> void:
 	for x in [-0.65, 0.65]:
 		_box(frame * Vector3(x, 0.24, 0), Vector3(0.20, 0.48, 0.37), LIMESTONE, true, rotation)
 
-func _herbs(center: Vector3) -> void:
+func _herbs(center: Vector3, burned := false) -> void:
 	_box(center + Vector3.UP * 0.24, Vector3(2.10, 0.48, 1.39), LIMESTONE, true)
-	_box(center + Vector3.UP * 0.49, Vector3(1.89, 0.035, 1.17), OAK.darkened(0.35))
+	var soil := CHAR.darkened(0.36) if burned else OAK.darkened(0.35)
+	_box(center + Vector3.UP * 0.49, Vector3(1.89, 0.035, 1.17), soil)
 	for i in 6:
 		var at := center + Vector3(-0.75 + (i % 3) * 0.75, 0.59, -0.28 + 0.55 * floorf(i / 3.0))
-		_round(at, 0.13 + 0.06 * absf(sin(i * 2.3)), 0.16, Color(0.26, 0.41, 0.20))
-		_round(at + Vector3.UP * 0.10, 0.056, 0.08, Color(0.61, 0.48, 0.29))
+		if burned:
+			_burned_shrub(at - Vector3.UP * 0.08, 0.40)
+		else:
+			_round(at, 0.13 + 0.06 * absf(sin(i * 2.3)), 0.16, Color(0.26, 0.41, 0.20))
+			_round(at + Vector3.UP * 0.10, 0.056, 0.08, Color(0.61, 0.48, 0.29))
 
 func _box(at: Vector3, size: Vector3, color: Color, solid := false, tilt := Vector3.ZERO) -> StaticBody3D:
 	if not _boxes.has(color):
@@ -937,9 +1034,12 @@ func _box(at: Vector3, size: Vector3, color: Color, solid := false, tilt := Vect
 	_append_detail(_boxes[color], Transform3D(basis.scaled_local(size), at))
 	if not solid:
 		return null
+	return _box_collision(at, size, tilt)
+
+func _box_collision(at: Vector3, size: Vector3, tilt: Vector3) -> StaticBody3D:
 	var shape := BoxShape3D.new()
 	shape.size = size
-	return _add_collider(shape, Transform3D(basis, at))
+	return _add_collider(shape, Transform3D(Basis.from_euler(tilt), at))
 
 func _round(at: Vector3, radius: float, height: float, color: Color, solid := false, tilt := Vector3.ZERO) -> void:
 	if not _cylinders.has(color):

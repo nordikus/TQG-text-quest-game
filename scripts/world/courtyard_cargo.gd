@@ -43,7 +43,7 @@ func _crate(at: Vector3, yaw: float) -> void:
 			OAK.lightened(i * 0.021), Vector3.ZERO, body)
 
 func _burned_crate(at: Vector3) -> void:
-	_board(at + Vector3(0, 0.075, 0), Vector3(0.93, 0.13, 0.82), CHAR, Vector3(0, -0.17, 0))
+	_board(at + Vector3(0, 0.075, 0), Vector3(0.93, 0.13, 0.82), CHAR, Vector3(0, -0.17, 0), self, true)
 	for i in 4:
 		var angle := 0.62 * i - 0.72
 		var offset := Vector3(0.17 * sin(i * 2.5), 0.19 + 0.04 * i, -0.25 + 0.15 * i)
@@ -51,9 +51,10 @@ func _burned_crate(at: Vector3) -> void:
 			CHAR.lightened(0.03 * (i % 3)), Vector3(0.30 * sin(i), angle, 0.12))
 	for offset in [Vector3(-0.40, 0.31, -0.32), Vector3(0.38, 0.22, -0.32)]:
 		_board(at + offset, Vector3(0.13, offset.y * 1.8, 0.14),
-			CHAR.darkened(0.2), Vector3(0.20, 0.13, 0.16))
+			CHAR.darkened(0.2), Vector3(0.20, 0.13, 0.16), self, true)
 
-func _board(at: Vector3, size: Vector3, color: Color, tilt: Vector3, holder: Node3D = null) -> void:
+func _board(at: Vector3, size: Vector3, color: Color, tilt: Vector3,
+		holder: Node3D = null, solid := false) -> void:
 	var mesh := BoxMesh.new()
 	mesh.size = size
 	var material := StandardMaterial3D.new()
@@ -65,3 +66,11 @@ func _board(at: Vector3, size: Vector3, color: Color, tilt: Vector3, holder: Nod
 	instance.position = at
 	instance.rotation = tilt
 	(holder if holder else self).add_child(instance)
+	if solid:
+		var body := StaticBody3D.new()
+		var shape := BoxShape3D.new()
+		shape.size = size
+		var collider := CollisionShape3D.new()
+		collider.shape = shape
+		body.add_child(collider)
+		instance.add_child(body)

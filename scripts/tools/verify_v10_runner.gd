@@ -340,6 +340,15 @@ func _check_rooms() -> void:
 	var roof := _ray(well.global_position + Vector3.UP * 2.9, well.global_position + Vector3.UP * 0.78)
 	_check(post.get("collider") == well and roof.get("collider") == well and roof.position.y > 2.7,
 		"The courtyard well has physical posts and a roof.")
+	var winch := _ray(well.to_global(Vector3(0.05, 1.35, 0.33)), well.to_global(Vector3(0.05, 1.35, 0)))
+	var rear := castle.get_node("RearBailey") as Node3D
+	var rear_roof: Node = _ray(rear.to_global(Vector3(-24.55, 3.8, -86.80)),
+		rear.to_global(Vector3(-24.55, 2.9, -86.80))).get("collider")
+	var wheel: Node = _ray(rear.to_global(Vector3(-23.10, 0.43, -85.78)),
+		rear.to_global(Vector3(-23.57, 0.43, -85.78))).get("collider")
+	_check(winch.get("collider") == well and rear_roof != null and rear.is_ancestor_of(rear_roof)
+		and wheel != null and rear.is_ancestor_of(wheel),
+		"The well winch, rear workshop roof and cart wheel have collision.")
 	var quarters := castle.get_node("BarracksBuilding/GuardQuartersAndArmory")
 	var beds := 0
 	for child in quarters.get_children():
@@ -496,12 +505,53 @@ func _check_courtyard_fire(burned: bool) -> void:
 	_check(ruined_shelter.is_visible_in_tree() == burned
 		and intact_shelter.is_visible_in_tree() != burned and shelter_smoke.emitting == burned,
 		"The supply shelter burns in Ash and is restored when the fire state resets.")
+	_check_fire_exposed_furnishings(burned)
 	var soot_is_mounted := true
 	for mark_name in ["WestStairSoot1", "WestStairSoot2", "WestCurtainSoot3", "WestCurtainSoot4"]:
 		var mark := _world.castle_ash.get_node(mark_name) as Node3D
 		var wall: Node = _ray(mark.global_position, mark.global_position + Vector3.LEFT * 0.06).get("collider")
 		soot_is_mounted = soot_is_mounted and wall != null and wall.name in ["CourtyardWallStair", "WallWest"]
 	_check(soot_is_mounted, "Soot sits against the current west wall and staircase masonry.")
+
+func _check_fire_exposed_furnishings(burned: bool) -> void:
+	var intact := _world.castle_verge as Node3D
+	var ruins := _world.castle_ash as Node3D
+	var castle := intact.get_parent() as Node3D
+	var intact_props := intact.get_node("FireExposedFurnishings") as Node3D
+	var burned_props := ruins.get_node("FireExposedFurnishings") as Node3D
+	var west_shrub := intact.get_node("WestPlanterPlants/Shrub2") as Node3D
+	var burned_bed := ruins.get_node("WestPlanterPlants") as Node3D
+	var east_shrub := castle.get_node("EastGardenBed/Shrub2") as Node3D
+	var smoke_matches := true
+	for name in ["GateMusterEmbers", "FarrierEmbers"]:
+		var smoke := ruins.get_node("RemnantFires/%s/Smoke" % name) as CPUParticles3D
+		smoke_matches = smoke_matches and smoke.emitting == burned
+	_check(intact_props.is_visible_in_tree() != burned and burned_props.is_visible_in_tree() == burned
+		and west_shrub.is_visible_in_tree() != burned and west_shrub.get_node("CollisionShape3D").disabled == burned
+		and burned_bed.is_visible_in_tree() == burned and east_shrub.is_visible_in_tree() and smoke_matches,
+		"The fire replaces exposed courtyard furnishings and plants while the east bed survives.")
+
+	var high_parts_match := true
+	for point in [Vector3(-11.6, 3.04, -0.80), Vector3(-11.20, 3.27, -13.81), Vector3(-10.60, 0.57, -32.70)]:
+		var at := castle.to_global(point)
+		var collider: Node = _ray(at + Vector3.UP * 0.44, at - Vector3.UP * 0.16).get("collider")
+		high_parts_match = high_parts_match and (
+			collider == null if burned else collider != null and intact_props.is_ancestor_of(collider))
+	var active_props := burned_props if burned else intact_props
+	var post := castle.to_global(Vector3(-14.08, 0.64, 0.65))
+	var post_collider: Node = _ray(post + Vector3.LEFT * 0.32, post).get("collider")
+	var beacon := castle.to_global(Vector3(3.5, 0.57, -1.1))
+	var beacon_collider: Node = _ray(beacon + Vector3.LEFT * 0.37, beacon).get("collider")
+	var active_beacons: Node = ruins if burned else _world.court_lanterns
+	var cargo := (ruins if burned else intact).get_node("GateCargo") as Node3D
+	var crate := Vector3(-0.53, 0.20, 0.05) if burned else Vector3(-0.62, 0.94, 0.12)
+	var cargo_collider: Node = _ray(cargo.to_global(crate), cargo.to_global(crate - Vector3.UP * 0.16)).get("collider")
+	_check(high_parts_match and post_collider != null and active_props.is_ancestor_of(post_collider)
+		and beacon_collider != null and active_beacons.is_ancestor_of(beacon_collider)
+		and cargo_collider != null and cargo.is_ancestor_of(cargo_collider),
+		"Colliders follow the intact props, surviving charred posts, cargo and courtyard beacons.")
+	var avenue := _ray(castle.to_global(Vector3(0, 0.9, 4.6)), castle.to_global(Vector3(0, 0.9, -44.0)))
+	_check(avenue.is_empty(), "Courtyard furniture clears the route from the gate to the keep.")
 
 func _rewrite() -> void:
 	var times: int = InventoryManager.quill_uses_count
