@@ -15,13 +15,17 @@ var observer_epilogue: Node = null
 func _ready():
 	var english := Translation.new()
 	english.locale = "en"
+	var russian := Translation.new()
+	russian.locale = "ru"
 	for source: String in EnglishText.MESSAGES:
 		english.add_message(source, EnglishText.MESSAGES[source])
+		russian.add_message(source, source)
 	TranslationServer.add_translation(english)
+	TranslationServer.add_translation(russian)
 	var settings := ConfigFile.new()
 	settings.load(SETTINGS_PATH)
-	var locale: String = settings.get_value("display", "language", "ru")
-	TranslationServer.set_locale("en" if locale == "en" else "ru")
+	var locale: String = settings.get_value("display", "language", "en")
+	TranslationServer.set_locale("ru" if locale == "ru" else "en")
 	_register_inputs()
 
 func set_language(locale: String) -> void:
@@ -33,6 +37,7 @@ func set_language(locale: String) -> void:
 
 func open_quest(quest_id: String):
 	if quest_panel and quest_panel.has_method("open_quest"):
+		SoundEffects.play_ui(&"page", -15.0)
 		quest_panel.open_quest(quest_id)
 
 func confirm_rewrite(action: Callable) -> void:

@@ -60,7 +60,7 @@ material = SubResource("StandardMaterial3D_sparkle")
 radius = 0.017
 height = 0.034
 
-[node name="StoneAltar" type="StaticBody3D"]
+[node name="StoneAltar" type="StaticBody3D" groups=["footstep_stone"]]
 collision_layer = 1
 
 [node name="Tier1" type="MeshInstance3D" parent="."]

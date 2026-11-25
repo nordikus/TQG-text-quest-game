@@ -56,6 +56,7 @@ func interact():
 			InventoryManager.use_item(required_item_id)
 			_toggle_door()
 		else:
+			SoundEffects.play_at(&"locked", self, -13.0, 0.0)
 			GameManager.notify(LOCKED_TEXT)
 			_update_prompt()
 			GameManager.interaction_prompt_changed.emit(interaction_prompt)
@@ -66,6 +67,7 @@ func interact():
 func _toggle_door():
 	_animating = true
 	is_open = not is_open
+	SoundEffects.play_at(&"door_open" if is_open else &"door_close", self, -12.0, 0.0)
 	_update_blockers()
 	_update_prompt()
 	GameManager.interaction_prompt_changed.emit(interaction_prompt)

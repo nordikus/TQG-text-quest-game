@@ -18,6 +18,7 @@ func interact():
 	if is_unlatched:
 		return
 	is_unlatched = true
+	SoundEffects.play_at(&"bolt", self, -13.0, 0.0)
 	if _latch_shape:
 		_latch_shape.disabled = true
 	_update_prompt()

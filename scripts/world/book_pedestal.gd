@@ -38,6 +38,7 @@ func interact():
 func _rewrite_reality():
 	if not QuestManager.is_quest_completed(quest_id) or not InventoryManager.use_item("great_quill"):
 		return
+	SoundEffects.play_at(&"rewrite", self, -10.0)
 	QuestManager.reset_quest(quest_id)
 	var wc := _find_world_changer()
 	if wc and wc.has_method("reset_world"):

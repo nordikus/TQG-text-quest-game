@@ -17,6 +17,7 @@ func set_raised(raised: bool, animate := true) -> void:
 	if not animate:
 		position.y = destination
 		return
+	SoundEffects.play_at(&"gate_chain", self, -10.0, 1.6)
 	_motion = create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	_motion.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_motion.tween_property(self, "position:y", destination, 2.6)

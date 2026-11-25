@@ -3,6 +3,7 @@
 *.translation
 *.import
 .tmp/
+/build/
 
 # Operating System files
 .DS_Store

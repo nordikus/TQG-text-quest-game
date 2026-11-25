@@ -37,6 +37,7 @@
 [ext_resource type="Script" path="res://scripts/world/distant_ridges.gd" id="33_ridges"]
 [ext_resource type="Script" path="res://scripts/world/forest_floor_details.gd" id="34_floor"]
 [ext_resource type="Script" path="res://scripts/world/play_session.gd" id="35_session"]
+[ext_resource type="Script" path="res://scripts/world/forest_audio.gd" id="36_audio"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 sky_top_color = Color(0.19, 0.37, 0.61, 1)
@@ -113,6 +114,9 @@ script = ExtResource("35_session")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=758829041]
 environment = SubResource("Environment_clearing")
+
+[node name="ForestAudio" type="Node3D" parent="."]
+script = ExtResource("36_audio")
 
 [node name="SunLight" type="DirectionalLight3D" parent="." unique_id=1112413832]
 transform = Transform3D(0.766044, -0.422618, 0.48481, 0, 0.75471, 0.656059, -0.642788, -0.50257, 0.578142, 0, 36, 0)
@@ -279,7 +283,7 @@ burned_strip = NodePath("../CharredForestZone")
 [node name="BurningPath" type="Node3D" parent="." unique_id=7678707]
 visible = false
 
-[node name="BurningPathBody" type="StaticBody3D" parent="BurningPath" unique_id=998209701]
+[node name="BurningPathBody" type="StaticBody3D" parent="BurningPath" unique_id=998209701 groups=["footstep_ash"]]
 
 [node name="BurningPathMesh" type="MeshInstance3D" parent="BurningPath/BurningPathBody" unique_id=1434775339]
 mesh = ExtResource("23_burning_path_mesh")

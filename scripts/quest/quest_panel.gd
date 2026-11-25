@@ -89,6 +89,7 @@ func _display_node(node_id: String):
 		choices_container.add_child(btn)
 
 func _on_choice_selected(next_node: String, current_node_data: Dictionary):
+	SoundEffects.play_ui(&"page", -19.0)
 	if next_node.is_empty():
 		var ending_id: String = current_node_data.get("ending_id", "")
 		var quest_id: String = current_quest.get("id", "")

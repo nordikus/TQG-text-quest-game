@@ -5,6 +5,7 @@ const JUMP_VELOCITY := 4.7
 const MOUSE_SENSITIVITY := 0.002
 
 @onready var camera: Camera3D = $Camera3D
+@onready var _footsteps := $Footsteps
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -23,7 +24,8 @@ func _unhandled_input(event: InputEvent):
 		camera.rotation.x = clampf(camera.rotation.x, -deg_to_rad(89), deg_to_rad(89))
 
 func _physics_process(delta: float):
-	if not is_on_floor():
+	var was_grounded := is_on_floor()
+	if not was_grounded:
 		velocity.y -= gravity * delta
 
 	if GameManager.ui_open:
@@ -32,7 +34,7 @@ func _physics_process(delta: float):
 		move_and_slide()
 		return
 
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and was_grounded:
 		velocity.y = JUMP_VELOCITY
 
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
@@ -45,4 +47,6 @@ func _physics_process(delta: float):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
+	var fall_speed := maxf(0.0, -velocity.y)
 	move_and_slide()
+	_footsteps.update_footsteps(not was_grounded and is_on_floor(), fall_speed)

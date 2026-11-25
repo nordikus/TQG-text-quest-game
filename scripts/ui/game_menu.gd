@@ -122,7 +122,9 @@ func show_home() -> void:
 	languages.add_item("Русский")
 	languages.add_item("English")
 	languages.select(1 if TranslationServer.get_locale() == "en" else 0)
-	languages.item_selected.connect(func(index: int): GameManager.set_language("en" if index == 1 else "ru"))
+	languages.item_selected.connect(func(index: int):
+		SoundEffects.play_ui(&"ui", -22.0)
+		GameManager.set_language("en" if index == 1 else "ru"))
 	language.add_child(languages)
 	_focus(first)
 
@@ -234,7 +236,9 @@ func _button(title: String, action: Callable) -> Button:
 	button.text = title
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.custom_minimum_size = Vector2(285, 41)
-	button.pressed.connect(action)
+	button.pressed.connect(func():
+		SoundEffects.play_ui(&"ui", -22.0)
+		action.call())
 	_contents.add_child(button)
 	return button
 

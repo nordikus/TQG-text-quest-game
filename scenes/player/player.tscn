@@ -1,6 +1,7 @@
 [gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_pc"]
+[ext_resource type="Script" path="res://scripts/player/footsteps.gd" id="7_steps"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_ray.gd" id="2_ir"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/quest_panel.tscn" id="4_qp"]
@@ -29,6 +30,9 @@ collision_mask = 1
 collide_with_areas = false
 collide_with_bodies = true
 script = ExtResource("2_ir")
+
+[node name="Footsteps" type="AudioStreamPlayer" parent="."]
+script = ExtResource("7_steps")
 
 [node name="HUD" parent="." instance=ExtResource("3_hud")]
 

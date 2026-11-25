@@ -17,9 +17,11 @@ func interact() -> void:
 	if _opened:
 		return
 	if not InventoryManager.has_item(ArcaneBarrier.SHARD_ID):
+		SoundEffects.play_at(&"locked", self, -15.0, 0.5)
 		GameManager.notify(LOCKED_TEXT)
 		return
 	_opened = true
+	SoundEffects.play_at(&"container", self, -13.0, 0.5)
 	_rune.hide()
 	interaction_prompt = ""
 	_opening = create_tween()

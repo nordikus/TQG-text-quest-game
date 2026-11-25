@@ -9,7 +9,7 @@ shader = ExtResource("3_bark")
 
 [node name="GreatTree" type="Node3D"]
 
-[node name="TrunkBody" type="StaticBody3D" parent="."]
+[node name="TrunkBody" type="StaticBody3D" parent="." groups=["footstep_wood"]]
 
 [node name="TreeMesh" type="MeshInstance3D" parent="TrunkBody"]
 mesh = ExtResource("1_tree_mesh")

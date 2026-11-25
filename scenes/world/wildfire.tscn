@@ -71,6 +71,13 @@ light_color = Color(1, 0.37, 0.105, 1)
 light_energy = 3.9
 omni_range = 9.5
 
+[node name="Crackle" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 1.15, 0)
+volume_db = -17.0
+unit_size = 5.0
+max_db = -12.0
+max_distance = 24.0
+
 [node name="Smoke" type="CPUParticles3D" parent="."]
 position = Vector3(0, 1.7, 0)
 emitting = false

@@ -18,9 +18,11 @@ func interact() -> void:
 	if not _available or not _sealed:
 		return
 	if not InventoryManager.has_item(SHARD_ID):
+		SoundEffects.play_at(&"locked", self, -16.0, 0.0)
 		GameManager.notify(LOCKED_TEXT)
 		return
 	_sealed = false
+	SoundEffects.play_at(&"seal", self, -12.0, 0.0)
 	_collider.disabled = true
 	set_highlighted(false)
 	GameManager.interaction_prompt_cleared.emit()

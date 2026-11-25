@@ -90,6 +90,7 @@ func _apply_extinguish_outcome(animate := true) -> void:
 	if great_tree:
 		great_tree.show()
 		if animate:
+			SoundEffects.play_at(&"tree_grow", nature_trail, -13.0)
 			_move_vertical(great_tree, 0.0, 3.5).finished.connect(_open_tree_route)
 		else:
 			_open_tree_route()

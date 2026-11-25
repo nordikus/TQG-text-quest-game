@@ -18,6 +18,7 @@ func add_item(item_id: String) -> bool:
 	if def.get("category", "item") == "note":
 		if not notes.has(item_id):
 			notes.append(item_id)
+			SoundEffects.play_ui(&"page", -15.0)
 			item_added.emit(def)
 			inventory_changed.emit()
 			GameManager.notify(tr("Получена записка: %s") % tr(def.get("title", "")))
@@ -29,6 +30,7 @@ func add_item(item_id: String) -> bool:
 		"id": item_id,
 		"remaining_uses": remaining_uses
 	})
+	SoundEffects.play_ui(&"pickup", -18.0)
 	item_added.emit(def)
 	inventory_changed.emit()
 	GameManager.notify(tr("Получен предмет: %s") % tr(def.get("title", "")))
