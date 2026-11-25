@@ -210,6 +210,9 @@ func _run_verification() -> void:
 	var courtyard_paving := clearing.get_node("CastleFacade/FrontBaileyPaving") as MeshInstance3D
 	if not _verify_courtyard_paving(courtyard_paving, space_state):
 		all_passed = false
+	var courtyard_walls := clearing.get_node("CastleFacade/CourtyardWalls")
+	if not _verify_rampart_stair_landings(courtyard_walls, space_state):
+		all_passed = false
 
 	# Test the new corner joins and the center of the rear curtain.
 	for x in [-45.1, -42.1, -32.6, -16.0, 0.0, 16.0, 32.6, 42.1, 45.1]:
@@ -491,6 +494,35 @@ func _verify_courtyard_paving(paving: MeshInstance3D, space: PhysicsDirectSpaceS
 		push_error("FAIL: The west buttress belongs against the outer curtain, clear of the courtyard.")
 		return false
 	print("PASS: Both stair roads join the rear paving and the west buttress stands against the curtain.")
+	return true
+
+func _verify_rampart_stair_landings(walls: Node, space: PhysicsDirectSpaceState3D) -> bool:
+	var sections := [
+		[Vector3(-32.1, 5.0, 4.2), Vector3(-31.1, 5.0, 4.2)],
+		[Vector3(-31.1, 13.8, 6.1), Vector3(-31.1, 13.8, 5.5)],
+		[Vector3(-29.7, 13.8, 6.1), Vector3(-29.7, 13.8, 5.5)],
+		[Vector3(-31.1, 15.2, 4.2), Vector3(-31.1, 14.3, 4.2)],
+	]
+	for stair_name in ["CourtyardWallStair", "EastRampartStair"]:
+		var stair := walls.get_node(stair_name) as StaticBody3D
+		var masonry := stair.get_node_or_null("StairMasonry") as MeshInstance3D
+		if not masonry:
+			push_error("FAIL: %s has no continuous masonry." % stair_name)
+			return false
+		var faces := masonry.mesh.get_faces()
+		for section in sections:
+			var from: Vector3 = section[0]
+			var to: Vector3 = section[1]
+			var visible_masonry := false
+			for i in range(0, faces.size(), 3):
+				if Geometry3D.segment_intersects_triangle(from, to, faces[i], faces[i + 1], faces[i + 2]) != null:
+					visible_masonry = true
+					break
+			var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(stair.to_global(from), stair.to_global(to)))
+			if not visible_masonry or hit.get("collider") != stair:
+				push_error("FAIL: %s needs solid masonry at %s." % [stair_name, from])
+				return false
+	print("PASS: Both rampart stair landings have masonry and collision on top, behind and along the courtyard edge.")
 	return true
 
 func _verify_east_wing(space: PhysicsDirectSpaceState3D) -> bool:
